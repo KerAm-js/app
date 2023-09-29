@@ -6,7 +6,7 @@ import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
 export const bigButtonStyles = StyleSheet.create({
   container: {
     height: 50,
-    width: "90%",
+    width: "100%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -23,6 +23,7 @@ export const bigButtonStyles = StyleSheet.create({
   title: {
     fontSize: TITLE_F_SIZE,
     fontWeight: TITLE_F_WEIGHT,
-    color: WHITE
+    color: WHITE,
+    marginLeft: 4
   },
 });

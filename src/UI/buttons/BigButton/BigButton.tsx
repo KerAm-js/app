@@ -20,7 +20,13 @@ export const BigButton = ({
         backgroundColor && { backgroundColor, shadowColor: backgroundColor },
       ]}
     >
-      {iconXmlFunc && <SvgXml xml={iconXmlFunc()} width={20} height={20} />}
+      {iconXmlFunc && (
+        <SvgXml
+          xml={iconXmlFunc(backgroundColor !== WHITE ? WHITE : undefined)}
+          width={20}
+          height={20}
+        />
+      )}
       <Text
         style={[
           bigButtonStyles.title,
