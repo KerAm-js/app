@@ -7,7 +7,7 @@ import Animated, {
 import { SvgXml } from "react-native-svg";
 import { arrowDownSvg } from "../../../../assets/svg/arrowDown";
 import { selectionSearchBarStyles } from "./styles";
-import { BLACK_DARK, GREY_DARK } from "../../../../consts/colors";
+import { BLACK_DARK, BLUE, GREY_DARK } from "../../../../consts/colors";
 import { searchSvg } from "../../../../assets/svg/search";
 
 const SelectionSearchBar = ({
@@ -75,6 +75,7 @@ const SelectionSearchBar = ({
           placeholder="Поиск"
           value={inputValue}
           onChangeText={onInputChange}
+          selectionColor={BLUE}
         />
       </Animated.View>
     </Pressable>

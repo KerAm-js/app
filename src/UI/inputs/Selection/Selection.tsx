@@ -4,92 +4,32 @@ import { TSelectionProps } from "./types";
 import { selectionStyles } from "./styles";
 import SelectionItem from "./Item/Item";
 import Animated, {
-  interpolate,
+  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 import SelectionSearchBar from "./SearchBar/SearchBar";
 import SelectionMenu from "./Menu/SelectionMenu";
+import { BLACK_DARK, BLUE } from "../../../consts/colors";
 
 const Selection = ({
   label,
-  values,
-  valuesList,
-  valuesSetter,
+  itemsList,
+  selectedItemsSet,
   placeholder,
+  multySelection,
 }: TSelectionProps) => {
-  const list = [
-    "Автовышка",
-    "Автовоз",
-    "Автобус пассажирский",
-    "Автобетононасос",
-    "Автогрейдер",
-    "Автогудронатор",
-    "Автокран",
-    "Бетоновоз",
-    "Бензовоз",
-    "Бульдозер",
-    "Буровая",
-    "Водовоз",
-    "Газель",
-    "Грохот",
-    "Дробильно-сортировочный комплекс",
-    "Дробилка мобильная",
-    "Земснаряд",
-    "Зерновоз",
-    "Каток грунтовой",
-    "Каток дорожный",
-    "Контейнеровоз",
-    "Кран башенный",
-    "Кран гусеничный",
-    "Лесовоз",
-    "Ломовоз",
-    "Мусоровоз (ПУХТО)",
-    "Мультилифт",
-    "Манипулятор",
-    "Мини погрузчик",
-    "Поливомоечная машина",
-    "Погрузчик вилочны",
-    "Погрузчик телескопический",
-    "Погрузчик Фронтальный",
-    "Рефрежиратор",
-    "Ресайклер-стабилизатор грунта",
-    "Самосвал",
-    "Самосвал вездеход",
-    "Сочлененный Самосвал",
-    "Снегоуборочная машина",
-    "Тонар",
-    "Трактор",
-    "Трал",
-    "Тромель",
-    "Трубоукладчик",
-    "Фура",
-    "Фреза дорожная",
-    "Фреза Мини",
-    "Фургон",
-    "Шаланда (длинномер)",
-    "Эвакуатор легковой",
-    "Эвакуатор грузовой",
-    "Экскаватор гусеничный",
-    "Экскаватор разрушитель",
-    "Экскаватор амфибия",
-    "Экскаватор колёсный",
-    "Экскаватор погрузчик",
-    "Экскаватор-Мини",
-    "Ямобур ",
-  ];
   const [text, setText] = useState<string>("");
-  const filteredList = useRef<Array<string>>([...list]);
-  const [selectedItems, setSelectedItems] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const selectedItemsArr = Object.keys(selectedItems).filter(
-    (key) => selectedItems[key]
-  );
+  const [_, arr] = useState([]);
+  const rerender = () => arr([]);
+  const filteredList = useRef<Array<string>>([...itemsList]);
   const isOpened = useSharedValue(0);
-  const menuHeight = !!selectedItemsArr.length ? 44 : 0;
   const containerHeight = useSharedValue(48);
+
+  const menuHeight = !!selectedItemsSet.size ? 44 : 0;
+  const selectedItemsArr = Array.from(selectedItemsSet);
+  const baseHeight = itemsList.length > 8 ? 324 : 48 + 46 * itemsList.length;
 
   const toggleHeight = () => {
     if (isOpened.value) {
@@ -97,20 +37,18 @@ const Selection = ({
       containerHeight.value = withTiming(48);
       inputRef.current?.blur();
     } else {
-      filteredList.current = [...list];
+      filteredList.current = [...itemsList];
       setText("");
       isOpened.value = withTiming(1);
-      containerHeight.value = withTiming(324 + menuHeight);
+      containerHeight.value = withTiming(baseHeight + menuHeight);
     }
   };
 
   const inputRef = useRef<TextInput | null>(null);
 
   const listContainerStyle = useAnimatedStyle(() => {
-    const shadowOpacity = interpolate(isOpened.value, [0, 1], [0, 0.15]);
     return {
       height: containerHeight.value,
-      shadowOpacity,
     };
   }, [isOpened.value]);
 
@@ -120,46 +58,61 @@ const Selection = ({
     };
   }, [isOpened.value]);
 
+  const labelStyle = useAnimatedStyle(() => {
+    const color = interpolateColor(isOpened.value, [0, 1], [BLACK_DARK, BLUE]);
+    return {
+      color,
+    };
+  });
+
   const onChangeSearchText = (text: string) => {
     filteredList.current = text
-      ? list.filter((item: string) =>
+      ? itemsList.filter((item: string) =>
           item.includes(text[0].toUpperCase() + text.slice(1))
         )
-      : [...list];
+      : [...itemsList];
     setText(text);
-    const listLength = filteredList.current.length;
-    const newContainerHeight =
-      listLength === 0
-        ? 105 + menuHeight
-        : listLength < 6
-        ? listLength * 46 + 48 + menuHeight
-        : 324 + menuHeight;
-    containerHeight.value = withTiming(newContainerHeight, { duration: 200 });
+    if (multySelection) {
+      const listLength = filteredList.current.length;
+      const isTooMuchItems = listLength > 8;
+      const newContainerHeight =
+        listLength === 0
+          ? 105 + menuHeight
+          : isTooMuchItems
+          ? baseHeight + menuHeight
+          : listLength * 46 + 48 + menuHeight;
+      containerHeight.value = withTiming(newContainerHeight, { duration: 200 });
+    }
   };
 
   const selectItem = (item: string) => {
-    if (!selectedItemsArr.length) {
+    if (!multySelection) {
+      selectedItemsSet.clear();
+    } else if (!selectedItemsSet.size) {
       containerHeight.value = withTiming(containerHeight.value + 44);
     }
-    setSelectedItems({
-      ...selectedItems,
-      [item]: true,
-    });
+    selectedItemsSet.add(item);
+    rerender();
   };
 
   const unselectItem = (item: string) => {
-    if (selectedItemsArr.length === 1) {
+    if (selectedItemsSet.size === 1 && multySelection) {
       containerHeight.value = withTiming(containerHeight.value - 44);
     }
-    setSelectedItems({
-      ...selectedItems,
-      [item]: false,
-    });
+    selectedItemsSet.delete(item);
+    rerender();
+  };
+
+  const unselectAll = () => {
+    selectedItemsSet.clear();
+    rerender();
   };
 
   return (
     <View style={selectionStyles.container}>
-      <Text style={selectionStyles.label}>{label}</Text>
+      <Animated.Text style={[selectionStyles.label, labelStyle]}>
+        {label}
+      </Animated.Text>
       <Animated.View
         style={[selectionStyles.listContainer, listContainerStyle]}
       >
@@ -172,11 +125,14 @@ const Selection = ({
           selectedItemsArr={selectedItemsArr}
           placeholder={placeholder}
         />
-        <SelectionMenu
-          selectedItemsArr={selectedItemsArr}
-          isOpened={isOpened}
-          unselectItem={unselectItem}
-        />
+        {multySelection && (
+          <SelectionMenu
+            selectedItemsArr={selectedItemsArr}
+            isOpened={isOpened}
+            unselectItem={unselectItem}
+            unselectAll={unselectAll}
+          />
+        )}
         <Animated.ScrollView
           style={[selectionStyles.scrollView, scrollViewStyle]}
         >
@@ -186,9 +142,11 @@ const Selection = ({
                 <SelectionItem
                   key={index + Date.now()}
                   title={item}
-                  isChecked={selectedItems[item]}
+                  isChecked={selectedItemsSet.has(item)}
                   onPress={() =>
-                    selectedItems[item] ? unselectItem(item) : selectItem(item)
+                    selectedItemsSet.has(item)
+                      ? unselectItem(item)
+                      : selectItem(item)
                   }
                 />
               );

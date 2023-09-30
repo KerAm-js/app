@@ -5,8 +5,6 @@ import {
   TEXT_F_SIZE,
 } from "../../../consts/texts";
 import {
-  BLACK_DARK,
-  BLACK_LIGHT_OPACITY,
   GREY_DARK,
   GREY_LIGHT,
   GREY_MIDDLE,
@@ -14,9 +12,7 @@ import {
 } from "../../../consts/colors";
 import {
   BORDER_RADIUS_SMALL,
-  BORDER_RADIUS_ULTRA_SMALL,
 } from "../../../consts/borders";
-import { INPUT_HEIGHT } from "../../../consts/views";
 
 export const selectionStyles = StyleSheet.create({
   container: {
@@ -33,13 +29,6 @@ export const selectionStyles = StyleSheet.create({
     fontWeight: REGULAR_F_WEIGHT,
     backgroundColor: WHITE,
     borderRadius: BORDER_RADIUS_SMALL,
-    shadowColor: BLACK_DARK,
-    shadowOpacity: 0,
-    shadowOffset: {
-      height: 2,
-      width: 0,
-    },
-    shadowRadius: 15,
   },
   notFoundMessage: {
     textAlign: "center",

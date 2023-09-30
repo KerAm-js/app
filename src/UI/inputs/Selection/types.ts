@@ -1,8 +1,7 @@
 export type TSelectionProps = {
   label: string;
-  multySelection?: boolean;
-  values: Array<string>;
-  valuesSetter: (value: string) => void;
-  valuesList?: Array<string>;
+  itemsList: Array<string>;
+  selectedItemsSet: Set<string>;
   placeholder: string;
+  multySelection: boolean;
 };

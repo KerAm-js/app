@@ -18,13 +18,13 @@ export const inputStyles = StyleSheet.create({
     marginBottom: 8,
     backgroundColor: WHITE,
     borderRadius: BORDER_RADIUS_SMALL,
-    shadowColor: BLACK_DARK,
-    shadowOpacity: 0,
-    shadowOffset: {
-      height: 2,
-      width: 0,
-    },
-    shadowRadius: 10,
+    // shadowColor: BLACK_DARK,
+    // shadowOpacity: 0,
+    // shadowOffset: {
+    //   height: 2,
+    //   width: 0,
+    // },
+    // shadowRadius: 10,
   },
   label: {
     fontSize: SMALL_F_SIZE,
