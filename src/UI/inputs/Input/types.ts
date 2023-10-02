@@ -1,6 +1,9 @@
+import { KeyboardTypeOptions } from "react-native";
+
 export type TInputProps = {
   value: string;
-  valueSetter: (value: string) => void;
-  label: string;
+  onChangeText: (value: string) => void;
   placeholder: string;
+  keyboardType?: KeyboardTypeOptions;
+  flexed?: boolean
 };

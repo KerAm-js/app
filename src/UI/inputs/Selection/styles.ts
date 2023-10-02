@@ -1,13 +1,11 @@
 import { StyleSheet } from "react-native";
 import {
   REGULAR_F_WEIGHT,
-  SMALL_F_SIZE,
   TEXT_F_SIZE,
 } from "../../../consts/texts";
 import {
   GREY_DARK,
   GREY_LIGHT,
-  GREY_MIDDLE,
   WHITE,
 } from "../../../consts/colors";
 import {
@@ -17,11 +15,6 @@ import {
 export const selectionStyles = StyleSheet.create({
   container: {
     width: "100%",
-  },
-  label: {
-    fontSize: SMALL_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
-    marginBottom: 8,
   },
   listContainer: {
     width: "100%",

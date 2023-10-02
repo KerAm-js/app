@@ -9,8 +9,9 @@ import { arrowDownSvg } from "../../../../assets/svg/arrowDown";
 import { selectionSearchBarStyles } from "./styles";
 import { BLACK_DARK, BLUE, GREY_DARK } from "../../../../consts/colors";
 import { searchSvg } from "../../../../assets/svg/search";
+import { FC } from "react";
 
-const SelectionSearchBar = ({
+const SelectionSearchBar: FC<TSelectionSearchBarProps> = ({
   onPress,
   isOpened,
   selectedItemsArr,
@@ -18,7 +19,7 @@ const SelectionSearchBar = ({
   inputRef,
   inputValue,
   onInputChange,
-}: TSelectionSearchBarProps) => {
+}) => {
   const searchBarContainerStyle = useAnimatedStyle(() => {
     const translation = interpolate(isOpened.value, [0, 1], [-15, 0]);
     const width = interpolate(isOpened.value, [0, 1], [0, 100]);
@@ -30,7 +31,7 @@ const SelectionSearchBar = ({
   }, [isOpened.value]);
 
   const arrowStyle = useAnimatedStyle(() => {
-    const rotation = interpolate(isOpened.value, [0, 1], [-180, 0]);
+    const rotation = interpolate(isOpened.value, [0, 1], [0, -180]);
     return {
       transform: [
         {

@@ -3,14 +3,15 @@ import { TBigButtonProps } from "./types";
 import { bigButtonStyles } from "./styles";
 import { SvgXml } from "react-native-svg";
 import { BLACK_DARK, WHITE } from "../../../consts/colors";
+import { FC } from "react";
 
-export const BigButton = ({
+export const BigButton: FC<TBigButtonProps> = ({
   backgroundColor,
   title,
   iconXmlFunc,
   onPress,
   noShadow,
-}: TBigButtonProps) => {
+}) => {
   return (
     <TouchableOpacity
       onPress={onPress}

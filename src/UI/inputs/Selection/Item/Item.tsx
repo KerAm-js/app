@@ -8,8 +8,13 @@ import {
 } from "../../../../consts/colors";
 import { selectionItemStyles } from "./styles";
 import { TSelectionItemProps } from "./types";
+import { FC } from "react";
 
-const SelectionItem = ({ title, isChecked, onPress }: TSelectionItemProps) => {
+const SelectionItem: FC<TSelectionItemProps> = ({
+  title,
+  isChecked,
+  onPress,
+}: TSelectionItemProps) => {
   return (
     <Pressable
       onPress={onPress}

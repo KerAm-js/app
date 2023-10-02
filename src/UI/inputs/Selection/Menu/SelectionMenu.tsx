@@ -1,22 +1,19 @@
 import Animated, {
-  interpolate,
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
 import SelectionMenuItem from "../MenuItem/MenuItem";
 import { selectionMenuStyles } from "./styles";
 import { TSelectionMenuProps } from "./types";
-import { RED } from "../../../../consts/colors";
-import { Pressable, ScrollView } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { cancelSvg } from "../../../../assets/svg/cancel";
+import { ScrollView } from "react-native";
+import { FC } from "react";
 
-const SelectionMenu = ({
+const SelectionMenu: FC<TSelectionMenuProps> = ({
   unselectItem,
   selectedItemsArr,
   isOpened,
   unselectAll,
-}: TSelectionMenuProps) => {
+}) => {
   const isShown = !!selectedItemsArr.length;
 
   const selectedItemsContainerStyle = useAnimatedStyle(() => {
@@ -44,14 +41,6 @@ const SelectionMenu = ({
           />
         ))}
       </ScrollView>
-      {/* {!!selectedItemsArr.length && (
-        <Pressable
-          onPress={unselectAll}
-          style={selectionMenuStyles.clearButton}
-        >
-          <SvgXml xml={cancelSvg(RED)} width={16} height={16} />
-        </Pressable>
-      )} */}
     </Animated.View>
   );
 };

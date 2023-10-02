@@ -3,13 +3,14 @@ import { TIconButtonProps } from "./types";
 import { SvgXml } from "react-native-svg";
 import { iconButtonStyles } from "./styles";
 import { BLACK_LIGHT, WHITE } from "../../../consts/colors";
+import { FC } from "react";
 
-export const IconButton = ({
+export const IconButton: FC<TIconButtonProps> = ({
   onPress,
   iconXmlFunc,
   bigSize,
   isActive,
-}: TIconButtonProps) => {
+}) => {
   return (
     <TouchableOpacity
       onPress={onPress}

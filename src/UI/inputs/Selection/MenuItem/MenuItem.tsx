@@ -3,8 +3,9 @@ import { SvgXml } from "react-native-svg";
 import { cancelSvg } from "../../../../assets/svg/cancel";
 import { TMenuItemProps } from "./types";
 import { menuItemStyles } from "./styles";
+import { FC } from "react";
 
-const SelectionMenuItem = ({ title, onPressX }: TMenuItemProps) => {
+const SelectionMenuItem: FC<TMenuItemProps> = ({ title, onPressX }) => {
   return (
     <View style={menuItemStyles.container}>
       <Text style={menuItemStyles.title}>{title}</Text>
