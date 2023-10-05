@@ -1,9 +1,11 @@
-import { TextInput, View } from "react-native";
+import { Pressable, TextInput, View } from "react-native";
 import { TInputProps } from "./types";
 import { inputStyles } from "./styles";
-import { BLUE, GREY_DARK } from "../../../consts/colors";
+import { BLUE, GREY_DARK, WHITE } from "../../../consts/colors";
 import { FC } from "react";
 import { TWithLabelChildrenProps } from "../WithLabel/types";
+import { SvgXml } from "react-native-svg";
+import { cancelSvg } from "../../../assets/svg/cancel";
 
 const InputField: FC<
   TInputProps & Pick<TWithLabelChildrenProps, "setIsFocused">
@@ -15,6 +17,7 @@ const InputField: FC<
   setIsFocused,
   flexed,
 }) => {
+  const clearInput = () => onChangeText("");
   return (
     <View style={[inputStyles.container, flexed && { flex: 1 }]}>
       <TextInput
@@ -28,6 +31,11 @@ const InputField: FC<
         onChangeText={onChangeText}
         keyboardType={keyboardType}
       />
+      <Pressable style={inputStyles.clearInputButton} onPress={clearInput}>
+        <View style={inputStyles.clearInputCircle}>
+          <SvgXml xml={cancelSvg(WHITE)} width={8} height={8} />
+        </View>
+      </Pressable>
     </View>
   );
 };

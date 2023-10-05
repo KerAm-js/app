@@ -31,7 +31,7 @@ const SelectionSearchBar: FC<TSelectionSearchBarProps> = ({
   }, [isOpened.value]);
 
   const arrowStyle = useAnimatedStyle(() => {
-    const rotation = interpolate(isOpened.value, [0, 1], [0, -180]);
+    const rotation = interpolate(isOpened.value, [0, 1], [-90, 0]);
     return {
       transform: [
         {
