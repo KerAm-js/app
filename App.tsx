@@ -10,6 +10,11 @@ import { TIntervalInputValue } from "./src/UI/inputs/Interval/types";
 import { TECHS_LIST } from "./src/consts/data";
 import Avatar from "./src/UI/Avatar/Avatar";
 import SearchBar from "./src/UI/inputs/SearchBar/SearchBar";
+import CardButton from "./src/UI/buttons/CardButton/CardButton";
+import { shovelSvg } from "./src/assets/svg/shovel";
+import { SCREEN_PADDING } from "./src/consts/views";
+import { excavatorSvg } from "./src/assets/svg/excavator";
+import { dumpSvg } from "./src/assets/svg/dump";
 
 export default function App() {
   const [input, setInput] = useState<string>("");
@@ -58,6 +63,11 @@ export default function App() {
           onChangeTextHandlers={onIntervalInputChangeHandlers}
           keyboardType="numeric"
         />
+        <View style={{ gap: 14, flexDirection: 'row', padding: SCREEN_PADDING, flexWrap: 'wrap' }}>
+          <CardButton title="Техника" onPress={() => console.log('ok')} iconXml={excavatorSvg()} />
+          <CardButton title="Нерудные материалы" onPress={() => console.log('ok')} iconXml={shovelSvg()} />
+          <CardButton title="Свалки" onPress={() => console.log('ok')} iconXml={dumpSvg()} />
+        </View>
         <StatusBar style="auto" />
       </ScrollView>
     </SafeAreaView>

@@ -7,5 +7,5 @@ export const SMALL_F_SIZE = 14;
 export const ULTRA_SMALL_F_SIZE = 12;
 
 export const REGULAR_F_WEIGHT = "500";
-export const SUBTITLE_BOLD_F_WEIGHT = "600";
+export const SUBTITLE_F_WEIGHT = "600";
 export const TITLE_F_WEIGHT = "700";
