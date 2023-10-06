@@ -1,11 +1,11 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Pressable, Text } from "react-native";
 import { TBigButtonProps } from "./types";
 import { bigButtonStyles } from "./styles";
 import { SvgXml } from "react-native-svg";
 import { BLACK_DARK, WHITE } from "../../../consts/colors";
 import { FC } from "react";
 
-export const BigButton: FC<TBigButtonProps> = ({
+const BigButton: FC<TBigButtonProps> = ({
   backgroundColor,
   title,
   iconXmlFunc,
@@ -13,7 +13,7 @@ export const BigButton: FC<TBigButtonProps> = ({
   noShadow,
 }) => {
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
       style={[
         bigButtonStyles.container,
@@ -36,6 +36,8 @@ export const BigButton: FC<TBigButtonProps> = ({
       >
         {title}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
+
+export default BigButton;

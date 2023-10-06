@@ -1,5 +1,5 @@
 import { userSvg } from "../../../assets/svg/user";
-import { BLACK_LIGHT, BLUE, GREEN, WHITE } from "./../../../consts/colors";
+import { BLACK_LIGHT, BLUE, GREEN, WHITE } from "../../../consts/colors";
 
 export type TBigButtonProps = {
   onPress: () => void;
