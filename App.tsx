@@ -9,6 +9,7 @@ import IntervalInput from "./src/UI/inputs/Interval/Interval";
 import { TIntervalInputValue } from "./src/UI/inputs/Interval/types";
 import { TECHS_LIST } from "./src/consts/data";
 import Avatar from "./src/UI/Avatar/Avatar";
+import SearchBar from "./src/UI/inputs/SearchBar/SearchBar";
 
 export default function App() {
   const [input, setInput] = useState<string>("");
