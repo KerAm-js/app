@@ -1,17 +1,15 @@
 import { Text, TextInput, View } from "react-native";
-import React, { FC, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { TSelectionProps } from "./types";
 import { selectionStyles } from "./styles";
 import SelectionItem from "./Item/Item";
 import Animated, {
-  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 import SelectionSearchBar from "./SearchBar/SearchBar";
 import SelectionMenu from "./Menu/SelectionMenu";
-import { BLACK_DARK, BLUE } from "../../../consts/colors";
 import withLabel from "../WithLabel/WithLabel";
 
 const Selection = withLabel<TSelectionProps>(
@@ -62,17 +60,6 @@ const Selection = withLabel<TSelectionProps>(
       };
     }, [isOpened.value]);
 
-    const labelStyle = useAnimatedStyle(() => {
-      const color = interpolateColor(
-        isOpened.value,
-        [0, 1],
-        [BLACK_DARK, BLUE]
-      );
-      return {
-        color,
-      };
-    });
-
     const onChangeSearchText = (text: string) => {
       filteredList.current = text
         ? itemsList.filter((item: string) =>
@@ -115,6 +102,7 @@ const Selection = withLabel<TSelectionProps>(
 
     const unselectAll = () => {
       selectedItemsSet.clear();
+      containerHeight.value = withTiming(containerHeight.value - 44);
       rerender();
     };
 
