@@ -1,0 +1,1 @@
+export const YA_MAP_API_KEY = '20c7fb3f-ab5c-4116-b5ca-7810a2827d8f';
