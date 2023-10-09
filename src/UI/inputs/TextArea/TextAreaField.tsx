@@ -1,7 +1,7 @@
 import { TextInput, View } from "react-native";
 import { BLUE, GREY_DARK, WHITE } from "../../../consts/colors";
 import { FC } from "react";
-import { TWithLabelChildrenProps } from "../WithLabel/types";
+import { TWithLabelChildrenProps } from "../../../hoc/WithLabel/types";
 import { TTextAreaProps } from "./types";
 import { textAreaStyles } from "./styles";
 

@@ -1,4 +1,4 @@
-import withLabel from "../WithLabel/WithLabel";
+import withLabel from "../../../hoc/WithLabel/WithLabel";
 import TextAreaField from "./TextAreaField";
 import { TTextAreaProps } from "./types";
 

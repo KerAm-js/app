@@ -1,6 +1,8 @@
 import { View } from "react-native"
 import MainMap from "./components/MainMap/MainMap";
 import { IAdvert } from "../../types/Advert";
+import MenuBar from "./components/MenuBar/MenuBar";
+import NavBar from "./components/NavBar/NavBar";
 
 const adverts: Array<IAdvert> = [
   {
@@ -39,7 +41,9 @@ const adverts: Array<IAdvert> = [
 
 const MainPage = () => {
   return <View>
+    <NavBar />
     <MainMap adverts={adverts} />
+    <MenuBar />
   </View>
 }
 

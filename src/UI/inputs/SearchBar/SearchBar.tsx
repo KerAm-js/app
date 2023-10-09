@@ -1,11 +1,10 @@
-import { Pressable, TextInput, View } from "react-native";
+import { TextInput, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { searchSvg } from "../../../assets/svg/search";
 import { GREY_DARK } from "../../../consts/colors";
 import { searchBarStyles } from "./styles";
 import { FC } from "react";
 import { TSearchBarProps } from "./types";
-import InputField from "../Input/InputField";
 
 const SearchBar: FC<TSearchBarProps> = ({
   value,

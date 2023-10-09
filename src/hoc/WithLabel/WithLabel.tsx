@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { IWithLabelProps, TWithLabelChildrenProps } from "./types";
 import { withLabelStyles } from "./styles";
 import React, { ComponentType, FC, useState } from "react";
-import { BLUE } from "../../../consts/colors";
+import { BLUE } from "../../consts/colors";
 
 function withLabel<T>(
   Component: ComponentType<

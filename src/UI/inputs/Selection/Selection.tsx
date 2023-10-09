@@ -10,7 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import SelectionSearchBar from "./SearchBar/SearchBar";
 import SelectionMenu from "./Menu/SelectionMenu";
-import withLabel from "../WithLabel/WithLabel";
+import withLabel from "../../../hoc/WithLabel/WithLabel";
 
 const Selection = withLabel<TSelectionProps>(
   ({

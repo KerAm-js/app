@@ -3,7 +3,7 @@ import { intervalInputStyles } from "./styles";
 import { FC, useState } from "react";
 import { BLUE, GREY_DARK } from "../../../consts/colors";
 import { TIntervalInputProps } from "./types";
-import withLabel from "../WithLabel/WithLabel";
+import withLabel from "../../../hoc/WithLabel/WithLabel";
 import InputField from "../Input/InputField";
 
 const IntervalInput = withLabel<TIntervalInputProps>(
