@@ -13,5 +13,6 @@ export const withMapShadowStyles = StyleSheet.create({
       width: 0,
     },
     shadowRadius: 10,
+    elevation: 10
   }
 })

@@ -8,7 +8,7 @@ export const menuBarStyles = StyleSheet.create({
     gap: 10,
     position: 'absolute',
     justifyContent: 'center',
-    bottom: 40,
+    bottom: 0,
     zIndex: 1
   }
 })

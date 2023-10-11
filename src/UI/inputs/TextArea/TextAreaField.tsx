@@ -27,6 +27,8 @@ TTextAreaProps & Pick<TWithLabelChildrenProps, "setIsFocused">
         onChangeText={onChangeText}
         keyboardType={keyboardType}
         multiline
+        returnKeyType="done"
+        returnKeyLabel="Готово"
       />
     </View>
   );

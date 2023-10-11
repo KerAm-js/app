@@ -4,7 +4,7 @@ import { SCREEN_PADDING } from "../../../../consts/views";
 export const navBarStyles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 50,
+    top: 0,
     width: '100%',
     paddingHorizontal: SCREEN_PADDING,
     flexDirection: "row",

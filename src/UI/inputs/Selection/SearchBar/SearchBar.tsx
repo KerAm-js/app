@@ -77,6 +77,8 @@ const SelectionSearchBar: FC<TSelectionSearchBarProps> = ({
           value={inputValue}
           onChangeText={onInputChange}
           selectionColor={BLUE}
+          returnKeyType="done"
+          returnKeyLabel="Готово"
         />
       </Animated.View>
     </Pressable>

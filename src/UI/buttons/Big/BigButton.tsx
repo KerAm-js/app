@@ -1,4 +1,4 @@
-import { Pressable, Text } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { TBigButtonProps } from "./types";
 import { bigButtonStyles } from "./styles";
 import { SvgXml } from "react-native-svg";
@@ -13,30 +13,32 @@ const BigButton: FC<TBigButtonProps> = ({
   noShadow,
 }) => {
   return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        bigButtonStyles.container,
-        noShadow && { shadowOpacity: 0 },
-        backgroundColor && { backgroundColor, shadowColor: backgroundColor },
-      ]}
-    >
-      {iconXmlFunc && (
-        <SvgXml
-          xml={iconXmlFunc(backgroundColor !== WHITE ? WHITE : undefined)}
-          width={20}
-          height={20}
-        />
-      )}
-      <Text
+    <View style={bigButtonStyles.container}>
+      <Pressable
+        onPress={onPress}
         style={[
-          bigButtonStyles.title,
-          backgroundColor === WHITE && { color: BLACK_DARK },
+          bigButtonStyles.button,
+          noShadow && { shadowOpacity: 0 },
+          backgroundColor && { backgroundColor, shadowColor: backgroundColor },
         ]}
       >
-        {title}
-      </Text>
-    </Pressable>
+        {iconXmlFunc && (
+          <SvgXml
+            xml={iconXmlFunc(backgroundColor !== WHITE ? WHITE : undefined)}
+            width={20}
+            height={20}
+          />
+        )}
+        <Text
+          style={[
+            bigButtonStyles.title,
+            backgroundColor === WHITE && { color: BLACK_DARK },
+          ]}
+        >
+          {title}
+        </Text>
+      </Pressable>
+    </View>
   );
 };
 

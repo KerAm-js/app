@@ -1,6 +1,6 @@
-import { KeyboardTypeOptions } from "react-native";
+import { KeyboardTypeOptions, TextInputProps } from "react-native";
 
-export type TInputProps = {
+export interface IInputProps extends TextInputProps {
   value: string;
   onChangeText: (value: string) => void;
   placeholder: string;

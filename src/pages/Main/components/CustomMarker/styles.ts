@@ -18,6 +18,7 @@ export const customMarkerStyles = StyleSheet.create({
       width: 0,
     },
     shadowRadius: 5,
-    shadowOpacity: 50
+    shadowOpacity: 50,
+    elevation: 5
   }
 })

@@ -1,10 +1,15 @@
 import { StyleSheet } from "react-native";
-import { TITLE_F_SIZE, TITLE_F_WEIGHT } from "../../../consts/texts";
+import { TEXT_F_SIZE, TITLE_F_SIZE, TITLE_F_WEIGHT } from "../../../consts/texts";
 import { BLACK_DARK, BLACK_LIGHT, WHITE } from "../../../consts/colors";
 import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
+import { SCREEN_PADDING } from "../../../consts/views";
 
 export const bigButtonStyles = StyleSheet.create({
   container: {
+    paddingHorizontal: SCREEN_PADDING,
+    paddingTop: 20,
+  },
+  button: {
     height: 50,
     width: "100%",
     flexDirection: "row",
@@ -18,12 +23,12 @@ export const bigButtonStyles = StyleSheet.create({
       width: 0,
     },
     shadowRadius: 5,
-    borderRadius: BORDER_RADIUS_SMALL
+    borderRadius: BORDER_RADIUS_SMALL,
+    marginRight: 4,
   },
   title: {
-    fontSize: TITLE_F_SIZE,
+    fontSize: TEXT_F_SIZE,
     fontWeight: TITLE_F_WEIGHT,
     color: WHITE,
-    marginLeft: 4
   },
 });

@@ -1,4 +1,4 @@
-import { Text, TextInput, View } from "react-native";
+import { Keyboard, Text, TextInput, View } from "react-native";
 import React, { useRef, useState } from "react";
 import { TSelectionProps } from "./types";
 import { selectionStyles } from "./styles";
@@ -43,6 +43,7 @@ const Selection = withLabel<TSelectionProps>(
         isOpened.value = withTiming(1);
         containerHeight.value = withTiming(baseHeight + menuHeight);
         setIsFocused(true);
+        Keyboard.dismiss();
       }
     };
 

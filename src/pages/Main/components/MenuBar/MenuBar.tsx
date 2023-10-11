@@ -7,10 +7,12 @@ import { excavatorSvg } from "../../../../assets/svg/excavator";
 import { shovelSvg } from "../../../../assets/svg/shovel";
 import { dumpSvg } from "../../../../assets/svg/dump";
 import { menuBarStyles } from "./styles";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const MenuBar: FC = () => {
   const [state, setState] = useState<TAdvertType | null>(null);
-  return <View style={[menuBarStyles.container]}>
+  const { bottom } = useSafeAreaInsets();
+  return <View style={[menuBarStyles.container, {paddingBottom: bottom + 10}]}>
     <MenuButton isActive={state === null} iconXmlFunc={allSvg} onPress={() => setState(null)} />
     <MenuButton isActive={state === 'excavator'} iconXmlFunc={excavatorSvg} onPress={() => setState('excavator')} />
     <MenuButton isActive={state === 'shovel'} iconXmlFunc={shovelSvg} onPress={() => setState('shovel')} />
