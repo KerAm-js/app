@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { intervalInputStyles } from "./styles";
 import { TIntervalInputProps } from "./types";
-import withLabel from "../../../hoc/WithLabel/WithLabel";
+import withLabel from "../../../components/hoc/WithLabel/WithLabel";
 import InputField from "../Input/InputField";
 
 const IntervalInput = withLabel<TIntervalInputProps>(

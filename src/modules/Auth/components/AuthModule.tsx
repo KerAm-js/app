@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useHeaderHeight } from "@react-navigation/elements";
 import { TFormInputType } from "../../../components/form/types";
 import Form from "../../../components/form/Form";
+import { View } from "react-native";
+import { authModuleStyles } from "./styles";
 
 const AuthModule = () => {
   const [phone, setPhone] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const headerHeight = useHeaderHeight();
 
   const inputs: Array<TFormInputType> = [
     {
@@ -29,12 +29,23 @@ const AuthModule = () => {
       keyboardType: "numbers-and-punctuation",
     },
   ];
+
+  const onSubmit = () => {
+    const userData = {
+      phone,
+      password,
+    };
+    console.log(userData);
+  };
+
   return (
-    <Form
-      inputs={{ noTitle: inputs }}
-      submitTitle="Войти"
-      onSubmit={() => console.log("Вход")}
-    />
+    <View style={authModuleStyles.container}>
+      <Form
+        inputs={{ noTitle: inputs }}
+        submitTitle="Войти"
+        onSubmit={onSubmit}
+      />
+    </View>
   );
 };
 

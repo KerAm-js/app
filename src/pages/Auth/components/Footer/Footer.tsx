@@ -11,7 +11,7 @@ const Footer = () => {
   return (
     <View style={footerStyles.container}>
       <Pressable onPress={() => navigation.navigate("Register")}>
-        <Text style={footerStyles.button}>Зарегистрироваться</Text>
+        <Text style={footerStyles.button}>Регистрация</Text>
       </Pressable>
     </View>
   );

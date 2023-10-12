@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { REGULAR_F_WEIGHT, SMALL_F_SIZE } from "../../consts/texts";
-import { SCREEN_PADDING } from "../../consts/views";
+import { REGULAR_F_WEIGHT, SMALL_F_SIZE } from "../../../consts/texts";
+import { SCREEN_PADDING } from "../../../consts/views";
 
 export const withLabelStyles = StyleSheet.create({
   label: {

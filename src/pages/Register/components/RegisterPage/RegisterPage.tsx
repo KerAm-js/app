@@ -1,12 +1,21 @@
-import { Text, View } from "react-native";
-import { authPageStyles } from "./styles";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { useHeaderHeight } from "@react-navigation/elements";
+import RegisterModule from "../../../../modules/Register/components/RegisterModule";
 
 const RegisterPage = () => {
+  const headerHeight = useHeaderHeight();
   return (
-    <View style={authPageStyles.container}>
-      <Text>Register page</Text>
-    </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={headerHeight + 20}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView style={{ flex: 1 }}>
+        <RegisterModule />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 export default RegisterPage;
+

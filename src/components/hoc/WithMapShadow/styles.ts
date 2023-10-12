@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { BLACK_DARK, WHITE } from "../../consts/colors";
-import { BORDER_RADIUS_SMALL } from "../../consts/borders";
+import { BLACK_DARK, WHITE } from "../../../consts/colors";
+import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
 
 export const withMapShadowStyles = StyleSheet.create({
   container: {
