@@ -8,7 +8,12 @@ import Selection from "../../UI/inputs/Selection/Selection";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import BigButton from "../../UI/buttons/Big/BigButton";
 
-const Form: FC<TFormProps> = ({ inputs, onSubmit, submitTitle }) => {
+const Form: FC<TFormProps> = ({
+  inputs,
+  onSubmit,
+  submitTitle,
+  isFormValid,
+}) => {
   return (
     <View>
       {inputs?.noTitle?.map((input, index) => {
@@ -28,7 +33,11 @@ const Form: FC<TFormProps> = ({ inputs, onSubmit, submitTitle }) => {
           // case "photo":
         }
       })}
-      <BigButton title={submitTitle} onPress={onSubmit} />
+      <BigButton
+        title={submitTitle}
+        onPress={onSubmit}
+        disabled={!isFormValid}
+      />
     </View>
   );
 };

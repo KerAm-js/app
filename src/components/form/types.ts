@@ -21,6 +21,7 @@ export type TFormInputType =
 export type TFormProps = {
   onSubmit: () => void;
   submitTitle: string;
+  isFormValid: boolean;
   inputs: {
     noTitle?: Array<TFormInputType>;
     characters?: Array<TFormInputType>;

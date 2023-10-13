@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { REGULAR_F_WEIGHT, TEXT_F_SIZE } from "../../../consts/texts";
-import { GREY_DARK, WHITE } from "../../../consts/colors";
+import { REGULAR_F_WEIGHT, SMALL_F_SIZE, TEXT_F_SIZE } from "../../../consts/texts";
+import { GREY_DARK, RED, WHITE } from "../../../consts/colors";
 import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
 
 export const inputStyles = StyleSheet.create({
@@ -9,6 +9,8 @@ export const inputStyles = StyleSheet.create({
     backgroundColor: WHITE,
     borderRadius: BORDER_RADIUS_SMALL,
     flexDirection: "row",
+    borderWidth: 1,
+    borderColor: WHITE
   },
   input: {
     fontSize: TEXT_F_SIZE,
@@ -31,4 +33,10 @@ export const inputStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  error: {
+    fontSize: SMALL_F_SIZE,
+    fontWeight: REGULAR_F_WEIGHT,
+    color: RED,
+    marginTop: 5,
+  }
 });

@@ -4,6 +4,7 @@ import { bigButtonStyles } from "./styles";
 import { SvgXml } from "react-native-svg";
 import { BLACK_DARK, WHITE } from "../../../consts/colors";
 import { FC } from "react";
+import { DISABLED_BUTTON_OPACITY } from "../../../consts/views";
 
 const BigButton: FC<TBigButtonProps> = ({
   backgroundColor,
@@ -11,15 +12,18 @@ const BigButton: FC<TBigButtonProps> = ({
   iconXmlFunc,
   onPress,
   noShadow,
+  disabled,
 }) => {
   return (
     <View style={bigButtonStyles.container}>
       <Pressable
         onPress={onPress}
+        disabled={disabled}
         style={[
           bigButtonStyles.button,
           noShadow && { shadowOpacity: 0 },
           backgroundColor && { backgroundColor, shadowColor: backgroundColor },
+          disabled && { opacity: DISABLED_BUTTON_OPACITY }
         ]}
       >
         {iconXmlFunc && (

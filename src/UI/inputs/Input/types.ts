@@ -5,5 +5,6 @@ export interface IInputProps extends TextInputProps {
   onChangeText: (value: string) => void;
   placeholder: string;
   keyboardType?: KeyboardTypeOptions;
-  flexed?: boolean
+  flexed?: boolean;
+  error?: string;
 };

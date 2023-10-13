@@ -4,6 +4,7 @@ import { BLACK_LIGHT, BLUE, GREEN, WHITE } from "../../../consts/colors";
 export type TBigButtonProps = {
   onPress: () => void;
   title: string;
+  disabled?: boolean;
   iconXmlFunc?: typeof userSvg;
   noShadow?: boolean;
   backgroundColor?:

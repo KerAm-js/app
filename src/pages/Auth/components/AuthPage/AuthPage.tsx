@@ -1,13 +1,11 @@
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
-import { authPageStyles } from "./styles";
+import { View } from "react-native";
 import Footer from "../Footer/Footer";
-import { useHeaderHeight } from "@react-navigation/elements";
 import AuthModule from "../../../../modules/Auth/components/AuthModule";
+import { authPageStyles } from "./styles";
 
 const AuthPage = () => {
-  const headerHeight = useHeaderHeight();
   return (
-    <View style={{ flex: 1 }}>
+    <View style={authPageStyles.container}>
       <AuthModule />
       <Footer />
     </View>

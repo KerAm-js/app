@@ -1,22 +1,41 @@
-import { useState } from "react";
 import { TFormInputType } from "../../../components/form/types";
 import { registerModuleStyles } from "./styles";
 import { View } from "react-native";
 import Form from "../../../components/form/Form";
+import { useInputValidator } from "../../../hooks/inputValidator/useInputValidator";
+import { usePhoneValidator } from "../../../hooks/inputValidator/usePhoneValidator";
+import { EMAIL_REGEX } from "../../../consts/regex";
 
 const RegisterModule = () => {
-  const [username, setUsername] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, onChangeUsername, isUsernameValid, usernameError] =
+    useInputValidator({ initValue: "", minLength: 3 });
+  const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
+    initValue: "",
+  });
+  const [email, onEmailChange, isEmailValid, emailError] = useInputValidator({
+    initValue: "",
+    pattern: EMAIL_REGEX,
+  });
+  const [password, onPasswordChange, isPasswordValid, passwordError] =
+    useInputValidator({
+      initValue: "",
+      minLength: 6,
+    });
+  const [password2, onPassword2Change, isPassword2Valid, password2Error] =
+    useInputValidator({
+      initValue: "",
+      minLength: 6,
+      confirmedValue: password,
+      confirmingErrorMessage: "Пароли не совпадают",
+    });
 
   const inputs: Array<TFormInputType> = [
     {
       id: "username",
       type: "input",
       value: username,
-      onChangeText: setUsername,
+      error: usernameError,
+      onChangeText: onChangeUsername,
       placeholder: "",
       label: "Имя пользователя",
     },
@@ -24,16 +43,18 @@ const RegisterModule = () => {
       id: "phone",
       type: "input",
       value: phone,
-      onChangeText: setPhone,
+      onChangeText: onPhoneChange,
+      error: phoneError,
       placeholder: "",
       label: "Телефон",
-      keyboardType: "numeric",
+      keyboardType: "phone-pad",
     },
     {
       id: "email",
       type: "input",
       value: email,
-      onChangeText: setEmail,
+      onChangeText: onEmailChange,
+      error: emailError,
       placeholder: "",
       label: "E-mail",
       keyboardType: "email-address",
@@ -42,7 +63,8 @@ const RegisterModule = () => {
       id: "password",
       type: "input",
       value: password,
-      onChangeText: setPassword,
+      onChangeText: onPasswordChange,
+      error: passwordError,
       placeholder: "",
       label: "Пароль",
       secureTextEntry: true,
@@ -51,8 +73,9 @@ const RegisterModule = () => {
     {
       id: "confirmPassword",
       type: "input",
-      value: confirmPassword,
-      onChangeText: setConfirmPassword,
+      value: password2,
+      onChangeText: onPassword2Change,
+      error: password2Error,
       placeholder: "",
       label: "Подтвердите пароль",
       secureTextEntry: true,
@@ -60,15 +83,24 @@ const RegisterModule = () => {
     },
   ];
 
+  const isFormValid =
+    isUsernameValid &&
+    isEmailValid &&
+    isPhoneValid &&
+    isPasswordValid &&
+    isPassword2Valid;
+
   const onSubmit = () => {
-    const userData = {
-      username,
-      phone,
-      email,
-      password,
+    if (isFormValid) {
+      const userData = {
+        username,
+        phone,
+        email,
+        password,
+      };
+      console.log(userData);
     }
-    console.log(userData);
-  }
+  };
 
   return (
     <View style={registerModuleStyles.container}>
@@ -76,6 +108,7 @@ const RegisterModule = () => {
         inputs={{ noTitle: inputs }}
         submitTitle="Зарегистрироваться"
         onSubmit={onSubmit}
+        isFormValid={isFormValid}
       />
     </View>
   );
