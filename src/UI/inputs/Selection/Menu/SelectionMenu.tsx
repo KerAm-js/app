@@ -20,9 +20,8 @@ const SelectionMenu: FC<TSelectionMenuProps> = ({
   const isShown = !!selectedItemsArr.length;
 
   const selectedItemsContainerStyle = useAnimatedStyle(() => {
-    const isVisible = isOpened.value && !!selectedItemsArr.length;
     return {
-      height: withTiming(isShown ? 44 : 0),
+      height: withTiming(isShown ? 44 : 0, {duration: 150}),
       opacity: isOpened.value,
       borderBottomWidth: withTiming(isShown ? 1 : 0),
     };

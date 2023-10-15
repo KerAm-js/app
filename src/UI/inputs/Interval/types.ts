@@ -1,16 +1,15 @@
-import { KeyboardTypeOptions } from "react-native";
+import { TextInputProps } from "react-native";
 
 export type TIntervalInputValue = {
   from: string;
   to: string;
 };
 
-export type TIntervalInputProps = {
-  placeholders?: { from: string; to: string };
-  values: TIntervalInputValue;
-  onChangeTextHandlers: {
-    from: (value: string) => void;
-    to: (value: string) => void;
-  };
-  keyboardType?: KeyboardTypeOptions;
-};
+export interface IIntervalInputProps extends TextInputProps {
+  firstPlaceholder: string;
+  secondPlaceholder: string;
+  firstValue: string;
+  secondValue: string;
+  onFirstValueChange: (text: string) => void;
+  onSecondValueChange: (text: string) => void;
+}

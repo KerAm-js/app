@@ -1,31 +1,39 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { intervalInputStyles } from "./styles";
-import { TIntervalInputProps } from "./types";
-import withLabel from "../../../components/hoc/WithLabel/WithLabel";
+import { IIntervalInputProps } from "./types";
+import withLabelAndError from "../../../components/hoc/WithLabelAndError/WithLabelAndError";
 import InputField from "../Input/InputField";
+import { useState } from "react";
 
-const IntervalInput = withLabel<TIntervalInputProps>(
-  ({ placeholders, values, onChangeTextHandlers, keyboardType, setIsFocused }) => {
+const IntervalInput = withLabelAndError<IIntervalInputProps>(
+  ({
+    firstPlaceholder,
+    secondPlaceholder,
+    firstValue,
+    secondValue,
+    onFirstValueChange,
+    onSecondValueChange,
+    setIsFocused,
+    ...inputProps
+  }) => {
     return (
       <View style={intervalInputStyles.container}>
-        <View style={intervalInputStyles.inputsContainer}>
-          <InputField
-            value={values.from}
-            setIsFocused={setIsFocused}
-            placeholder={placeholders?.from || "от"}
-            onChangeText={onChangeTextHandlers.from}
-            keyboardType={keyboardType}
-            flexed
-          />
-          <InputField
-            value={values.to}
-            setIsFocused={setIsFocused}
-            placeholder={placeholders?.to || "до"}
-            onChangeText={onChangeTextHandlers.to}
-            keyboardType={keyboardType}
-            flexed
-          />
-        </View>
+        <InputField
+          value={firstValue}
+          setIsFocused={setIsFocused}
+          placeholder={firstPlaceholder || "от"}
+          onChangeText={onFirstValueChange}
+          flexed
+          {...inputProps}
+        />
+        <InputField
+          value={secondValue}
+          setIsFocused={setIsFocused}
+          placeholder={secondPlaceholder || "до"}
+          onChangeText={onSecondValueChange}
+          flexed
+          {...inputProps}
+        />
       </View>
     );
   }

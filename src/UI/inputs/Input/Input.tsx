@@ -1,7 +1,7 @@
 import { IInputProps } from "./types";
 import InputField from "./InputField";
-import withLabel from "../../../components/hoc/WithLabel/WithLabel";
+import withLabelAndError from "../../../components/hoc/WithLabelAndError/WithLabelAndError";
 
-const Input = withLabel<IInputProps>((props) => <InputField {...props} />);
+const Input = withLabelAndError<IInputProps>((props) => <InputField {...props} />);
 
 export default Input;

@@ -2,17 +2,18 @@ import { TFormInputType } from "../../../components/form/types";
 import Form from "../../../components/form/Form";
 import { View } from "react-native";
 import { authModuleStyles } from "./styles";
-import { usePhoneValidator } from "../../../hooks/inputValidator/usePhoneValidator";
-import { useInputValidator } from "../../../hooks/inputValidator/useInputValidator";
+import { usePhoneValidator } from "../../../hooks/inputValidators/usePhoneValidator";
+import { useInputValidator } from "../../../hooks/inputValidators/useInputValidator";
 
 const AuthModule = () => {
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
     initValue: "",
   });
-  const [password, onPasswordChange, isPasswordValid, passwordError] = useInputValidator({
-    initValue: "",
-    minLength: 6,
-  });
+  const [password, onPasswordChange, isPasswordValid, passwordError] =
+    useInputValidator({
+      initValue: "",
+      minLength: 6,
+    });
 
   const inputs: Array<TFormInputType> = [
     {

@@ -3,15 +3,24 @@ import { IInputProps } from "./types";
 import { inputStyles } from "./styles";
 import { BLUE, GREY_DARK, RED, WHITE } from "../../../consts/colors";
 import { FC, useState } from "react";
-import { TWithLabelChildrenProps } from "../../../components/hoc/WithLabel/types";
+import { TWithLabelAndErrorChildrenProps } from "../../../components/hoc/WithLabelAndError/types";
 import { SvgXml } from "react-native-svg";
 import { cancelSvg } from "../../../assets/svg/cancel";
+import { eyeSvg } from "../../../assets/svg/eye";
+import { eyeSlashSvg } from "../../../assets/svg/eyeSlash";
 
-const InputField: FC<
-  IInputProps & Pick<TWithLabelChildrenProps, "setIsFocused">
-> = ({ value, onChangeText, setIsFocused, flexed, error, ...props }) => {
+const InputField: FC<IInputProps & TWithLabelAndErrorChildrenProps> = ({
+  value,
+  onChangeText,
+  setIsFocused,
+  errorShown,
+  setErrorShown,
+  flexed,
+  secureTextEntry,
+  ...props
+}) => {
   const clearInput = () => onChangeText("");
-  const [errorShown, setErrorShown] = useState(false);
+  const [isTextSecure, setIsTextSecure] = useState(secureTextEntry);
 
   const onFocus = () => setIsFocused(true);
 
@@ -20,36 +29,50 @@ const InputField: FC<
     setErrorShown(true);
   };
 
+  const toggleTextSecurity = () => {
+    setIsTextSecure(!isTextSecure);
+  };
+
   return (
-    <View>
-      <View
-        style={[
-          inputStyles.container,
-          flexed && { flex: 1 },
-          errorShown && !!error && { borderColor: RED },
-        ]}
-      >
-        <TextInput
-          style={inputStyles.input}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          placeholderTextColor={GREY_DARK}
-          selectionColor={BLUE}
-          value={value}
-          onChangeText={onChangeText}
-          returnKeyType="done"
-          returnKeyLabel="Готово"
-          {...props}
-        />
-        {value && (
+    <View
+      style={[
+        inputStyles.container,
+        flexed && { flex: 1 },
+        errorShown && { borderColor: RED },
+      ]}
+    >
+      <TextInput
+        style={inputStyles.input}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        placeholderTextColor={GREY_DARK}
+        selectionColor={BLUE}
+        value={value}
+        onChangeText={onChangeText}
+        returnKeyType="done"
+        returnKeyLabel="Готово"
+        secureTextEntry={isTextSecure}
+        {...props}
+      />
+      {value &&
+        (secureTextEntry === undefined ? (
           <Pressable style={inputStyles.clearInputButton} onPress={clearInput}>
             <View style={inputStyles.clearInputCircle}>
               <SvgXml xml={cancelSvg(WHITE)} width={8} height={8} />
             </View>
           </Pressable>
-        )}
-      </View>
-      {errorShown && !!error && <Text style={inputStyles.error}>{error}</Text>}
+        ) : (
+          <Pressable
+            style={inputStyles.clearInputButton}
+            onPress={toggleTextSecurity}
+          >
+            <SvgXml
+              xml={isTextSecure ? eyeSlashSvg(GREY_DARK) : eyeSvg(GREY_DARK)}
+              width={16}
+              height={16}
+            />
+          </Pressable>
+        ))}
     </View>
   );
 };

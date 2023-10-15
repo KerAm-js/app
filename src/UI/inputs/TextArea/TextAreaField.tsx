@@ -1,25 +1,33 @@
 import { TextInput, View } from "react-native";
-import { BLUE, GREY_DARK, WHITE } from "../../../consts/colors";
+import { BLUE, GREY_DARK, RED } from "../../../consts/colors";
 import { FC } from "react";
-import { TWithLabelChildrenProps } from "../../../components/hoc/WithLabel/types";
+import { TWithLabelAndErrorChildrenProps } from "../../../components/hoc/WithLabelAndError/types";
 import { TTextAreaProps } from "./types";
 import { textAreaStyles } from "./styles";
 
-const TextAreaField: FC<
-TTextAreaProps & Pick<TWithLabelChildrenProps, "setIsFocused">
-> = ({
+const TextAreaField: FC<TTextAreaProps & TWithLabelAndErrorChildrenProps> = ({
   value,
   onChangeText,
   placeholder,
   keyboardType,
   setIsFocused,
+  setErrorShown,
+  errorShown,
 }) => {
+  const onFocus = () => setIsFocused(true);
+
+  const onBlur = () => {
+    setIsFocused(false);
+    setErrorShown(true);
+  };
   return (
-    <View style={[textAreaStyles.container]}>
+    <View
+      style={[textAreaStyles.container, errorShown && { borderColor: RED }]}
+    >
       <TextInput
         style={textAreaStyles.input}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onFocus={onFocus}
+        onBlur={onBlur}
         placeholder={placeholder}
         placeholderTextColor={GREY_DARK}
         selectionColor={BLUE}

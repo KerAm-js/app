@@ -2,13 +2,13 @@ import { TFormInputType } from "../../../components/form/types";
 import { registerModuleStyles } from "./styles";
 import { View } from "react-native";
 import Form from "../../../components/form/Form";
-import { useInputValidator } from "../../../hooks/inputValidator/useInputValidator";
-import { usePhoneValidator } from "../../../hooks/inputValidator/usePhoneValidator";
+import { useInputValidator } from "../../../hooks/inputValidators/useInputValidator";
+import { usePhoneValidator } from "../../../hooks/inputValidators/usePhoneValidator";
 import { EMAIL_REGEX } from "../../../consts/regex";
 
 const RegisterModule = () => {
   const [username, onChangeUsername, isUsernameValid, usernameError] =
-    useInputValidator({ initValue: "", minLength: 3 });
+    useInputValidator({ initValue: "", minLength: 2 });
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
     initValue: "",
   });

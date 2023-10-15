@@ -6,5 +6,4 @@ export interface IInputProps extends TextInputProps {
   placeholder: string;
   keyboardType?: KeyboardTypeOptions;
   flexed?: boolean;
-  error?: string;
 };

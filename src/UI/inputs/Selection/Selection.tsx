@@ -1,5 +1,5 @@
 import { Keyboard, Text, TextInput, View } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TSelectionProps } from "./types";
 import { selectionStyles } from "./styles";
 import SelectionItem from "./Item/Item";
@@ -10,26 +10,30 @@ import Animated, {
 } from "react-native-reanimated";
 import SelectionSearchBar from "./SearchBar/SearchBar";
 import SelectionMenu from "./Menu/SelectionMenu";
-import withLabel from "../../../components/hoc/WithLabel/WithLabel";
+import { RED } from "../../../consts/colors";
+import withLabelAndError from "../../../components/hoc/WithLabelAndError/WithLabelAndError";
 
-const Selection = withLabel<TSelectionProps>(
+const Selection = withLabelAndError<TSelectionProps>(
   ({
     itemsList,
-    selectedItemsSet,
+    selectedItems,
+    selectItem,
+    unselectItem,
+    unselectAll,
     placeholder,
     multySelection,
+    errorShown,
+    setErrorShown,
     setIsFocused,
   }) => {
     const [text, setText] = useState<string>("");
-    const [_, arr] = useState([]);
-    const rerender = () => arr([]);
     const filteredList = useRef<Array<string>>([...itemsList]);
     const isOpened = useSharedValue(0);
     const containerHeight = useSharedValue(48);
+    const selectedItemsObj = useRef<{ [key: string]: boolean }>({});
 
-    const menuHeight = !!selectedItemsSet.size ? 44 : 0;
-    const selectedItemsArr = Array.from(selectedItemsSet);
-    const baseHeight = itemsList.length > 8 ? 324 : 48 + 46 * itemsList.length;
+    const menuHeight = !!selectedItems.length ? 44 : 0;
+    const baseHeight = itemsList.length > 8 ? 326 : 48 + 46 * itemsList.length;
 
     const toggleHeight = () => {
       if (isOpened.value) {
@@ -37,6 +41,7 @@ const Selection = withLabel<TSelectionProps>(
         containerHeight.value = withTiming(48);
         inputRef.current?.blur();
         setIsFocused(false);
+        setErrorShown(true);
       } else {
         filteredList.current = [...itemsList];
         setText("");
@@ -77,40 +82,46 @@ const Selection = withLabel<TSelectionProps>(
             : isTooMuchItems
             ? baseHeight + menuHeight
             : listLength * 46 + 48 + menuHeight;
-        containerHeight.value = withTiming(newContainerHeight, {
-          duration: 200,
-        });
+        containerHeight.value = withTiming(newContainerHeight);
       }
     };
 
-    const selectItem = (item: string) => {
-      if (!multySelection) {
-        selectedItemsSet.clear();
-      } else if (!selectedItemsSet.size) {
-        containerHeight.value = withTiming(containerHeight.value + 44);
+    const onSelectItem = (item: string) => {
+      if (!selectedItemsObj.current[item]) {
+        if (!selectedItems.length) {
+          containerHeight.value = withTiming(containerHeight.value + 44);
+        }
+        selectItem(item);
+        selectedItemsObj.current[item] = true;
+      } else {
+        if (selectedItems.length === 1 && multySelection) {
+          containerHeight.value = withTiming(containerHeight.value - 44);
+        }
+        unselectItem(item);
+        selectedItemsObj.current[item] = false;
       }
-      selectedItemsSet.add(item);
-      rerender();
     };
 
-    const unselectItem = (item: string) => {
-      if (selectedItemsSet.size === 1 && multySelection) {
-        containerHeight.value = withTiming(containerHeight.value - 44);
-      }
-      selectedItemsSet.delete(item);
-      rerender();
-    };
-
-    const unselectAll = () => {
-      selectedItemsSet.clear();
+    const onUnselectAll = () => {
       containerHeight.value = withTiming(containerHeight.value - 44);
-      rerender();
+      selectedItemsObj.current = {};
+      unselectAll();
     };
+
+    useEffect(() => {
+      selectedItems.forEach((item) => {
+        selectedItemsObj.current[item] = true;
+      });
+    }, []);
 
     return (
       <View style={selectionStyles.container}>
         <Animated.View
-          style={[selectionStyles.listContainer, listContainerStyle]}
+          style={[
+            selectionStyles.listContainer,
+            errorShown && { borderColor: RED },
+            listContainerStyle,
+          ]}
         >
           <SelectionSearchBar
             isOpened={isOpened}
@@ -118,15 +129,15 @@ const Selection = withLabel<TSelectionProps>(
             inputValue={text}
             onInputChange={onChangeSearchText}
             inputRef={inputRef}
-            selectedItemsArr={selectedItemsArr}
+            selectedItemsArr={selectedItems}
             placeholder={placeholder}
           />
           {multySelection && (
             <SelectionMenu
-              selectedItemsArr={selectedItemsArr}
+              selectedItemsArr={selectedItems}
               isOpened={isOpened}
               unselectItem={unselectItem}
-              unselectAll={unselectAll}
+              unselectAll={onUnselectAll}
             />
           )}
           <Animated.ScrollView
@@ -138,12 +149,8 @@ const Selection = withLabel<TSelectionProps>(
                   <SelectionItem
                     key={index + Date.now()}
                     title={item}
-                    isChecked={selectedItemsSet.has(item)}
-                    onPress={() =>
-                      selectedItemsSet.has(item)
-                        ? unselectItem(item)
-                        : selectItem(item)
-                    }
+                    isChecked={selectedItemsObj.current[item]}
+                    onPress={() => onSelectItem(item)}
                   />
                 );
               })

@@ -1,8 +1,8 @@
-import { TIntervalInputProps } from "../../UI/inputs/Interval/types";
+import { IIntervalInputProps } from "../../UI/inputs/Interval/types";
 import { IInputProps } from "../../UI/inputs/Input/types";
 import { TSelectionProps } from "../../UI/inputs/Selection/types";
 import { TTextAreaProps } from "../../UI/inputs/TextArea/types";
-import { TWithLabelProps } from "../hoc/WithLabel/types";
+import { TWithLabelAndErrorProps } from "../hoc/WithLabelAndError/types";
 import { SegmentedControlProps } from "@react-native-segmented-control/segmented-control";
 
 export type TPhotoInputProps = {};
@@ -10,13 +10,13 @@ export type TPhotoInputProps = {};
 export type TAddressInputProps = {};
 
 export type TFormInputType =
-  | (IInputProps & TWithLabelProps & { type: "input"; id: string })
-  | (TIntervalInputProps & TWithLabelProps & { type: "interval"; id: string })
-  | (TSelectionProps & TWithLabelProps & { type: "selection"; id: string })
-  | (SegmentedControlProps & TWithLabelProps & { type: "segment"; id: string })
-  | (TTextAreaProps & TWithLabelProps & { type: "textArea"; id: string })
-  | (TPhotoInputProps & TWithLabelProps & { type: "photo"; id: string })
-  | (TAddressInputProps & TWithLabelProps & { type: "address"; id: string });
+  | (IInputProps & TWithLabelAndErrorProps & { type: "input"; id: string })
+  | (IIntervalInputProps & TWithLabelAndErrorProps & { type: "interval"; id: string })
+  | (TSelectionProps & TWithLabelAndErrorProps & { type: "selection"; id: string })
+  | (SegmentedControlProps & TWithLabelAndErrorProps & { type: "segment"; id: string })
+  | (TTextAreaProps & TWithLabelAndErrorProps & { type: "textArea"; id: string })
+  | (TPhotoInputProps & TWithLabelAndErrorProps & { type: "photo"; id: string })
+  | (TAddressInputProps & TWithLabelAndErrorProps & { type: "address"; id: string });
 
 export type TFormProps = {
   onSubmit: () => void;

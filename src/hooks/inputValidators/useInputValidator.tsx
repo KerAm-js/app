@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TInputValidator } from "./types";
+
+const arr = ["символ", "символа", "символа", "символа"];
 
 export const useInputValidator: TInputValidator = ({
   initValue,
@@ -7,7 +9,7 @@ export const useInputValidator: TInputValidator = ({
   minLength = 0,
   confirmedValue,
   confirmingErrorMessage,
-  required
+  required,
 }) => {
   const [value, setValue] = useState(initValue);
   const [isValid, setIsValid] = useState(false);
@@ -18,7 +20,9 @@ export const useInputValidator: TInputValidator = ({
   const onChangeValue = (text: string) => {
     setValue(text);
     if (text.length < minLength) {
-      setError(`Введите минимум ${minLength} символов`);
+      setError(
+        `Введите минимум ${minLength} ${arr[minLength - 1] || "символов"}`
+      );
       setIsValid(false);
     } else if (text.length === 0 && required) {
       setIsValid(false);
@@ -30,18 +34,14 @@ export const useInputValidator: TInputValidator = ({
       setError("");
       setIsValid(true);
     }
-    if (confirmedValue && value !== confirmedValue && confirmingErrorMessage) {
+    if (confirmedValue && text === confirmedValue) {
+      setIsValid(true);
+      setError("");
+    } else if (confirmingErrorMessage) {
       setIsValid(false);
       setError(confirmingErrorMessage);
     }
   };
-
-  // useEffect(() => {
-  //   if (confirmedValue && value !== confirmedValue && confirmingErrorMessage) {
-  //     setIsValid(false);
-  //     setError(confirmingErrorMessage);
-  //   }
-  // }, [value]);
 
   return [value, onChangeValue, isValid, error];
 };

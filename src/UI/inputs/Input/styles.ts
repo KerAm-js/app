@@ -33,10 +33,4 @@ export const inputStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  error: {
-    fontSize: SMALL_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
-    color: RED,
-    marginTop: 5,
-  }
 });

@@ -8,7 +8,7 @@ const RegisterPage = () => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      keyboardVerticalOffset={headerHeight + 20}
+      keyboardVerticalOffset={headerHeight}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView style={registerPageStyles.container}>

@@ -22,6 +22,8 @@ export const selectionStyles = StyleSheet.create({
     fontWeight: REGULAR_F_WEIGHT,
     backgroundColor: WHITE,
     borderRadius: BORDER_RADIUS_SMALL,
+    borderWidth: 1,
+    borderColor: GREY_LIGHT,
   },
   notFoundMessage: {
     textAlign: "center",
