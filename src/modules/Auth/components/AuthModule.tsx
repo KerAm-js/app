@@ -5,7 +5,7 @@ import { authModuleStyles } from "./styles";
 import { usePhoneValidator } from "../../../hooks/inputValidators/usePhoneValidator";
 import { useInputValidator } from "../../../hooks/inputValidators/useInputValidator";
 
-const AuthModule = () => {
+const AuthModuleComponent = () => {
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
     initValue: "",
   });
@@ -64,4 +64,4 @@ const AuthModule = () => {
   );
 };
 
-export default AuthModule;
+export default AuthModuleComponent;

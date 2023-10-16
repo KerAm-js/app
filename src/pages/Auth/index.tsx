@@ -1,5 +1,5 @@
-import AuthPage from "./components/AuthPage/AuthPage";
+import Component from "./components/AuthPage/AuthPage";
 
-export default {
-  Component: AuthPage
-}
+export const AuthPage = {
+  Component,
+};

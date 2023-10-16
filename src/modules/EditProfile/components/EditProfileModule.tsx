@@ -1,12 +1,12 @@
-import { TFormInputType } from "../../../components/form/types";
-import { registerModuleStyles } from "./styles";
 import { View } from "react-native";
-import Form from "../../../components/form/Form";
-import { useInputValidator } from "../../../hooks/inputValidators/useInputValidator";
 import { usePhoneValidator } from "../../../hooks/inputValidators/usePhoneValidator";
+import { useInputValidator } from "../../../hooks/inputValidators/useInputValidator";
+import { TFormInputType } from "../../../components/form/types";
 import { EMAIL_REGEX } from "../../../consts/regex";
+import Form from "../../../components/form/Form";
+import { editProfileModuleStyles } from "./styles";
 
-const RegisterModuleComponent = () => {
+const EditProfileModuleComponent = () => {
   const [username, onChangeUsername, isUsernameValid, usernameError] =
     useInputValidator({ initValue: "", minLength: 2 });
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
@@ -16,18 +16,6 @@ const RegisterModuleComponent = () => {
     initValue: "",
     pattern: EMAIL_REGEX,
   });
-  const [password, onPasswordChange, isPasswordValid, passwordError] =
-    useInputValidator({
-      initValue: "",
-      minLength: 6,
-    });
-  const [password2, onPassword2Change, isPassword2Valid, password2Error] =
-    useInputValidator({
-      initValue: "",
-      minLength: 6,
-      confirmedValue: password,
-      confirmingErrorMessage: "Пароли не совпадают",
-    });
 
   const inputs: Array<TFormInputType> = [
     {
@@ -59,36 +47,9 @@ const RegisterModuleComponent = () => {
       label: "E-mail",
       keyboardType: "email-address",
     },
-    {
-      id: "password",
-      type: "input",
-      value: password,
-      onChangeText: onPasswordChange,
-      error: passwordError,
-      placeholder: "",
-      label: "Пароль",
-      secureTextEntry: true,
-      keyboardType: "numbers-and-punctuation",
-    },
-    {
-      id: "confirmPassword",
-      type: "input",
-      value: password2,
-      onChangeText: onPassword2Change,
-      error: password2Error,
-      placeholder: "",
-      label: "Подтвердите пароль",
-      secureTextEntry: true,
-      keyboardType: "numbers-and-punctuation",
-    },
   ];
 
-  const isFormValid =
-    isUsernameValid &&
-    isEmailValid &&
-    isPhoneValid &&
-    isPasswordValid &&
-    isPassword2Valid;
+  const isFormValid = isPhoneValid;
 
   const onSubmit = () => {
     if (isFormValid) {
@@ -96,17 +57,16 @@ const RegisterModuleComponent = () => {
         username,
         phone,
         email,
-        password,
       };
       console.log(userData);
     }
   };
 
   return (
-    <View style={registerModuleStyles.container}>
+    <View style={editProfileModuleStyles.container}>
       <Form
         inputs={{ noTitle: inputs }}
-        submitTitle="Зарегистрироваться"
+        submitTitle="Сохранить"
         onSubmit={onSubmit}
         isFormValid={isFormValid}
       />
@@ -114,4 +74,4 @@ const RegisterModuleComponent = () => {
   );
 };
 
-export default RegisterModuleComponent;
+export default EditProfileModuleComponent;

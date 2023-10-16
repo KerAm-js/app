@@ -1,9 +1,9 @@
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
-import RegisterModule from "../../../../modules/Register/components/RegisterModule";
 import { registerPageStyles } from "./styles";
+import { RegisterModule } from "../../../../modules/Register";
 
-const RegisterPage = () => {
+const RegisterPageComponent = () => {
   const headerHeight = useHeaderHeight();
   return (
     <KeyboardAvoidingView
@@ -12,11 +12,11 @@ const RegisterPage = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView style={registerPageStyles.container}>
-        <RegisterModule />
+        <RegisterModule.Component />
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
-export default RegisterPage;
+export default RegisterPageComponent;
 

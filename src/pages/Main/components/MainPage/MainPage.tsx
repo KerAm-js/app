@@ -39,7 +39,7 @@ const adverts: Array<IAdvert> = [
   },
 ];
 
-const MainPage = () => {
+const MainPageComponent = () => {
   return <View>
     <NavBar />
     <MainMap adverts={adverts} />
@@ -47,4 +47,4 @@ const MainPage = () => {
   </View>
 }
 
-export default MainPage;
+export default MainPageComponent;

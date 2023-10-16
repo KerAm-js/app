@@ -14,10 +14,10 @@ const Avatar: FC<TAvatarProps> = ({ width = 120, height = 120 }) => {
           shadowColor: WHITE,
           shadowOffset: {
             width: 0,
-            height: -(width / 6),
+            height: -(width / 12),
           },
           shadowOpacity: 1,
-          shadowRadius: width / 6,
+          shadowRadius: width / 12,
         },
       ]}
     >

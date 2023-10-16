@@ -1,5 +1,5 @@
-import RegisterPage from "./components/RegisterPage/RegisterPage";
+import Component from "./components/RegisterPage/RegisterPage";
 
-export default {
-  Component: RegisterPage
-}
+export const RegisterPage = {
+  Component,
+};

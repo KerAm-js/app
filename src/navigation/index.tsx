@@ -1,18 +1,43 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MainPage from "../pages/Main";
-import AuthPage from "../pages/Auth";
-import RegisterPage from "../pages/Register";
-import { GREY_LIGHT } from "../consts/colors";
+import { BLACK_DARK, GREY_LIGHT } from "../consts/colors";
+import { MainPage } from "../pages/Main";
+import { AuthPage } from "../pages/Auth";
+import { ProfilePage } from "../pages/Profile";
+import { RegisterPage } from "../pages/Register";
+import { EditProfilePage } from "../pages/EditProfile";
 
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShadowVisible: false,
+        headerBackTitleVisible: false,
+        headerTintColor: BLACK_DARK
+      }}
+    >
       <Stack.Screen
         options={{ headerShown: false }}
         name="Main"
         component={MainPage.Component}
+      />
+      <Stack.Screen
+        options={{
+          title: "Профиль",
+          headerStyle: { backgroundColor: GREY_LIGHT },
+          headerRight: ProfilePage.headerRight,
+        }}
+        name="Profile"
+        component={ProfilePage.Component}
+      />
+      <Stack.Screen
+        options={{
+          title: "Редактирование",
+          headerStyle: { backgroundColor: GREY_LIGHT },
+        }}
+        name="EditProfile"
+        component={EditProfilePage.Component}
       />
       <Stack.Screen
         options={{

@@ -1,15 +1,15 @@
 import { View } from "react-native";
 import Footer from "../Footer/Footer";
-import AuthModule from "../../../../modules/Auth/components/AuthModule";
 import { authPageStyles } from "./styles";
+import { AuthModule } from "../../../../modules/Auth";
 
-const AuthPage = () => {
+const AuthPageComponent = () => {
   return (
     <View style={authPageStyles.container}>
-      <AuthModule />
+      <AuthModule.Component />
       <Footer />
     </View>
   );
 };
 
-export default AuthPage;
+export default AuthPageComponent;

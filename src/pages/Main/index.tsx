@@ -1,5 +1,5 @@
-import MainPage from "./components/MainPage/MainPage";
+import Component from "./components/MainPage/MainPage"
 
-export default {
-  Component: MainPage,
+export const MainPage = {
+  Component,
 }

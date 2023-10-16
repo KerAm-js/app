@@ -18,7 +18,7 @@ const NavBar: FC = () => {
     <View style={[navBarStyles.container, { paddingTop: top }]}>
       <NavButton
         iconXml={userSvg()}
-        onPress={() => navigation.navigate("Auth")}
+        onPress={() => navigation.navigate("Profile")}
       />
       <View style={navBarStyles.rightButtonsContainer}>
         <NavButton iconXml={listSvg()} onPress={() => console.log("pressed")} />
