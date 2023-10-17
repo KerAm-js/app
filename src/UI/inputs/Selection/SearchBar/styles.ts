@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { INPUT_HEIGHT } from "../../../../consts/views";
 import { GREY_DARK, GREY_LIGHT } from "../../../../consts/colors";
-import { REGULAR_F_WEIGHT, TEXT_F_SIZE } from "../../../../consts/texts";
+import { TEXT_F_SIZE } from "../../../../consts/texts";
 
 export const selectionSearchBarStyles = StyleSheet.create({
   container: {
@@ -18,7 +18,7 @@ export const selectionSearchBarStyles = StyleSheet.create({
     paddingVertical: 14,
     flex: 1,
     fontSize: TEXT_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
+    fontFamily: 'Gilroy-Medium',
   },
   arrow: {
     position: "absolute",
@@ -29,7 +29,7 @@ export const selectionSearchBarStyles = StyleSheet.create({
   placeholder: {
     paddingRight: 50,
     fontSize: TEXT_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
+    fontFamily: 'Gilroy-Medium',
     color: GREY_DARK,
     position: "absolute",
     top: 13,

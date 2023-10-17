@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { BLUE } from "../../../../consts/colors";
-import { REGULAR_F_WEIGHT, TEXT_F_SIZE } from "../../../../consts/texts";
+import { TEXT_F_SIZE } from "../../../../consts/texts";
 
 export const footerStyles = StyleSheet.create({
   container: {
@@ -11,6 +11,6 @@ export const footerStyles = StyleSheet.create({
   button: {
     color: BLUE,
     fontSize: TEXT_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT
+    fontFamily: 'Gilroy-Medium',
   }
 })

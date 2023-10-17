@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { TEXT_F_SIZE, TITLE_F_SIZE, TITLE_F_WEIGHT } from "../../../consts/texts";
+import { TEXT_F_SIZE } from "../../../consts/texts";
 import { BLACK_DARK, BLACK_LIGHT, WHITE } from "../../../consts/colors";
 import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
 import { SCREEN_PADDING } from "../../../consts/views";
@@ -28,7 +28,7 @@ export const bigButtonStyles = StyleSheet.create({
   },
   title: {
     fontSize: TEXT_F_SIZE,
-    fontWeight: TITLE_F_WEIGHT,
+    fontFamily: 'Gilroy-Bold',
     color: WHITE,
   },
 });

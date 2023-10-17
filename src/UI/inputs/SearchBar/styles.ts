@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { SCREEN_PADDING } from "../../../consts/views";
 import { BLACK_DARK, WHITE } from "../../../consts/colors";
 import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
-import { REGULAR_F_WEIGHT, TEXT_F_SIZE } from "../../../consts/texts";
+import { TEXT_F_SIZE } from "../../../consts/texts";
 
 export const searchBarStyles = StyleSheet.create({
   container: {
@@ -25,7 +25,7 @@ export const searchBarStyles = StyleSheet.create({
   },
   input: {
     fontSize: TEXT_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
+    fontFamily: 'Gilroy-Medium',
     flex: 1,
     paddingLeft: 10,
     paddingVertical: 15,

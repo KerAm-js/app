@@ -5,6 +5,7 @@ import { AuthPage } from "../pages/Auth";
 import { ProfilePage } from "../pages/Profile";
 import { RegisterPage } from "../pages/Register";
 import { EditProfilePage } from "../pages/EditProfile";
+import { navigationStyles } from "./styles";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +15,9 @@ const RootNavigator = () => {
       screenOptions={{
         headerShadowVisible: false,
         headerBackTitleVisible: false,
-        headerTintColor: BLACK_DARK
+        headerTintColor: BLACK_DARK,
+        headerStyle: navigationStyles.header,
+        headerTitleStyle: navigationStyles.title
       }}
     >
       <Stack.Screen

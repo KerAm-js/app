@@ -2,7 +2,7 @@ import { Dimensions, StyleSheet } from "react-native";
 import { WHITE } from "../../../consts/colors";
 import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
 import { SCREEN_PADDING } from "../../../consts/views";
-import { SUBTITLE_F_WEIGHT, TEXT_F_SIZE } from "../../../consts/texts";
+import { TEXT_F_SIZE } from "../../../consts/texts";
 
 export const cardButtonWidth =
   (Dimensions.get("screen").width - SCREEN_PADDING * 2 - 14) / 2;
@@ -18,6 +18,6 @@ export const cardButtonStyles = StyleSheet.create({
   },
   title: {
     fontSize: TEXT_F_SIZE,
-    fontWeight: SUBTITLE_F_WEIGHT
+    fontFamily: 'Gilroy-Medium'
   },
 });

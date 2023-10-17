@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
-import { REGULAR_F_WEIGHT, SMALL_F_SIZE } from "../../../consts/texts";
+import { SMALL_F_SIZE } from "../../../consts/texts";
 import { SCREEN_PADDING } from "../../../consts/views";
 import { RED } from "../../../consts/colors";
 
 export const withLabelAndErrorStyles = StyleSheet.create({
   label: {
     fontSize: SMALL_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
+    fontFamily: 'Gilroy-Medium',
     marginBottom: 8,
   },
   container: {
@@ -16,7 +16,7 @@ export const withLabelAndErrorStyles = StyleSheet.create({
   },
   error: {
     fontSize: SMALL_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
+    fontFamily: 'Gilroy-Medium',
     color: RED,
     marginTop: 5,
   }

@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
 import {
-  REGULAR_F_WEIGHT,
   TEXT_F_SIZE,
 } from "../../../consts/texts";
 import {
@@ -19,7 +18,7 @@ export const selectionStyles = StyleSheet.create({
   listContainer: {
     width: "100%",
     fontSize: TEXT_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
+    fontFamily: 'Gilroy-Medium',
     backgroundColor: WHITE,
     borderRadius: BORDER_RADIUS_SMALL,
     borderWidth: 1,
@@ -29,7 +28,7 @@ export const selectionStyles = StyleSheet.create({
     textAlign: "center",
     width: "100%",
     fontSize: TEXT_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
+    fontFamily: 'Gilroy-Medium',
     color: GREY_DARK,
     marginTop: 15,
   },

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { REGULAR_F_WEIGHT, SMALL_F_SIZE, TEXT_F_SIZE } from "../../../consts/texts";
+import { TEXT_F_SIZE } from "../../../consts/texts";
 import { GREY_DARK, RED, WHITE } from "../../../consts/colors";
 import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
 
@@ -14,7 +14,7 @@ export const inputStyles = StyleSheet.create({
   },
   input: {
     fontSize: TEXT_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
+    fontFamily: 'Gilroy-Medium',
     flex: 1,
     paddingLeft: 15,
     paddingVertical: 15,

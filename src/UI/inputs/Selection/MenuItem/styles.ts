@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { GREY_MIDDLE } from "../../../../consts/colors";
 import { BORDER_RADIUS_ULTRA_SMALL } from "../../../../consts/borders";
-import { REGULAR_F_WEIGHT, TEXT_F_SIZE } from "../../../../consts/texts";
+import { TEXT_F_SIZE } from "../../../../consts/texts";
 
 export const menuItemStyles = StyleSheet.create({
   container: {
@@ -22,6 +22,6 @@ export const menuItemStyles = StyleSheet.create({
   },
   title: {
     fontSize: TEXT_F_SIZE,
-    fontWeight: REGULAR_F_WEIGHT,
+    fontFamily: 'Gilroy-Medium',
   },
 });
