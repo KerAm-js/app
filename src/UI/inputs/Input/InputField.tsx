@@ -3,7 +3,7 @@ import { IInputProps } from "./types";
 import { inputStyles } from "./styles";
 import { BLUE, GREY_DARK, RED, WHITE } from "../../../consts/colors";
 import { FC, useState } from "react";
-import { TWithLabelAndErrorChildrenProps } from "../../../components/hoc/WithLabelAndError/types";
+import { TWithLabelAndErrorChildrenProps } from "../../../components/HOC/WithLabelAndError/types";
 import { SvgXml } from "react-native-svg";
 import { cancelSvg } from "../../../assets/svg/cancel";
 import { eyeSvg } from "../../../assets/svg/eye";

@@ -7,11 +7,11 @@ const RegisterPageComponent = () => {
   const headerHeight = useHeaderHeight();
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={registerPageStyles.container}
       keyboardVerticalOffset={headerHeight}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <ScrollView style={registerPageStyles.container}>
+      <ScrollView style={registerPageStyles.scrollView}>
         <RegisterModule.Component />
       </ScrollView>
     </KeyboardAvoidingView>

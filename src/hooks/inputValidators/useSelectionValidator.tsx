@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { TSelectionValidator } from "./types";
 
-const arr = ["символ", "символа", "символа", "символа"];
-
 export const useSelectionValidator: TSelectionValidator = ({
   initValue,
   required,

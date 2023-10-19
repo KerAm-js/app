@@ -1,7 +1,4 @@
-import { Pressable, View } from "react-native";
-import { SvgXml } from "react-native-svg";
-import { starSubstractedSvg } from "../../assets/svg/starSubstracted";
-import { GREY_LIGHT, YELLOW } from "../../consts/colors";
+import { View } from "react-native";
 import { ratingStyles } from "./styles";
 import { FC, useState } from "react";
 import { TRatingProps } from "./types";

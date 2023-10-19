@@ -5,12 +5,13 @@ import {
   TEXT_F_SIZE,
   TITLE_F_SIZE,
 } from "../../../../consts/texts";
-import { GREY_DARK } from "../../../../consts/colors";
+import { GREY_DARK, GREY_LIGHT } from "../../../../consts/colors";
 
 export const userInfoStyles = StyleSheet.create({
   container: {
     paddingHorizontal: SCREEN_PADDING,
     alignItems: "center",
+    backgroundColor: GREY_LIGHT
   },
   username: {
     fontSize: TITLE_F_SIZE,

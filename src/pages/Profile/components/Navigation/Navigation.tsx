@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { profileNavigationStyles } from "./styles";
 import ButtonsGroup from "../../../../UI/buttons/Group/ButtonsGroup";
 import { useNavigation } from "@react-navigation/native";
@@ -25,7 +25,7 @@ const Navigation = () => {
         data={[
           {
             title: "Найти пользователя",
-            onPress: () => navigation.navigate("Auth"),
+            onPress: () => navigation.navigate("UserSearch"),
           },
         ]}
       />
@@ -41,6 +41,11 @@ const Navigation = () => {
         title="Разместить объявление"
         onPress={() => navigation.navigate("Auth")}
       />
+      <Pressable style={profileNavigationStyles.supportButton}>
+        <Text style={profileNavigationStyles.supportButtonTitle}>
+          Служба поддержки
+        </Text>
+      </Pressable>
     </View>
   );
 };

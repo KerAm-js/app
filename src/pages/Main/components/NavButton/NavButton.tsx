@@ -1,6 +1,6 @@
 import { TNavButtonProps } from "./types";
 import { navButtonStyles } from "./styles";
-import WihtMapShadow from "../../../../components/hoc/WithMapShadow/WtihMapShadow";
+import WihtMapShadow from "../../../../components/HOC/WithMapShadow/WtihMapShadow";
 import { Pressable } from "react-native";
 import { SvgXml } from "react-native-svg";
 

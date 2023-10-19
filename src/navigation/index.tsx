@@ -1,23 +1,27 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { BLACK_DARK, GREY_LIGHT } from "../consts/colors";
+import { BLACK_DARK, GREY_DARK, GREY_LIGHT } from "../consts/colors";
 import { MainPage } from "../pages/Main";
 import { AuthPage } from "../pages/Auth";
 import { ProfilePage } from "../pages/Profile";
 import { RegisterPage } from "../pages/Register";
 import { EditProfilePage } from "../pages/EditProfile";
 import { navigationStyles } from "./styles";
+import { UserSearchPage } from "../pages/UserSearch";
+import { UserPage } from "../pages/User";
+import { RootStackParamList } from "./types";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
   return (
     <Stack.Navigator
+      initialRouteName="Main"
       screenOptions={{
         headerShadowVisible: false,
         headerBackTitleVisible: false,
         headerTintColor: BLACK_DARK,
         headerStyle: navigationStyles.header,
-        headerTitleStyle: navigationStyles.title
+        headerTitleStyle: navigationStyles.title,
       }}
     >
       <Stack.Screen
@@ -42,6 +46,26 @@ const RootNavigator = () => {
         name="EditProfile"
         component={EditProfilePage.Component}
       />
+      <Stack.Screen
+        options={{
+          title: "Поиск пользователя",
+          headerStyle: { backgroundColor: GREY_LIGHT },
+        }}
+        name="UserSearch"
+        component={UserSearchPage.Component}
+      />
+      <Stack.Screen
+        options={({ route }) => ({
+          title: route.params.username,
+          headerStyle: { backgroundColor: GREY_LIGHT },
+          headerRight: () => (
+            <UserPage.headerRight phoneNumber={route.params.phone} />
+          ),
+        })}
+        name="User"
+      >
+        {({ route }) => <UserPage.Component {...route.params} />}
+      </Stack.Screen>
       <Stack.Screen
         options={{
           title: "Вход",

@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import { intervalInputStyles } from "./styles";
 import { IIntervalInputProps } from "./types";
-import withLabelAndError from "../../../components/hoc/WithLabelAndError/WithLabelAndError";
+import withLabelAndError from "../../../components/HOC/WithLabelAndError/WithLabelAndError";
 import InputField from "../Input/InputField";
 import { useState } from "react";
 

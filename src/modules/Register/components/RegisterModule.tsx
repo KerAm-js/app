@@ -1,7 +1,7 @@
-import { TFormInputType } from "../../../components/form/types";
+import { TFormInputType } from "../../../components/Form/types";
 import { registerModuleStyles } from "./styles";
 import { View } from "react-native";
-import Form from "../../../components/form/Form";
+import Form from "../../../components/Form/Form";
 import { useInputValidator } from "../../../hooks/inputValidators/useInputValidator";
 import { usePhoneValidator } from "../../../hooks/inputValidators/usePhoneValidator";
 import { EMAIL_REGEX } from "../../../consts/regex";

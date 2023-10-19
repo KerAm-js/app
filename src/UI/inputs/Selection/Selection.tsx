@@ -11,7 +11,7 @@ import Animated, {
 import SelectionSearchBar from "./SearchBar/SearchBar";
 import SelectionMenu from "./Menu/SelectionMenu";
 import { RED } from "../../../consts/colors";
-import withLabelAndError from "../../../components/hoc/WithLabelAndError/WithLabelAndError";
+import withLabelAndError from "../../../components/HOC/WithLabelAndError/WithLabelAndError";
 
 const Selection = withLabelAndError<TSelectionProps>(
   ({

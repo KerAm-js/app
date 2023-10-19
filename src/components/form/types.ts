@@ -2,7 +2,7 @@ import { IIntervalInputProps } from "../../UI/inputs/Interval/types";
 import { IInputProps } from "../../UI/inputs/Input/types";
 import { TSelectionProps } from "../../UI/inputs/Selection/types";
 import { TTextAreaProps } from "../../UI/inputs/TextArea/types";
-import { TWithLabelAndErrorProps } from "../hoc/WithLabelAndError/types";
+import { TWithLabelAndErrorProps } from "../HOC/WithLabelAndError/types";
 import { SegmentedControlProps } from "@react-native-segmented-control/segmented-control";
 
 export type TPhotoInputProps = {};
