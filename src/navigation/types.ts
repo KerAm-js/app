@@ -1,3 +1,4 @@
+import { IMyCommentsPageProps } from "../pages/MyComments/components/MyCommentsPage/types";
 import { IUser } from "../types/User";
 
 export type RootStackParamList = {
@@ -8,4 +9,6 @@ export type RootStackParamList = {
   Register: undefined;
   User: IUser;
   UserSearch: undefined;
+  MyComments: IMyCommentsPageProps;
+  CommentsToMe: IMyCommentsPageProps;
 };

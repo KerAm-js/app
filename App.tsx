@@ -5,8 +5,12 @@ import { StatusBar, View } from "react-native";
 import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+// import YaMap from 'react-native-yamap';
+// import { YA_MAP_API_KEY } from "./src/api/yamap";
 
 SplashScreen.preventAutoHideAsync();
+
+// YaMap.init(YA_MAP_API_KEY);
 
 export default function App() {
   const [fontsLoaded] = useFonts({

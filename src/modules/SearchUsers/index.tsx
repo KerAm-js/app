@@ -1,4 +1,4 @@
-import SearchUsersModuleComponent from "./components/ModuleComponent/SearchUsersModule";
+import SearchUsersModuleComponent from "./components/SearchUsersModule/SearchUsersModule";
 
 export const SearhUsersModule = {
   Component: SearchUsersModuleComponent,

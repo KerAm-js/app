@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { SCREEN_PADDING } from "../../../../consts/views";
 
 export const menuBarStyles = StyleSheet.create({
   container: {

@@ -9,14 +9,13 @@ import { GREY_DARK, GREY_LIGHT } from "../../../../consts/colors";
 
 export const userInfoStyles = StyleSheet.create({
   container: {
-    paddingHorizontal: SCREEN_PADDING,
     alignItems: "center",
     backgroundColor: GREY_LIGHT
   },
   username: {
     fontSize: TITLE_F_SIZE,
     fontFamily: 'Gilroy-Bold',
-    marginBottom: 15,
+    marginBottom: 5,
   },
   userInfoText: {
     fontSize: TEXT_F_SIZE,
@@ -25,7 +24,8 @@ export const userInfoStyles = StyleSheet.create({
   },
   ratingContainer: {
     marginTop: 7,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 10,
   },
   ratingText: {
     color: GREY_DARK,

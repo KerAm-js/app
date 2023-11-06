@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import BigButton from "../../../../UI/buttons/Big/BigButton";
+import { USER } from "../../../../consts/devData";
 
 const Navigation = () => {
   const navigation =
@@ -13,11 +14,22 @@ const Navigation = () => {
     <View style={profileNavigationStyles.container}>
       <ButtonsGroup
         data={[
-          { title: "Мои отзывы", onPress: () => navigation.navigate("Auth") },
+          {
+            title: "Мои отзывы",
+            onPress: () =>
+              navigation.navigate("MyComments", {
+                userId: USER.id,
+                userRole: "author",
+              }),
+          },
           { title: "Ждут оценки", onPress: () => navigation.navigate("Auth") },
           {
             title: "Отзывы обо мне",
-            onPress: () => navigation.navigate("Auth"),
+            onPress: () =>
+              navigation.navigate("CommentsToMe", {
+                userId: USER.id,
+                userRole: "adressee",
+              }),
           },
         ]}
       />

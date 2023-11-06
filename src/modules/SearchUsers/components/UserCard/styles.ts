@@ -8,6 +8,7 @@ export const userCardStyles = StyleSheet.create({
     backgroundColor: WHITE,
     borderRadius: BORDER_RADIUS_SMALL,
     padding: 12,
+    paddingHorizontal: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

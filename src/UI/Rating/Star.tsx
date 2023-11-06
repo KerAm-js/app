@@ -13,6 +13,8 @@ const Star: FC<IStarProps> = ({
   setRating,
   index,
   backgroundColor,
+  size,
+  containerWidth,
 }) => {
   if (type === "button" && setRating) {
     const onPress = () => {
@@ -22,27 +24,27 @@ const Star: FC<IStarProps> = ({
       <Pressable onPress={onPress}>
         <SvgXml
           xml={starSvg(rating >= index ? YELLOW : GREY_MIDDLE)}
-          width={20}
-          height={20}
+          width={size}
+          height={size}
         />
       </Pressable>
     );
   }
 
-  const width = ratingStyles.starWrapper.width * (rating - (index - 1));
+  const width = size * (rating - (index - 1));
 
   return (
-    <View style={ratingStyles.starWrapper}>
+    <View style={[ratingStyles.starWrapper, { width: size, height: size }]}>
       <View
         style={[
           ratingStyles.ratingIndicator,
-          { width: width > 20 ? 20 : width },
+          { width: width > size ? size : width },
         ]}
       />
       <SvgXml
         xml={starSubstractedSvg(backgroundColor || GREY_LIGHT)}
-        width={20}
-        height={20}
+        width={size}
+        height={size}
       />
     </View>
   );

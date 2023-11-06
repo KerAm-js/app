@@ -4,15 +4,17 @@ import Rating from "../../../../UI/Rating/Rating";
 import { GREY_LIGHT } from "../../../../consts/colors";
 import { FC } from "react";
 import { IUser } from "../../../../types/User";
+import InfoCard from "../../../../UI/InfoCard/InfoCard";
 
 const UserInfo: FC<
-  Pick<IUser, "username" | "phone" | "email" | "rating" | "ratesCount">
-> = ({ username, phone, email, rating, ratesCount }) => {
+  Pick<
+    IUser,
+    "username" | "phone" | "email" | "rating" | "ratesCount" | "description"
+  >
+> = ({ username, phone, email, rating, ratesCount, description }) => {
   return (
     <View style={userInfoStyles.container}>
       <Text style={userInfoStyles.username}>{username}</Text>
-      <Text style={userInfoStyles.userInfoText}>{phone}</Text>
-      <Text style={userInfoStyles.userInfoText}>{email}</Text>
       <View style={userInfoStyles.ratingContainer}>
         <Rating
           rating={rating}
@@ -23,6 +25,9 @@ const UserInfo: FC<
           Рейтинг {rating} (количество оценок {ratesCount})
         </Text>
       </View>
+      <InfoCard title="Телефон" content={phone} />
+      <InfoCard title="Почта" content={email} />
+      {!!description && <InfoCard title="Описание" content={description} />}
     </View>
   );
 };

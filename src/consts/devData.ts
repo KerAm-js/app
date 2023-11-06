@@ -1,5 +1,58 @@
 import { IUser } from "../types/User";
 
+export const USER: IUser = {
+  id: "1",
+  phone: "+7 928 123-45-67",
+  username: "ДунСтрой Групп",
+  email: "email@mail.ru",
+  description: "Описание к аккаунту",
+  rating: 4.7,
+  ratesCount: 12,
+  comments: [
+    {
+      id: "1",
+      authorId: "1",
+      authorName: "ДунСтрой Групп",
+      adresseeId: "2",
+      rate: 5,
+      text: "В данном блоке будет отображаться текст вашего отзыва",
+    },
+    {
+      id: "2",
+      authorId: "1",
+      authorName: "ДунСтрой Групп",
+      adresseeId: "2",
+      rate: 5,
+      text: "В данном блоке будет отображаться текст вашего отзыва",
+    },
+    {
+      id: "3",
+      authorId: "1",
+      authorName: "ДунСтрой Групп",
+      adresseeId: "3",
+      rate: 5,
+      text: "В данном блоке будет отображаться текст вашего отзыва. В данном блоке будет отображаться текст вашего отзыва. В данном блоке будет отображаться текст вашего отзыва. В данном блоке будет отображаться текст вашего отзыва. В данном блоке будет отображаться текст вашего отзыва.",
+    },
+    {
+      id: "4",
+      authorId: "1",
+      authorName: "ДунСтрой Групп",
+      adresseeId: "5",
+      rate: 5,
+      text: "В данном блоке будет отображаться текст вашего отзыва",
+    },
+    {
+      id: "5",
+      authorId: "2",
+      authorName: "Илья Ильин",
+      adresseeId: "1",
+      rate: 5,
+      text: "В данном блоке будет отображаться текст отзыва пользователя о вас",
+    },
+  ],
+  adverts: [],
+};
+
 export const TECHS_LIST = [
   "Автовышка",
   "Автовоз",
@@ -63,111 +116,135 @@ export const TECHS_LIST = [
 
 export const USERS_LIST: Array<IUser> = [
   {
+    id: "2",
+    description: "",
     phone: "+7 928 123-45-67",
     username: "User 1",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "3",
+    description: "",
     phone: "+7 928 123-45-68",
     username: "User 2",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "4",
+    description: "",
     phone: "+7 928 223-45-69",
     username: "User 3",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "5",
+    description: "",
     phone: "+7 928 323-45-67",
     username: "User 4",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "6",
+    description: "",
     phone: "+7 963 123-45-67",
     username: "Usr 2",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "7",
+    description: "",
     phone: "+7 933 123-45-67",
     username: "Usr 1",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "8",
+    description: "",
     phone: "+7 928 133-45-67",
     username: "Usr 1",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "9",
+    description: "",
     phone: "+7 928 133-45-68",
     username: "User 2",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "10",
+    description: "",
     phone: "+7 928 233-45-69",
     username: "Use 0",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "11",
+    description: "",
     phone: "+7 928 333-45-67",
     username: "User 4",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "12",
+    description: "",
     phone: "+7 963 133-45-67",
     username: "Usr 2",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
   {
+    id: "13",
+    description: "",
     phone: "+78 933 133-45-67",
     username: "Usr 1",
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
     adverts: [],
-    comments: []
+    comments: [],
   },
 ];

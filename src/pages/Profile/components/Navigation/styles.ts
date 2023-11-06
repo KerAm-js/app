@@ -5,8 +5,8 @@ import { TEXT_F_SIZE } from "../../../../consts/texts";
 export const profileNavigationStyles = StyleSheet.create({
   container: {
     gap: 10,
-    marginTop: 20,
-    paddingBottom: 50,
+    marginTop: 10,
+    paddingBottom: 70,
     backgroundColor: GREY_LIGHT
   },
   supportButton: {

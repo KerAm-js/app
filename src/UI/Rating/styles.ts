@@ -4,13 +4,9 @@ import { GREY_DARK, GREY_MIDDLE, YELLOW } from "../../consts/colors";
 export const ratingStyles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    width: 140,
-    height: 20,
     justifyContent: "space-between",
   },
   starWrapper: {
-    width: 20,
-    height: 20,
     backgroundColor: GREY_MIDDLE
   },
   ratingIndicator: {

@@ -9,6 +9,7 @@ import { navigationStyles } from "./styles";
 import { UserSearchPage } from "../pages/UserSearch";
 import { UserPage } from "../pages/User";
 import { RootStackParamList } from "./types";
+import MyComments from "../pages/MyComments";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -65,6 +66,24 @@ const RootNavigator = () => {
         name="User"
       >
         {({ route }) => <UserPage.Component {...route.params} />}
+      </Stack.Screen>
+      <Stack.Screen
+        options={{
+          title: "Мои отзывы",
+          headerStyle: { backgroundColor: GREY_LIGHT },
+        }}
+        name="MyComments"
+      >
+        {({ route }) => <MyComments.Component {...route.params} />}
+      </Stack.Screen>
+      <Stack.Screen
+        options={{
+          title: "Отзывы обо мне",
+          headerStyle: { backgroundColor: GREY_LIGHT },
+        }}
+        name="CommentsToMe"
+      >
+        {({ route }) => <MyComments.Component {...route.params} />}
       </Stack.Screen>
       <Stack.Screen
         options={{

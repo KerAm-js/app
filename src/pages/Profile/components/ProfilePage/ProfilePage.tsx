@@ -12,7 +12,8 @@ const ProfilePageComponent = () => {
         username="ДунСтрой Групп"
         phone="8 928 123-45-67"
         email="email@mail.ru"
-        rating={4.8}
+        description="В данном блоке будет отображаться описание к странице пользователя. Описание может содержать до 400 символов."
+        rating={4.7}
         ratesCount={124}
       />
       <Navigation />
