@@ -1,31 +1,30 @@
 import { View } from "react-native";
 import { ratingStyles } from "./styles";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { TRatingProps } from "./types";
 import Star from "./Star";
 
 const Rating: FC<TRatingProps> = ({
   type,
   rating,
+  setRating,
   backgroundColor,
   size = 20,
 }) => {
   const starIndexes = [1, 2, 3, 4, 5];
-  const [ratingValue, setRatingValue] = useState(0);
   const width = (size / 2.5) * 4 + size * 5;
 
-  if (type === "button") {
+  if (type === "button" && setRating) {
     return (
       <View style={[ratingStyles.container, { width }]}>
         {starIndexes.map((index) => (
           <Star
             key={index}
             type="button"
-            rating={ratingValue}
-            setRating={setRatingValue}
+            rating={rating}
+            setRating={setRating}
             index={index}
             size={size}
-            containerWidth={width}
           />
         ))}
       </View>
@@ -42,7 +41,6 @@ const Rating: FC<TRatingProps> = ({
           index={index}
           backgroundColor={backgroundColor}
           size={size}
-          containerWidth={width}
         />
       ))}
     </View>

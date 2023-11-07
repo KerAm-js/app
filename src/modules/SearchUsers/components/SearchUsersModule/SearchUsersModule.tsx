@@ -10,6 +10,8 @@ const SearchUsersModuleComponent = () => {
   const [search, setSearch] = useState("");
 
   const filteredUsers = filterUsers(USERS_LIST, search);
+
+  console.log(filteredUsers.length)
   
   return (
     <View style={searchUsersStyles.container}>

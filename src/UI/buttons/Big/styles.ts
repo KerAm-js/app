@@ -7,7 +7,6 @@ import { SCREEN_PADDING } from "../../../consts/views";
 export const bigButtonStyles = StyleSheet.create({
   container: {
     paddingHorizontal: SCREEN_PADDING,
-    paddingTop: 20,
   },
   button: {
     height: 50,

@@ -2,8 +2,7 @@ import { FC } from "react";
 import { Text, View } from "react-native";
 import { TAdvertsListProps } from "./types";
 import { advertsListStyles } from "./styles";
-
-const arr = ["объявление", "объявления", "объявления", "объявления"];
+import { RU_LANG } from "../../../../consts/rulang";
 
 const AdvertsList: FC<TAdvertsListProps> = ({ data }) => {
   return (
@@ -11,7 +10,8 @@ const AdvertsList: FC<TAdvertsListProps> = ({ data }) => {
       <Text style={advertsListStyles.title}>
         {data.length === 0
           ? "Нет объявлений"
-          : data.length + " " + arr[data.length] || "объявлений"}
+          : data.length + " " + (RU_LANG.adverts[data.length] ||
+            RU_LANG.adverts[0])}
       </Text>
     </View>
   );

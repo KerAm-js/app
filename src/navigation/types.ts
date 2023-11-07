@@ -1,3 +1,4 @@
+import { ICommentPageProps } from "../pages/Comment/components/types";
 import { IMyCommentsPageProps } from "../pages/MyComments/components/MyCommentsPage/types";
 import { IUser } from "../types/User";
 
@@ -11,4 +12,5 @@ export type RootStackParamList = {
   UserSearch: undefined;
   MyComments: IMyCommentsPageProps;
   CommentsToMe: IMyCommentsPageProps;
+  Comment: ICommentPageProps;
 };

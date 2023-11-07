@@ -14,7 +14,6 @@ const Star: FC<IStarProps> = ({
   index,
   backgroundColor,
   size,
-  containerWidth,
 }) => {
   if (type === "button" && setRating) {
     const onPress = () => {

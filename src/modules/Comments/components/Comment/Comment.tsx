@@ -11,15 +11,13 @@ import { WHITE } from "../../../../consts/colors";
 import { USER } from "../../../../consts/devData";
 import { arrowRightSvg } from "../../../../assets/svg/arrowRight";
 import { TextLayoutEventData } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
 
-const Comment: FC<ICommentProps> = ({
-  adresseeId,
-  authorId,
-  authorName,
-  text,
-  rate,
-}) => {
-  const user = USER;
+const Comment: FC<ICommentProps> = (props) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [numberOfLines, setNumberOfLines] = useState<number | undefined>(
     undefined
@@ -28,8 +26,8 @@ const Comment: FC<ICommentProps> = ({
   const commentText = useRef<null | Text>(null);
   const isFirstLayout = useRef<boolean>(true);
 
-  const isUserAdressee = adresseeId === user.id;
-  const isUserAuthor = authorId === user.id;
+  const isUserAdressee = props.adresseeId === USER.id;
+  const isUserAuthor = props.authorId === USER.id;
 
   const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
     if (event.nativeEvent.lines.length > 2 && isFirstLayout.current) {
@@ -43,16 +41,29 @@ const Comment: FC<ICommentProps> = ({
     setNumberOfLines((numberOfLines) => (!numberOfLines ? 2 : undefined));
   };
 
+  const navigateToEdition = () => {
+    if (isUserAuthor)
+      navigation.navigate("Comment", {
+        userId: USER.id,
+        username: USER.username,
+        defaultComment: props,
+      });
+  };
+
   return (
     <View style={commentStyles.container}>
-      <Pressable style={commentStyles.card}>
+      <Pressable onPress={navigateToEdition} style={commentStyles.card}>
         <View style={commentStyles.topContainer}>
           <Avatar size={36} />
           <View style={commentStyles.infoContainer}>
             <View style={commentStyles.usernameContainer}>
-              <Text style={commentStyles.username}>{authorName}</Text>
+              <Text style={commentStyles.username}>{props.authorName}</Text>
               {(isUserAuthor || isUserAdressee) && (
-                <SvgXml xml={isUserAuthor ? boxOutSvg() : boxInSvg()} />
+                <SvgXml
+                  xml={isUserAuthor ? boxOutSvg() : boxInSvg()}
+                  width={16}
+                  height={16}
+                />
               )}
             </View>
             <View style={commentStyles.rateContainer}>
@@ -61,7 +72,7 @@ const Comment: FC<ICommentProps> = ({
               </Text>
               <Rating
                 type="presentation"
-                rating={rate}
+                rating={props.rate}
                 backgroundColor={WHITE}
                 size={12}
               />
@@ -77,7 +88,7 @@ const Comment: FC<ICommentProps> = ({
           style={commentStyles.text}
           onTextLayout={onTextLayout}
         >
-          "{text}"
+          "{props.text}"
         </Text>
         {!!readMoreShown && (
           <Pressable onPress={showMore}>

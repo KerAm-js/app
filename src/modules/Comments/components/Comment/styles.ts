@@ -21,13 +21,13 @@ export const commentStyles = StyleSheet.create({
   },
   topContainer: {
     flexDirection: "row",
-    alignItems: "center",
     width: "100%",
     marginBottom: 12
   },
   infoContainer: {
     flex: 1,
     marginLeft: 9,
+    alignSelf: 'center'
   },
   usernameContainer: {
     flexDirection: "row",

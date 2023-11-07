@@ -10,6 +10,7 @@ import { UserSearchPage } from "../pages/UserSearch";
 import { UserPage } from "../pages/User";
 import { RootStackParamList } from "./types";
 import MyComments from "../pages/MyComments";
+import Comment from "../pages/Comment";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -84,6 +85,15 @@ const RootNavigator = () => {
         name="CommentsToMe"
       >
         {({ route }) => <MyComments.Component {...route.params} />}
+      </Stack.Screen>
+      <Stack.Screen
+        options={({ route }) => ({
+          title: route.params.defaultComment ? "Редактирование" : "Новый отзыв",
+          headerStyle: { backgroundColor: GREY_LIGHT },
+        })}
+        name="Comment"
+      >
+        {({ route }) => <Comment.Component {...route.params} />}
       </Stack.Screen>
       <Stack.Screen
         options={{

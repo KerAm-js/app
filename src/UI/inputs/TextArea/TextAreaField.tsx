@@ -14,11 +14,11 @@ const TextAreaField: FC<TTextAreaProps & TWithLabelAndErrorChildrenProps> = ({
   setErrorShown,
   errorShown,
 }) => {
-  const onFocus = () => setIsFocused(true);
+  const onFocus = () => setIsFocused && setIsFocused(true);
 
   const onBlur = () => {
-    setIsFocused(false);
-    setErrorShown(true);
+    setIsFocused &&setIsFocused(false);
+    setErrorShown && setErrorShown(true);
   };
   return (
     <View

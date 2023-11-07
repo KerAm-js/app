@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { TInputValidator } from "./types";
-
-const arr = ["символ", "символа", "символа", "символа"];
+import { RU_LANG } from "../../consts/rulang";
 
 export const useInputValidator: TInputValidator = ({
   initValue,
@@ -21,7 +20,9 @@ export const useInputValidator: TInputValidator = ({
     setValue(text);
     if (text.length < minLength) {
       setError(
-        `Введите минимум ${minLength} ${arr[minLength - 1] || "символов"}`
+        `Введите минимум ${minLength} ${
+          (RU_LANG.symbols[minLength] || RU_LANG.symbols[0])
+        }`
       );
       setIsValid(false);
     } else if (text.length === 0 && required) {
