@@ -1,3 +1,4 @@
+import { TAdvert } from "./Advert";
 import { IComment } from "./Comment";
 
 export interface IUser {
@@ -9,6 +10,6 @@ export interface IUser {
   rating: number;
   ratesCount: number;
   comments: Array<IComment>;
-  adverts: Array<any>;
+  adverts: Array<TAdvert>;
   avatar?: string;
-};
+}

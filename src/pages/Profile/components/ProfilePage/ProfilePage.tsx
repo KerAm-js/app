@@ -1,4 +1,4 @@
-import { ScrollView } from "react-native";
+import { Dimensions, ScrollView } from "react-native";
 import AvatarBlock from "../AvatarBlock/AvatarBlock";
 import UserInfo from "../UserInfo/UserInfo";
 import Navigation from "../Navigation/Navigation";

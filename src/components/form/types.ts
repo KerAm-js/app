@@ -24,9 +24,9 @@ export type TFormProps = {
   isFormValid: boolean;
   inputs: {
     noTitle?: Array<TFormInputType>;
-    characters?: Array<TFormInputType>;
+    params?: Array<TFormInputType>;
     general?: Array<TFormInputType>;
-    payment?: Array<TFormInputType>;
+    price?: Array<TFormInputType>;
     user?: Array<TFormInputType>;
   };
 };

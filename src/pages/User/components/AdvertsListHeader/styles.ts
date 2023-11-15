@@ -1,13 +1,12 @@
 import { StyleSheet } from "react-native";
 import { TEXT_F_SIZE } from "../../../../consts/texts";
 
-export const advertsListStyles = StyleSheet.create({
-  container: {
-    marginTop: 25,
-  },
+export const advertsListHeaderStyles = StyleSheet.create({
   title: {
     fontSize: TEXT_F_SIZE,
     fontFamily: "Gilroy-Bold",
     textAlign: "center",
+    marginTop: 25,
+    marginBottom: 5
   },
 });

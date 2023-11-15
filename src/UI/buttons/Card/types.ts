@@ -1,5 +1,7 @@
+import { TAdvertType } from "../../../types/Advert";
+
 export type TCardButtonProps = {
-  iconXml: string;
   title: string;
   onPress: () => void;
+  type: TAdvertType
 };

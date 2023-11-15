@@ -1,5 +1,5 @@
 export type TLikeButtonProps = {
-  onPress: () => void;
+  onPress: (value: boolean) => void;
   size?: number;
-  isActive?: boolean
-}
+  isLiked?: boolean;
+};

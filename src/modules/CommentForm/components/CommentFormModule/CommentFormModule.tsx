@@ -25,6 +25,10 @@ const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
     console.log(commentObj);
   };
 
+  const disabled = defaultComment
+    ? rating === defaultComment.rate && comment === defaultComment.text
+    : !rating;
+
   return (
     <View>
       <RatingInput username={username} rating={rating} setRating={setRating} />
@@ -32,6 +36,7 @@ const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
       <BigButton
         title={defaultComment ? "Сохранить" : "Отправить"}
         onPress={submit}
+        disabled={disabled}
       />
     </View>
   );

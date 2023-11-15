@@ -12,43 +12,48 @@ const Navigation = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
     <View style={profileNavigationStyles.container}>
-      <ButtonsGroup
-        data={[
-          {
-            title: "Мои отзывы",
-            onPress: () =>
-              navigation.navigate("MyComments", {
-                userId: USER.id,
-                userRole: "author",
-              }),
-          },
-          { title: "Ждут оценки", onPress: () => navigation.navigate("Auth") },
-          {
-            title: "Отзывы обо мне",
-            onPress: () =>
-              navigation.navigate("CommentsToMe", {
-                userId: USER.id,
-                userRole: "adressee",
-              }),
-          },
-        ]}
-      />
-      <ButtonsGroup
-        data={[
-          {
-            title: "Найти пользователя",
-            onPress: () => navigation.navigate("UserSearch"),
-          },
-        ]}
-      />
-      <ButtonsGroup
-        data={[
-          {
-            title: "Мои объявления",
-            onPress: () => navigation.navigate("Auth"),
-          },
-        ]}
-      />
+      <View style={profileNavigationStyles.groupButtonsContainer}>
+        <ButtonsGroup
+          data={[
+            {
+              title: "Мои отзывы",
+              onPress: () =>
+                navigation.navigate("MyComments", {
+                  userId: USER.id,
+                  userRole: "author",
+                }),
+            },
+            {
+              title: "Ждут оценки",
+              onPress: () => navigation.navigate("Auth"),
+            },
+            {
+              title: "Отзывы обо мне",
+              onPress: () =>
+                navigation.navigate("CommentsToMe", {
+                  userId: USER.id,
+                  userRole: "adressee",
+                }),
+            },
+          ]}
+        />
+        <ButtonsGroup
+          data={[
+            {
+              title: "Найти пользователя",
+              onPress: () => navigation.navigate("UserSearch"),
+            },
+          ]}
+        />
+        <ButtonsGroup
+          data={[
+            {
+              title: "Мои объявления",
+              onPress: () => navigation.navigate("Auth"),
+            },
+          ]}
+        />
+      </View>
       <BigButton
         title="Разместить объявление"
         onPress={() => navigation.navigate("Auth")}

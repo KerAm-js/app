@@ -1,19 +1,26 @@
 import { FC } from "react";
-import { ScrollView } from "react-native";
+import { View } from "react-native";
 import { IUser } from "../../../../types/User";
 import { ProfilePage } from "../../../Profile";
 import { userPageStyles } from "./styles";
 import Comments from "../Comments/Comments";
-import AdvertsList from "../AdvertsList/AdvertsList";
+import AdvertsList from "../AdvertsListHeader/AdvertsListHeader";
+import AdvertsModule from "../../../../modules/Adverts";
 
 const UserPageComponent: FC<IUser> = (props) => {
   return (
-    <ScrollView style={userPageStyles.container}>
-      <ProfilePage.AvatarBlock />
-      <ProfilePage.UserInfo {...props} />
-      <Comments />
-      <AdvertsList data={props.adverts} />
-    </ScrollView>
+    <AdvertsModule.Component
+      style={userPageStyles.container}
+      ListHeaderComponent={
+        <View>
+          <ProfilePage.AvatarBlock />
+          <ProfilePage.UserInfo {...props} />
+          <Comments />
+          <AdvertsList dataLength={props.adverts.length} />
+        </View>
+      }
+      data={props.adverts}
+    />
   );
 };
 
