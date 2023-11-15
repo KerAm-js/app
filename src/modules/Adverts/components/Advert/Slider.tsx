@@ -62,6 +62,7 @@ const Slider: FC<ISliderProps> = ({ params, type }) => {
               }}
               style={advertStyles.image}
               source={{ uri: item }}
+              resizeMode="cover"
             />
           );
         }}

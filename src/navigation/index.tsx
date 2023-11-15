@@ -11,6 +11,7 @@ import { UserPage } from "../pages/User";
 import { RootStackParamList } from "./types";
 import MyComments from "../pages/MyComments";
 import Comment from "../pages/Comment";
+import MyAdverts from "../pages/MyAdverts";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -94,6 +95,15 @@ const RootNavigator = () => {
         name="Comment"
       >
         {({ route }) => <Comment.Component {...route.params} />}
+      </Stack.Screen>
+      <Stack.Screen
+        options={{
+          title: "Мои объявления",
+          headerStyle: { backgroundColor: GREY_LIGHT },
+        }}
+        name="MyAdverts"
+      >
+        {({ route }) => <MyAdverts.Component {...route.params} />}
       </Stack.Screen>
       <Stack.Screen
         options={{

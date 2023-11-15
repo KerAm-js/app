@@ -7,7 +7,6 @@ const getRelevance = (updatedAt: number) => {
 
 export const getRelevanceObj = (updatedAt: number) => {
   const relevance = getRelevance(updatedAt);
-  console.log(relevance);
   if (relevance < 60) {
     return {
       string: relevance + " сек",

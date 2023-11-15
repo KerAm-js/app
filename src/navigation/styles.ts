@@ -4,7 +4,7 @@ import { TEXT_F_SIZE } from "../consts/texts";
 
 export const navigationStyles = StyleSheet.create({
   title: {
-    fontFamily: 'Gilroy-Semibold',
+    fontFamily: 'Gilroy-Bold',
     fontSize: TEXT_F_SIZE
   },
   header: {

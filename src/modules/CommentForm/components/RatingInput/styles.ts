@@ -12,7 +12,6 @@ export const ratingInputStyles = StyleSheet.create({
     borderRadius: BORDER_RADIUS_SMALL,
     flexDirection: 'row',
     marginBottom: 20,
-    marginTop: 12,
   },
   inputContainer: {
     marginLeft: 10

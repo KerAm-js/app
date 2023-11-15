@@ -49,7 +49,9 @@ const Navigation = () => {
           data={[
             {
               title: "Мои объявления",
-              onPress: () => navigation.navigate("Auth"),
+              onPress: () => navigation.navigate("MyAdverts", {
+                data: USER.adverts
+              }),
             },
           ]}
         />

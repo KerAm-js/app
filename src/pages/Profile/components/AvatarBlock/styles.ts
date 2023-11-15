@@ -3,7 +3,7 @@ import { GREY_LIGHT, WHITE } from "../../../../consts/colors";
 
 export const avatarBlockStyles = StyleSheet.create({
   container: {
-    paddingTop: 30,
+    paddingTop: 20,
     paddingBottom: 20,
     alignItems: "center",
   },

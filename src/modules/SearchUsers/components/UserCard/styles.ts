@@ -7,7 +7,7 @@ export const userCardStyles = StyleSheet.create({
   container: {
     backgroundColor: WHITE,
     borderRadius: BORDER_RADIUS_SMALL,
-    padding: 12,
+    paddingVertical: 12,
     paddingHorizontal: 15,
     flexDirection: "row",
     justifyContent: "space-between",

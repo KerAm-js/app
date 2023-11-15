@@ -5,13 +5,14 @@ import { SCREEN_PADDING } from "../../../../consts/views";
 export const searchUsersStyles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 10,
   },
-  searchBarContainer: {
-    paddingVertical: 10,
+  list: {
+    marginTop: 10,
   },
   flatlistContent: {
     paddingTop: 10,
     paddingHorizontal: SCREEN_PADDING,
-    paddingBottom: 50,
+    paddingBottom: 70,
   },
 });

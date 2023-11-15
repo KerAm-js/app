@@ -12,17 +12,14 @@ const RatingInput: FC<IRatingInputProps> = ({
   setRating,
 }) => {
   return (
-    <React.Fragment>
-      <Title text="Оцените пользователя" />
-      <View style={ratingInputStyles.container}>
-        <Avatar size={50} />
-        <View style={ratingInputStyles.inputContainer}>
-          <Text style={ratingInputStyles.username}>{username}</Text>
-          <Rating type="button" rating={rating} setRating={setRating} />
-          <Text style={ratingInputStyles.hint}>Нажмите, чтобы оценить</Text>
-        </View>
+    <View style={ratingInputStyles.container}>
+      <Avatar size={50} />
+      <View style={ratingInputStyles.inputContainer}>
+        <Text style={ratingInputStyles.username}>{username}</Text>
+        <Rating type="button" rating={rating} setRating={setRating} />
+        <Text style={ratingInputStyles.hint}>Нажмите, чтобы оценить</Text>
       </View>
-    </React.Fragment>
+    </View>
   );
 };
 

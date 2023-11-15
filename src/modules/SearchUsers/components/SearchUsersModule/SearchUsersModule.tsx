@@ -10,18 +10,17 @@ const SearchUsersModuleComponent = () => {
   const [search, setSearch] = useState("");
 
   const filteredUsers = filterUsers(USERS_LIST, search);
-  
+
   return (
     <View style={searchUsersStyles.container}>
-      <View style={searchUsersStyles.searchBarContainer}>
-        <SearchBar
-          value={search}
-          onChangeText={setSearch}
-          placeholder="Телефон или имя пользователя"
-        />
-      </View>
+      <SearchBar
+        value={search}
+        onChangeText={setSearch}
+        placeholder="Телефон или имя пользователя"
+      />
       <FlatList
         data={filteredUsers}
+        style={searchUsersStyles.list}
         contentContainerStyle={searchUsersStyles.flatlistContent}
         renderItem={({ item }) => <UserCard key={item.phone} {...item} />}
       />

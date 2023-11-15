@@ -1,4 +1,5 @@
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 import Avatar from "../../../../UI/Avatar/Avatar";
 import Rating from "../../../../UI/Rating/Rating";
 import { FC, useMemo } from "react";
@@ -14,6 +15,8 @@ import { watchSvg } from "../../../../assets/svg/watch";
 import { eyeSvg } from "../../../../assets/svg/eye";
 import { likeSvg } from "../../../../assets/svg/like";
 import { getRelevanceObj } from "../../helpers/getRelevance";
+import { USER } from "../../../../consts/devData";
+import { circlesSvg } from "../../../../assets/svg/circles";
 
 const Advert: FC<TAdvert> = ({
   id,
@@ -39,6 +42,8 @@ const Advert: FC<TAdvert> = ({
   };
   const relevance = getRelevanceObj(updatedAt);
 
+  console.log(title.length)
+
   return (
     <View style={advertStyles.container}>
       <View style={advertStyles.topContainer}>
@@ -52,7 +57,11 @@ const Advert: FC<TAdvert> = ({
             size={12}
           />
         </View>
-        <LikeButton onPress={onLike} isLiked={isLiked} />
+        {
+          USER.id === userId 
+            ? <Pressable style={advertStyles.editButton}><SvgXml xml={circlesSvg()}/></Pressable>
+            : <LikeButton onPress={onLike} isLiked={isLiked} />
+        }
       </View>
       <View style={advertStyles.sliderContainer}>
         <View style={advertStyles.addressContainer}>
@@ -60,6 +69,12 @@ const Advert: FC<TAdvert> = ({
           <Text style={advertStyles.address}>{general.address}</Text>
         </View>
         <Slider type={type} params={params} />
+        <LinearGradient
+          colors={["rgba(0, 0, 0, 0)",  "rgba(0, 0, 0, 0.65)", "rgba(0, 0, 0, 0.8)"]}
+          style={advertStyles.titleBackdrop}
+        >
+          <Text style={advertStyles.title}>{title}</Text>
+        </LinearGradient>
       </View>
       <View style={advertStyles.paramsContainer}>
         {paramsArr.map((entry) => (

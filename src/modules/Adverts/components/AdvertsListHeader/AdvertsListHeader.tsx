@@ -4,7 +4,7 @@ import { TAdvertsListProps } from "./types";
 import { advertsListHeaderStyles } from "./styles";
 import { RU_LANG } from "../../../../consts/rulang";
 
-const AdvertsList: FC<TAdvertsListProps> = ({ dataLength }) => {
+const AdvertsListHeader: FC<TAdvertsListProps> = ({ dataLength }) => {
   return (
     <Text style={advertsListHeaderStyles.title}>
       {dataLength === 0
@@ -16,4 +16,4 @@ const AdvertsList: FC<TAdvertsListProps> = ({ dataLength }) => {
   );
 };
 
-export default AdvertsList;
+export default AdvertsListHeader;
