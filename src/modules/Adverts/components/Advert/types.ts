@@ -1,4 +1,4 @@
-import { TAdvert, ITechnicParams } from "../../../../types/Advert";
+import { TAdvert } from "../../../../types/Advert";
 
 export interface ISliderProps
   extends Pick<TAdvert, "type" | "params"> {}

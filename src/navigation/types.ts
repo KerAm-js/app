@@ -1,5 +1,6 @@
 import { ICommentPageProps } from "../pages/Comment/components/types";
-import { IMyAdvertsPageProps } from "../pages/MyAdverts/components/types";
+import { IModalProps } from "../pages/Modal/components/page/types";
+import { IMyAdvertsPageProps } from "../pages/MyAdverts/components/page/types";
 import { IMyCommentsPageProps } from "../pages/MyComments/components/MyCommentsPage/types";
 import { IUser } from "../types/User";
 
@@ -15,4 +16,5 @@ export type RootStackParamList = {
   MyAdverts: IMyAdvertsPageProps;
   CommentsToMe: IMyCommentsPageProps;
   Comment: ICommentPageProps;
+  Modal: IModalProps
 };

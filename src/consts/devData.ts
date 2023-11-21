@@ -508,6 +508,10 @@ export const USER: IUser = {
           "https://cdn.stpulscen.ru/system/ckeditor_assets/pictures/352723/content_kovshi-jcb-01.jpg",
           "https://avatars.mds.yandex.net/get-autoru-vos/11038141/883df25017df09a8cda4c1a43d9161e9/1200x900",
         ],
+        otherParams: {
+          'Вес': 32.2,
+          'Объём': 1.44
+        }
       },
     },
   ],

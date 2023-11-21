@@ -1,5 +1,5 @@
 import CallButton from "./components/CallButton/CallButton";
-import Component from "./components/UserPage/UserPage";
+import Component from "./components/page/UserPage";
 
 export const UserPage = {
   Component,

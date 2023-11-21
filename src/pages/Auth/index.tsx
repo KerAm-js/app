@@ -1,4 +1,4 @@
-import Component from "./components/AuthPage/AuthPage";
+import Component from "./components/page/AuthPage";
 
 export const AuthPage = {
   Component,

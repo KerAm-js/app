@@ -1,12 +1,11 @@
 import { Pressable, Text, View } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 import Avatar from "../../../../UI/Avatar/Avatar";
 import Rating from "../../../../UI/Rating/Rating";
 import { FC, useMemo } from "react";
-import { TAdvert } from "../../../../types/Advert";
 import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 import { advertStyles } from "./styles";
-import { GREY_DARK, WHITE } from "../../../../consts/colors";
+import { BLACK_DARK, GREY_DARK, WHITE } from "../../../../consts/colors";
 import Slider from "./Slider";
 import { pointSvg } from "../../../../assets/svg/point";
 import { SvgXml } from "react-native-svg";
@@ -17,6 +16,10 @@ import { likeSvg } from "../../../../assets/svg/like";
 import { getRelevanceObj } from "../../helpers/getRelevance";
 import { USER } from "../../../../consts/devData";
 import { circlesSvg } from "../../../../assets/svg/circles";
+import { TAdvert } from "../../../../types/Advert";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
 
 const Advert: FC<TAdvert> = ({
   id,
@@ -32,6 +35,12 @@ const Advert: FC<TAdvert> = ({
   params,
   price,
 }) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const openModal = () => {
+    navigation.navigate("Modal", { advertId: id });
+  };
   const isLiked = useMemo(() => !!likes.find((item) => item === userId), []);
   const paramsArr = useMemo(() => Object.entries(params.otherParams || {}), []);
 
@@ -40,9 +49,8 @@ const Advert: FC<TAdvert> = ({
       `Post ${id} is ${value ? "liked by" : "disliked by"} ${username}`
     );
   };
-  const relevance = getRelevanceObj(updatedAt);
 
-  console.log(title.length)
+  const relevance = getRelevanceObj(updatedAt);
 
   return (
     <View style={advertStyles.container}>
@@ -57,11 +65,13 @@ const Advert: FC<TAdvert> = ({
             size={12}
           />
         </View>
-        {
-          USER.id === userId 
-            ? <Pressable style={advertStyles.editButton}><SvgXml xml={circlesSvg()}/></Pressable>
-            : <LikeButton onPress={onLike} isLiked={isLiked} />
-        }
+        {USER.id === userId ? (
+          <Pressable onPress={openModal} style={advertStyles.editButton}>
+            <SvgXml xml={circlesSvg()} />
+          </Pressable>
+        ) : (
+          <LikeButton onPress={onLike} isLiked={isLiked} />
+        )}
       </View>
       <View style={advertStyles.sliderContainer}>
         <View style={advertStyles.addressContainer}>
@@ -70,10 +80,25 @@ const Advert: FC<TAdvert> = ({
         </View>
         <Slider type={type} params={params} />
         <LinearGradient
-          colors={["rgba(0, 0, 0, 0)",  "rgba(0, 0, 0, 0.65)", "rgba(0, 0, 0, 0.8)"]}
+          colors={
+            !!params.photos.length
+              ? [
+                  "rgba(0, 0, 0, 0)",
+                  "rgba(0, 0, 0, 0.6)",
+                  "rgba(0, 0, 0, 0.85)",
+                ]
+              : []
+          }
           style={advertStyles.titleBackdrop}
         >
-          <Text style={advertStyles.title}>{title}</Text>
+          <Text
+            style={[
+              advertStyles.title,
+              !params.photos.length && { color: BLACK_DARK },
+            ]}
+          >
+            {title}
+          </Text>
         </LinearGradient>
       </View>
       <View style={advertStyles.paramsContainer}>

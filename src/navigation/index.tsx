@@ -12,115 +12,125 @@ import { RootStackParamList } from "./types";
 import MyComments from "../pages/MyComments";
 import Comment from "../pages/Comment";
 import MyAdverts from "../pages/MyAdverts";
+import MyModal from "../pages/Modal";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="Main"
-      screenOptions={{
-        headerShadowVisible: false,
-        headerBackTitleVisible: false,
-        headerTintColor: BLACK_DARK,
-        headerStyle: navigationStyles.header,
-        headerTitleStyle: navigationStyles.title,
-      }}
-    >
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name="Main"
-        component={MainPage.Component}
-      />
-      <Stack.Screen
-        options={{
-          title: "Профиль",
-          headerStyle: { backgroundColor: GREY_LIGHT },
-          headerRight: ProfilePage.headerRight,
+    <Stack.Navigator initialRouteName="Main">
+      <Stack.Group
+        screenOptions={{
+          headerShadowVisible: false,
+          headerBackTitleVisible: false,
+          headerTintColor: BLACK_DARK,
+          headerStyle: navigationStyles.header,
+          headerTitleStyle: navigationStyles.title,
         }}
-        name="Profile"
-        component={ProfilePage.Component}
-      />
-      <Stack.Screen
-        options={{
-          title: "Редактирование",
-          headerStyle: { backgroundColor: GREY_LIGHT },
-        }}
-        name="EditProfile"
-        component={EditProfilePage.Component}
-      />
-      <Stack.Screen
-        options={{
-          title: "Поиск пользователя",
-          headerStyle: { backgroundColor: GREY_LIGHT },
-        }}
-        name="UserSearch"
-        component={UserSearchPage.Component}
-      />
-      <Stack.Screen
-        options={({ route }) => ({
-          title: route.params.username,
-          headerStyle: { backgroundColor: GREY_LIGHT },
-          headerRight: () => (
-            <UserPage.headerRight phoneNumber={route.params.phone} />
-          ),
-        })}
-        name="User"
       >
-        {({ route }) => <UserPage.Component {...route.params} />}
-      </Stack.Screen>
-      <Stack.Screen
-        options={{
-          title: "Мои отзывы",
-          headerStyle: { backgroundColor: GREY_LIGHT },
-        }}
-        name="MyComments"
-      >
-        {({ route }) => <MyComments.Component {...route.params} />}
-      </Stack.Screen>
-      <Stack.Screen
-        options={{
-          title: "Отзывы обо мне",
-          headerStyle: { backgroundColor: GREY_LIGHT },
-        }}
-        name="CommentsToMe"
-      >
-        {({ route }) => <MyComments.Component {...route.params} />}
-      </Stack.Screen>
-      <Stack.Screen
-        options={({ route }) => ({
-          title: route.params.defaultComment ? "Редактирование" : "Новый отзыв",
-          headerStyle: { backgroundColor: GREY_LIGHT },
-        })}
-        name="Comment"
-      >
-        {({ route }) => <Comment.Component {...route.params} />}
-      </Stack.Screen>
-      <Stack.Screen
-        options={{
-          title: "Мои объявления",
-          headerStyle: { backgroundColor: GREY_LIGHT },
-        }}
-        name="MyAdverts"
-      >
-        {({ route }) => <MyAdverts.Component {...route.params} />}
-      </Stack.Screen>
-      <Stack.Screen
-        options={{
-          title: "Вход",
-          headerStyle: { backgroundColor: GREY_LIGHT },
-        }}
-        name="Auth"
-        component={AuthPage.Component}
-      />
-      <Stack.Screen
-        options={{
-          title: "Регистрация",
-          headerStyle: { backgroundColor: GREY_LIGHT },
-        }}
-        name="Register"
-        component={RegisterPage.Component}
-      />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Main"
+          component={MainPage.Component}
+        />
+        <Stack.Screen
+          options={{
+            title: "Профиль",
+            headerStyle: { backgroundColor: GREY_LIGHT },
+            headerRight: ProfilePage.headerRight,
+          }}
+          name="Profile"
+          component={ProfilePage.Component}
+        />
+        <Stack.Screen
+          options={{
+            title: "Редактирование",
+            headerStyle: { backgroundColor: GREY_LIGHT },
+          }}
+          name="EditProfile"
+          component={EditProfilePage.Component}
+        />
+        <Stack.Screen
+          options={{
+            title: "Поиск пользователя",
+            headerStyle: { backgroundColor: GREY_LIGHT },
+          }}
+          name="UserSearch"
+          component={UserSearchPage.Component}
+        />
+        <Stack.Screen
+          options={({ route }) => ({
+            title: route.params.username,
+            headerStyle: { backgroundColor: GREY_LIGHT },
+            headerRight: () => (
+              <UserPage.headerRight phoneNumber={route.params.phone} />
+            ),
+          })}
+          name="User"
+        >
+          {({ route }) => <UserPage.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={{
+            title: "Мои отзывы",
+            headerStyle: { backgroundColor: GREY_LIGHT },
+          }}
+          name="MyComments"
+        >
+          {({ route }) => <MyComments.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={{
+            title: "Отзывы обо мне",
+            headerStyle: { backgroundColor: GREY_LIGHT },
+          }}
+          name="CommentsToMe"
+        >
+          {({ route }) => <MyComments.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={({ route }) => ({
+            title: route.params.defaultComment
+              ? "Редактирование"
+              : "Новый отзыв",
+            headerStyle: { backgroundColor: GREY_LIGHT },
+          })}
+          name="Comment"
+        >
+          {({ route }) => <Comment.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={{
+            title: "Мои объявления",
+            headerStyle: { backgroundColor: GREY_LIGHT },
+          }}
+          name="MyAdverts"
+        >
+          {({ route }) => <MyAdverts.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={{
+            title: "Вход",
+            headerStyle: { backgroundColor: GREY_LIGHT },
+          }}
+          name="Auth"
+          component={AuthPage.Component}
+        />
+        <Stack.Screen
+          options={{
+            title: "Регистрация",
+            headerStyle: { backgroundColor: GREY_LIGHT },
+          }}
+          name="Register"
+          component={RegisterPage.Component}
+        />
+      </Stack.Group>
+
+      <Stack.Group screenOptions={{ presentation: "transparentModal", headerShown: false, animation: 'fade' }}>
+        <Stack.Screen name="Modal">
+          {({ route }) => <MyModal.Component {...route.params} />}
+        </Stack.Screen>
+      </Stack.Group>
     </Stack.Navigator>
   );
 };
