@@ -11,7 +11,7 @@ export const useInputValidator: TInputValidator = ({
   required,
 }) => {
   const [value, setValue] = useState(initValue);
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(!!initValue);
   const [error, setError] = useState(
     !initValue.length && required ? "Заполните данное поле" : ""
   );

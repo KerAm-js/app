@@ -3,7 +3,7 @@ import { TInputValidator } from "./types";
 
 export const usePhoneValidator: TInputValidator = ({ initValue, required }) => {
   const [value, setValue] = useState(initValue);
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(!!initValue);
   const [error, setError] = useState(
     !initValue && required ? "Заполните данное поле" : ""
   );

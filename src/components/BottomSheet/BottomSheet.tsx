@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useRef } from "react";
 import { Alert, LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import { IBottomSheetProps } from "./types";
 import { bottomSheetStyles } from "./styles";
@@ -9,11 +9,19 @@ import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
   withTiming,
 } from "react-native-reanimated";
 import { RootStackParamList } from "../../navigation/types";
 import SheetButton from "./Button";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
+
+const OVERDRAG = 40;
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -23,25 +31,13 @@ const BottomSheet: FC<IBottomSheetProps> = ({ actions, title }) => {
 
   const translateY = useSharedValue(0);
   const { bottom } = useSafeAreaInsets();
-
-  const rSheetStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: translateY.value }],
-      paddingBottom: bottom,
-    };
-  });
-
-  const rBackdropStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(translateY.value, [0, -220], [0, 1]);
-    return {
-      opacity,
-    };
-  });
+  const paddingBottom = OVERDRAG + (bottom < 15 ? 15 : bottom);
+  const context = useSharedValue({ y: 0, height: 204 + paddingBottom });
 
   const closeModal = () => {
     translateY.value = withTiming(
       0,
-      undefined,
+      { duration: 350 },
       (isFinished: boolean | undefined) => {
         if (isFinished) {
           runOnJS(navigation.goBack)();
@@ -50,8 +46,51 @@ const BottomSheet: FC<IBottomSheetProps> = ({ actions, title }) => {
     );
   };
 
+  const gesture = Gesture.Pan()
+    .onStart(() => {
+      context.value.y = translateY.value;
+    })
+    .onUpdate((evt) => {
+      const newY = context.value.y + evt.translationY;
+      if (newY >= -context.value.height) {
+        translateY.value = newY;
+      }
+    })
+    .onFinalize(() => {
+      if (
+        translateY.value <= -context.value.height + OVERDRAG ||
+        translateY.value + context.value.height < OVERDRAG * 3
+      ) {
+        translateY.value = withSpring(-context.value.height + OVERDRAG);
+      } else {
+        runOnJS(closeModal)();
+      }
+    });
+
+  const rSheetStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }],
+      paddingBottom,
+    };
+  });
+
+  const rBackdropStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(
+      translateY.value,
+      [0, -context.value.height],
+      [0, 1]
+    );
+    return {
+      opacity,
+    };
+  });
+
   const onLayout = (evt: LayoutChangeEvent) => {
-    translateY.value = withTiming(-evt.nativeEvent.layout.height);
+    const height = evt.nativeEvent.layout.height;
+    translateY.value = withTiming(-height + OVERDRAG, {
+      duration: 350,
+    });
+    context.value.height = height;
   };
 
   const buttonHandlers = useMemo(() => {
@@ -84,28 +123,30 @@ const BottomSheet: FC<IBottomSheetProps> = ({ actions, title }) => {
   }, []);
 
   return (
-    <View style={bottomSheetStyles.container}>
+    <GestureHandlerRootView style={bottomSheetStyles.container}>
       <AnimatedPressable
         onPress={closeModal}
         style={[bottomSheetStyles.backdrop, rBackdropStyle]}
       />
-      <Animated.View
-        onLayout={onLayout}
-        style={[bottomSheetStyles.sheet, rSheetStyle]}
-      >
-        <View style={bottomSheetStyles.titleContainer}>
-          <Text style={bottomSheetStyles.title}>{title}</Text>
-        </View>
-        {actions.map((button, index) => (
-          <SheetButton
-            key={button.id}
-            {...button}
-            onPress={buttonHandlers[index]}
-          />
-        ))}
-        <SheetButton type="accent" title="Отмена" onPress={closeModal} />
-      </Animated.View>
-    </View>
+      <GestureDetector gesture={gesture}>
+        <Animated.View
+          onLayout={onLayout}
+          style={[bottomSheetStyles.sheet, rSheetStyle]}
+        >
+          <View style={bottomSheetStyles.titleContainer}>
+            <Text style={bottomSheetStyles.title}>{title}</Text>
+          </View>
+          {actions.map((button, index) => (
+            <SheetButton
+              key={button.id}
+              {...button}
+              onPress={buttonHandlers[index]}
+            />
+          ))}
+          <SheetButton type="accent" title="Отмена" onPress={closeModal} />
+        </Animated.View>
+      </GestureDetector>
+    </GestureHandlerRootView>
   );
 };
 
