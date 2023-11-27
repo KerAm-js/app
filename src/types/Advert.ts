@@ -1,3 +1,7 @@
+import { IDumpGeneral, IDumpParams, IDumpPrice } from "./Dump";
+import { IShovelGeneral, IShovelParams, IShovelPrice } from "./Showel";
+import { ITechnicGeneral, ITechnicParams, ITechnincPrice } from "./Technic";
+
 export type TAdvertType = keyof IAdvertMap;
 
 export type TAdvert =
@@ -61,83 +65,3 @@ interface IAdvertMap {
     price: IDumpPrice;
   };
 }
-
-export type TAdress = {
-  latitude: number;
-  longitude: number;
-};
-
-type TWorkMode = "day" | "night" | "all";
-
-type TGeneral = {
-  workMode: TWorkMode;
-  comment?: string;
-  address: string;
-};
-
-type TParams = {
-  photos: Array<string>;
-};
-
-type TPrice = {
-  price: number;
-  paymentType: "cash" | "non-cash" | "all";
-};
-
-interface ITechnicGeneral extends TGeneral {
-  count: number;
-  rentalPeriod: {
-    from: number; //date
-    to: number; //date
-  };
-  rentalDaysCount: number;
-  secondAdress?: TAdress;
-  distance?: number; // meters
-}
-
-interface IShovelGeneral extends TGeneral {}
-
-interface IDumpGeneral extends TGeneral {}
-
-export interface ITechnicParams extends TParams {
-  "Вид техники": string;
-  Марка?: string;
-  Модель?: string;
-  Год?: number;
-  Оборудование?: Array<string>;
-  otherParams?: {
-    Вес?: number;
-    Высота?: number;
-    Объём?: number;
-    "Количество пассажиров"?: number;
-    "Длина трубы"?: number;
-    "Длина стрелы"?: number;
-    Грузоподъёмность?: number;
-    Производительность?: number;
-    "Вид груза"?: string;
-    "Тип вальцов"?: "гладкие" | "комбинированные";
-    "Количество вальцов"?: number;
-    Тип?: "габаритный" | "негабаритный";
-    Оссиг?: "Подключён" | "Не подключён";
-    "Количество осей"?: number;
-    "Длина кузова"?: number;
-    "Тип прицепа"?: "Прицеп" | "Полуприцеп" | "Корыта" | "Прямая площадка";
-    "Вид погрузки"?: "Задняя" | "Передняя";
-  };
-}
-
-interface IShovelParams extends TParams {
-  otherParams?: {};
-}
-
-interface IDumpParams extends TParams {
-  otherParams?: {};
-}
-
-interface ITechnincPrice extends TPrice {
-  paymentFor: "смену" | "час" | "м3/км" | "т/км";
-}
-
-interface IShovelPrice extends TPrice {}
-
-interface IDumpPrice extends TPrice {}

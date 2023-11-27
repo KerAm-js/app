@@ -1,8 +1,8 @@
 import { BLACK_DARK } from "../../consts/colors";
 
-export const likeSvg = (
+export const likeFillSvg = (
   color: string = BLACK_DARK
 ) => `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M9.99973 2.64256C15.5472 -3.05994 29.4172 6.91881 9.99973 19.7501C-9.41777 6.92006 4.45223 -3.05994 9.99973 2.64256Z" fill="${color}"/>
+<path d="M9.39046 3.23527L9.99973 3.86156L10.609 3.23527C12.9281 0.851326 17.1035 1.7013 18.605 4.63358C19.3277 6.04482 19.4556 8.02701 18.2134 10.4776C17.0021 12.8675 14.4898 15.6853 9.99971 18.7274C5.50964 15.6856 2.99735 12.868 1.78602 10.4782C0.543899 8.0276 0.671772 6.04536 1.39444 4.63403C2.89601 1.70153 7.07138 0.851391 9.39046 3.23527Z" stroke="${color}" stroke-width="1.7"/>
 </svg>
 `;

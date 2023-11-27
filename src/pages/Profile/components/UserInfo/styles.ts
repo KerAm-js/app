@@ -1,11 +1,10 @@
 import { StyleSheet } from "react-native";
-import { SCREEN_PADDING } from "../../../../consts/views";
 import {
   SMALL_F_SIZE,
   TEXT_F_SIZE,
   TITLE_F_SIZE,
 } from "../../../../consts/texts";
-import { BLUE, GREY_DARK, GREY_LIGHT } from "../../../../consts/colors";
+import { GREY_DARK, GREY_LIGHT } from "../../../../consts/colors";
 
 export const userInfoStyles = StyleSheet.create({
   container: {
@@ -32,18 +31,5 @@ export const userInfoStyles = StyleSheet.create({
     fontSize: SMALL_F_SIZE,
     fontFamily: 'Gilroy-Medium',
     marginTop: 8
-  },
-  button: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  buttonTitle: {
-    textAlign: "center",
-    fontSize: SMALL_F_SIZE,
-    lineHeight: SMALL_F_SIZE + 4,
-    fontFamily: "Gilroy-Semibold",
-    color: BLUE,
   },
 });

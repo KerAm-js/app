@@ -149,13 +149,14 @@ export const advertStyles = StyleSheet.create({
   },
   advertInfo: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: 'center',
   },
   advertInfoText: {
     marginLeft: 4,
     marginRight: 7,
     fontSize: ULTRA_SMALL_F_SIZE,
+    fontFamily: "Gilroy-Medium",
     color: GREY_DARK,
+    marginTop: 1,
   },
 });

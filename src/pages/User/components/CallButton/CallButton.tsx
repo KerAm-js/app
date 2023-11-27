@@ -12,7 +12,7 @@ const CallButton: FC<TCallButtonProps> = ({ phoneNumber }) => {
 
   return (
     <TouchableOpacity onPress={onPress} style={callButtonStyles.container}>
-      <SvgXml xml={telephoneSvg()} />
+      <SvgXml xml={telephoneSvg()} width={18} height={18} />
     </TouchableOpacity>
   );
 };

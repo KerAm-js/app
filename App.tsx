@@ -31,7 +31,6 @@ export default function App() {
   return (
     <NavigationContainer onReady={onLayoutRootView}>
       <RootNavigator />
-      <StatusBar barStyle="dark-content" />
     </NavigationContainer>
   );
 }

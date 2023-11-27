@@ -15,7 +15,7 @@ const NavBar: FC = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
-    <View style={[navBarStyles.container, { paddingTop: top }]}>
+    <View style={[navBarStyles.container, { paddingTop: top < 15 ? 15 : top }]}>
       <NavButton
         iconXml={userSvg()}
         onPress={() => navigation.navigate("Profile")}

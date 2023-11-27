@@ -8,6 +8,7 @@ import InfoCard from "../../../../UI/InfoCard/InfoCard";
 import { SvgXml } from "react-native-svg";
 import { arrowRightSvg } from "../../../../assets/svg/arrowRight";
 import { RU_LANG } from "../../../../consts/rulang";
+import Link from "../../../../UI/buttons/Link/Link";
 
 const UserInfo: FC<IUser> = ({
   id,
@@ -39,16 +40,14 @@ const UserInfo: FC<IUser> = ({
         </Text>
       </View>
       {!!commentsLen && (
-        <Pressable
-          style={userInfoStyles.button}
+        <Link
+          title={
+            commentsLen +
+            " " +
+            (RU_LANG.comments[commentsLen] || RU_LANG.comments[0])
+          }
           onPress={() => console.log("pressed")}
-        >
-          <Text style={userInfoStyles.buttonTitle}>
-            {commentsLen + " " + (RU_LANG.comments[commentsLen] ||
-              RU_LANG.comments[0])}
-          </Text>
-          <SvgXml xml={arrowRightSvg(BLUE)} width={10} height={10} />
-        </Pressable>
+        />
       )}
       <InfoCard title="Телефон" content={phone} />
       <InfoCard title="Почта" content={email} />

@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { BLACK_DARK, GREY_DARK, GREY_LIGHT } from "../consts/colors";
+import { BLACK_DARK, GREY_LIGHT } from "../consts/colors";
 import { MainPage } from "../pages/Main";
 import { AuthPage } from "../pages/Auth";
 import { ProfilePage } from "../pages/Profile";
@@ -13,6 +13,10 @@ import MyComments from "../pages/MyComments";
 import Comment from "../pages/Comment";
 import MyAdverts from "../pages/MyAdverts";
 import MyModal from "../pages/Modal";
+import AdvertPage from "../pages/Advert";
+import AnimatedHeaderBackground from "./components/HeaderBackground/HeaderBackground";
+import AnimatedHeaderTitle from "./components/HeaderTitle/HeaderTitle";
+import AnimatedHeaderBackButton from "./components/HeaderBack/HeaderBack";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -22,10 +26,9 @@ const RootNavigator = () => {
       <Stack.Group
         screenOptions={{
           headerShadowVisible: false,
-          headerBackTitleVisible: false,
-          headerTintColor: BLACK_DARK,
-          headerStyle: navigationStyles.header,
+          headerBackVisible: false,
           headerTitleStyle: navigationStyles.title,
+          headerLeft: () => <AnimatedHeaderBackButton />,
         }}
       >
         <Stack.Screen
@@ -35,9 +38,9 @@ const RootNavigator = () => {
         />
         <Stack.Screen
           options={{
-            title: "Профиль",
             headerStyle: { backgroundColor: GREY_LIGHT },
             headerRight: ProfilePage.headerRight,
+            title: "Профиль",
           }}
           name="Profile"
           component={ProfilePage.Component}
@@ -109,6 +112,18 @@ const RootNavigator = () => {
           {({ route }) => <MyAdverts.Component {...route.params} />}
         </Stack.Screen>
         <Stack.Screen
+          options={({ route }) => ({
+            title:
+              route.params.price.price +
+              " руб за " +
+              route.params.price.paymentFor,
+            headerTransparent: true,
+          })}
+          name="Advert"
+        >
+          {({ route }) => <AdvertPage.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
           options={{
             title: "Вход",
             headerStyle: { backgroundColor: GREY_LIGHT },
@@ -126,7 +141,13 @@ const RootNavigator = () => {
         />
       </Stack.Group>
 
-      <Stack.Group screenOptions={{ presentation: "transparentModal", headerShown: false, animation: 'fade' }}>
+      <Stack.Group
+        screenOptions={{
+          presentation: "transparentModal",
+          headerShown: false,
+          animation: "fade",
+        }}
+      >
         <Stack.Screen name="Modal">
           {({ route }) => <MyModal.Component {...route.params} />}
         </Stack.Screen>

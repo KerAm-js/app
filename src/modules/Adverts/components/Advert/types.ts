@@ -1,6 +1,6 @@
 import { TAdvert } from "../../../../types/Advert";
 
-export interface ISliderProps
+export interface IAdvertSliderProps
   extends Pick<TAdvert, "type" | "params"> {}
 
 export interface IParamProps {

@@ -11,7 +11,7 @@ const EditProfileButton = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
     <TouchableOpacity style={editProfileButtonStyles.container} onPress={() => navigation.navigate("EditProfile")}>
-      <SvgXml xml={editSvg()} width={22} height={22} />
+      <SvgXml xml={editSvg()} width={18} height={18} />
     </TouchableOpacity>
   );
 };

@@ -8,13 +8,13 @@ import {
   View,
 } from "react-native";
 import { advertStyles } from "./styles";
-import { ISliderProps } from "./types";
+import { IAdvertSliderProps } from "./types";
 import React, { FC, useCallback, useMemo, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import { GREY_DARK } from "../../../../consts/colors";
 import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeIconXml";
 
-const Slider: FC<ISliderProps> = ({ params, type }) => {
+const Slider: FC<IAdvertSliderProps> = ({ params, type }) => {
   const [currentSlide, setCurrentSlider] = useState(1);
 
   const windowWidth = Dimensions.get("window").width;
