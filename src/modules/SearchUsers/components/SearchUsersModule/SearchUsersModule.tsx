@@ -1,7 +1,7 @@
 import { FlatList, View } from "react-native";
 import { useState } from "react";
 import { searchUsersStyles } from "./styles";
-import UserCard from "../UserCard/UserCard";
+import UserCard from "../../../../components/UserCard/UserCard";
 import SearchBar from "../../../../UI/inputs/SearchBar/SearchBar";
 import { USERS_LIST } from "../../../../consts/devData";
 import { filterUsers } from "../../helpers/filterUsers";

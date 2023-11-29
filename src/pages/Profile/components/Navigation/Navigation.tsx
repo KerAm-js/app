@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import BigButton from "../../../../UI/buttons/Big/BigButton";
-import { USER } from "../../../../consts/devData";
+import { USER, USERS_LIST } from "../../../../consts/devData";
 
 const Navigation = () => {
   const navigation =
@@ -25,7 +25,8 @@ const Navigation = () => {
             },
             {
               title: "Ждут оценки",
-              onPress: () => navigation.navigate("Auth"),
+              onPress: () => navigation.navigate("AwaitingComment", {users: USERS_LIST.slice(0, 2)}),
+              circleNumber: 2
             },
             {
               title: "Отзывы обо мне",

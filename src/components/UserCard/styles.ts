@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import { WHITE } from "../../../../consts/colors";
-import { BORDER_RADIUS_SMALL } from "../../../../consts/borders";
-import { SMALL_F_SIZE, TEXT_F_SIZE } from "../../../../consts/texts";
+import { WHITE } from "../../consts/colors";
+import { BORDER_RADIUS_SMALL } from "../../consts/borders";
+import { SMALL_F_SIZE, TEXT_F_SIZE } from "../../consts/texts";
 
 export const userCardStyles = StyleSheet.create({
   container: {

@@ -17,6 +17,7 @@ import AdvertPage from "../pages/Advert";
 import AnimatedHeaderBackground from "./components/HeaderBackground/HeaderBackground";
 import AnimatedHeaderTitle from "./components/HeaderTitle/HeaderTitle";
 import AnimatedHeaderBackButton from "./components/HeaderBack/HeaderBack";
+import AwaitingComment from "../pages/AwaitingComment";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -81,6 +82,15 @@ const RootNavigator = () => {
           name="MyComments"
         >
           {({ route }) => <MyComments.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={{
+            title: "Ждут оценки",
+            headerStyle: { backgroundColor: GREY_LIGHT },
+          }}
+          name="AwaitingComment"
+        >
+          {({ route }) => <AwaitingComment.Component {...route.params} />}
         </Stack.Screen>
         <Stack.Screen
           options={{
