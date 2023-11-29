@@ -9,20 +9,20 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/types";
 import { IUser } from "../../types/User";
 
-const UserCard: FC<IUser> = ({ ...props }) => {
+const UserCard: FC<IUser> = (user) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const onPress = () => {
-    navigation.navigate("User", { ...props });
+    navigation.navigate("User", user);
   };
   return (
     <Pressable onPress={onPress} style={userCardStyles.container}>
       <View style={userCardStyles.userData}>
         <Avatar size={36} />
         <View>
-          <Text style={userCardStyles.username}>{props.username}</Text>
-          <Text style={userCardStyles.phone}>{props.phone}</Text>
+          <Text style={userCardStyles.username}>{user.username}</Text>
+          <Text style={userCardStyles.phone}>{user.phone}</Text>
         </View>
       </View>
       <SvgXml xml={arrowRightSvg()} width={14} height={14} />

@@ -19,6 +19,7 @@ import AnimatedHeaderTitle from "./components/HeaderTitle/HeaderTitle";
 import AnimatedHeaderBackButton from "./components/HeaderBack/HeaderBack";
 import AwaitingComment from "../pages/AwaitingComment";
 import UserCommentsPage from "../pages/UserComments";
+import NewCommentPage from "../pages/NewComment";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -133,6 +134,14 @@ const RootNavigator = () => {
           name="UserComments"
         >
           {({ route }) => <UserCommentsPage.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={{
+            title: "Новый отзыв",
+          }}
+          name="NewComment"
+        >
+          {({ route }) => <NewCommentPage.Component {...route.params} />}
         </Stack.Screen>
         <Stack.Screen
           options={{

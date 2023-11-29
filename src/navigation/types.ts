@@ -27,4 +27,5 @@ export type RootStackParamList = {
   Advert: TAdvert;
   AwaitingComment: IAwaitingCommentPageProps;
   UserComments: ICommentsModuleProps;
+  NewComment: IUser;
 };

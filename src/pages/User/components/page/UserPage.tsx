@@ -6,19 +6,19 @@ import { userPageStyles } from "./styles";
 import Comments from "../Comments/Comments";
 import AdvertsModule from "../../../../modules/Adverts";
 
-const UserPageComponent: FC<IUser> = (props) => {
+const UserPageComponent: FC<IUser> = (user) => {
   return (
     <AdvertsModule.Component
       style={userPageStyles.container}
       ListHeaderComponent={
         <View>
           <ProfilePage.AvatarBlock />
-          <ProfilePage.UserInfo {...props} />
-          <Comments />
-          <AdvertsModule.Header dataLength={props.adverts.length} />
+          <ProfilePage.UserInfo {...user} />
+          <Comments {...user} />
+          <AdvertsModule.Header dataLength={user.adverts.length} />
         </View>
       }
-      data={props.adverts}
+      data={user.adverts}
     />
   );
 };
