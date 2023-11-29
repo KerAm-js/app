@@ -7,17 +7,15 @@ import AdvertsListHeader from "../AdvertsListHeader/AdvertsListHeader";
 
 const AdvertsModuleComponent: FC<IAdvertsModuleProps> = (props) => {
   return (
-    <>
-      <FlatList
-        renderItem={({ item }) => <Advert {...item} />}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={advertsModuleStyles.contentContainer}
-        ListHeaderComponent={() => (
-          <AdvertsListHeader dataLength={props.data?.length || 0} />
-        )}
-        {...props}
-      />
-    </>
+    <FlatList
+      renderItem={({ item }) => <Advert {...item} />}
+      keyExtractor={(item) => item.id}
+      contentContainerStyle={advertsModuleStyles.contentContainer}
+      ListHeaderComponent={() => (
+        <AdvertsListHeader dataLength={props.data?.length || 0} />
+      )}
+      {...props}
+    />
   );
 };
 

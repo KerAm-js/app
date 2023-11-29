@@ -13,3 +13,14 @@ export const getAdvertTypeIconFunc = (advertType: TAdvertType) => {
       return dumpSvg;
   }
 };
+
+export const getAdvertTypeTitle = (advertType: TAdvertType) => {
+  switch (advertType) {
+    case "technic":
+      return "Техника";
+    case "shovel":
+      return "Нерудные материалы";
+    case "dump":
+      return "Свалки";
+  }
+}

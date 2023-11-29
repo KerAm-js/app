@@ -9,7 +9,7 @@ import {
 import React, { FC, useCallback, useMemo, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import { GREY_DARK } from "../../../../consts/colors";
-import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeIconXml";
+import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeGetters";
 import { ISliderProps } from "./types";
 import { sliderStyles } from "./styles";
 import Animated, {

@@ -3,7 +3,7 @@ import { Pressable, Text } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { TCardButtonProps } from "./types";
 import { cardButtonStyles, cardButtonWidth } from "./styles";
-import { getAdvertTypeIconFunc } from "../../../helpers/advertTypeIconXml";
+import { getAdvertTypeIconFunc } from "../../../helpers/advertTypeGetters";
 
 const CardButton: FC<TCardButtonProps> = ({ title, type, onPress }) => {
   return (

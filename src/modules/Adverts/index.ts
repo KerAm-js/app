@@ -1,7 +1,9 @@
 import AdvertsListHeader from "./components/AdvertsListHeader/AdvertsListHeader";
 import AdvertsModuleComponent from "./components/AdvertsModule/AdvertsModuleComponent";
 
-export default {
+const AdvertsModule = {
   Component: AdvertsModuleComponent,
-  Header: AdvertsListHeader
+  Header: AdvertsListHeader,
 };
+
+export default AdvertsModule;

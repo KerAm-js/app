@@ -1,5 +1,4 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { BLACK_DARK, GREY_LIGHT } from "../consts/colors";
 import { MainPage } from "../pages/Main";
 import { AuthPage } from "../pages/Auth";
 import { ProfilePage } from "../pages/Profile";
@@ -14,12 +13,13 @@ import Comment from "../pages/Comment";
 import MyAdverts from "../pages/MyAdverts";
 import MyModal from "../pages/Modal";
 import AdvertPage from "../pages/Advert";
-import AnimatedHeaderBackground from "./components/HeaderBackground/HeaderBackground";
-import AnimatedHeaderTitle from "./components/HeaderTitle/HeaderTitle";
 import AnimatedHeaderBackButton from "./components/HeaderBack/HeaderBack";
 import AwaitingComment from "../pages/AwaitingComment";
 import UserCommentsPage from "../pages/UserComments";
 import NewCommentPage from "../pages/NewComment";
+import AdvertsListPage from "../pages/AdvertsList";
+import { getAdvertTypeTitle } from "../helpers/advertTypeGetters";
+import ChooseAdvertTypePage from "../pages/ChooseAdvertType";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -40,6 +40,22 @@ const RootNavigator = () => {
           name="Main"
           component={MainPage.Component}
         />
+        <Stack.Screen
+          options={({ route }) => ({
+            title: route.params.title,
+          })}
+          name="ChooseAdvertType"
+        >
+          {({ route }) => <ChooseAdvertTypePage.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={({ route }) => ({
+            title: getAdvertTypeTitle(route.params.type),
+          })}
+          name="AdvertsList"
+        >
+          {({ route }) => <AdvertsListPage.Component {...route.params} />}
+        </Stack.Screen>
         <Stack.Screen
           options={{
             headerRight: ProfilePage.headerRight,

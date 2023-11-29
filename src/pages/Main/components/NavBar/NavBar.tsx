@@ -21,7 +21,15 @@ const NavBar: FC = () => {
         onPress={() => navigation.navigate("Profile")}
       />
       <View style={navBarStyles.rightButtonsContainer}>
-        <NavButton iconXml={listSvg()} onPress={() => console.log("pressed")} />
+        <NavButton
+          iconXml={listSvg()}
+          onPress={() =>
+            navigation.navigate("ChooseAdvertType", {
+              title: "Объявления",
+              navigateTo: "adverts",
+            })
+          }
+        />
         <NavButton
           iconXml={filterSvg()}
           onPress={() => console.log("pressed")}

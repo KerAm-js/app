@@ -12,7 +12,7 @@ import { IAdvertSliderProps } from "./types";
 import React, { FC, useCallback, useMemo, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import { GREY_DARK } from "../../../../consts/colors";
-import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeIconXml";
+import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeGetters";
 
 const Slider: FC<IAdvertSliderProps> = ({ params, type }) => {
   const [currentSlide, setCurrentSlider] = useState(1);
