@@ -19,7 +19,7 @@ const Navigation = () => {
               title: "Мои отзывы",
               onPress: () =>
                 navigation.navigate("MyComments", {
-                  userId: USER.id,
+                  user: USER,
                   userRole: "author",
                 }),
             },
@@ -32,7 +32,7 @@ const Navigation = () => {
               title: "Отзывы обо мне",
               onPress: () =>
                 navigation.navigate("CommentsToMe", {
-                  userId: USER.id,
+                  user: USER,
                   userRole: "adressee",
                 }),
             },

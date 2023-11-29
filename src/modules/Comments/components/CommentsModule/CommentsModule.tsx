@@ -1,29 +1,23 @@
 import { FlatList } from "react-native";
-import { USER } from "../../../../consts/devData";
 import Comment from "../Comment/Comment";
 import { commentsModuleStyles } from "./styles";
 import { FC } from "react";
 import { ICommentsModuleProps } from "./types";
-import { IComment } from "../../../../types/Comment";
 
 const CommentsModuleComponent: FC<ICommentsModuleProps> = ({
-  userId,
+  user,
   userRole,
 }) => {
-  let comments: Array<IComment>;
-  if (userId === USER.id) {
-    comments = USER.comments.filter((comment) => {
-      return userRole === "adressee"
-        ? comment.adresseeId === USER.id
-        : comment.authorId === USER.id;
-    });
-  } else {
-    comments = []; // here we need api to get comments of/about any user
-  }
+  const comments = user.comments.filter((comment) => {
+    return userRole === "adressee"
+      ? comment.adresseeId === user.id
+      : comment.authorId === user.id;
+  });
   return (
     <FlatList
       style={commentsModuleStyles.container}
       data={comments}
+      contentContainerStyle={commentsModuleStyles.contentContainer}
       renderItem={({ item }) => <Comment key={item.id} {...item} />}
     />
   );

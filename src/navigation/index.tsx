@@ -18,6 +18,7 @@ import AnimatedHeaderBackground from "./components/HeaderBackground/HeaderBackgr
 import AnimatedHeaderTitle from "./components/HeaderTitle/HeaderTitle";
 import AnimatedHeaderBackButton from "./components/HeaderBack/HeaderBack";
 import AwaitingComment from "../pages/AwaitingComment";
+import UserCommentsPage from "../pages/UserComments";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -29,6 +30,7 @@ const RootNavigator = () => {
           headerShadowVisible: false,
           headerBackVisible: false,
           headerTitleStyle: navigationStyles.title,
+          headerStyle: navigationStyles.header,
           headerLeft: () => <AnimatedHeaderBackButton />,
         }}
       >
@@ -39,7 +41,6 @@ const RootNavigator = () => {
         />
         <Stack.Screen
           options={{
-            headerStyle: { backgroundColor: GREY_LIGHT },
             headerRight: ProfilePage.headerRight,
             title: "Профиль",
           }}
@@ -49,7 +50,6 @@ const RootNavigator = () => {
         <Stack.Screen
           options={{
             title: "Редактирование",
-            headerStyle: { backgroundColor: GREY_LIGHT },
           }}
           name="EditProfile"
           component={EditProfilePage.Component}
@@ -57,7 +57,6 @@ const RootNavigator = () => {
         <Stack.Screen
           options={{
             title: "Поиск пользователя",
-            headerStyle: { backgroundColor: GREY_LIGHT },
           }}
           name="UserSearch"
           component={UserSearchPage.Component}
@@ -65,7 +64,6 @@ const RootNavigator = () => {
         <Stack.Screen
           options={({ route }) => ({
             title: route.params.username,
-            headerStyle: { backgroundColor: GREY_LIGHT },
             headerRight: () => (
               <UserPage.headerRight phoneNumber={route.params.phone} />
             ),
@@ -77,7 +75,6 @@ const RootNavigator = () => {
         <Stack.Screen
           options={{
             title: "Мои отзывы",
-            headerStyle: { backgroundColor: GREY_LIGHT },
           }}
           name="MyComments"
         >
@@ -86,7 +83,6 @@ const RootNavigator = () => {
         <Stack.Screen
           options={{
             title: "Ждут оценки",
-            headerStyle: { backgroundColor: GREY_LIGHT },
           }}
           name="AwaitingComment"
         >
@@ -95,7 +91,6 @@ const RootNavigator = () => {
         <Stack.Screen
           options={{
             title: "Отзывы обо мне",
-            headerStyle: { backgroundColor: GREY_LIGHT },
           }}
           name="CommentsToMe"
         >
@@ -106,7 +101,6 @@ const RootNavigator = () => {
             title: route.params.defaultComment
               ? "Редактирование"
               : "Новый отзыв",
-            headerStyle: { backgroundColor: GREY_LIGHT },
           })}
           name="Comment"
         >
@@ -115,7 +109,6 @@ const RootNavigator = () => {
         <Stack.Screen
           options={{
             title: "Мои объявления",
-            headerStyle: { backgroundColor: GREY_LIGHT },
           }}
           name="MyAdverts"
         >
@@ -135,8 +128,15 @@ const RootNavigator = () => {
         </Stack.Screen>
         <Stack.Screen
           options={{
+            title: "Отзывы",
+          }}
+          name="UserComments"
+        >
+          {({ route }) => <UserCommentsPage.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={{
             title: "Вход",
-            headerStyle: { backgroundColor: GREY_LIGHT },
           }}
           name="Auth"
           component={AuthPage.Component}
@@ -144,7 +144,6 @@ const RootNavigator = () => {
         <Stack.Screen
           options={{
             title: "Регистрация",
-            headerStyle: { backgroundColor: GREY_LIGHT },
           }}
           name="Register"
           component={RegisterPage.Component}

@@ -1,5 +1,7 @@
 import CommentsModuleComponent from "./components/CommentsModule/CommentsModule";
 
-export default {
+const CommentsModule = {
   Component: CommentsModuleComponent
 }
+
+export default CommentsModule;

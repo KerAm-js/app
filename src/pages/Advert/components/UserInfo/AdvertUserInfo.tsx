@@ -4,21 +4,19 @@ import { advertUserInfoStyles } from "./styles";
 import { GREEN, GREY_LIGHT } from "../../../../consts/colors";
 import Rating from "../../../../UI/Rating/Rating";
 import { FC } from "react";
-import { TAdvert } from "../../../../types/Advert";
 import { IUser } from "../../../../types/User";
 import Link from "../../../../UI/buttons/Link/Link";
 import { RU_LANG } from "../../../../consts/rulang";
 import BigButton from "../../../../UI/buttons/Big/BigButton";
-import { telephoneSvg } from "../../../../assets/svg/telephone";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
 
-const AdvertUserInfo: FC<IUser> = ({
-  id,
-  rating,
-  ratesCount,
-  username,
-  phone,
-  comments,
-}) => {
+const AdvertUserInfo: FC<IUser> = (props) => {
+  const { id, rating, ratesCount, username, phone, comments } = props;
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const commentsAboutUser = comments.filter(
     (comment) => comment.adresseeId === id
   );
@@ -26,9 +24,11 @@ const AdvertUserInfo: FC<IUser> = ({
   const commentsLen = commentsAboutUser.length;
 
   const call = () => {
-    const onPress = () => {
-      Linking.openURL(`tel:${phone}`);
-    };
+    Linking.openURL(`tel:${phone}`);
+  };
+
+  const goToComments = () => {
+    navigation.navigate("UserComments", { user: props, userRole: "adressee" });
   };
 
   return (
@@ -54,7 +54,7 @@ const AdvertUserInfo: FC<IUser> = ({
             " " +
             (RU_LANG.comments[commentsLen] || RU_LANG.comments[0])
           }
-          onPress={() => console.log("pressed")}
+          onPress={goToComments}
         />
       </View>
       <BigButton backgroundColor={GREEN} title="Позвонить" onPress={call} />

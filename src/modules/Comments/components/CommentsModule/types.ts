@@ -1,4 +1,6 @@
+import { IUser } from "../../../../types/User";
+
 export interface ICommentsModuleProps {
-  userId: string;
+  user: IUser
   userRole: 'adressee' | 'author',
 }

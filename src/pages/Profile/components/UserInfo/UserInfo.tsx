@@ -1,30 +1,39 @@
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { userInfoStyles } from "./styles";
 import Rating from "../../../../UI/Rating/Rating";
-import { BLUE, GREY_LIGHT } from "../../../../consts/colors";
+import { GREY_LIGHT } from "../../../../consts/colors";
 import { FC } from "react";
 import { IUser } from "../../../../types/User";
 import InfoCard from "../../../../UI/InfoCard/InfoCard";
-import { SvgXml } from "react-native-svg";
-import { arrowRightSvg } from "../../../../assets/svg/arrowRight";
 import { RU_LANG } from "../../../../consts/rulang";
 import Link from "../../../../UI/buttons/Link/Link";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
 
-const UserInfo: FC<IUser> = ({
-  id,
-  username,
-  phone,
-  email,
-  rating,
-  ratesCount,
-  description,
-  comments,
-}) => {
+const UserInfo: FC<IUser> = (props) => {
+  const {
+    id,
+    username,
+    phone,
+    email,
+    rating,
+    ratesCount,
+    description,
+    comments,
+  } = props;
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const commentsAboutUser = comments.filter(
     (comment) => comment.adresseeId === id
   );
 
   const commentsLen = commentsAboutUser.length;
+
+  const goToComments = () => {
+    navigation.navigate("UserComments", { user: props, userRole: "adressee" });
+  };
 
   return (
     <View style={userInfoStyles.container}>
@@ -46,7 +55,7 @@ const UserInfo: FC<IUser> = ({
             " " +
             (RU_LANG.comments[commentsLen] || RU_LANG.comments[0])
           }
-          onPress={() => console.log("pressed")}
+          onPress={goToComments}
         />
       )}
       <InfoCard title="Телефон" content={phone} />

@@ -1,3 +1,4 @@
+import { ICommentsModuleProps } from "../modules/Comments/components/CommentsModule/types";
 import { IAwaitingCommentPageProps } from "../pages/AwaitingComment/components/page/types";
 import { ICommentPageProps } from "../pages/Comment/components/types";
 import { IModalProps } from "../pages/Modal/components/page/types";
@@ -25,4 +26,5 @@ export type RootStackParamList = {
   Modal: IModalProps;
   Advert: TAdvert;
   AwaitingComment: IAwaitingCommentPageProps;
+  UserComments: ICommentsModuleProps;
 };
