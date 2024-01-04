@@ -8,16 +8,7 @@ import { IPhotoInputProps } from "../../UI/inputs/Photo/types";
 
 export type TAddressInputProps = {};
 
-type TInputType =
-  | "input"
-  | "selection"
-  | "interval"
-  | "segment"
-  | "textArea"
-  | "address";
-
-
-export type TFormInputType =
+export type TFormInput =
   | (IInputProps &
       TWithLabelAndErrorProps & { type: "input"; id: string; hidden?: boolean })
   | (IIntervalInputProps &
@@ -52,15 +43,11 @@ export type TFormInputType =
         hidden?: boolean;
       });
 
+export type TFormInputsArray = {title?: string, inputs: TFormInput[]}[]
+
 export type TFormProps = {
   onSubmit: () => void;
   submitTitle: string;
   isFormValid: boolean;
-  inputs: {
-    noTitle?: Array<TFormInputType>;
-    params?: Array<TFormInputType>;
-    general?: Array<TFormInputType>;
-    price?: Array<TFormInputType>;
-    user?: Array<TFormInputType>;
-  };
+  inputs: TFormInputsArray;
 };

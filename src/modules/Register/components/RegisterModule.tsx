@@ -1,4 +1,4 @@
-import { TFormInputType } from "../../../components/Form/types";
+import { TFormInput, TFormInputsArray } from "../../../components/Form/types";
 import { registerModuleStyles } from "./styles";
 import { View } from "react-native";
 import Form from "../../../components/Form/Form";
@@ -29,57 +29,61 @@ const RegisterModuleComponent = () => {
       confirmingErrorMessage: "Пароли не совпадают",
     });
 
-  const inputs: Array<TFormInputType> = [
+  const inputs: TFormInputsArray = [
     {
-      id: "username",
-      type: "input",
-      value: username,
-      error: usernameError,
-      onChangeText: onChangeUsername,
-      placeholder: "",
-      label: "Имя пользователя",
-    },
-    {
-      id: "phone",
-      type: "input",
-      value: phone,
-      onChangeText: onPhoneChange,
-      error: phoneError,
-      placeholder: "",
-      label: "Телефон",
-      keyboardType: "phone-pad",
-    },
-    {
-      id: "email",
-      type: "input",
-      value: email,
-      onChangeText: onEmailChange,
-      error: emailError,
-      placeholder: "",
-      label: "E-mail",
-      keyboardType: "email-address",
-    },
-    {
-      id: "password",
-      type: "input",
-      value: password,
-      onChangeText: onPasswordChange,
-      error: passwordError,
-      placeholder: "",
-      label: "Пароль",
-      secureTextEntry: true,
-      keyboardType: "numbers-and-punctuation",
-    },
-    {
-      id: "confirmPassword",
-      type: "input",
-      value: password2,
-      onChangeText: onPassword2Change,
-      error: password2Error,
-      placeholder: "",
-      label: "Подтвердите пароль",
-      secureTextEntry: true,
-      keyboardType: "numbers-and-punctuation",
+      inputs: [
+        {
+          id: "username",
+          type: "input",
+          value: username,
+          error: usernameError,
+          onChangeText: onChangeUsername,
+          placeholder: "",
+          label: "Имя пользователя",
+        },
+        {
+          id: "phone",
+          type: "input",
+          value: phone,
+          onChangeText: onPhoneChange,
+          error: phoneError,
+          placeholder: "",
+          label: "Телефон",
+          keyboardType: "phone-pad",
+        },
+        {
+          id: "email",
+          type: "input",
+          value: email,
+          onChangeText: onEmailChange,
+          error: emailError,
+          placeholder: "",
+          label: "E-mail",
+          keyboardType: "email-address",
+        },
+        {
+          id: "password",
+          type: "input",
+          value: password,
+          onChangeText: onPasswordChange,
+          error: passwordError,
+          placeholder: "",
+          label: "Пароль",
+          secureTextEntry: true,
+          keyboardType: "numbers-and-punctuation",
+        },
+        {
+          id: "confirmPassword",
+          type: "input",
+          value: password2,
+          onChangeText: onPassword2Change,
+          error: password2Error,
+          placeholder: "",
+          label: "Подтвердите пароль",
+          secureTextEntry: true,
+          keyboardType: "numbers-and-punctuation",
+        },
+      ],
     },
   ];
 
@@ -105,7 +109,7 @@ const RegisterModuleComponent = () => {
   return (
     <View style={registerModuleStyles.container}>
       <Form
-        inputs={{ noTitle: inputs }}
+        inputs={inputs}
         submitTitle="Зарегистрироваться"
         onSubmit={onSubmit}
         isFormValid={isFormValid}

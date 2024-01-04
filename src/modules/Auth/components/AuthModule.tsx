@@ -1,4 +1,4 @@
-import { TFormInputType } from "../../../components/Form/types";
+import { TFormInputsArray } from "../../../components/Form/types";
 import Form from "../../../components/Form/Form";
 import { View } from "react-native";
 import { authModuleStyles } from "./styles";
@@ -15,28 +15,32 @@ const AuthModuleComponent = () => {
       minLength: 6,
     });
 
-  const inputs: Array<TFormInputType> = [
+  const inputs: TFormInputsArray = [
     {
-      id: "phone",
-      type: "input",
-      value: phone,
-      onChangeText: onPhoneChange,
-      placeholder: "",
-      label: "Телефон",
-      keyboardType: "phone-pad",
-      maxLength: 16,
-      error: phoneError,
-    },
-    {
-      id: "password",
-      type: "input",
-      value: password,
-      onChangeText: onPasswordChange,
-      placeholder: "",
-      label: "Пароль",
-      secureTextEntry: true,
-      keyboardType: "numbers-and-punctuation",
-      error: passwordError,
+      inputs: [
+        {
+          id: "phone",
+          type: "input",
+          value: phone,
+          onChangeText: onPhoneChange,
+          placeholder: "",
+          label: "Телефон",
+          keyboardType: "phone-pad",
+          maxLength: 16,
+          error: phoneError,
+        },
+        {
+          id: "password",
+          type: "input",
+          value: password,
+          onChangeText: onPasswordChange,
+          placeholder: "",
+          label: "Пароль",
+          secureTextEntry: true,
+          keyboardType: "numbers-and-punctuation",
+          error: passwordError,
+        },
+      ],
     },
   ];
 
@@ -55,7 +59,7 @@ const AuthModuleComponent = () => {
   return (
     <View style={authModuleStyles.container}>
       <Form
-        inputs={{ noTitle: inputs }}
+        inputs={inputs}
         submitTitle="Войти"
         onSubmit={onSubmit}
         isFormValid={isFormValid}

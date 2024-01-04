@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { usePhoneValidator } from "../../../hooks/inputValidators/usePhoneValidator";
 import { useInputValidator } from "../../../hooks/inputValidators/useInputValidator";
-import { TFormInputType } from "../../../components/Form/types";
+import { TFormInput, TFormInputsArray } from "../../../components/Form/types";
 import { EMAIL_REGEX } from "../../../consts/regex";
 import Form from "../../../components/Form/Form";
 import { editProfileModuleStyles } from "./styles";
@@ -20,44 +20,48 @@ const EditProfileModuleComponent = () => {
   });
   const [description, setDescription] = useState(USER.description);
 
-  const inputs: Array<TFormInputType> = [
+  const inputs: TFormInputsArray = [
     {
-      id: "username",
-      type: "input",
-      value: username,
-      error: usernameError,
-      onChangeText: onChangeUsername,
-      placeholder: "",
-      label: "Имя пользователя",
-    },
-    {
-      id: "phone",
-      type: "input",
-      value: phone,
-      onChangeText: onPhoneChange,
-      error: phoneError,
-      placeholder: "",
-      label: "Телефон",
-      keyboardType: "phone-pad",
-      textContentType: "telephoneNumber"
-    },
-    {
-      id: "email",
-      type: "input",
-      value: email,
-      onChangeText: onEmailChange,
-      error: emailError,
-      placeholder: "",
-      label: "E-mail",
-      keyboardType: "email-address",
-    },
-    {
-      id: "description",
-      type: "textArea",
-      value: description,
-      onChangeText: (text: string) => setDescription(text),
-      placeholder: "",
-      label: "Описание",
+      inputs: [
+        {
+          id: "username",
+          type: "input",
+          value: username,
+          error: usernameError,
+          onChangeText: onChangeUsername,
+          placeholder: "",
+          label: "Имя пользователя",
+        },
+        {
+          id: "phone",
+          type: "input",
+          value: phone,
+          onChangeText: onPhoneChange,
+          error: phoneError,
+          placeholder: "",
+          label: "Телефон",
+          keyboardType: "phone-pad",
+          textContentType: "telephoneNumber",
+        },
+        {
+          id: "email",
+          type: "input",
+          value: email,
+          onChangeText: onEmailChange,
+          error: emailError,
+          placeholder: "",
+          label: "E-mail",
+          keyboardType: "email-address",
+        },
+        {
+          id: "description",
+          type: "textArea",
+          value: description,
+          onChangeText: (text: string) => setDescription(text),
+          placeholder: "",
+          label: "Описание",
+        },
+      ],
     },
   ];
 
@@ -85,7 +89,7 @@ const EditProfileModuleComponent = () => {
   return (
     <View style={editProfileModuleStyles.container}>
       <Form
-        inputs={{ noTitle: inputs }}
+        inputs={inputs}
         submitTitle="Сохранить"
         onSubmit={onSubmit}
         isFormValid={isFormValid}
