@@ -9,6 +9,8 @@ export const useInputValidator: TInputValidator = ({
   confirmedValue,
   confirmingErrorMessage,
   required,
+  minValue,
+  maxValue,
 }) => {
   const [value, setValue] = useState(initValue);
   const [isValid, setIsValid] = useState(!!initValue);
@@ -18,10 +20,11 @@ export const useInputValidator: TInputValidator = ({
 
   const onChangeValue = (text: string) => {
     setValue(text);
+    const number = Number(text);
     if (text.length < minLength) {
       setError(
         `Введите минимум ${minLength} ${
-          (RU_LANG.symbols[minLength] || RU_LANG.symbols[0])
+          RU_LANG.symbols[minLength] || RU_LANG.symbols[0]
         }`
       );
       setIsValid(false);
@@ -31,16 +34,21 @@ export const useInputValidator: TInputValidator = ({
     } else if (pattern && !pattern.test(text)) {
       setError("Некорректные данные");
       setIsValid(false);
-    } else {
-      setError("");
-      setIsValid(true);
-    }
-    if (confirmedValue && text === confirmedValue) {
+    } else if (confirmedValue && text === confirmedValue) {
       setIsValid(true);
       setError("");
     } else if (confirmingErrorMessage) {
       setIsValid(false);
       setError(confirmingErrorMessage);
+    } else if (!isNaN(number) && minValue && number < minValue) {
+      setIsValid(false);
+      setError("Минимальное значение " + minValue);
+    } else if (!isNaN(number) && maxValue && number > maxValue) {
+      setIsValid(false);
+      setError("Максимальное значение " + maxValue);
+    } else {
+      setIsValid(true);
+      setError("");
     }
   };
 

@@ -3,7 +3,7 @@ import MenuBar from "../MenuBar/MenuBar";
 import NavBar from "../NavBar/NavBar";
 import YaMap from "react-native-yamap";
 
-const YandexMap = () => {
+const YaMap3 = () => {
   return (
     <View style={{ flex: 1 }}>
       <NavBar />
@@ -25,4 +25,4 @@ const YandexMap = () => {
   );
 };
 
-export default YandexMap;
+export default YaMap3;

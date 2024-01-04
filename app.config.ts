@@ -8,6 +8,21 @@ const config: ExpoConfig = {
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light",
+  plugins: [
+    [
+      "expo-camera",
+      {
+        cameraPermission: "Allow $(Duna) to access your camera.",
+      },
+    ],
+    [
+      "expo-image-picker",
+      {
+        photosPermission:
+          "The app accesses your photos to let you share them with your friends.",
+      },
+    ],
+  ],
   splash: {
     image: "./assets/splash.png",
     resizeMode: "cover",
@@ -16,7 +31,7 @@ const config: ExpoConfig = {
   assetBundlePatterns: ["**/*"],
   ios: {
     supportsTablet: false,
-    bundleIdentifier: "com.amirkerimov.duna"
+    bundleIdentifier: "com.amirkerimov.duna",
   },
   android: {
     adaptiveIcon: {

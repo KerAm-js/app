@@ -1,5 +1,7 @@
 import Component from "./components/AuthModule";
 
-export const AuthModule = {
+const AuthModule = {
   Component,
 };
+
+export default AuthModule;

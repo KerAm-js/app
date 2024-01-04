@@ -1,5 +1,7 @@
-import CommentFormModuleComponent from "./components/CommentFormModule/CommentFormModule";
+import CommentFormModuleComponent from "./components/module/CommentFormModule";
 
-export default {
+const CommentFormModule = {
   Component: CommentFormModuleComponent,
 }
+
+export default CommentFormModule;

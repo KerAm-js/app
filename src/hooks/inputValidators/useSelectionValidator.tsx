@@ -4,6 +4,7 @@ import { TSelectionValidator } from "./types";
 export const useSelectionValidator: TSelectionValidator = ({
   initValue,
   required,
+  multySelection,
 }) => {
   const [value, setValue] = useState<Array<string>>([]);
   const [isValid, setIsValid] = useState(false);
@@ -12,7 +13,11 @@ export const useSelectionValidator: TSelectionValidator = ({
   );
 
   const selectItem = (selectedItem: string) => {
-    setValue((value) => [...value, selectedItem]);
+    if (multySelection) {
+      setValue((value) => [...value, selectedItem]);
+    } else {
+      setValue([selectedItem]);
+    }
   };
 
   const unselectItem = (unselectedItem: string) => {

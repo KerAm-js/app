@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { View } from "react-native";
 import { IUser } from "../../../../types/User";
-import { ProfilePage } from "../../../Profile";
 import { userPageStyles } from "./styles";
 import Comments from "../Comments/Comments";
 import AdvertsModule from "../../../../modules/Adverts";
+import ProfilePage from "../../../Profile";
 
 const UserPageComponent: FC<IUser> = (user) => {
   return (

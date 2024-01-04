@@ -5,7 +5,9 @@ import { TITLE_F_SIZE } from "../../consts/texts";
 export const titleStyles = StyleSheet.create({
   container: {
     width: '100%',
-    paddingHorizontal: SCREEN_PADDING
+    paddingHorizontal: SCREEN_PADDING,
+    marginBottom: 20,
+    marginTop: 10,
   },
   text: {
     fontSize: TITLE_F_SIZE,

@@ -4,7 +4,7 @@ import { BLUE } from "../../../consts/colors";
 import { TWithLabelAndErrorChildrenProps, TWithLabelAndErrorProps } from "./types";
 import { withLabelAndErrorStyles } from "./styles";
 
-function withLabelAndError<T>(
+function WithLabelAndError<T>(
   Input: ComponentType<T & TWithLabelAndErrorChildrenProps>
 ) {
   return (hocProps: T & TWithLabelAndErrorProps) => {
@@ -30,4 +30,4 @@ function withLabelAndError<T>(
   };
 }
 
-export default withLabelAndError;
+export default WithLabelAndError;

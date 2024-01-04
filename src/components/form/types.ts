@@ -4,19 +4,53 @@ import { TSelectionProps } from "../../UI/inputs/Selection/types";
 import { TTextAreaProps } from "../../UI/inputs/TextArea/types";
 import { TWithLabelAndErrorProps } from "../HOC/WithLabelAndError/types";
 import { SegmentedControlProps } from "@react-native-segmented-control/segmented-control";
-
-export type TPhotoInputProps = {};
+import { IPhotoInputProps } from "../../UI/inputs/Photo/types";
 
 export type TAddressInputProps = {};
 
+type TInputType =
+  | "input"
+  | "selection"
+  | "interval"
+  | "segment"
+  | "textArea"
+  | "address";
+
+
 export type TFormInputType =
-  | (IInputProps & TWithLabelAndErrorProps & { type: "input"; id: string })
-  | (IIntervalInputProps & TWithLabelAndErrorProps & { type: "interval"; id: string })
-  | (TSelectionProps & TWithLabelAndErrorProps & { type: "selection"; id: string })
-  | (SegmentedControlProps & TWithLabelAndErrorProps & { type: "segment"; id: string })
-  | (TTextAreaProps & TWithLabelAndErrorProps & { type: "textArea"; id: string })
-  | (TPhotoInputProps & TWithLabelAndErrorProps & { type: "photo"; id: string })
-  | (TAddressInputProps & TWithLabelAndErrorProps & { type: "address"; id: string });
+  | (IInputProps &
+      TWithLabelAndErrorProps & { type: "input"; id: string; hidden?: boolean })
+  | (IIntervalInputProps &
+      TWithLabelAndErrorProps & {
+        type: "interval";
+        id: string;
+        hidden?: boolean;
+      })
+  | (TSelectionProps &
+      TWithLabelAndErrorProps & {
+        type: "selection";
+        id: string;
+        hidden?: boolean;
+      })
+  | (SegmentedControlProps &
+      TWithLabelAndErrorProps & {
+        type: "segment";
+        id: string;
+        hidden?: boolean;
+      })
+  | (TTextAreaProps &
+      TWithLabelAndErrorProps & {
+        type: "textArea";
+        id: string;
+        hidden?: boolean;
+      })
+  | (IPhotoInputProps & { type: "photo"; id: string; hidden?: boolean })
+  | (TAddressInputProps &
+      TWithLabelAndErrorProps & {
+        type: "address";
+        id: string;
+        hidden?: boolean;
+      });
 
 export type TFormProps = {
   onSubmit: () => void;

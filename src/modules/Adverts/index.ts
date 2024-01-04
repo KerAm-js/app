@@ -1,5 +1,5 @@
 import AdvertsListHeader from "./components/AdvertsListHeader/AdvertsListHeader";
-import AdvertsModuleComponent from "./components/AdvertsModule/AdvertsModuleComponent";
+import AdvertsModuleComponent from "./components/module/AdvertsModuleComponent";
 
 const AdvertsModule = {
   Component: AdvertsModuleComponent,

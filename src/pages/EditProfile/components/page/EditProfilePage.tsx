@@ -1,7 +1,7 @@
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
-import { EditProfileModule } from "../../../modules/EditProfile";
 import { editProfilePageStyles } from "./styles";
 import { useHeaderHeight } from "@react-navigation/elements";
+import EditProfileModule from "../../../../modules/EditProfile";
 
 const EditProfilePageComponent = () => {
   const headerHeight = useHeaderHeight();

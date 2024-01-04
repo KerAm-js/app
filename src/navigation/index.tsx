@@ -1,25 +1,26 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MainPage } from "../pages/Main";
-import { AuthPage } from "../pages/Auth";
-import { ProfilePage } from "../pages/Profile";
-import { RegisterPage } from "../pages/Register";
-import { EditProfilePage } from "../pages/EditProfile";
 import { navigationStyles } from "./styles";
-import { UserSearchPage } from "../pages/UserSearch";
-import { UserPage } from "../pages/User";
+import UserSearchPage from "../pages/UserSearch";
 import { RootStackParamList } from "./types";
 import MyComments from "../pages/MyComments";
-import Comment from "../pages/Comment";
+import CommentPage from "../pages/Comment";
 import MyAdverts from "../pages/MyAdverts";
 import MyModal from "../pages/Modal";
 import AdvertPage from "../pages/Advert";
 import AnimatedHeaderBackButton from "./components/HeaderBack/HeaderBack";
-import AwaitingComment from "../pages/AwaitingComment";
+import AwaitingCommentPage from "../pages/AwaitingComment";
 import UserCommentsPage from "../pages/UserComments";
 import NewCommentPage from "../pages/NewComment";
 import AdvertsListPage from "../pages/AdvertsList";
 import { getAdvertTypeTitle } from "../helpers/advertTypeGetters";
 import ChooseAdvertTypePage from "../pages/ChooseAdvertType";
+import NewAdvertPage from "../pages/NewAdvert";
+import MainPage from "../pages/Main";
+import AuthPage from "../pages/Auth";
+import EditProfilePage from "../pages/EditProfile";
+import ProfilePage from "../pages/Profile";
+import RegisterPage from "../pages/Register";
+import UserPage from "../pages/User";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -103,7 +104,7 @@ const RootNavigator = () => {
           }}
           name="AwaitingComment"
         >
-          {({ route }) => <AwaitingComment.Component {...route.params} />}
+          {({ route }) => <AwaitingCommentPage.Component {...route.params} />}
         </Stack.Screen>
         <Stack.Screen
           options={{
@@ -121,7 +122,7 @@ const RootNavigator = () => {
           })}
           name="Comment"
         >
-          {({ route }) => <Comment.Component {...route.params} />}
+          {({ route }) => <CommentPage.Component {...route.params} />}
         </Stack.Screen>
         <Stack.Screen
           options={{
@@ -130,6 +131,14 @@ const RootNavigator = () => {
           name="MyAdverts"
         >
           {({ route }) => <MyAdverts.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={{
+            title: "Новое объявление",
+          }}
+          name="NewAdvert"
+        >
+          {({ route }) => <NewAdvertPage.Component {...route.params} />}
         </Stack.Screen>
         <Stack.Screen
           options={({ route }) => ({

@@ -1,7 +1,7 @@
 import AwaitingCommentPageComponent from "./components/page/AwaitingComment";
 
-const AwaitingComment = {
+const AwaitingCommentPage = {
   Component: AwaitingCommentPageComponent
 }
 
-export default AwaitingComment;
+export default AwaitingCommentPage;

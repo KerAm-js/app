@@ -1,5 +1,7 @@
-import SearchUsersModuleComponent from "./components/SearchUsersModule/SearchUsersModule";
+import SearchUsersModuleComponent from "./components/module/SearchUsersModule";
 
-export const SearhUsersModule = {
+const SearhUsersModule = {
   Component: SearchUsersModuleComponent,
 }
+
+export default SearhUsersModule;

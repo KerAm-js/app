@@ -1,5 +1,7 @@
 import MyCommentsPageComponent from "./components/MyCommentsPage/MyCommentsPage";
 
-export default {
+const MyCommentsPage = {
   Component: MyCommentsPageComponent
 }
+
+export default MyCommentsPage;

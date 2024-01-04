@@ -20,7 +20,7 @@ const ChooseAdvertTypePageComponent: FC<IChooseAdvertTypePageProps> = ({
     } else if (navigateTo === "filter") {
       // navigation.navigate("AdvertsList", { type });
     } else if (navigateTo === "form") {
-      // navigation.navigate("AdvertsList", { type });
+      navigation.navigate("NewAdvert", { type });
     }
   };
 

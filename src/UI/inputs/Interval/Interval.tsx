@@ -1,16 +1,14 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { intervalInputStyles } from "./styles";
 import { IIntervalInputProps } from "./types";
 import withLabelAndError from "../../../components/HOC/WithLabelAndError/WithLabelAndError";
 import InputField from "../Input/InputField";
-import { useState } from "react";
 
 const IntervalInput = withLabelAndError<IIntervalInputProps>(
   ({
     firstPlaceholder,
     secondPlaceholder,
-    firstValue,
-    secondValue,
+    value,
     onFirstValueChange,
     onSecondValueChange,
     setIsFocused,
@@ -19,7 +17,7 @@ const IntervalInput = withLabelAndError<IIntervalInputProps>(
     return (
       <View style={intervalInputStyles.container}>
         <InputField
-          value={firstValue}
+          value={value.first}
           setIsFocused={setIsFocused}
           placeholder={firstPlaceholder || "от"}
           onChangeText={onFirstValueChange}
@@ -27,7 +25,7 @@ const IntervalInput = withLabelAndError<IIntervalInputProps>(
           {...inputProps}
         />
         <InputField
-          value={secondValue}
+          value={value.second}
           setIsFocused={setIsFocused}
           placeholder={secondPlaceholder || "до"}
           onChangeText={onSecondValueChange}

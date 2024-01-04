@@ -1,15 +1,12 @@
 import { TextInputProps } from "react-native";
 
-export type TIntervalInputValue = {
-  from: string;
-  to: string;
-};
-
-export interface IIntervalInputProps extends TextInputProps {
+export interface IIntervalInputProps extends Omit<TextInputProps, 'value'> {
   firstPlaceholder: string;
   secondPlaceholder: string;
-  firstValue: string;
-  secondValue: string;
+  value: {
+    first: string;
+    second: string;
+  };
   onFirstValueChange: (text: string) => void;
   onSecondValueChange: (text: string) => void;
 }

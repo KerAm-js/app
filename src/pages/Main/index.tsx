@@ -1,6 +1,8 @@
-import Component from "./components/page/MainPage"
-import YandexMap from "./components/YaMap/YaMap"
+import YaMap2 from "./components/YaMap/YaMap";
+import YaMap3 from "./components/YaMap/YaMap3";
 
-export const MainPage = {
-  Component: YandexMap,
+const MainPage = {
+  Component: YaMap2,
 }
+
+export default MainPage;

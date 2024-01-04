@@ -1,5 +1,7 @@
 import Component from "./components/EditProfileModule";
 
-export const EditProfileModule = {
+const EditProfileModule = {
   Component,
 };
+
+export default EditProfileModule;

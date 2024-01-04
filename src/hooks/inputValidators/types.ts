@@ -5,6 +5,8 @@ type TInputValidatorProps = {
   required?: boolean;
   confirmedValue?: string;
   confirmingErrorMessage?: string;
+  minValue?: number,
+  maxValue?: number,
 };
 
 export type TInputValidator = (
@@ -19,9 +21,11 @@ export type TInputValidator = (
 export type TSelectionValidator = ({
   initValue,
   required,
+  multySelection, 
 }: {
   initValue?: Array<string>;
-  required: boolean;
+  required?: boolean;
+  multySelection?: boolean;
 }) => [
   value: Array<string>,
   selectItem: (value: string) => void,

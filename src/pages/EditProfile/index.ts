@@ -1,5 +1,7 @@
-import Component from "./components/EditProfilePage";
+import Component from "./components/page/EditProfilePage";
 
-export const EditProfilePage = {
+const EditProfilePage = {
   Component,
 };
+
+export default EditProfilePage;

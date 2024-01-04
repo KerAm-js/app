@@ -18,6 +18,6 @@ export const cardButtonStyles = StyleSheet.create({
   },
   title: {
     fontSize: TEXT_F_SIZE,
-    fontFamily: 'Gilroy-Medium'
+    fontFamily: 'Gilroy-Semibold'
   },
 });

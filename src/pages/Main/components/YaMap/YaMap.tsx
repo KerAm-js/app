@@ -5,7 +5,7 @@ import { WebView } from "react-native-webview";
 import { mainMapStyles } from "../MainMap/styles";
 import { YA_MAP_JS_API_KEY } from "../../../../api/yamap";
 
-const YandexMap = () => {
+const YaMap2 = () => {
   const html = `
       <html>
       <head>
@@ -60,4 +60,4 @@ function init() {
   );
 };
 
-export default YandexMap;
+export default YaMap2;

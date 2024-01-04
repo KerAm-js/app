@@ -2,7 +2,7 @@ import { ComponentType } from "react";
 import { View } from "react-native";
 import { withMapShadowStyles } from "./styles";
 
-function WihtMapShadow<T>(Component: ComponentType<T>) {
+function WithMapShadow<T>(Component: ComponentType<T>) {
   return (hocProps: T & React.JSX.IntrinsicAttributes) => {
     return <View style={withMapShadowStyles.container}>
       <Component {...hocProps} />
@@ -10,4 +10,4 @@ function WihtMapShadow<T>(Component: ComponentType<T>) {
   };
 }
 
-export default WihtMapShadow;
+export default WithMapShadow;

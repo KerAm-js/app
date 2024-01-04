@@ -1,7 +1,7 @@
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { registerPageStyles } from "./styles";
-import { RegisterModule } from "../../../../modules/Register";
+import RegisterModule from "../../../../modules/Register";
 
 const RegisterPageComponent = () => {
   const headerHeight = useHeaderHeight();

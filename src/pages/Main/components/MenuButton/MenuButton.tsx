@@ -3,7 +3,7 @@ import { SvgXml } from "react-native-svg";
 import { menuButtonStyles } from "./styles";
 import { BLACK_LIGHT, WHITE } from "../../../../consts/colors";
 import { TMenuButtonProps } from "./types";
-import WihtMapShadow from "../../../../components/HOC/WithMapShadow/WtihMapShadow";
+import WihtMapShadow from "../../../../components/HOC/WithMapShadow/WithMapShadow";
 
 const MenuButton = WihtMapShadow<TMenuButtonProps>(
   ({ onPress, iconXmlFunc, isActive }) => {

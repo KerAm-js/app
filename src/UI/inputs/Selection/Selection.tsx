@@ -9,14 +9,13 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import SelectionSearchBar from "./SearchBar/SearchBar";
-import SelectionMenu from "./Menu/SelectionMenu";
 import { RED } from "../../../consts/colors";
 import withLabelAndError from "../../../components/HOC/WithLabelAndError/WithLabelAndError";
 
 const Selection = withLabelAndError<TSelectionProps>(
   ({
     itemsList,
-    selectedItems,
+    value,
     selectItem,
     unselectItem,
     unselectAll,
@@ -32,7 +31,7 @@ const Selection = withLabelAndError<TSelectionProps>(
     const containerHeight = useSharedValue(48);
     const selectedItemsObj = useRef<{ [key: string]: boolean }>({});
 
-    const menuHeight = !!selectedItems.length ? 44 : 0;
+    const menuHeight = !!value.length ? 44 : 0;
     const baseHeight = itemsList.length > 8 ? 326 : 48 + 46 * itemsList.length;
 
     const toggleHeight = () => {
@@ -40,14 +39,14 @@ const Selection = withLabelAndError<TSelectionProps>(
         isOpened.value = withTiming(0);
         containerHeight.value = withTiming(48);
         inputRef.current?.blur();
-        setIsFocused(false);
-        setErrorShown(true);
+        setIsFocused && setIsFocused(false);
+        setErrorShown && setErrorShown(true);
       } else {
         filteredList.current = [...itemsList];
         setText("");
         isOpened.value = withTiming(1);
         containerHeight.value = withTiming(baseHeight + menuHeight);
-        setIsFocused(true);
+        setIsFocused && setIsFocused(true);
         Keyboard.dismiss();
       }
     };
@@ -73,32 +72,34 @@ const Selection = withLabelAndError<TSelectionProps>(
           )
         : [...itemsList];
       setText(text);
-      if (multySelection) {
-        const listLength = filteredList.current.length;
-        const isTooMuchItems = listLength > 8;
-        const newContainerHeight =
-          listLength === 0
-            ? 105 + menuHeight
-            : isTooMuchItems
-            ? baseHeight + menuHeight
-            : listLength * 46 + 48 + menuHeight;
-        containerHeight.value = withTiming(newContainerHeight);
-      }
+
+      const listLength = filteredList.current.length;
+      const isTooMuchItems = listLength > 8;
+      const newContainerHeight =
+        listLength === 0
+          ? 105 + menuHeight
+          : isTooMuchItems
+          ? baseHeight + menuHeight
+          : listLength * 46 + 48 + menuHeight;
+      containerHeight.value = withTiming(newContainerHeight);
     };
 
     const onSelectItem = (item: string) => {
       if (!selectedItemsObj.current[item]) {
-        if (!selectedItems.length) {
-          containerHeight.value = withTiming(containerHeight.value + 44);
-        }
         selectItem(item);
-        selectedItemsObj.current[item] = true;
-      } else {
-        if (selectedItems.length === 1 && multySelection) {
-          containerHeight.value = withTiming(containerHeight.value - 44);
+        if (multySelection) {
+          selectedItemsObj.current[item] = true;
+        } else {
+          selectedItemsObj.current = { [item]: true };
         }
-        unselectItem(item);
-        selectedItemsObj.current[item] = false;
+      } else {
+        if (multySelection && unselectItem) {
+          unselectItem(item);
+          selectedItemsObj.current[item] = false;
+        } else {
+          unselectAll();
+          selectedItemsObj.current = {};
+        }
       }
     };
 
@@ -109,7 +110,7 @@ const Selection = withLabelAndError<TSelectionProps>(
     };
 
     useEffect(() => {
-      selectedItems.forEach((item) => {
+      value.forEach((item) => {
         selectedItemsObj.current[item] = true;
       });
     }, []);
@@ -129,17 +130,17 @@ const Selection = withLabelAndError<TSelectionProps>(
             inputValue={text}
             onInputChange={onChangeSearchText}
             inputRef={inputRef}
-            selectedItemsArr={selectedItems}
+            selectedItemsArr={value}
             placeholder={placeholder}
           />
-          {multySelection && (
+          {/* {multySelection && (
             <SelectionMenu
               selectedItemsArr={selectedItems}
               isOpened={isOpened}
               unselectItem={unselectItem}
               unselectAll={onUnselectAll}
             />
-          )}
+          )} */}
           <Animated.ScrollView
             style={[selectionStyles.scrollView, scrollViewStyle]}
           >

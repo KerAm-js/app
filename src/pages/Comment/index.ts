@@ -1,5 +1,7 @@
-import CommentPageComponent from "./components/CommentPageComponent";
+import CommentPageComponent from "./components/page/CommentPageComponent";
 
-export default {
+const CommentPage = {
   Component: CommentPageComponent
 }
+
+export default CommentPage;

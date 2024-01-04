@@ -1,8 +1,9 @@
-import { View } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import MainMap from "../MainMap/MainMap";
 import { TAdvert } from "../../../../types/Advert";
 import MenuBar from "../MenuBar/MenuBar";
 import NavBar from "../NavBar/NavBar";
+import { View } from "react-native";
 
 const adverts: Array<TAdvert> = [];
 

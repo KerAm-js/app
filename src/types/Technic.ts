@@ -1,5 +1,44 @@
 import { TAdress, TGeneral, TParams, TPrice } from "./others";
 
+const techAd = {
+  type: "",
+  mark: "",
+  model: "",
+  productionYear: "",
+  equipment: "",
+  photos: [],
+  weight: undefined,
+  height: undefined,
+  volume: undefined,
+  passengersCount: undefined,
+  pipeLength: undefined,
+  boomLength: undefined,
+  liftingCapacity: undefined,
+  performance: undefined,
+  cargoType: undefined,
+  rollerType: undefined,
+  rollersCount: undefined,
+  technicType: undefined,
+  OSSIG: undefined,
+  axesNumber: undefined,
+  bodyLength: undefined,
+  trailerType: undefined,
+  loadingType: undefined,
+  count: 0,
+  workMode: "День",
+  rentalPeriod: undefined,
+  rentalDaysCount: 0,
+  address: "",
+  secondAddress: undefined,
+  distance: undefined,
+  comment: "",
+  price: 0,
+  paymentType: "Наличные",
+  paymentFor: "смену",
+  username: "",
+  phoneNumber: "",
+}
+
 export interface ITechnicGeneral extends TGeneral {
   count: number;
   rentalPeriod?: {
@@ -19,7 +58,7 @@ export interface ITechnicParams extends TParams {
     Оборудование?: Array<string>;
   };
   otherParams: {
-    Вес?: number;
+    weight?: {value: number, title: 'Вес'};
     Высота?: number;
     Объём?: number;
     "Количество пассажиров"?: number;

@@ -1,5 +1,7 @@
-import MyModal from "./components/page/Modal";
+import MyModalPageComponent from "./components/page/Modal";
 
-export default {
-  Component: MyModal
+const MyModal = {
+  Component: MyModalPageComponent
 }
+
+export default MyModal

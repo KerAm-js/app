@@ -3,9 +3,11 @@ import EditProfileButton from "./components/EditProfileButton/EditProfileButton"
 import Component from "./components/page/ProfilePage";
 import UserInfo from "./components/UserInfo/UserInfo";
 
-export const ProfilePage = {
+const ProfilePage = {
   Component,
   headerRight: EditProfileButton,
   UserInfo,
   AvatarBlock,
 };
+
+export default ProfilePage;

@@ -1,7 +1,9 @@
 import CallButton from "./components/CallButton/CallButton";
 import Component from "./components/page/UserPage";
 
-export const UserPage = {
+const UserPage = {
   Component,
   headerRight: CallButton
 };
+
+export default UserPage;

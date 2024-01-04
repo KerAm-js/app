@@ -1,5 +1,7 @@
 import Component from "./components/RegisterModule";
 
-export const RegisterModule = {
+const RegisterModule = {
   Component
 };
+
+export default RegisterModule;

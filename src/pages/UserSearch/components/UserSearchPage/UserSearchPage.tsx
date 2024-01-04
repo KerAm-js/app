@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { userSearchPageStyles } from "./styles";
-import { SearhUsersModule } from "../../../../modules/SearchUsers";
+import SearhUsersModule from "../../../../modules/SearchUsers";
 
 const UserSearchPageComponent = () => {
   return (

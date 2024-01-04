@@ -39,6 +39,7 @@ const EditProfileModuleComponent = () => {
       placeholder: "",
       label: "Телефон",
       keyboardType: "phone-pad",
+      textContentType: "telephoneNumber"
     },
     {
       id: "email",

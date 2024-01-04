@@ -59,7 +59,7 @@ const Navigation = () => {
       </View>
       <BigButton
         title="Разместить объявление"
-        onPress={() => navigation.navigate("Auth")}
+        onPress={() => navigation.navigate("ChooseAdvertType", {title: "Новое объявление", navigateTo: 'form'})}
       />
       <Pressable style={profileNavigationStyles.supportButton}>
         <Text style={profileNavigationStyles.supportButtonTitle}>

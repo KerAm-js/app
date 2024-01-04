@@ -1,5 +1,7 @@
 import MyAdvertsPageComponent from "./components/page/MyAdverts";
 
-export default {
+const MyAdvertsPage = {
   Component: MyAdvertsPageComponent
 }
+
+export default MyAdvertsPage;

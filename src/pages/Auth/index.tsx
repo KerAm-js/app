@@ -1,5 +1,7 @@
 import Component from "./components/page/AuthPage";
 
-export const AuthPage = {
+const AuthPage = {
   Component,
 };
+
+export default AuthPage;

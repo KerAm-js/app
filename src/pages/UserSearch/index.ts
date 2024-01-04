@@ -1,5 +1,7 @@
 import Component from "./components/UserSearchPage/UserSearchPage";
 
-export const UserSearchPage = {
+const UserSearchPage = {
   Component,
 };
+
+export default UserSearchPage;
