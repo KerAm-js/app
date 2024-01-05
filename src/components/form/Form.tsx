@@ -20,8 +20,8 @@ const Form: FC<TFormProps> = ({
 }) => {
   return (
     <View>
-      {inputs.map((item) => (
-        <View style={formStyles.inputsContainer}>
+      {inputs.map((item, index) => (
+        <View key={item.title || index} style={formStyles.inputsContainer}>
           {item.title && <Title text={item.title} />}
           <View>
             {item.inputs.map((input) => {
@@ -45,7 +45,7 @@ const Form: FC<TFormProps> = ({
                         key={input.id}
                         style={formStyles.segmentedControlContainer}
                       >
-                        <SegmentedControl key={input.id} {...input} />
+                        <SegmentedControl {...input} />
                       </View>
                     );
                   // case "address":

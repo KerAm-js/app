@@ -21,7 +21,11 @@ export const useSelectionValidator: TSelectionValidator = ({
   };
 
   const unselectItem = (unselectedItem: string) => {
-    setValue((value) => value.filter((item) => unselectedItem !== item));
+    if (multySelection) {
+      setValue((value) => value.filter((item) => unselectedItem !== item));
+    } else {
+      setValue([]);
+    }
   };
 
   const unselectAll = () => setValue([]);

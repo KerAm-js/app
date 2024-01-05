@@ -11,6 +11,7 @@ import Animated, {
 import SelectionSearchBar from "./SearchBar/SearchBar";
 import { RED } from "../../../consts/colors";
 import withLabelAndError from "../../../components/HOC/WithLabelAndError/WithLabelAndError";
+import SelectionMenu from "./Menu/SelectionMenu";
 
 const Selection = withLabelAndError<TSelectionProps>(
   ({
@@ -89,15 +90,19 @@ const Selection = withLabelAndError<TSelectionProps>(
         selectItem(item);
         if (multySelection) {
           selectedItemsObj.current[item] = true;
+          if (value.length === 0 && itemsList.length > 10)
+            containerHeight.value = withTiming(containerHeight.value + 44);
         } else {
           selectedItemsObj.current = { [item]: true };
+          toggleHeight();
         }
       } else {
-        if (multySelection && unselectItem) {
-          unselectItem(item);
+        unselectItem(item);
+        if (multySelection) {
           selectedItemsObj.current[item] = false;
+          if (value.length === 1 && itemsList.length > 10)
+            containerHeight.value = withTiming(containerHeight.value - 44);
         } else {
-          unselectAll();
           selectedItemsObj.current = {};
         }
       }
@@ -106,7 +111,7 @@ const Selection = withLabelAndError<TSelectionProps>(
     const onUnselectAll = () => {
       containerHeight.value = withTiming(containerHeight.value - 44);
       selectedItemsObj.current = {};
-      unselectAll();
+      unselectAll && unselectAll();
     };
 
     useEffect(() => {
@@ -133,14 +138,14 @@ const Selection = withLabelAndError<TSelectionProps>(
             selectedItemsArr={value}
             placeholder={placeholder}
           />
-          {/* {multySelection && (
+          {multySelection && itemsList.length > 10 && (
             <SelectionMenu
-              selectedItemsArr={selectedItems}
+              selectedItemsArr={value}
               isOpened={isOpened}
               unselectItem={unselectItem}
               unselectAll={onUnselectAll}
             />
-          )} */}
+          )}
           <Animated.ScrollView
             style={[selectionStyles.scrollView, scrollViewStyle]}
           >

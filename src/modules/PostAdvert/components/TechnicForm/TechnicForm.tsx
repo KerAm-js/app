@@ -1,10 +1,7 @@
 import { useState } from "react";
 import Form from "../../../../components/Form/Form";
-import {
-  TFormInput,
-  TFormInputsArray,
-} from "../../../../components/Form/types";
-import { TECHS_LIST } from "../../../../consts/data";
+import { TFormInputsArray } from "../../../../components/Form/types";
+import { EQUIPMENTS, TECHS_LIST } from "../../../../consts/data";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 
@@ -13,8 +10,8 @@ const TechnicForm = () => {
   const [
     technicType,
     selectTechnicTyoe,
-    _,
     unselectTechnicType,
+    _,
     isTechnicTypeValid,
     technicTypeError,
   ] = useSelectionValidator({ required: true });
@@ -32,8 +29,14 @@ const TechnicForm = () => {
       minValue: 1800,
       maxValue: new Date().getFullYear(),
     });
-
-  const segmentInput: Array<TFormInput> = [];
+  const [
+    equipment,
+    selectEquipment,
+    unselectEquipment,
+    unselectAllEquipments,
+    __,
+    equipmentError,
+  ] = useSelectionValidator({ multySelection: true });
 
   const inputs: TFormInputsArray = [
     {
@@ -58,7 +61,7 @@ const TechnicForm = () => {
           itemsList: TECHS_LIST,
           value: technicType,
           selectItem: selectTechnicTyoe,
-          unselectAll: unselectTechnicType,
+          unselectItem: unselectTechnicType,
           placeholder: "Самосвал",
           multySelection: false,
           label: "Вид техники",
@@ -94,6 +97,25 @@ const TechnicForm = () => {
           id: "photo",
           type: "photo",
           photosCount: 3,
+        },
+      ],
+    },
+    {
+      title: "Общие данные",
+      inputs: [
+        {
+          id: "equipment",
+          type: "selection",
+          hidden: !technicType[0] || !EQUIPMENTS[technicType[0]],
+          itemsList: EQUIPMENTS[technicType[0]],
+          value: equipment,
+          selectItem: selectEquipment,
+          unselectItem: unselectEquipment,
+          unselectAll: unselectAllEquipments,
+          placeholder: "",
+          multySelection: true,
+          label: "Доп. оборудование",
+          error: equipmentError,
         },
       ],
     },
