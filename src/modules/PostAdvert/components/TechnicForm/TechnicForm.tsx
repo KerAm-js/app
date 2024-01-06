@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { EQUIPMENTS, TECHS_LIST } from "../../../../consts/data";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
+import { SEGMENTED_CONTROL_VALUES } from "../../../../consts/segmentedControlValues";
+import { DATE_REGEX } from "../../../../consts/regex";
 
 const TechnicForm = () => {
   const [rentalIndex, setRentalIndex] = useState(0);
@@ -15,15 +17,10 @@ const TechnicForm = () => {
     isTechnicTypeValid,
     technicTypeError,
   ] = useSelectionValidator({ required: true });
-  const [mark, onChangeMark] = useInputValidator({
-    initValue: "",
-  });
-  const [model, onModelChange] = useInputValidator({
-    initValue: "",
-  });
+  const [mark, onChangeMark] = useInputValidator();
+  const [model, onModelChange] = useInputValidator();
   const [prodYear, onProdYearChange, isProdYearValid, prodYearError] =
     useInputValidator({
-      initValue: "",
       minLength: 4,
       required: true,
       minValue: 1800,
@@ -37,14 +34,36 @@ const TechnicForm = () => {
     __,
     equipmentError,
   ] = useSelectionValidator({ multySelection: true });
+  const [count, onCountChange, isCountValid, countError] = useInputValidator({
+    required: true,
+    minValue: 1,
+  });
+  const [workModeIndex, setWorkModeIndex] = useState(0);
+  const [firstDate, onFirstDateChange, isFirstDateValid, firstDateError] =
+    useInputValidator({
+      pattern: DATE_REGEX,
+      patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
+    });
+  const [secondDate, onSecondDateChange, isSecondDateValid, secondDateError] =
+    useInputValidator({
+      pattern: DATE_REGEX,
+      patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
+    });
+  const [
+    rentalDaysCount,
+    onRentalDaysCountChange,
+    isRentalDaysCountValid,
+    rentalDaysCountError,
+  ] = useInputValidator({ required: true, minValue: 1 });
+  const [comment, setComment] = useState("");
 
   const inputs: TFormInputsArray = [
     {
       inputs: [
         {
-          id: "rentalType",
+          id: "rental",
           type: "segment",
-          values: ["Сдать в аренду", "Взять в аренду"],
+          values: SEGMENTED_CONTROL_VALUES.rent,
           selectedIndex: rentalIndex,
           onChange: (evt) =>
             setRentalIndex(evt.nativeEvent.selectedSegmentIndex),
@@ -94,16 +113,6 @@ const TechnicForm = () => {
           keyboardType: "decimal-pad",
         },
         {
-          id: "photo",
-          type: "photo",
-          photosCount: 3,
-        },
-      ],
-    },
-    {
-      title: "Общие данные",
-      inputs: [
-        {
           id: "equipment",
           type: "selection",
           hidden: !technicType[0] || !EQUIPMENTS[technicType[0]],
@@ -117,21 +126,107 @@ const TechnicForm = () => {
           label: "Доп. оборудование",
           error: equipmentError,
         },
+        {
+          id: "photo",
+          type: "photo",
+          photosCount: 3,
+        },
+      ],
+    },
+    {
+      title: "Общие данные",
+      inputs: [
+        {
+          id: "count",
+          type: "input",
+          onChangeText: onCountChange,
+          error: countError,
+          value: count,
+          label: "Количество единиц",
+          placeholder: "",
+          keyboardType: "decimal-pad",
+        },
+        {
+          id: "workMode",
+          type: "segment",
+          values: SEGMENTED_CONTROL_VALUES.workMode,
+          selectedIndex: workModeIndex,
+          onChange: (evt) =>
+            setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
+          label: "Режим работы",
+        },
+        {
+          id: "rentalPeriod",
+          type: "interval",
+          firstPlaceholder: "ДД.ММ.ГГГГ",
+          secondPlaceholder: "ДД.ММ.ГГГГ",
+          value: { first: firstDate, second: secondDate },
+          onFirstValueChange: onFirstDateChange,
+          onSecondValueChange: onSecondDateChange,
+          error: firstDateError || secondDateError,
+          label: "Период аренды",
+        },
+        {
+          id: "rentalDaysCount",
+          type: "input",
+          placeholder: "",
+          value: rentalDaysCount,
+          onChangeText: onRentalDaysCountChange,
+          error: rentalDaysCountError,
+          label: "Период аренды",
+          editable: !(
+            firstDate &&
+            isFirstDateValid &&
+            secondDate &&
+            isSecondDateValid
+          ),
+        },
+        {
+          id: "comment",
+          type: "textArea",
+          onChangeText: (text: string) => setComment(text.trim()),
+          value: comment,
+          label: "Комментарий",
+          placeholder: "",
+        },
       ],
     },
   ];
 
-  const isFormValid = isTechnicTypeValid && isProdYearValid;
+  const isFormValid =
+    isTechnicTypeValid &&
+    isProdYearValid &&
+    isCountValid &&
+    isFirstDateValid &&
+    isSecondDateValid &&
+    isRentalDaysCountValid;
 
   const onSubmit = () => {
     console.log({
-      rentalIndex,
+      rent: SEGMENTED_CONTROL_VALUES.rent[rentalIndex],
       technicType,
       mark,
       model,
       prodYear,
+      count,
+      workMode: SEGMENTED_CONTROL_VALUES.workMode[workModeIndex],
+      rentalPeriod: firstDate + " - " + secondDate,
+      rentalDaysCount,
+      comment,
     });
   };
+
+  useEffect(() => {
+    if (firstDate && isFirstDateValid && secondDate && isSecondDateValid) {
+      const first = new Date(firstDate.split(".").reverse().join("-"));
+      const second = new Date(secondDate.split(".").reverse().join("-"));
+      const daysCount =
+        Math.round(
+          (second.valueOf() - first.valueOf()) / (1000 * 60 * 60 * 24)
+        ) + 1;
+      onRentalDaysCountChange(daysCount.toString());
+    }
+  }, [firstDate, secondDate]);
 
   return (
     <Form

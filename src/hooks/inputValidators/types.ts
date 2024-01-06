@@ -1,7 +1,8 @@
 type TInputValidatorProps = {
-  initValue: string;
+  initValue?: string;
   minLength?: number;
   pattern?: RegExp;
+  patternErrorMessage?: string,
   required?: boolean;
   confirmedValue?: string;
   confirmingErrorMessage?: string;
@@ -10,7 +11,7 @@ type TInputValidatorProps = {
 };
 
 export type TInputValidator = (
-  props: TInputValidatorProps
+  props?: TInputValidatorProps
 ) => [
   value: string,
   onChangeValue: (value: string) => void,

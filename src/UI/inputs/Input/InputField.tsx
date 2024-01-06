@@ -1,7 +1,13 @@
 import { Pressable, Text, TextInput, View } from "react-native";
 import { IInputProps } from "./types";
 import { inputStyles } from "./styles";
-import { BLUE, GREY_DARK, RED, WHITE } from "../../../consts/colors";
+import {
+  BLUE,
+  GREY_DARK,
+  GREY_MIDDLE,
+  RED,
+  WHITE,
+} from "../../../consts/colors";
 import { FC, useState } from "react";
 import { TWithLabelAndErrorChildrenProps } from "../../../components/HOC/WithLabelAndError/types";
 import { SvgXml } from "react-native-svg";
@@ -42,7 +48,10 @@ const InputField: FC<IInputProps & TWithLabelAndErrorChildrenProps> = ({
       ]}
     >
       <TextInput
-        style={inputStyles.input}
+        style={[
+          inputStyles.input,
+          props.editable === false && { color: GREY_DARK },
+        ]}
         onFocus={onFocus}
         onBlur={onBlur}
         placeholderTextColor={GREY_DARK}
