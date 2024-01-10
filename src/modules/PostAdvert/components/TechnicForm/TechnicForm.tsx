@@ -6,6 +6,8 @@ import { useInputValidator } from "../../../../hooks/inputValidators/useInputVal
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { SEGMENTED_CONTROL_VALUES } from "../../../../consts/segmentedControlValues";
 import { DATE_REGEX } from "../../../../consts/regex";
+import { USER } from "../../../../consts/devData";
+import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 
 const TechnicForm = () => {
   const [rentalIndex, setRentalIndex] = useState(0);
@@ -56,6 +58,18 @@ const TechnicForm = () => {
     rentalDaysCountError,
   ] = useInputValidator({ required: true, minValue: 1 });
   const [comment, setComment] = useState("");
+  const [price, onPriceChange, isPriceValid, priceError] = useInputValidator({
+    required: true,
+    minValue: 0,
+  });
+  const [paymentForI, setPaymentForI] = useState(0);
+  const [paymentTypeI, setPaymentTypeI] = useState(0);
+  const [username, onUsernameChange, isUsernameValid, usernameError] =
+    useInputValidator({ required: true, initValue: USER.username });
+  const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
+    required: true,
+    initValue: USER.phone,
+  });
 
   const inputs: TFormInputsArray = [
     {
@@ -184,10 +198,65 @@ const TechnicForm = () => {
         {
           id: "comment",
           type: "textArea",
-          onChangeText: (text: string) => setComment(text.trim()),
+          onChangeText: (text: string) => setComment(text),
           value: comment,
           label: "Комментарий",
           placeholder: "",
+        },
+      ],
+    },
+    {
+      title: "Информация о цене",
+      inputs: [
+        {
+          id: "price",
+          type: "input",
+          value: price,
+          onChangeText: onPriceChange,
+          error: priceError,
+          placeholder: "",
+          label: "Цена (руб)",
+        },
+        {
+          id: "paymentFor",
+          type: "segment",
+          values: SEGMENTED_CONTROL_VALUES.paymentFor,
+          selectedIndex: paymentForI,
+          onChange: (evt) =>
+            setPaymentForI(evt.nativeEvent.selectedSegmentIndex),
+          label: "Оплата за",
+        },
+        {
+          id: "paymentType",
+          type: "segment",
+          values: SEGMENTED_CONTROL_VALUES.paymentType,
+          selectedIndex: paymentTypeI,
+          onChange: (evt) =>
+            setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),
+          label: "Способ оплаты",
+        },
+      ],
+    },
+    {
+      title: "Данные пользователя",
+      inputs: [
+        {
+          id: "username",
+          type: "input",
+          value: username,
+          onChangeText: onUsernameChange,
+          label: "Имя пользователя",
+          placeholder: "",
+        },
+        {
+          id: "phone",
+          type: "input",
+          value: phone,
+          onChangeText: onPhoneChange,
+          error: phoneError,
+          label: "Имя пользователя",
+          placeholder: "",
+          keyboardType: 'phone-pad'
         },
       ],
     },
@@ -199,7 +268,10 @@ const TechnicForm = () => {
     isCountValid &&
     isFirstDateValid &&
     isSecondDateValid &&
-    isRentalDaysCountValid;
+    isRentalDaysCountValid &&
+    isPriceValid &&
+    isUsernameValid &&
+    isPhoneValid;
 
   const onSubmit = () => {
     console.log({
@@ -208,11 +280,17 @@ const TechnicForm = () => {
       mark,
       model,
       prodYear,
+      equipment,
       count,
       workMode: SEGMENTED_CONTROL_VALUES.workMode[workModeIndex],
       rentalPeriod: firstDate + " - " + secondDate,
       rentalDaysCount,
       comment,
+      price,
+      paymentFor: SEGMENTED_CONTROL_VALUES.paymentFor[paymentForI],
+      paymentType: SEGMENTED_CONTROL_VALUES.paymentType[paymentTypeI],
+      username,
+      phone
     });
   };
 

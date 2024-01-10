@@ -22,6 +22,7 @@ export const useInputValidator: TInputValidator = (props) => {
   );
 
   const onChangeValue = (text: string) => {
+    console.log(text);
     setValue(text);
     const number = Number(text);
     if (text.length < minLength) {

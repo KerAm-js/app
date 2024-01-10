@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { TInputValidator } from "./types";
 
-export const usePhoneValidator: TInputValidator = ({ initValue, required }) => {
-  const [value, setValue] = useState(initValue);
+export const usePhoneValidator: TInputValidator = (props) => {
+  const {initValue, required} = props || {}; 
+  const [value, setValue] = useState(initValue || '');
   const [isValid, setIsValid] = useState(!!initValue);
   const [error, setError] = useState(
     !initValue && required ? "Заполните данное поле" : ""

@@ -9,6 +9,7 @@ export const photoInputStyles = StyleSheet.create({
     paddingHorizontal: SCREEN_PADDING,
     paddingTop: 5,
     gap: 10,
+    marginBottom: 8,
   },
   input: {
     width: 100,

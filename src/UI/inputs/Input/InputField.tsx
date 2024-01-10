@@ -1,10 +1,9 @@
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, TextInput, View } from "react-native";
 import { IInputProps } from "./types";
 import { inputStyles } from "./styles";
 import {
   BLUE,
   GREY_DARK,
-  GREY_MIDDLE,
   RED,
   WHITE,
 } from "../../../consts/colors";
