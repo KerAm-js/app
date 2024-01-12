@@ -133,9 +133,9 @@ const RootNavigator = () => {
           {({ route }) => <MyAdverts.Component {...route.params} />}
         </Stack.Screen>
         <Stack.Screen
-          options={{
-            title: "Новое объявление",
-          }}
+          options={({ route }) => ({
+            title: getAdvertTypeTitle(route.params.type)
+          })}
           name="NewAdvert"
         >
           {({ route }) => <NewAdvertPage.Component {...route.params} />}

@@ -4,13 +4,13 @@ import { TFormInputsArray } from "../../../../components/Form/types";
 import { EQUIPMENTS, TECHS_LIST } from "../../../../consts/data";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import { SEGMENTED_CONTROL_VALUES } from "../../../../consts/segmentedControlValues";
+import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { DATE_REGEX } from "../../../../consts/regex";
 import { USER } from "../../../../consts/devData";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 
 const TechnicForm = () => {
-  const [rentalIndex, setRentalIndex] = useState(0);
+  const [typeI, setTypeI] = useState(0);
   const [
     technicType,
     selectTechnicTyoe,
@@ -36,6 +36,7 @@ const TechnicForm = () => {
     __,
     equipmentError,
   ] = useSelectionValidator({ multySelection: true });
+  const [images, setImages] = useState<string[]>([]);
   const [count, onCountChange, isCountValid, countError] = useInputValidator({
     required: true,
     minValue: 1,
@@ -73,15 +74,16 @@ const TechnicForm = () => {
 
   const inputs: TFormInputsArray = [
     {
+      title: "Объявление",
       inputs: [
         {
           id: "rental",
           type: "segment",
-          values: SEGMENTED_CONTROL_VALUES.rent,
-          selectedIndex: rentalIndex,
+          values: INPUT_VALUES.rent,
+          selectedIndex: typeI,
           onChange: (evt) =>
-            setRentalIndex(evt.nativeEvent.selectedSegmentIndex),
-          label: "",
+            setTypeI(evt.nativeEvent.selectedSegmentIndex),
+          label: "Тип объявления",
         },
       ],
     },
@@ -144,6 +146,8 @@ const TechnicForm = () => {
           id: "photo",
           type: "photo",
           photosCount: 3,
+          images,
+          setImages
         },
       ],
     },
@@ -163,7 +167,7 @@ const TechnicForm = () => {
         {
           id: "workMode",
           type: "segment",
-          values: SEGMENTED_CONTROL_VALUES.workMode,
+          values: INPUT_VALUES.workMode,
           selectedIndex: workModeIndex,
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
@@ -220,7 +224,7 @@ const TechnicForm = () => {
         {
           id: "paymentFor",
           type: "segment",
-          values: SEGMENTED_CONTROL_VALUES.paymentFor,
+          values: INPUT_VALUES.paymentFor,
           selectedIndex: paymentForI,
           onChange: (evt) =>
             setPaymentForI(evt.nativeEvent.selectedSegmentIndex),
@@ -229,7 +233,7 @@ const TechnicForm = () => {
         {
           id: "paymentType",
           type: "segment",
-          values: SEGMENTED_CONTROL_VALUES.paymentType,
+          values: INPUT_VALUES.paymentType,
           selectedIndex: paymentTypeI,
           onChange: (evt) =>
             setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -245,6 +249,7 @@ const TechnicForm = () => {
           type: "input",
           value: username,
           onChangeText: onUsernameChange,
+          error: usernameError,
           label: "Имя пользователя",
           placeholder: "",
         },
@@ -275,20 +280,21 @@ const TechnicForm = () => {
 
   const onSubmit = () => {
     console.log({
-      rent: SEGMENTED_CONTROL_VALUES.rent[rentalIndex],
+      type: INPUT_VALUES.rent[typeI],
       technicType,
       mark,
       model,
       prodYear,
       equipment,
+      images,
       count,
-      workMode: SEGMENTED_CONTROL_VALUES.workMode[workModeIndex],
+      workMode: INPUT_VALUES.workMode[workModeIndex],
       rentalPeriod: firstDate + " - " + secondDate,
       rentalDaysCount,
       comment,
       price,
-      paymentFor: SEGMENTED_CONTROL_VALUES.paymentFor[paymentForI],
-      paymentType: SEGMENTED_CONTROL_VALUES.paymentType[paymentTypeI],
+      paymentFor: INPUT_VALUES.paymentFor[paymentForI],
+      paymentType: INPUT_VALUES.paymentType[paymentTypeI],
       username,
       phone
     });

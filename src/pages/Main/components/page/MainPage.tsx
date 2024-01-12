@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import MainMap from "../MainMap/MainMap";
 import { TAdvert } from "../../../../types/Advert";
 import MenuBar from "../MenuBar/MenuBar";

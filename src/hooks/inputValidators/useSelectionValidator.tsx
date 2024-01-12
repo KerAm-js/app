@@ -6,7 +6,7 @@ export const useSelectionValidator: TSelectionValidator = ({
   required,
   multySelection,
 }) => {
-  const [value, setValue] = useState<Array<string>>([]);
+  const [value, setValue] = useState<Array<string>>(initValue || []);
   const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState(
     !initValue && required ? "Заполните данное поле" : ""

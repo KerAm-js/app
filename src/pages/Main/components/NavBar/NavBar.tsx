@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { navBarStyles } from "./styles";
 import NavButton from "../NavButton/NavButton";
 import { userSvg } from "../../../../assets/svg/user";

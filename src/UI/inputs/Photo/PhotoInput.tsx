@@ -4,13 +4,15 @@ import { cameraSvg } from "../../../assets/svg/camera";
 import { GREY_DARK, WHITE } from "../../../consts/colors";
 import { photoInputStyles } from "./styles";
 import * as ImagePicker from "expo-image-picker";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { IPhotoInputProps } from "./types";
 import { cancelSvg } from "../../../assets/svg/cancel";
 
-const PhotoInput: FC<IPhotoInputProps> = ({ photosCount }) => {
-  const [selectedImages, setSelectedImages] = useState<Array<string>>([]);
-
+const PhotoInput: FC<IPhotoInputProps> = ({
+  photosCount,
+  images,
+  setImages,
+}) => {
   const pickImageAsync = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -20,8 +22,8 @@ const PhotoInput: FC<IPhotoInputProps> = ({ photosCount }) => {
         quality: 1,
       });
       if (!result.canceled) {
-        const results = result.assets.map((asset, i) => asset.uri);
-        setSelectedImages(results);
+        const results = result.assets.map((asset) => asset.uri);
+        setImages(results);
       }
     } catch (error) {
       console.log(error);
@@ -29,21 +31,18 @@ const PhotoInput: FC<IPhotoInputProps> = ({ photosCount }) => {
   };
 
   const deleteImage = (index: number) => {
-    setSelectedImages((images) => images.filter((_, i) => i !== index));
+    setImages(images.filter((_, i) => i !== index));
   };
 
   return (
     <ScrollView horizontal contentContainerStyle={photoInputStyles.container}>
       {new Array(photosCount).fill(0).map((_, i) => {
-        if (!!selectedImages[i]) {
+        if (!!images[i]) {
           return (
-            <View
-              key={selectedImages[i]}
-              style={photoInputStyles.imageContainer}
-            >
+            <View key={images[i]} style={photoInputStyles.imageContainer}>
               <Image
                 style={photoInputStyles.image}
-                source={{ uri: selectedImages[i] }}
+                source={{ uri: images[i] }}
                 width={100}
                 height={100}
               />

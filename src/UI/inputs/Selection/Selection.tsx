@@ -32,7 +32,8 @@ const Selection = withLabelAndError<TSelectionProps>(
     const containerHeight = useSharedValue(48);
     const selectedItemsObj = useRef<{ [key: string]: boolean }>({});
 
-    const menuHeight = !!value.length ? 44 : 0;
+    const menuHeight =
+      !!value.length && multySelection && itemsList.length > 10 ? 44 : 0;
     const baseHeight = itemsList.length > 8 ? 326 : 48 + 46 * itemsList.length;
 
     const toggleHeight = () => {
