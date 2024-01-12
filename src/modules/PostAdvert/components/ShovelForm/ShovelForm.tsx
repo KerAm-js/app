@@ -7,27 +7,15 @@ import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { USER } from "../../../../consts/devData";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 
-const DumpForm = () => {
-  const [type, selectType, unselectType, _, isTypeValid, typeError] =
-    useSelectionValidator({
-      required: true,
-      initValue: [INPUT_VALUES.dumpAdvertType[0]],
-    });
+const ShovelForm = () => {
+  const [typeI, setTypeI] = useState(0);
   const [
-    wasteType,
-    selectWasteType,
-    unselectWasteType,
+    materialType,
+    selectMaterialType,
+    unselectMaterialType,
     __,
-    isWasteTypeValid,
-    wasteTypeError,
-  ] = useSelectionValidator({ required: true });
-  const [
-    dangerClass,
-    selectDangerClass,
-    unselectDangerClass,
-    ___,
-    isDangerClassValid,
-    dangerClassError,
+    isMaterialTypeValid,
+    materialTypeError,
   ] = useSelectionValidator({ required: true });
   const [
     transport,
@@ -44,6 +32,7 @@ const DumpForm = () => {
     minValue: 0,
   });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
+  const [deliveryI, setDeliveryI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
     useInputValidator({ required: true, initValue: USER.username });
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
@@ -61,13 +50,11 @@ const DumpForm = () => {
       inputs: [
         {
           id: "rental",
-          type: "selection",
-          value: type,
-          selectItem: selectType,
-          unselectItem: unselectType,
-          itemsList: INPUT_VALUES.dumpAdvertType,
-          error: typeError,
-          placeholder: "",
+          type: "segment",
+          values: INPUT_VALUES.shovelAdvertType,
+          selectedIndex: typeI,
+          onChange: (evt) =>
+            setTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Тип объявления",
         },
       ],
@@ -76,26 +63,15 @@ const DumpForm = () => {
       title: "Характеристики",
       inputs: [
         {
-          id: "wasteType",
+          id: "materialType",
           type: "selection",
-          value: wasteType,
-          selectItem: selectWasteType,
-          unselectItem: unselectWasteType,
-          itemsList: INPUT_VALUES.wasteTypes,
-          error: wasteTypeError,
+          value: materialType,
+          selectItem: selectMaterialType,
+          unselectItem: unselectMaterialType,
+          itemsList: INPUT_VALUES.materialTypes,
+          error: materialTypeError,
           placeholder: "",
-          label: "Вид отходов",
-        },
-        {
-          id: "dangerClass",
-          type: "selection",
-          value: dangerClass,
-          selectItem: selectDangerClass,
-          unselectItem: unselectDangerClass,
-          itemsList: INPUT_VALUES.dangerClasses,
-          error: dangerClassError,
-          placeholder: "",
-          label: "Класс опасности",
+          label: "Вид материала",
         },
         {
           id: "transport",
@@ -143,6 +119,15 @@ const DumpForm = () => {
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
           label: "Режим работы",
+        },
+        {
+          id: "delivery",
+          type: "segment",
+          values: INPUT_VALUES.delivery,
+          selectedIndex: deliveryI,
+          onChange: (evt) =>
+            setDeliveryI(evt.nativeEvent.selectedSegmentIndex),
+          label: "Доставка",
         },
         {
           id: "comment",
@@ -207,9 +192,7 @@ const DumpForm = () => {
   ];
 
   const isFormValid =
-    isTypeValid &&
-    isWasteTypeValid &&
-    isDangerClassValid &&
+    isMaterialTypeValid &&
     isTransportValid &&
     isAmountValid &&
     isPriceValid &&
@@ -218,13 +201,13 @@ const DumpForm = () => {
 
   const onSubmit = () => {
     console.log({
-      type,
-      wasteType,
-      dangerClass,
+      type: INPUT_VALUES.shovelAdvertType[typeI],
+      materialType,
       transport,
       measureIn: INPUT_VALUES.measureIn[measureInI],
       amount,
       workMode: INPUT_VALUES.workMode[workModeIndex],
+      deliveryI: INPUT_VALUES.delivery[deliveryI],
       comment,
       price,
       paymentType: INPUT_VALUES.paymentType[paymentTypeI],
@@ -243,4 +226,4 @@ const DumpForm = () => {
   );
 };
 
-export default DumpForm;
+export default ShovelForm;

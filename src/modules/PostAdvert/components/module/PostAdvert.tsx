@@ -2,6 +2,7 @@ import { FC } from "react";
 import { TAdvert } from "../../../../types/Advert";
 import TechnicForm from "../TechnicForm/TechnicForm";
 import DumpForm from "../DumpForm/DumpForm";
+import ShovelForm from "../ShovelForm/ShovelForm";
 
 const PostAdvertModuleComponent: FC<Pick<TAdvert, "type">> = ({ type }) => {
   switch (type) {
@@ -10,7 +11,7 @@ const PostAdvertModuleComponent: FC<Pick<TAdvert, "type">> = ({ type }) => {
     case "dump":
       return <DumpForm />;
     case "shovel":
-      return null;
+      return <ShovelForm />;
     default:
       return null;
   }

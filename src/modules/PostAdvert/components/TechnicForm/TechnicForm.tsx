@@ -79,7 +79,7 @@ const TechnicForm = () => {
         {
           id: "rental",
           type: "segment",
-          values: INPUT_VALUES.rent,
+          values: INPUT_VALUES.technicAdvertType,
           selectedIndex: typeI,
           onChange: (evt) =>
             setTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -97,7 +97,7 @@ const TechnicForm = () => {
           value: technicType,
           selectItem: selectTechnicTyoe,
           unselectItem: unselectTechnicType,
-          placeholder: "Самосвал",
+          placeholder: "",
           multySelection: false,
           label: "Вид техники",
           error: technicTypeError,
@@ -108,7 +108,7 @@ const TechnicForm = () => {
           onChangeText: onChangeMark,
           value: mark,
           label: "Марка",
-          placeholder: "Volvo",
+          placeholder: "",
         },
         {
           id: "model",
@@ -116,7 +116,7 @@ const TechnicForm = () => {
           onChangeText: onModelChange,
           value: model,
           label: "Модель",
-          placeholder: "FM TRUCK",
+          placeholder: "",
         },
         {
           id: "prodYear",
@@ -125,7 +125,7 @@ const TechnicForm = () => {
           error: prodYearError,
           value: prodYear,
           label: "Год выпуска",
-          placeholder: new Date().getFullYear().toString(),
+          placeholder: "",
           keyboardType: "decimal-pad",
         },
         {
@@ -280,7 +280,7 @@ const TechnicForm = () => {
 
   const onSubmit = () => {
     console.log({
-      type: INPUT_VALUES.rent[typeI],
+      type: INPUT_VALUES.technicAdvertType[typeI],
       technicType,
       mark,
       model,
