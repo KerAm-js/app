@@ -4,8 +4,6 @@ import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES } from "../../../../consts/inputValues";
-import { USER } from "../../../../consts/devData";
-import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 
 const DumpForm = () => {
   const [type, selectType, unselectType, _, isTypeValid, typeError] =
@@ -38,22 +36,17 @@ const DumpForm = () => {
     transportError,
   ] = useSelectionValidator({ required: true });
   const [measureInI, setMeasureInI] = useState(0);
-  const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
-    { required: true, minValue: 1 }
-  );
+  const [amount1, onAmount1Change, isAmount1Valid, amount1Error] =
+    useInputValidator({ required: true, minValue: 1 });
+  const [amount2, onAmount2Change, isAmount2Valid, amount2Error] =
+    useInputValidator({ required: true, minValue: 1 });
+
   const [workModeIndex, setWorkModeIndex] = useState(0);
-  const [comment, setComment] = useState("");
-  const [price, onPriceChange, isPriceValid, priceError] = useInputValidator({
-    required: true,
-    minValue: 0,
-  });
+  const [price1, onPrice1Change, isPrice1Valid, price1Error] =
+    useInputValidator({ required: true, minValue: 1 });
+  const [price2, onPrice2Change, isPrice2Valid, price2Error] =
+    useInputValidator({ required: true, minValue: 1 });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
-  const [username, onUsernameChange, isUsernameValid, usernameError] =
-    useInputValidator({ required: true, initValue: USER.username });
-  const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
-    required: true,
-    initValue: USER.phone,
-  });
 
   const inputs: TFormInputsArray = [
     {
@@ -119,16 +112,18 @@ const DumpForm = () => {
         },
         {
           id: "amount",
-          type: "input",
-          onChangeText: onAmountCange,
-          error: amountError,
-          value: amount,
+          type: "interval",
+          firstPlaceholder: "",
+          secondPlaceholder: "",
+          firstValue: amount1,
+          secondValue: amount2,
+          onFirstValueChange: onAmount1Change,
+          onSecondValueChange: onAmount2Change,
+          error: amount1Error || amount2Error,
           label:
             INPUT_VALUES.measureIn[measureInI] === "м3"
               ? "Объём (м3)"
               : "Вес (тонн)",
-          placeholder: "",
-          keyboardType: "decimal-pad",
         },
       ],
     },
@@ -144,14 +139,6 @@ const DumpForm = () => {
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
           label: "Режим работы",
         },
-        {
-          id: "comment",
-          type: "textArea",
-          onChangeText: (text: string) => setComment(text),
-          value: comment,
-          label: "Комментарий",
-          placeholder: "",
-        },
       ],
     },
     {
@@ -159,11 +146,14 @@ const DumpForm = () => {
       inputs: [
         {
           id: "price",
-          type: "input",
-          value: price,
-          onChangeText: onPriceChange,
-          error: priceError,
-          placeholder: "",
+          type: "interval",
+          firstPlaceholder: "",
+          secondPlaceholder: "",
+          firstValue: price1,
+          secondValue: price2,
+          onFirstValueChange: onPrice1Change,
+          onSecondValueChange: onPrice2Change,
+          error: amount1Error || amount2Error,
           label:
             INPUT_VALUES.measureIn[measureInI] === "м3"
               ? "Цена (руб/м3)"
@@ -180,57 +170,12 @@ const DumpForm = () => {
         },
       ],
     },
-    {
-      title: "Данные пользователя",
-      inputs: [
-        {
-          id: "username",
-          type: "input",
-          value: username,
-          onChangeText: onUsernameChange,
-          error: usernameError,
-          label: "Имя пользователя",
-          placeholder: "",
-        },
-        {
-          id: "phone",
-          type: "input",
-          value: phone,
-          onChangeText: onPhoneChange,
-          error: phoneError,
-          label: "Имя пользователя",
-          placeholder: "",
-          keyboardType: "phone-pad",
-        },
-      ],
-    },
   ];
 
-  const isFormValid =
-    isTypeValid &&
-    isWasteTypeValid &&
-    isDangerClassValid &&
-    isTransportValid &&
-    isAmountValid &&
-    isPriceValid &&
-    isUsernameValid &&
-    isPhoneValid;
+  const isFormValid = false;
 
   const onSubmit = () => {
-    console.log({
-      type,
-      wasteType,
-      dangerClass,
-      transport,
-      measureIn: INPUT_VALUES.measureIn[measureInI],
-      amount,
-      workMode: INPUT_VALUES.workMode[workModeIndex],
-      comment,
-      price,
-      paymentType: INPUT_VALUES.paymentType[paymentTypeI],
-      username,
-      phone,
-    });
+    console.log({});
   };
 
   return (
@@ -238,7 +183,7 @@ const DumpForm = () => {
       inputs={inputs}
       isFormValid={isFormValid}
       onSubmit={onSubmit}
-      submitTitle="Опубликовать"
+      submitTitle="Сохранить"
     />
   );
 };

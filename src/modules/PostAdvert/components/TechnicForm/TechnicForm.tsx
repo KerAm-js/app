@@ -77,12 +77,11 @@ const TechnicForm = () => {
       title: "Объявление",
       inputs: [
         {
-          id: "rental",
+          id: "type",
           type: "segment",
           values: INPUT_VALUES.technicAdvertType,
           selectedIndex: typeI,
-          onChange: (evt) =>
-            setTypeI(evt.nativeEvent.selectedSegmentIndex),
+          onChange: (evt) => setTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Тип объявления",
         },
       ],
@@ -147,7 +146,7 @@ const TechnicForm = () => {
           type: "photo",
           photosCount: 3,
           images,
-          setImages
+          setImages,
         },
       ],
     },
@@ -178,7 +177,8 @@ const TechnicForm = () => {
           type: "interval",
           firstPlaceholder: "ДД.ММ.ГГГГ",
           secondPlaceholder: "ДД.ММ.ГГГГ",
-          value: { first: firstDate, second: secondDate },
+          firstValue: firstDate,
+          secondValue: secondDate,
           onFirstValueChange: onFirstDateChange,
           onSecondValueChange: onSecondDateChange,
           error: firstDateError || secondDateError,
@@ -261,7 +261,7 @@ const TechnicForm = () => {
           error: phoneError,
           label: "Имя пользователя",
           placeholder: "",
-          keyboardType: 'phone-pad'
+          keyboardType: "phone-pad",
         },
       ],
     },
@@ -289,14 +289,17 @@ const TechnicForm = () => {
       images,
       count,
       workMode: INPUT_VALUES.workMode[workModeIndex],
-      rentalPeriod: firstDate + " - " + secondDate,
+      rentalPeriod:
+        firstDate && secondDate && isFirstDateValid && isSecondDateValid
+          ? firstDate + " - " + secondDate
+          : undefined,
       rentalDaysCount,
       comment,
       price,
       paymentFor: INPUT_VALUES.paymentFor[paymentForI],
       paymentType: INPUT_VALUES.paymentType[paymentTypeI],
       username,
-      phone
+      phone,
     });
   };
 

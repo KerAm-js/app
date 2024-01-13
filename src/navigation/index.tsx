@@ -21,6 +21,7 @@ import EditProfilePage from "../pages/EditProfile";
 import ProfilePage from "../pages/Profile";
 import RegisterPage from "../pages/Register";
 import UserPage from "../pages/User";
+import FilterPage from "../pages/Filter";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -139,6 +140,14 @@ const RootNavigator = () => {
           name="NewAdvert"
         >
           {({ route }) => <NewAdvertPage.Component {...route.params} />}
+        </Stack.Screen>
+        <Stack.Screen
+          options={({ route }) => ({
+            title: getAdvertTypeTitle(route.params.type)
+          })}
+          name="Filter"
+        >
+          {({ route }) => <FilterPage.Component {...route.params} />}
         </Stack.Screen>
         <Stack.Screen
           options={({ route }) => ({

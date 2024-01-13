@@ -56,7 +56,11 @@ const NavBar: FC = () => {
         />
         <NavButton
           iconXml={filterSvg()}
-          onPress={() => console.log("pressed")}
+          onPress={() =>
+            navigation.navigate("ChooseAdvertType", {
+              title: "Фильтр",
+              navigateTo: "filter",
+            })}
         />
       </View>
     </View>

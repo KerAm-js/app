@@ -8,25 +8,29 @@ const IntervalInput = withLabelAndError<IIntervalInputProps>(
   ({
     firstPlaceholder,
     secondPlaceholder,
-    value,
+    firstValue,
+    secondValue,
     onFirstValueChange,
     onSecondValueChange,
     setIsFocused,
+    setErrorShown,
     ...inputProps
   }) => {
     return (
       <View style={intervalInputStyles.container}>
         <InputField
-          value={value.first}
-          setIsFocused={setIsFocused}
+          value={firstValue}
           placeholder={firstPlaceholder || "от"}
           onChangeText={onFirstValueChange}
           flexed
+          setErrorShown={undefined}
+          setIsFocused={undefined}
           {...inputProps}
         />
         <InputField
-          value={value.second}
+          value={secondValue}
           setIsFocused={setIsFocused}
+          setErrorShown={setErrorShown}
           placeholder={secondPlaceholder || "до"}
           onChangeText={onSecondValueChange}
           flexed

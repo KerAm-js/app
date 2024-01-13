@@ -32,4 +32,5 @@ export type RootStackParamList = {
   ChooseAdvertType: IChooseAdvertTypePageProps;
   AdvertsList: Pick<TAdvert, "type">;
   NewAdvert: Pick<TAdvert, "type">;
+  Filter: Pick<TAdvert, "type">;
 };

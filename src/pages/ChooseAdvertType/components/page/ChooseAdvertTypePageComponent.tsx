@@ -18,7 +18,7 @@ const ChooseAdvertTypePageComponent: FC<IChooseAdvertTypePageProps> = ({
     if (navigateTo === "adverts") {
       navigation.navigate("AdvertsList", { type });
     } else if (navigateTo === "filter") {
-      // navigation.navigate("AdvertsList", { type });
+      navigation.navigate("Filter", { type });
     } else if (navigateTo === "form") {
       navigation.navigate("NewAdvert", { type });
     }

@@ -49,7 +49,7 @@ const ShovelForm = () => {
       title: "Объявление",
       inputs: [
         {
-          id: "rental",
+          id: "type",
           type: "segment",
           values: INPUT_VALUES.shovelAdvertType,
           selectedIndex: typeI,
