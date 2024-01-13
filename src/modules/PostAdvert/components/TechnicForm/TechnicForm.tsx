@@ -138,7 +138,7 @@ const TechnicForm = () => {
           unselectAll: unselectAllEquipments,
           placeholder: "",
           multySelection: true,
-          label: "Доп. оборудование",
+          label: "Дополнительное оборудование",
           error: equipmentError,
         },
         {
@@ -159,7 +159,7 @@ const TechnicForm = () => {
           onChangeText: onCountChange,
           error: countError,
           value: count,
-          label: "Количество единиц",
+          label: "Количество единиц техники",
           placeholder: "",
           keyboardType: "decimal-pad",
         },

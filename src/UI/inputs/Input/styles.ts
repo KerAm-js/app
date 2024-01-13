@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 import { TEXT_F_SIZE } from "../../../consts/texts";
 import { GREY_DARK, RED, WHITE } from "../../../consts/colors";
 import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
+import { INPUT_HEIGHT } from "../../../consts/views";
 
 export const inputStyles = StyleSheet.create({
   container: {
@@ -17,7 +18,7 @@ export const inputStyles = StyleSheet.create({
     fontFamily: 'Gilroy-Medium',
     flex: 1,
     paddingLeft: 15,
-    paddingVertical: 15,
+    height: INPUT_HEIGHT,
   },
   clearInputButton: {
     paddingVertical: 17,

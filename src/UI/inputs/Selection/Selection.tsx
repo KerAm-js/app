@@ -12,6 +12,7 @@ import SelectionSearchBar from "./SearchBar/SearchBar";
 import { RED } from "../../../consts/colors";
 import withLabelAndError from "../../../components/HOC/WithLabelAndError/WithLabelAndError";
 import SelectionMenu from "./Menu/SelectionMenu";
+import { INPUT_HEIGHT } from "../../../consts/views";
 
 const Selection = withLabelAndError<TSelectionProps>(
   ({
@@ -29,17 +30,17 @@ const Selection = withLabelAndError<TSelectionProps>(
     const [text, setText] = useState<string>("");
     const filteredList = useRef<Array<string>>([...itemsList]);
     const isOpened = useSharedValue(0);
-    const containerHeight = useSharedValue(48);
+    const containerHeight = useSharedValue(INPUT_HEIGHT);
     const selectedItemsObj = useRef<{ [key: string]: boolean }>({});
 
     const menuHeight =
       !!value.length && multySelection && itemsList.length > 10 ? 44 : 0;
-    const baseHeight = itemsList.length > 8 ? 326 : 48 + 46 * itemsList.length;
+    const baseHeight = itemsList.length > 8 ? 326 : INPUT_HEIGHT + 46 * itemsList.length;
 
     const toggleHeight = () => {
       if (isOpened.value) {
         isOpened.value = withTiming(0);
-        containerHeight.value = withTiming(48);
+        containerHeight.value = withTiming(INPUT_HEIGHT);
         inputRef.current?.blur();
         setIsFocused && setIsFocused(false);
         setErrorShown && setErrorShown(true);
@@ -82,7 +83,7 @@ const Selection = withLabelAndError<TSelectionProps>(
           ? 105 + menuHeight
           : isTooMuchItems
           ? baseHeight + menuHeight
-          : listLength * 46 + 48 + menuHeight;
+          : listLength * 46 + INPUT_HEIGHT + menuHeight;
       containerHeight.value = withTiming(newContainerHeight);
     };
 

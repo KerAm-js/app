@@ -18,7 +18,7 @@ const DumpForm = () => {
     __,
     isWasteTypeValid,
     wasteTypeError,
-  ] = useSelectionValidator({ required: true });
+  ] = useSelectionValidator({ multySelection: true });
   const [
     dangerClass,
     selectDangerClass,
@@ -26,7 +26,7 @@ const DumpForm = () => {
     ___,
     isDangerClassValid,
     dangerClassError,
-  ] = useSelectionValidator({ required: true });
+  ] = useSelectionValidator({ multySelection: true });
   const [
     transport,
     selectTransport,
@@ -34,7 +34,7 @@ const DumpForm = () => {
     ____,
     isTransportValid,
     transportError,
-  ] = useSelectionValidator({ required: true });
+  ] = useSelectionValidator({ multySelection: true });
   const [measureInI, setMeasureInI] = useState(0);
   const [amount1, onAmount1Change, isAmount1Valid, amount1Error] =
     useInputValidator({ required: true, minValue: 1 });
@@ -76,8 +76,9 @@ const DumpForm = () => {
           unselectItem: unselectWasteType,
           itemsList: INPUT_VALUES.wasteTypes,
           error: wasteTypeError,
+          multySelection: true,
           placeholder: "",
-          label: "Вид отходов",
+          label: "Виды отходов",
         },
         {
           id: "dangerClass",
@@ -87,8 +88,9 @@ const DumpForm = () => {
           unselectItem: unselectDangerClass,
           itemsList: INPUT_VALUES.dangerClasses,
           error: dangerClassError,
+          multySelection: true,
           placeholder: "",
-          label: "Класс опасности",
+          label: "Классы опасности",
         },
         {
           id: "transport",
@@ -98,8 +100,9 @@ const DumpForm = () => {
           unselectItem: unselectTransport,
           itemsList: INPUT_VALUES.dumpTransport,
           error: transportError,
+          multySelection: true,
           placeholder: "",
-          label: "Вид транспорта",
+          label: "Виды транспорта",
         },
         {
           id: "measureIn",
@@ -153,7 +156,7 @@ const DumpForm = () => {
           secondValue: price2,
           onFirstValueChange: onPrice1Change,
           onSecondValueChange: onPrice2Change,
-          error: amount1Error || amount2Error,
+          error: price1Error || price2Error,
           label:
             INPUT_VALUES.measureIn[measureInI] === "м3"
               ? "Цена (руб/м3)"
@@ -172,10 +175,27 @@ const DumpForm = () => {
     },
   ];
 
-  const isFormValid = false;
+  const isFormValid =
+    isAmount1Valid &&
+    isAmount2Valid &&
+    isDangerClassValid &&
+    isPrice1Valid &&
+    isPrice2Valid &&
+    isTransportValid &&
+    isTypeValid &&
+    isWasteTypeValid;
 
   const onSubmit = () => {
-    console.log({});
+    console.log({
+      type,
+      wasteType,
+      transport,
+      dangerClass,
+      amount1,
+      amount2,
+      price1,
+      price2
+    });
   };
 
   return (

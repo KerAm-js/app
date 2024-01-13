@@ -20,7 +20,7 @@ const IntervalInput = withLabelAndError<IIntervalInputProps>(
       <View style={intervalInputStyles.container}>
         <InputField
           value={firstValue}
-          placeholder={firstPlaceholder || "от"}
+          placeholder={firstPlaceholder || "От"}
           onChangeText={onFirstValueChange}
           flexed
           setErrorShown={undefined}
