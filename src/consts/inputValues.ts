@@ -2,7 +2,7 @@ export const INPUT_VALUES = {
   technicAdvertType: ["Сдать в аренду", "Взять в аренду"],
   workMode: ["День", "Ночь", "Круглосуточно"],
   paymentFor: ["Смену", "Час", "м3/км", "т/км"],
-  paymentType: ["Наличные", "Безналичные", "Любой"],
+  paymentType: ["Наличные", "Безналичные", "Все"],
   dumpAdvertType: ["Отвал", "Нужен отвал", "Вывоз", "Нужен вывоз"],
   wasteTypes: [
     "Бетонный бой",
@@ -13,9 +13,9 @@ export const INPUT_VALUES = {
     "Суглинок",
   ],
   dangerClasses: ["1 класс", "2 класс", "3 класс", "4 класс", "5 класс"],
-  dumpTransport: ['Самосвал 3-х осный', 'Самосвал 4-х осный', 'Тонар'],
-  measureIn: ['Тоннах', 'м3'],
-  shovelAdvertType: ['Купить', 'Продать'],
+  dumpTransport: ["Самосвал 3-х осный", "Самосвал 4-х осный", "Тонар"],
+  measureIn: ["Тоннах", "м3"],
+  shovelAdvertType: ["Купить", "Продать"],
   materialTypes: [
     "Пескогрунт",
     "Песок карьерный",
@@ -24,5 +24,25 @@ export const INPUT_VALUES = {
     "Щебень гравийный",
     "Щебень гранитный",
   ],
-  delivery: ['С доставкой', 'Без доставки']
+  delivery: ["С доставкой", "Самовывоз"],
+  rollerType: ["Гладкие", "Комбинированные"],
+  sizeType: ["Габаритный", "Негабаритный"],
+  OSSIG: ["Подключён", "Не подключён"],
+  trailerType: ["Прицеп", "Полуприцеп", "Корыто", "Прямая площадка"],
+  loadingType: ["Задняя", "Передняя"],
+  axesCount: ['3', '4'],
+};
+
+export const INPUT_VALUES_WITH_ALL = {
+  technicAdvertType: [...INPUT_VALUES.technicAdvertType, "Все"],
+  dumpAdvertType: [...INPUT_VALUES.dumpAdvertType, "Все"],
+  measureIn: [...INPUT_VALUES.measureIn, "Все"],
+  shovelAdvertType: [...INPUT_VALUES.shovelAdvertType, "Все"],
+  delivery: [...INPUT_VALUES.delivery, "Все"],
+  rollerType: [...INPUT_VALUES.rollerType, "Все"],
+  sizeType: [...INPUT_VALUES.sizeType, "Все"],
+  OSSIG: [...INPUT_VALUES.OSSIG, "Все"],
+  trailerType: [...INPUT_VALUES.trailerType, "Все"],
+  loadingType: [...INPUT_VALUES.loadingType, "Все"],
+  axesCount: [...INPUT_VALUES.axesCount, "Все"],
 };

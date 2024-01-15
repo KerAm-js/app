@@ -13,6 +13,10 @@ const DumpForm = () => {
       required: true,
       initValue: [INPUT_VALUES.dumpAdvertType[0]],
     });
+  const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
+    required: true,
+    minLength: 15,
+  });
   const [
     wasteType,
     selectWasteType,
@@ -69,6 +73,16 @@ const DumpForm = () => {
           error: typeError,
           placeholder: "",
           label: "Тип объявления",
+        },
+        {
+          id: "title",
+          type: "input",
+          onChangeText: onTitleChange,
+          value: title,
+          error: titleError,
+          label: "Заголовок",
+          placeholder: "Нужен отвал",
+          maxLength: 100,
         },
       ],
     },
@@ -208,6 +222,7 @@ const DumpForm = () => {
 
   const isFormValid =
     isTypeValid &&
+    isTitleValid &&
     isWasteTypeValid &&
     isDangerClassValid &&
     isTransportValid &&
@@ -219,6 +234,7 @@ const DumpForm = () => {
   const onSubmit = () => {
     console.log({
       type,
+      title,
       wasteType,
       dangerClass,
       transport,

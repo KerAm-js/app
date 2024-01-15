@@ -2,17 +2,17 @@ import { FC } from "react";
 import { Text, View } from "react-native";
 import { IParamProps } from "./types";
 import { advertStyles } from "./styles";
-import { DATA_OF_MEASUREMENT } from "../../../../consts/data";
+import { TECHNIC_PARAMS } from "../../../../consts/data";
 
-const Param: FC<IParamProps> = ({ title, content }) => {
+const Param: FC<IParamProps> = ({ param, content }) => {
   const contentString =
-    content + (DATA_OF_MEASUREMENT[title]
-      ? " " + DATA_OF_MEASUREMENT[title]
+    content + (TECHNIC_PARAMS[param]?.measurement
+      ? " " + TECHNIC_PARAMS[param]?.measurement
       : "");
 
   return (
     <View style={advertStyles.param}>
-      <Text style={advertStyles.paramTitle}>{title}:</Text>
+      <Text style={advertStyles.paramTitle}>{TECHNIC_PARAMS[param]?.title}:</Text>
       <Text style={advertStyles.paramContent}>{contentString}</Text>
     </View>
   );

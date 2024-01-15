@@ -37,15 +37,15 @@ const DumpForm = () => {
   ] = useSelectionValidator({ multySelection: true });
   const [measureInI, setMeasureInI] = useState(0);
   const [amount1, onAmount1Change, isAmount1Valid, amount1Error] =
-    useInputValidator({ required: true, minValue: 1 });
+  useInputValidator({ minValue: 1 });
   const [amount2, onAmount2Change, isAmount2Valid, amount2Error] =
-    useInputValidator({ required: true, minValue: 1 });
+  useInputValidator({ minValue: 1 });
 
   const [workModeIndex, setWorkModeIndex] = useState(0);
   const [price1, onPrice1Change, isPrice1Valid, price1Error] =
-    useInputValidator({ required: true, minValue: 1 });
+    useInputValidator({ minValue: 1 });
   const [price2, onPrice2Change, isPrice2Valid, price2Error] =
-    useInputValidator({ required: true, minValue: 1 });
+    useInputValidator({ minValue: 1 });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
 
   const inputs: TFormInputsArray = [

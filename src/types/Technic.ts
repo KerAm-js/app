@@ -1,44 +1,5 @@
 import { TAdress, TGeneral, TParams, TPrice } from "./others";
 
-const techAd = {
-  type: "",
-  mark: "",
-  model: "",
-  productionYear: "",
-  equipment: "",
-  photos: [],
-  weight: undefined,
-  height: undefined,
-  volume: undefined,
-  passengersCount: undefined,
-  pipeLength: undefined,
-  boomLength: undefined,
-  liftingCapacity: undefined,
-  performance: undefined,
-  cargoType: undefined,
-  rollerType: undefined,
-  rollersCount: undefined,
-  technicType: undefined,
-  OSSIG: undefined,
-  axesNumber: undefined,
-  bodyLength: undefined,
-  trailerType: undefined,
-  loadingType: undefined,
-  count: 0,
-  workMode: "День",
-  rentalPeriod: undefined,
-  rentalDaysCount: 0,
-  address: "",
-  secondAddress: undefined,
-  distance: undefined,
-  comment: "",
-  price: 0,
-  paymentType: "Наличные",
-  paymentFor: "смену",
-  username: "",
-  phoneNumber: "",
-}
-
 export interface ITechnicGeneral extends TGeneral {
   count: number;
   rentalPeriod?: {
@@ -50,34 +11,37 @@ export interface ITechnicGeneral extends TGeneral {
   distance?: number; // meters
 }
 
+export interface ITechnicOtherParams {
+  weight?: number;
+  height?: number;
+  volume?: number;
+  passengersCount?: number;
+  pipeLength?: number;
+  boomLength?: number;
+  liftingCapacity?: number;
+  performance?: number;
+  cargoType?: string;
+  rollerType?: "Гладкие" | "Комбинированные";
+  rollersCount?: number;
+  sizeType?: "Габаритный" | "Негабаритный";
+  OSSIG?: "Подключён" | "Не подключён";
+  axesCount?: number;
+  bodyLength?: number;
+  trailerType?: "Прицеп" | "Полуприцеп" | "Корыто" | "Прямая площадка";
+  loadingType?: "Задняя" | "Передняя";
+}
+
 export interface ITechnicParams extends TParams {
   mainParams: {
-    Марка: string;
-    Модель?: string;
-    Год: number;
-    Оборудование?: Array<string>;
+    technicType: string;
+    mark?: string;
+    model?: string;
+    productionYear?: string;
+    equipment?: string;
   };
-  otherParams: {
-    weight?: {value: number, title: 'Вес'};
-    Высота?: number;
-    Объём?: number;
-    "Количество пассажиров"?: number;
-    "Длина трубы"?: number;
-    "Длина стрелы"?: number;
-    Грузоподъёмность?: number;
-    Производительность?: number;
-    "Вид груза"?: string;
-    "Тип вальцов"?: "гладкие" | "комбинированные";
-    "Количество вальцов"?: number;
-    Тип?: "габаритный" | "негабаритный";
-    Оссиг?: "Подключён" | "Не подключён";
-    "Количество осей"?: number;
-    "Длина кузова"?: number;
-    "Тип прицепа"?: "Прицеп" | "Полуприцеп" | "Корыта" | "Прямая площадка";
-    "Вид погрузки"?: "Задняя" | "Передняя";
-  };
+  otherParams: ITechnicOtherParams;
 }
 
 export interface ITechnincPrice extends TPrice {
-  paymentFor: "смену" | "час" | "м3/км" | "т/км";
+  paymentFor: "Смену" | "Час" | "м3/км" | "т/км";
 }

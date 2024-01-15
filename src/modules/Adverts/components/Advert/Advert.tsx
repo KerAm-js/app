@@ -20,6 +20,7 @@ import { TAdvert } from "../../../../types/Advert";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
+import { ITechnicOtherParams } from "../../../../types/Technic";
 
 const Advert: FC<TAdvert> = (props) => {
   const {
@@ -44,6 +45,8 @@ const Advert: FC<TAdvert> = (props) => {
   };
   const isLiked = useMemo(() => !!likes.find((item) => item === USER.id), []);
   const paramsArr = useMemo(() => Object.entries(params.otherParams || {}), []);
+
+  console.log(params.otherParams);
 
   const onLike = (value: boolean) => {
     console.log(
@@ -107,7 +110,7 @@ const Advert: FC<TAdvert> = (props) => {
       <Pressable onPress={goToAdvertPage}>
         <View style={advertStyles.paramsContainer}>
           {paramsArr.map((entry) => (
-            <Param key={entry[0]} title={entry[0]} content={String(entry[1])} />
+            <Param key={entry[0]} param={entry[0]} content={String(entry[1])} />
           ))}
         </View>
         <View style={advertStyles.bottomContainer}>

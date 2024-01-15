@@ -12,12 +12,11 @@ export type TGeneral = {
 };
 
 export type TParams = {
-  type: string;
   photos: Array<string>;
 };
 
 export type TPrice = {
   price: number;
   paymentType: "Наличные" | "Безналичные" | "Любой";
-  paymentFor: "смену" | "час" | "м3/км" | "т/км" | "м3" | "тонну";
+  paymentFor: "Смену" | "Час" | "м3/км" | "т/км" | "м3" | "Тонну";
 };

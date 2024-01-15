@@ -78,24 +78,24 @@ export const USER: IUser = {
       },
       price: {
         price: 10000,
-        paymentFor: "смену",
+        paymentFor: "Смену",
         paymentType: "Любой",
       },
       params: {
-        type: "Экскаватор гусеничный",
         photos: [
           "https://stroy-plys.ru/uploads/posts/2014-01/1390641675_ekskavator-gusenichnyy-hyundai-380.jpg",
           "https://cdn.stpulscen.ru/system/ckeditor_assets/pictures/352723/content_kovshi-jcb-01.jpg",
           "https://avatars.mds.yandex.net/get-autoru-vos/11038141/883df25017df09a8cda4c1a43d9161e9/1200x900",
         ],
         mainParams: {
-          Марка: "Hyundai",
-          Модель: "JCB",
-          Год: 2021,
+          technicType: "Экскаватор гусеничный",
+          mark: "Hyundai",
+          model: "JCB",
+          productionYear: "2021",
         },
         otherParams: {
-          Вес: 32.2,
-          Объём: 1.44,
+          weight: 32.2,
+          volume: 1.44,
         },
       },
     },
@@ -111,6 +111,7 @@ export const USERS_LIST: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    comments: [],
     adverts: [
       {
         id: "1",
@@ -136,15 +137,15 @@ export const USERS_LIST: Array<IUser> = [
         },
         price: {
           price: 10000,
-          paymentFor: "смену",
+          paymentFor: "Смену",
           paymentType: "Наличные",
         },
         params: {
           mainParams: {
-            Марка: "Hyundai",
-            Год: 2021,
+            technicType: "Экскаватор гусеничный",
+            mark: "Hyundai",
+            productionYear: '2021',
           },
-          type: "Экскаватор гусеничный",
           photos: [
             "https://cdn.stpulscen.ru/system/ckeditor_assets/pictures/352723/content_kovshi-jcb-01.jpg",
             "https://avatars.mds.yandex.net/get-autoru-vos/11038141/883df25017df09a8cda4c1a43d9161e9/1200x900",
@@ -157,208 +158,10 @@ export const USERS_LIST: Array<IUser> = [
             "https://stroy-plys.ru/uploads/posts/2014-01/1390641675_ekskavator-gusenichnyy-hyundai-380.jpg",
           ],
           otherParams: {
-            Вес: 32.2,
-            Объём: 1.44,
+            weight: 32.2,
+            volume: 1.44,
           },
         },
-      },
-      {
-        id: "2",
-        userId: "2",
-        username: "User 1",
-        userRating: 3.7,
-        type: "technic",
-        updatedAt: Date.now(),
-        likes: ["1", "2", "3", "7", "13"],
-        views: ["1", "2", "3", "4", "5", "6", "7"],
-        title: "Сдаётся гусеничный экскаватор Hyundai",
-        general: {
-          address: "Москва, Химки",
-          count: 3,
-          workMode: "День",
-          rentalPeriod: {
-            from: new Date("2023-11-23").valueOf(),
-            to: new Date("2023-12-23").valueOf(),
-          },
-          rentalDaysCount:
-            new Date("2023-11-23").valueOf() -
-            new Date("2023-12-23").valueOf() / (1000 * 3600 * 24),
-        },
-        price: {
-          price: 10000,
-          paymentFor: "час",
-          paymentType: "Наличные",
-        },
-        params: {
-          type: "Экскаватор гусеничный",
-          photos: [],
-          mainParams: {
-            Марка: "Hyundai",
-            Год: 2021,
-          },
-          otherParams: {
-            Вес: 32.2,
-            Объём: 1.44,
-          },
-        },
-      },
-      {
-        id: "3",
-        userId: "2",
-        username: "User 1",
-        userRating: 3.7,
-        type: "technic",
-        updatedAt: Date.now() - 1000 * 3600 * 24,
-        likes: ["2", "3", "7", "13"],
-        views: ["1", "2", "3", "4", "5", "6", "7"],
-        title: "Сдаётся гусеничный экскаватор Hyundai",
-        general: {
-          address: "Москва, Химки",
-          count: 3,
-          workMode: "День",
-          rentalPeriod: {
-            from: new Date("2023-11-23").valueOf(),
-            to: new Date("2023-12-23").valueOf(),
-          },
-          rentalDaysCount:
-            new Date("2023-11-23").valueOf() -
-            new Date("2023-12-23").valueOf() / (1000 * 3600 * 24),
-        },
-        price: {
-          price: 10000,
-          paymentFor: "м3/км",
-          paymentType: "Наличные",
-        },
-        params: {
-          type: "Экскаватор гусеничный",
-          photos: [
-            "https://stroy-plys.ru/uploads/posts/2014-01/1390641675_ekskavator-gusenichnyy-hyundai-380.jpg",
-            "https://cdn.stpulscen.ru/system/ckeditor_assets/pictures/352723/content_kovshi-jcb-01.jpg",
-            "https://avatars.mds.yandex.net/get-autoru-vos/11038141/883df25017df09a8cda4c1a43d9161e9/1200x900",
-          ],
-          mainParams: {
-            Марка: "Hyundai",
-            Год: 2021,
-          },
-          otherParams: {
-            Вес: 32.2,
-            Объём: 1.44,
-          },
-        },
-      },
-      {
-        id: "4",
-        userId: "2",
-        username: "User 1",
-        userRating: 3.7,
-        type: "technic",
-        updatedAt: Date.now() - 1000 * 3600 * 24 * 7,
-        likes: ["2", "3", "7", "13"],
-        views: ["1", "2", "3", "4", "5", "6", "7"],
-        title: "Сдаётся гусеничный экскаватор Hyundai",
-        general: {
-          address: "Москва, Химки",
-          count: 3,
-          workMode: "День",
-          rentalPeriod: {
-            from: new Date("2023-11-23").valueOf(),
-            to: new Date("2023-12-23").valueOf(),
-          },
-          rentalDaysCount:
-            new Date("2023-11-23").valueOf() -
-            new Date("2023-12-23").valueOf() / (1000 * 3600 * 24),
-        },
-        price: {
-          price: 10000,
-          paymentFor: "смену",
-          paymentType: "Любой",
-        },
-        params: {
-          type: "Экскаватор гусеничный",
-          photos: [
-            "https://stroy-plys.ru/uploads/posts/2014-01/1390641675_ekskavator-gusenichnyy-hyundai-380.jpg",
-            "https://cdn.stpulscen.ru/system/ckeditor_assets/pictures/352723/content_kovshi-jcb-01.jpg",
-            "https://avatars.mds.yandex.net/get-autoru-vos/11038141/883df25017df09a8cda4c1a43d9161e9/1200x900",
-          ],
-          mainParams: {
-            Марка: "Hyundai",
-            Год: 2021,
-          },
-          otherParams: {
-            Вес: 32.2,
-            Объём: 1.44,
-          },
-        },
-      },
-      {
-        id: "5",
-        userId: "2",
-        username: "User 1",
-        userRating: 3.7,
-        type: "technic",
-        updatedAt: Date.now(),
-        likes: ["2", "3", "7", "13"],
-        views: ["1", "2", "3", "4", "5", "6", "7"],
-        title: "Сдаётся гусеничный экскаватор Hyundai",
-        general: {
-          address: "Москва, Химки",
-          count: 3,
-          workMode: "День",
-          rentalPeriod: {
-            from: new Date("2023-11-23").valueOf(),
-            to: new Date("2023-12-23").valueOf(),
-          },
-          rentalDaysCount:
-            new Date("2023-11-23").valueOf() -
-            new Date("2023-12-23").valueOf() / (1000 * 3600 * 24),
-        },
-        price: {
-          price: 10000,
-          paymentFor: "смену",
-          paymentType: "Наличные",
-        },
-        params: {
-          type: "Экскаватор гусеничный",
-          photos: [
-            "https://stroy-plys.ru/uploads/posts/2014-01/1390641675_ekskavator-gusenichnyy-hyundai-380.jpg",
-            "https://cdn.stpulscen.ru/system/ckeditor_assets/pictures/352723/content_kovshi-jcb-01.jpg",
-            "https://avatars.mds.yandex.net/get-autoru-vos/11038141/883df25017df09a8cda4c1a43d9161e9/1200x900",
-          ],
-          mainParams: {
-            Марка: "Hyundai",
-            Год: 2021,
-          },
-          otherParams: {
-            Вес: 32.2,
-            Объём: 1.44,
-          },
-        },
-      },
-    ],
-    comments: [
-      {
-        id: "1",
-        authorId: "1",
-        authorName: "ДунСтрой Групп",
-        adresseeId: "2",
-        rate: 5,
-        text: "В данном блоке будет отображаться текст вашего отзыва",
-      },
-      {
-        id: "2",
-        authorId: "1",
-        authorName: "ДунСтрой Групп",
-        adresseeId: "2",
-        rate: 5,
-        text: "В данном блоке будет отображаться текст вашего отзыва",
-      },
-      {
-        id: "6",
-        authorId: "2",
-        authorName: "ДунСтрой Групп",
-        adresseeId: "3",
-        rate: 5,
-        text: "В данном блоке будет отображаться текст вашего отзыва",
       },
     ],
   },

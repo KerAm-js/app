@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
-import { EQUIPMENTS, TECHS_LIST } from "../../../../consts/data";
+import { TECHNICS, TECHS_LIST } from "../../../../consts/data";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { DATE_REGEX } from "../../../../consts/regex";
+import { isKeyOfObject } from "../../../../helpers/isKeyOfObject";
 
 const TechnicForm = () => {
   const [typeI, setTypeI] = useState(0);
@@ -154,8 +155,10 @@ const TechnicForm = () => {
         {
           id: "equipment",
           type: "selection",
-          hidden: !technicType[0] || !EQUIPMENTS[technicType[0]],
-          itemsList: EQUIPMENTS[technicType[0]],
+          hidden:
+            !technicType[0] ||
+            TECHNICS[technicType[0]]?.equipments.length === 0,
+          itemsList: TECHNICS[technicType[0]]?.equipments || [],
           value: equipment,
           selectItem: selectEquipment,
           unselectItem: unselectEquipment,
@@ -213,7 +216,7 @@ const TechnicForm = () => {
           onFirstValueChange: onRentalDaysCount1Change,
           onSecondValueChange: onRentalDaysCount2Change,
           error: rentalDaysCount1Error || rentalDaysCount2Error,
-          label: "Срок аренды",
+          label: "Срок аренды (в днях)",
         },
       ],
     },

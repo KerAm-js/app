@@ -24,7 +24,7 @@ const IntervalInput = withLabelAndError<IIntervalInputProps>(
           onChangeText={onFirstValueChange}
           flexed
           setErrorShown={undefined}
-          setIsFocused={undefined}
+          setIsFocused={setIsFocused}
           {...inputProps}
         />
         <InputField

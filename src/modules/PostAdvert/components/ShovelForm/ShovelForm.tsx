@@ -9,6 +9,10 @@ import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneVal
 
 const ShovelForm = () => {
   const [typeI, setTypeI] = useState(0);
+  const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
+    required: true,
+    minLength: 15,
+  });
   const [
     materialType,
     selectMaterialType,
@@ -53,9 +57,18 @@ const ShovelForm = () => {
           type: "segment",
           values: INPUT_VALUES.shovelAdvertType,
           selectedIndex: typeI,
-          onChange: (evt) =>
-            setTypeI(evt.nativeEvent.selectedSegmentIndex),
+          onChange: (evt) => setTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Тип объявления",
+        },
+        {
+          id: "title",
+          type: "input",
+          onChangeText: onTitleChange,
+          value: title,
+          error: titleError,
+          label: "Заголовок",
+          placeholder: "Продаю пескогрунт",
+          maxLength: 100,
         },
       ],
     },
@@ -125,8 +138,7 @@ const ShovelForm = () => {
           type: "segment",
           values: INPUT_VALUES.delivery,
           selectedIndex: deliveryI,
-          onChange: (evt) =>
-            setDeliveryI(evt.nativeEvent.selectedSegmentIndex),
+          onChange: (evt) => setDeliveryI(evt.nativeEvent.selectedSegmentIndex),
           label: "Доставка",
         },
         {
@@ -192,6 +204,7 @@ const ShovelForm = () => {
   ];
 
   const isFormValid =
+    isTitleValid &&
     isMaterialTypeValid &&
     isTransportValid &&
     isAmountValid &&
@@ -202,6 +215,7 @@ const ShovelForm = () => {
   const onSubmit = () => {
     console.log({
       type: INPUT_VALUES.shovelAdvertType[typeI],
+      title,
       materialType,
       transport,
       measureIn: INPUT_VALUES.measureIn[measureInI],

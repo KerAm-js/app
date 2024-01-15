@@ -4,46 +4,36 @@ import { ITechnicGeneral, ITechnicParams, ITechnincPrice } from "./Technic";
 
 export type TAdvertType = keyof IAdvertMap;
 
-export interface ITechnicAdvert {
+interface IAdvert {
   id: string;
-  type: "technic";
-  username: string;
+  type: "technic" | "dump" | "shovel";
+  title: string;
   userId: string;
   userRating: number;
   updatedAt: number;
   views: Array<string>;
   likes: Array<string>;
-  title: string;
+  username: string;
+}
+
+export interface ITechnicAdvert extends IAdvert {
+  type: "technic";
   general: IAdvertMap["technic"]["general"];
   params: IAdvertMap["technic"]["params"];
   price: IAdvertMap["technic"]["price"];
 }
 
-export interface IDumpAdvert {
-  id: string;
+export interface IDumpAdvert extends IAdvert {
   type: "dump";
-  username: string;
-  userId: string;
-  userRating: number;
-  updatedAt: number;
-  views: Array<string>;
-  likes: Array<string>;
-  title: string;
+  typeOfTransaction: 'Сдать в аренду' | 'Взять в аренду';
   general: IAdvertMap["dump"]["general"];
   params: IAdvertMap["dump"]["params"];
   price: IAdvertMap["dump"]["price"];
 }
 
-export interface IShovelAdvert {
-  id: string;
+export interface IShovelAdvert extends IAdvert {
   type: "shovel";
-  username: string;
-  userId: string;
-  userRating: number;
-  updatedAt: number;
-  views: Array<string>;
-  likes: Array<string>;
-  title: string;
+  typeOfTransaction: 'Сдать в аренду' | 'Взять в аренду';
   general: IAdvertMap["shovel"]["general"];
   params: IAdvertMap["shovel"]["params"];
   price: IAdvertMap["shovel"]["price"];
