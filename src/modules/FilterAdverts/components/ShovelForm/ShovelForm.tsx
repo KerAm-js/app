@@ -7,6 +7,7 @@ import {
   INPUT_VALUES,
   INPUT_VALUES_WITH_ALL,
 } from "../../../../consts/inputValues";
+import { MATERIALS, MATERIALS_LIST } from "../../../../consts/data";
 
 const ShovelForm = () => {
   const [typeI, setTypeI] = useState(0);
@@ -25,6 +26,14 @@ const ShovelForm = () => {
     ____,
     isTransportValid,
     transportError,
+  ] = useSelectionValidator({ multySelection: true });
+  const [
+    fractions,
+    selectFractions,
+    unselectFractions,
+    _____,
+    isFractionsValid,
+    fractionsError,
   ] = useSelectionValidator({ multySelection: true });
   const [measureInI, setMeasureInI] = useState(0);
   const [
@@ -83,7 +92,7 @@ const ShovelForm = () => {
           value: materialType,
           selectItem: selectMaterialType,
           unselectItem: unselectMaterialType,
-          itemsList: INPUT_VALUES.materialTypes,
+          itemsList: MATERIALS_LIST,
           error: materialTypeError,
           placeholder: "",
           label: "Вид материала",
@@ -99,6 +108,20 @@ const ShovelForm = () => {
           multySelection: true,
           placeholder: "",
           label: "Виды транспорта",
+        },
+        {
+          id: "fractions",
+          type: "selection",
+          value: fractions,
+          selectItem: selectFractions,
+          unselectItem: unselectFractions,
+          itemsList: MATERIALS[materialType[0]]?.fractions || [],
+          error: fractionsError,
+          hidden:
+            !materialType[0] ||
+            MATERIALS[materialType[0]]?.fractions.length === 0,
+          multySelection: true,
+          label: "Фракции",
         },
         {
           id: "measureIn",

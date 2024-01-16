@@ -6,6 +6,7 @@ import { useSelectionValidator } from "../../../../hooks/inputValidators/useSele
 import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { USER } from "../../../../consts/devData";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
+import { MATERIALS, MATERIALS_LIST } from "../../../../consts/data";
 
 const ShovelForm = () => {
   const [typeI, setTypeI] = useState(0);
@@ -28,6 +29,14 @@ const ShovelForm = () => {
     ____,
     isTransportValid,
     transportError,
+  ] = useSelectionValidator({ required: true });
+  const [
+    fractions,
+    selectFractions,
+    unselectFractions,
+    _____,
+    isFractionsValid,
+    fractionsError,
   ] = useSelectionValidator({ required: true });
   const [workModeIndex, setWorkModeIndex] = useState(0);
   const [comment, setComment] = useState("");
@@ -81,7 +90,7 @@ const ShovelForm = () => {
           value: materialType,
           selectItem: selectMaterialType,
           unselectItem: unselectMaterialType,
-          itemsList: INPUT_VALUES.materialTypes,
+          itemsList: MATERIALS_LIST,
           error: materialTypeError,
           label: "Вид материала",
         },
@@ -94,6 +103,19 @@ const ShovelForm = () => {
           itemsList: INPUT_VALUES.dumpTransport,
           error: transportError,
           label: "Вид транспорта",
+        },
+        {
+          id: "fractions",
+          type: "selection",
+          value: fractions,
+          selectItem: selectFractions,
+          unselectItem: unselectFractions,
+          itemsList: MATERIALS[materialType[0]]?.fractions || [],
+          hidden:
+            !materialType[0] ||
+            MATERIALS[materialType[0]]?.fractions.length === 0,
+          error: fractionsError,
+          label: "Фракция",
         },
         {
           id: "measureIn",

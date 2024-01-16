@@ -21,6 +21,16 @@ export const EQUIPMENTS = {
   waterDustSupression: "Водяное пылеподавление",
 };
 
+export const FRACTIONS = {
+  fr5_20: "5-20",
+  fr20_40: "20-40",
+  fr40_70: "40-70",
+  graniteScreening: "Отсев гранитный",
+  gravelScreening: "Отсев гравийный",
+  limestoneScreening: "Отсев известняковый",
+  concreteScreening: "Отсев бетонный",
+};
+
 export const TECHNIC_PARAMS: {
   [key in keyof ITechnicOtherParams]: {
     title: string;
@@ -53,137 +63,137 @@ export const TECHNICS: {
     isTransport?: boolean;
   };
 } = {
-  "Автовышка": {
+  Автовышка: {
     equipments: [],
     params: { boomLength: true, liftingCapacity: true },
   },
-  "Автовоз": {
+  Автовоз: {
     params: {},
     equipments: [],
     isTransport: true,
   },
   "Автобус пассажирский": {
-    params: {passengersCount: true},
+    params: { passengersCount: true },
     equipments: [],
     isTransport: true,
   },
-  "Автобетононасос": {
-    params: {pipeLength: true},
+  Автобетононасос: {
+    params: { pipeLength: true },
     equipments: [],
   },
-  "Автогрейдер": {
-    params: {weight: true},
+  Автогрейдер: {
+    params: { weight: true },
     equipments: [],
   },
-  "Автогудронатор": {
+  Автогудронатор: {
     params: {},
     equipments: [],
   },
-  "Автокран": {
-    params: {boomLength: true, liftingCapacity: true},
+  Автокран: {
+    params: { boomLength: true, liftingCapacity: true },
     equipments: [],
   },
-  "Бетоновоз": {
-    params: {volume: true},
-    equipments: [],
-    isTransport: true,
-  },
-  "Бензовоз": {
-    params: {volume: true},
+  Бетоновоз: {
+    params: { volume: true },
     equipments: [],
     isTransport: true,
   },
-  "Бульдозер": {
+  Бензовоз: {
+    params: { volume: true },
+    equipments: [],
+    isTransport: true,
+  },
+  Бульдозер: {
     equipments: [
       EQUIPMENTS.leveller,
       EQUIPMENTS.cuttingBlade,
       EQUIPMENTS.pushingBlade,
       EQUIPMENTS.ripperFangs,
     ],
-    params: {weight: true},
+    params: { weight: true },
   },
   "Буровая установка": {
     params: {},
     equipments: [],
   },
-  "Водовоз": {
-    params: {volume: true},
+  Водовоз: {
+    params: { volume: true },
     equipments: [],
     isTransport: true,
   },
-  "Газель": {
-    params: {liftingCapacity: true},
+  Газель: {
+    params: { liftingCapacity: true },
     equipments: [],
   },
-  "Гидробур": {
+  Гидробур: {
     params: {},
     equipments: [],
   },
-  "Грохот": {
-    params: {performance: true},
+  Грохот: {
+    params: { performance: true },
     equipments: [],
   },
   "Дробильно-сортировочный комплекс": {
-    params: {performance: true},
+    params: { performance: true },
     equipments: [],
   },
   "Дробилка мобильная": {
-    params: {performance: true},
+    params: { performance: true },
     equipments: [],
   },
-  "Земснаряд": {
+  Земснаряд: {
     params: {},
     equipments: [],
   },
-  "Зерновоз": {
-    params: {volume: true, liftingCapacity: true, cargoType: true},
+  Зерновоз: {
+    params: { volume: true, liftingCapacity: true, cargoType: true },
     equipments: [],
     isTransport: true,
   },
   "Каток грунтовой": {
-    params: {weight: true},
+    params: { weight: true },
     equipments: [],
   },
   "Каток дорожный": {
-    params: {weight: true, rollerType: true, rollersCount: true},
+    params: { weight: true, rollerType: true, rollersCount: true },
     equipments: [],
   },
-  "Контейнеровоз": {
+  Контейнеровоз: {
     params: {},
     equipments: [],
     isTransport: true,
   },
   "Кран башенный": {
-    params: {liftingCapacity: true, height: true},
+    params: { liftingCapacity: true, height: true },
     equipments: [],
   },
   "Кран гусеничный": {
     equipments: [EQUIPMENTS.vibrationLoader],
-    params: {liftingCapacity: true, height: true, sizeType: true},
+    params: { liftingCapacity: true, height: true, sizeType: true },
   },
-  "Лесовоз": {
-    params: {liftingCapacity: true, volume: true},
+  Лесовоз: {
+    params: { liftingCapacity: true, volume: true },
     equipments: [],
     isTransport: true,
   },
-  "Ломовоз": {
-    params: {liftingCapacity: true, volume: true},
+  Ломовоз: {
+    params: { liftingCapacity: true, volume: true },
     equipments: [],
     isTransport: true,
   },
   "Мусоровоз (ПУХТО)": {
-    params: {liftingCapacity: true, volume: true},
+    params: { liftingCapacity: true, volume: true },
     equipments: [],
     isTransport: true,
   },
-  "Мультилифт": {
-    params: {liftingCapacity: true, volume: true},
+  Мультилифт: {
+    params: { liftingCapacity: true, volume: true },
     equipments: [],
     isTransport: true,
   },
-  "Манипулятор": {
+  Манипулятор: {
     equipments: [EQUIPMENTS.hydroDrill],
-    params: {liftingCapacity: true, cargoType: true},
+    params: { liftingCapacity: true, cargoType: true },
     isTransport: true,
   },
   "Погрузчик мини": {
@@ -198,42 +208,42 @@ export const TECHNICS: {
     params: {},
   },
   "Поливомоечная машина": {
-    params: {volume: true},
+    params: { volume: true },
     equipments: [],
     isTransport: true,
   },
   "Погрузчик вилочный": {
-    params: {liftingCapacity: true},
+    params: { liftingCapacity: true },
     equipments: [],
   },
   "Погрузчик телескопический": {
-    params: {liftingCapacity: true, boomLength: true},
+    params: { liftingCapacity: true, boomLength: true },
     equipments: [],
   },
   "Погрузчик фронтальный": {
-    params: {volume: true, sizeType: true},
+    params: { volume: true, sizeType: true },
     equipments: [],
   },
-  "Рефрежиратор": {
-    params: {volume: true, liftingCapacity: true, cargoType: true},
+  Рефрежиратор: {
+    params: { volume: true, liftingCapacity: true, cargoType: true },
     equipments: [],
     isTransport: true,
   },
   "Ресайклер-стабилизатор грунта": {
-    params: {sizeType: true},
+    params: { sizeType: true },
     equipments: [],
   },
-  "Самосвал": {
-    params: {volume: true, OSSIG: true, axesCount: true},
+  Самосвал: {
+    params: { volume: true, OSSIG: true, axesCount: true },
     equipments: [],
     isTransport: true,
   },
   "Самосвал вездеход": {
-    params: {volume: true},
+    params: { volume: true },
     equipments: [],
   },
   "Самосвал сочленённый": {
-    params: {volume: true},
+    params: { volume: true },
     equipments: [],
   },
   "Снегоуборочная машина": {
@@ -241,63 +251,63 @@ export const TECHNICS: {
     equipments: [],
     isTransport: true,
   },
-  "Тонар": {
-    params: {volume: true, cargoType: true},
+  Тонар: {
+    params: { volume: true, cargoType: true },
     equipments: [],
     isTransport: true,
   },
-  "Трактор": {
+  Трактор: {
     equipments: [
       EQUIPMENTS.frontBlade,
       EQUIPMENTS.wateringCan,
       EQUIPMENTS.brush,
       EQUIPMENTS.hydroDrill,
     ],
-    params: {liftingCapacity: true},
+    params: { liftingCapacity: true },
   },
-  "Трал": {
-    params: {cargoType: true, trailerType: true, loadingType: true},
+  Трал: {
+    params: { cargoType: true, trailerType: true, loadingType: true },
     equipments: [],
     isTransport: true,
   },
-  "Тромель": {
-    params: {performance: true},
+  Тромель: {
+    params: { performance: true },
     equipments: [],
   },
-  "Трубоукладчик": {
-    params: {volume: true},
+  Трубоукладчик: {
+    params: { volume: true },
     equipments: [],
   },
-  "Фура": {
-    params: {liftingCapacity: true, cargoType: true},
+  Фура: {
+    params: { liftingCapacity: true, cargoType: true },
     equipments: [],
     isTransport: true,
   },
   "Фреза дорожная": {
-    params: {sizeType: true},
+    params: { sizeType: true },
     equipments: [],
   },
   "Фреза мини": {
-    params: {sizeType: true},
+    params: { sizeType: true },
     equipments: [],
   },
-  "Фургон": {
-    params: {volume: true, liftingCapacity: true, cargoType: true},
+  Фургон: {
+    params: { volume: true, liftingCapacity: true, cargoType: true },
     equipments: [],
     isTransport: true,
   },
   "Шаланда (длинномер)": {
-    params: {liftingCapacity: true, cargoType: true, bodyLength: true},
+    params: { liftingCapacity: true, cargoType: true, bodyLength: true },
     equipments: [],
     isTransport: true,
   },
   "Эвакуатор легковой": {
-    params: {liftingCapacity: true},
+    params: { liftingCapacity: true },
     equipments: [],
     isTransport: true,
   },
   "Эвакуатор грузовой": {
-    params: {liftingCapacity: true},
+    params: { liftingCapacity: true },
     equipments: [],
     isTransport: true,
   },
@@ -312,7 +322,7 @@ export const TECHNICS: {
       EQUIPMENTS.planningBucket,
       EQUIPMENTS.waterDustSupression,
     ],
-    params: {weight: true, volume: true, boomLength: true,},
+    params: { weight: true, volume: true, boomLength: true },
   },
   "Экскаватор разрушитель": {
     equipments: [
@@ -325,7 +335,7 @@ export const TECHNICS: {
       EQUIPMENTS.planningBucket,
       EQUIPMENTS.waterDustSupression,
     ],
-    params: {weight: true},
+    params: { weight: true },
   },
   "Экскаватор амфибия": {
     equipments: [
@@ -351,7 +361,7 @@ export const TECHNICS: {
       EQUIPMENTS.planningBucket,
       EQUIPMENTS.waterDustSupression,
     ],
-    params: {weight: true, volume: true},
+    params: { weight: true, volume: true },
   },
   "Экскаватор погрузчик": {
     equipments: [
@@ -381,11 +391,88 @@ export const TECHNICS: {
   },
 };
 
-const list = (
+export const MATERIALS: {
+  [key: string]: {
+    fractions: Array<string>;
+  };
+} = {
+  "Асфальтная крошка": {
+    fractions: [],
+  },
+  "Асфальтный скол": {
+    fractions: [],
+  },
+  Керамзит: {
+    fractions: [FRACTIONS.fr5_20, FRACTIONS.fr20_40, FRACTIONS.fr40_70],
+  },
+  "Кирпичный бой": {
+    fractions: [],
+  },
+  Пескогрунт: {
+    fractions: [],
+  },
+  "Песок карьерный": {
+    fractions: [],
+  },
+  "Песок мытый": {
+    fractions: [],
+  },
+  "Песок сеяный": {
+    fractions: [],
+  },
+  "Плодородный грунт": {
+    fractions: [],
+  },
+  Торф: {
+    fractions: [],
+  },
+  "Щебень вторичный (рецикл бетонный)": {
+    fractions: [
+      FRACTIONS.fr5_20,
+      FRACTIONS.fr20_40,
+      FRACTIONS.fr40_70,
+      FRACTIONS.concreteScreening,
+    ],
+  },
+  "Щебень гравийный": {
+    fractions: [
+      FRACTIONS.fr5_20,
+      FRACTIONS.fr20_40,
+      FRACTIONS.fr40_70,
+      FRACTIONS.gravelScreening,
+    ],
+  },
+  "Щебень гранитный": {
+    fractions: [
+      FRACTIONS.fr5_20,
+      FRACTIONS.fr20_40,
+      FRACTIONS.fr40_70,
+      FRACTIONS.graniteScreening,
+    ],
+  },
+  "Щебень известняковый": {
+    fractions: [
+      FRACTIONS.fr5_20,
+      FRACTIONS.fr20_40,
+      FRACTIONS.fr40_70,
+      FRACTIONS.limestoneScreening,
+    ],
+  },
+};
+
+const materialsList = (
+  Object.keys(MATERIALS) as Array<keyof typeof MATERIALS>
+).reduce((accumulator, current) => {
+  accumulator.push(current);
+  return accumulator;
+}, [] as Array<keyof typeof MATERIALS>);
+
+const technicsList = (
   Object.keys(TECHNICS) as Array<keyof typeof TECHNICS>
 ).reduce((accumulator, current) => {
   accumulator.push(current);
   return accumulator;
 }, [] as Array<keyof typeof TECHNICS>);
 
-export const TECHS_LIST = list.map(item => item.toString())
+export const TECHS_LIST = technicsList.map((item) => item.toString());
+export const MATERIALS_LIST = materialsList.map((item) => item.toString());
