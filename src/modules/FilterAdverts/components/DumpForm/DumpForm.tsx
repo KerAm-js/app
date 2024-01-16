@@ -116,8 +116,6 @@ const DumpForm = () => {
         {
           id: "amount",
           type: "interval",
-          firstPlaceholder: "",
-          secondPlaceholder: "",
           firstValue: amount1,
           secondValue: amount2,
           onFirstValueChange: onAmount1Change,
@@ -150,8 +148,6 @@ const DumpForm = () => {
         {
           id: "price",
           type: "interval",
-          firstPlaceholder: "",
-          secondPlaceholder: "",
           firstValue: price1,
           secondValue: price2,
           onFirstValueChange: onPrice1Change,

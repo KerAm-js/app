@@ -71,7 +71,6 @@ const DumpForm = () => {
           unselectItem: unselectType,
           itemsList: INPUT_VALUES.dumpAdvertType,
           error: typeError,
-          placeholder: "",
           label: "Тип объявления",
         },
         {
@@ -97,7 +96,6 @@ const DumpForm = () => {
           unselectItem: unselectWasteType,
           itemsList: INPUT_VALUES.wasteTypes,
           error: wasteTypeError,
-          placeholder: "",
           label: "Вид отходов",
         },
         {
@@ -108,7 +106,6 @@ const DumpForm = () => {
           unselectItem: unselectDangerClass,
           itemsList: INPUT_VALUES.dangerClasses,
           error: dangerClassError,
-          placeholder: "",
           label: "Класс опасности",
         },
         {
@@ -119,7 +116,6 @@ const DumpForm = () => {
           unselectItem: unselectTransport,
           itemsList: INPUT_VALUES.dumpTransport,
           error: transportError,
-          placeholder: "",
           label: "Вид транспорта",
         },
         {
@@ -141,7 +137,6 @@ const DumpForm = () => {
             INPUT_VALUES.measureIn[measureInI] === "м3"
               ? "Объём (м3)"
               : "Вес (тонн)",
-          placeholder: "",
           keyboardType: "decimal-pad",
         },
       ],
@@ -164,7 +159,6 @@ const DumpForm = () => {
           onChangeText: (text: string) => setComment(text),
           value: comment,
           label: "Комментарий",
-          placeholder: "",
         },
       ],
     },
@@ -177,7 +171,6 @@ const DumpForm = () => {
           value: price,
           onChangeText: onPriceChange,
           error: priceError,
-          placeholder: "",
           label:
             INPUT_VALUES.measureIn[measureInI] === "м3"
               ? "Цена (руб/м3)"
@@ -204,7 +197,6 @@ const DumpForm = () => {
           onChangeText: onUsernameChange,
           error: usernameError,
           label: "Имя пользователя",
-          placeholder: "",
         },
         {
           id: "phone",
@@ -213,7 +205,6 @@ const DumpForm = () => {
           onChangeText: onPhoneChange,
           error: phoneError,
           label: "Имя пользователя",
-          placeholder: "",
           keyboardType: "phone-pad",
         },
       ],

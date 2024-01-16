@@ -83,7 +83,6 @@ const ShovelForm = () => {
           unselectItem: unselectMaterialType,
           itemsList: INPUT_VALUES.materialTypes,
           error: materialTypeError,
-          placeholder: "",
           label: "Вид материала",
         },
         {
@@ -94,7 +93,6 @@ const ShovelForm = () => {
           unselectItem: unselectTransport,
           itemsList: INPUT_VALUES.dumpTransport,
           error: transportError,
-          placeholder: "",
           label: "Вид транспорта",
         },
         {
@@ -116,7 +114,6 @@ const ShovelForm = () => {
             INPUT_VALUES.measureIn[measureInI] === "м3"
               ? "Объём (м3)"
               : "Вес (тонн)",
-          placeholder: "",
           keyboardType: "decimal-pad",
         },
       ],
@@ -147,7 +144,6 @@ const ShovelForm = () => {
           onChangeText: (text: string) => setComment(text),
           value: comment,
           label: "Комментарий",
-          placeholder: "",
         },
       ],
     },
@@ -160,7 +156,6 @@ const ShovelForm = () => {
           value: price,
           onChangeText: onPriceChange,
           error: priceError,
-          placeholder: "",
           label:
             INPUT_VALUES.measureIn[measureInI] === "м3"
               ? "Цена (руб/м3)"
@@ -187,7 +182,6 @@ const ShovelForm = () => {
           onChangeText: onUsernameChange,
           error: usernameError,
           label: "Имя пользователя",
-          placeholder: "",
         },
         {
           id: "phone",
@@ -196,7 +190,6 @@ const ShovelForm = () => {
           onChangeText: onPhoneChange,
           error: phoneError,
           label: "Имя пользователя",
-          placeholder: "",
           keyboardType: "phone-pad",
         },
       ],

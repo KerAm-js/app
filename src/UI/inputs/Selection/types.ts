@@ -4,6 +4,6 @@ export type TSelectionProps = {
   selectItem: (value: string) => void;
   unselectItem: (value: string) => void;
   unselectAll?: () => void;
-  placeholder: string;
+  placeholder?: string;
   multySelection?: boolean;
 };
