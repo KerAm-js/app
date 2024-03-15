@@ -14,7 +14,7 @@ import { SvgXml } from "react-native-svg";
 import { GREY_DARK } from "../../../../consts/colors";
 import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeGetters";
 
-const Slider: FC<IAdvertSliderProps> = ({ params, type }) => {
+const Slider: FC<IAdvertSliderProps> = ({ photos, type }) => {
   const [currentSlide, setCurrentSlider] = useState(1);
 
   const windowWidth = Dimensions.get("window").width;
@@ -49,7 +49,7 @@ const Slider: FC<IAdvertSliderProps> = ({ params, type }) => {
       <FlatList
         style={advertStyles.slider}
         horizontal
-        data={params.photos}
+        data={photos}
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onScrollEnd}
@@ -82,10 +82,10 @@ const Slider: FC<IAdvertSliderProps> = ({ params, type }) => {
 
   return (
     <React.Fragment>
-      {!!params.photos.length && (
+      {!!photos.length && (
         <View style={advertStyles.currentIndexContainer}>
           <Text style={advertStyles.currentIndex}>
-            {currentSlide}/{params.photos.length}
+            {currentSlide}/{photos.length}
           </Text>
         </View>
       )}

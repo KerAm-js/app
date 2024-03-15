@@ -20,7 +20,6 @@ import { TAdvert } from "../../../../types/Advert";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { ITechnicOtherParams } from "../../../../types/Technic";
 
 const Advert: FC<TAdvert> = (props) => {
   const {
@@ -33,6 +32,7 @@ const Advert: FC<TAdvert> = (props) => {
     likes,
     views,
     title,
+    photos,
     general,
     params,
     price,
@@ -44,9 +44,13 @@ const Advert: FC<TAdvert> = (props) => {
     navigation.navigate("Modal", { advertId: id });
   };
   const isLiked = useMemo(() => !!likes.find((item) => item === USER.id), []);
-  const paramsArr = useMemo(() => Object.entries(params.otherParams || {}), []);
-
-  console.log(params.otherParams);
+  const paramsArr = useMemo(() => {
+    const result: Array<[string, string]> = []
+    for (let param in params) {
+      result.push([param, params[param]])
+    }
+    return result;
+  }, []);
 
   const onLike = (value: boolean) => {
     console.log(
@@ -84,10 +88,10 @@ const Advert: FC<TAdvert> = (props) => {
           <SvgXml xml={pointSvg(WHITE)} width={10} height={14} />
           <Text style={advertStyles.address}>{general.address}</Text>
         </View>
-        <Slider type={type} params={params} />
+        <Slider type={type} photos={photos} />
         <LinearGradient
           colors={
-            !!params.photos.length
+            !!photos.length
               ? [
                   "rgba(0, 0, 0, 0)",
                   "rgba(0, 0, 0, 0.6)",
@@ -100,7 +104,7 @@ const Advert: FC<TAdvert> = (props) => {
           <Text
             style={[
               advertStyles.title,
-              !params.photos.length && { color: BLACK_DARK },
+              !photos.length && { color: BLACK_DARK },
             ]}
           >
             {title}

@@ -15,7 +15,7 @@ export const INPUT_VALUES = {
   dangerClasses: ["1 класс", "2 класс", "3 класс", "4 класс", "5 класс"],
   dumpTransport: ["Самосвал 3-х осный", "Самосвал 4-х осный", "Тонар"],
   measureIn: ["Тоннах", "м3"],
-  shovelAdvertType: ["Купить", "Продать"],
+  materialAdvertType: ["Купить", "Продать"],
   materialTypes: [
     "Пескогрунт",
     "Песок карьерный",
@@ -37,7 +37,7 @@ export const INPUT_VALUES_WITH_ALL = {
   technicAdvertType: [...INPUT_VALUES.technicAdvertType, "Все"],
   dumpAdvertType: [...INPUT_VALUES.dumpAdvertType, "Все"],
   measureIn: [...INPUT_VALUES.measureIn, "Все"],
-  shovelAdvertType: [...INPUT_VALUES.shovelAdvertType, "Все"],
+  materialAdvertType: [...INPUT_VALUES.materialAdvertType, "Все"],
   delivery: [...INPUT_VALUES.delivery, "Все"],
   rollerType: [...INPUT_VALUES.rollerType, "Все"],
   sizeType: [...INPUT_VALUES.sizeType, "Все"],

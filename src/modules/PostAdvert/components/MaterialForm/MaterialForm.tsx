@@ -8,7 +8,7 @@ import { USER } from "../../../../consts/devData";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { MATERIALS, MATERIALS_LIST } from "../../../../consts/data";
 
-const ShovelForm = () => {
+const MaterialForm = () => {
   const [typeI, setTypeI] = useState(0);
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
@@ -30,6 +30,10 @@ const ShovelForm = () => {
     isTransportValid,
     transportError,
   ] = useSelectionValidator({ required: true });
+  const [measureInI, setMeasureInI] = useState(0);
+  const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
+    { required: true, minValue: 1 }
+  );
   const [
     fractions,
     selectFractions,
@@ -39,23 +43,19 @@ const ShovelForm = () => {
     fractionsError,
   ] = useSelectionValidator({ required: true });
   const [workModeIndex, setWorkModeIndex] = useState(0);
+  const [deliveryI, setDeliveryI] = useState(0);
   const [comment, setComment] = useState("");
   const [price, onPriceChange, isPriceValid, priceError] = useInputValidator({
     required: true,
     minValue: 0,
   });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
-  const [deliveryI, setDeliveryI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
     useInputValidator({ required: true, initValue: USER.username });
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
     required: true,
     initValue: USER.phone,
   });
-  const [measureInI, setMeasureInI] = useState(0);
-  const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
-    { required: true, minValue: 1 }
-  );
 
   const inputs: TFormInputsArray = [
     {
@@ -64,7 +64,7 @@ const ShovelForm = () => {
         {
           id: "type",
           type: "segment",
-          values: INPUT_VALUES.shovelAdvertType,
+          values: INPUT_VALUES.materialAdvertType,
           selectedIndex: typeI,
           onChange: (evt) => setTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Тип объявления",
@@ -229,7 +229,7 @@ const ShovelForm = () => {
 
   const onSubmit = () => {
     console.log({
-      type: INPUT_VALUES.shovelAdvertType[typeI],
+      type: INPUT_VALUES.materialAdvertType[typeI],
       title,
       materialType,
       transport,
@@ -255,4 +255,4 @@ const ShovelForm = () => {
   );
 };
 
-export default ShovelForm;
+export default MaterialForm;

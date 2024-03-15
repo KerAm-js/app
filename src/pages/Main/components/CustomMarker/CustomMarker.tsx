@@ -10,7 +10,7 @@ import { ICustomMarkerProps } from "./types";
 import { View } from "react-native";
 
 const data = {
-  excavator: {
+  technic: {
     iconXml: excavatorSvg(WHITE),
     color: BLUE,
   },
@@ -18,7 +18,7 @@ const data = {
     iconXml: dumpSvg(WHITE),
     color: GREEN,
   },
-  shovel: {
+  material: {
     iconXml: shovelSvg(WHITE),
     color: RED,
   },

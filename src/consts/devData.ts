@@ -1,4 +1,5 @@
 import { IUser } from "../types/User";
+import { MATERIALS_LIST } from "./data";
 
 export const USER: IUser = {
   id: "1",
@@ -61,6 +62,12 @@ export const USER: IUser = {
       likes: ["1", "2", "3", "7"],
       views: ["1", "2", "3", "4", "5", "6", "7"],
       title: "Сдаётся гусеничный экскаватор Hyundai",
+      transactionType: "Сдать в аренду",
+      photos: [
+        "https://stroy-plys.ru/uploads/posts/2014-01/1390641675_ekskavator-gusenichnyy-hyundai-380.jpg",
+        "https://cdn.stpulscen.ru/system/ckeditor_assets/pictures/352723/content_kovshi-jcb-01.jpg",
+        "https://avatars.mds.yandex.net/get-autoru-vos/11038141/883df25017df09a8cda4c1a43d9161e9/1200x900",
+      ],
       general: {
         address: "Москва, Химки",
         count: 3,
@@ -79,24 +86,15 @@ export const USER: IUser = {
       price: {
         price: 10000,
         paymentFor: "Смену",
-        paymentType: "Любой",
+        paymentType: "Все",
       },
       params: {
-        photos: [
-          "https://stroy-plys.ru/uploads/posts/2014-01/1390641675_ekskavator-gusenichnyy-hyundai-380.jpg",
-          "https://cdn.stpulscen.ru/system/ckeditor_assets/pictures/352723/content_kovshi-jcb-01.jpg",
-          "https://avatars.mds.yandex.net/get-autoru-vos/11038141/883df25017df09a8cda4c1a43d9161e9/1200x900",
-        ],
-        mainParams: {
-          technicType: "Экскаватор гусеничный",
-          mark: "Hyundai",
-          model: "JCB",
-          productionYear: "2021",
-        },
-        otherParams: {
-          weight: 32.2,
-          volume: 1.44,
-        },
+        technicType: "Экскаватор гусеничный",
+        mark: "Hyundai",
+        model: "JCB",
+        productionYear: "2021",
+        weight: 32.2,
+        volume: 1.44,
       },
     },
   ],
@@ -123,6 +121,18 @@ export const USERS_LIST: Array<IUser> = [
         likes: ["2", "3", "7", "13"],
         views: ["1", "2", "3", "4", "5", "6", "7"],
         title: "Сдаётся гусеничный экскаватор Hyundai",
+        transactionType: 'Сдать в аренду',
+        photos: [
+          "https://cdn.stpulscen.ru/system/ckeditor_assets/pictures/352723/content_kovshi-jcb-01.jpg",
+          "https://avatars.mds.yandex.net/get-autoru-vos/11038141/883df25017df09a8cda4c1a43d9161e9/1200x900",
+          "https://stkalmaz.ru/wp-content/uploads/2023/03/7086387da2a68ceebf759ef9b1eac6f3.jpeg",
+          "https://www.prostanki.com/img/boardpics/2020_03/A1BynE6lzoSMcp9Qs3Jq.jpg",
+          "http://static.gmstar.ru/boardImage/imageOriginal/4/115921/1536652020_gusenichnyy_ekskavat.jpg",
+          "https://www.tornometal.com/wp-content/uploads/2015/04/JS205LC-Low2.jpg",
+          "https://avatars.mds.yandex.net/get-ydo/3904573/2a000001874673c75e8aa2bbbceda3077e5b/diploma",
+          "https://vst-parts.ru/wa-data/public/shop/products/45/07/745/images/923/923.970.jpg",
+          "https://stroy-plys.ru/uploads/posts/2014-01/1390641675_ekskavator-gusenichnyy-hyundai-380.jpg",
+        ],
         general: {
           address: "Москва, Химки",
           count: 3,
@@ -141,26 +151,40 @@ export const USERS_LIST: Array<IUser> = [
           paymentType: "Наличные",
         },
         params: {
-          mainParams: {
-            technicType: "Экскаватор гусеничный",
-            mark: "Hyundai",
-            productionYear: '2021',
-          },
-          photos: [
-            "https://cdn.stpulscen.ru/system/ckeditor_assets/pictures/352723/content_kovshi-jcb-01.jpg",
-            "https://avatars.mds.yandex.net/get-autoru-vos/11038141/883df25017df09a8cda4c1a43d9161e9/1200x900",
-            "https://stkalmaz.ru/wp-content/uploads/2023/03/7086387da2a68ceebf759ef9b1eac6f3.jpeg",
-            "https://www.prostanki.com/img/boardpics/2020_03/A1BynE6lzoSMcp9Qs3Jq.jpg",
-            "http://static.gmstar.ru/boardImage/imageOriginal/4/115921/1536652020_gusenichnyy_ekskavat.jpg",
-            "https://www.tornometal.com/wp-content/uploads/2015/04/JS205LC-Low2.jpg",
-            "https://avatars.mds.yandex.net/get-ydo/3904573/2a000001874673c75e8aa2bbbceda3077e5b/diploma",
-            "https://vst-parts.ru/wa-data/public/shop/products/45/07/745/images/923/923.970.jpg",
-            "https://stroy-plys.ru/uploads/posts/2014-01/1390641675_ekskavator-gusenichnyy-hyundai-380.jpg",
-          ],
-          otherParams: {
-            weight: 32.2,
-            volume: 1.44,
-          },
+          technicType: "Экскаватор гусеничный",
+          mark: "Hyundai",
+          productionYear: "2021",
+          weight: 32.2,
+          volume: 1.44,
+        },
+      },
+      {
+        id: "2",
+        userId: "2",
+        username: "User 1",
+        userRating: 3.7,
+        type: "dump",
+        updatedAt: Date.now() - 1000 * 3600,
+        likes: ["2", "3", "7", "13"],
+        views: ["1", "2", "3", "4", "5", "6", "7"],
+        title: "Сдаётся гусеничный экскаватор Hyundai",
+        transactionType: 'Нужен вывоз',
+        photos: [
+        ],
+        general: {
+          address: "Москва, Химки",
+          workMode: "День",
+        },
+        price: {
+          price: 10000,
+          paymentType: "Наличные",
+        },
+        params: {
+          wasteType: MATERIALS_LIST[0],
+          dangerClass: '1 класс',
+          transport: 'Самосвал 3-х осный',
+          measureIn: 'Тоннах',
+          amount: 2
         },
       },
     ],

@@ -9,7 +9,7 @@ import {
   INPUT_VALUES_WITH_ALL,
 } from "../../../../consts/inputValues";
 import { DATE_REGEX } from "../../../../consts/regex";
-import { getLabelForParam } from "../../../../helpers/technicParams";
+import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
 
 const TechnicForm = () => {
   const [typeI, setTypeI] = useState(0);
@@ -329,7 +329,7 @@ const TechnicForm = () => {
           onSecondValueChange: onWeight2Change,
           hidden: !technicType[0] || !TECHNICS[technicType[0]].params.weight,
           error: weight1Error || weight2Error,
-          label: getLabelForParam("weight"),
+          label: getLabelForTechnicParam("weight"),
           keyboardType: "decimal-pad",
         },
         {
@@ -341,7 +341,7 @@ const TechnicForm = () => {
           onSecondValueChange: onHeight2Change,
           hidden: !technicType[0] || !TECHNICS[technicType[0]].params.height,
           error: height1Error || height2Error,
-          label: getLabelForParam("height"),
+          label: getLabelForTechnicParam("height"),
           keyboardType: "decimal-pad",
         },
         {
@@ -353,7 +353,7 @@ const TechnicForm = () => {
           onSecondValueChange: onVolume2Change,
           hidden: !technicType[0] || !TECHNICS[technicType[0]].params.volume,
           error: volume1Error || volume2Error,
-          label: getLabelForParam("volume"),
+          label: getLabelForTechnicParam("volume"),
           keyboardType: "decimal-pad",
         },
         {
@@ -366,7 +366,7 @@ const TechnicForm = () => {
           hidden:
             !technicType[0] || !TECHNICS[technicType[0]].params.passengersCount,
           error: passengersCount1Error || passengersCount2Error,
-          label: getLabelForParam("passengersCount"),
+          label: getLabelForTechnicParam("passengersCount"),
           keyboardType: "decimal-pad",
         },
         {
@@ -379,7 +379,7 @@ const TechnicForm = () => {
           hidden:
             !technicType[0] || !TECHNICS[technicType[0]].params.pipeLength,
           error: pipeLength1Error || pipeLength2Error,
-          label: getLabelForParam("pipeLength"),
+          label: getLabelForTechnicParam("pipeLength"),
           keyboardType: "decimal-pad",
         },
         {
@@ -392,7 +392,7 @@ const TechnicForm = () => {
           hidden:
             !technicType[0] || !TECHNICS[technicType[0]].params.boomLength,
           error: boomLength1Error || boomLength2Error,
-          label: getLabelForParam("boomLength"),
+          label: getLabelForTechnicParam("boomLength"),
           keyboardType: "decimal-pad",
         },
         {
@@ -405,7 +405,7 @@ const TechnicForm = () => {
           hidden:
             !technicType[0] || !TECHNICS[technicType[0]].params.liftingCapacity,
           error: liftingCapacity1Error || liftingCapacity2Error,
-          label: getLabelForParam("liftingCapacity"),
+          label: getLabelForTechnicParam("liftingCapacity"),
           keyboardType: "decimal-pad",
         },
         {
@@ -418,7 +418,7 @@ const TechnicForm = () => {
           hidden:
             !technicType[0] || !TECHNICS[technicType[0]].params.performance,
           error: performance1Error || performance2Error,
-          label: getLabelForParam("performance"),
+          label: getLabelForTechnicParam("performance"),
           keyboardType: "decimal-pad",
         },
         {
@@ -431,7 +431,7 @@ const TechnicForm = () => {
           hidden:
             !technicType[0] || !TECHNICS[technicType[0]].params.rollersCount,
           error: rollersCount1Error || rollersCount2Error,
-          label: getLabelForParam("rollersCount"),
+          label: getLabelForTechnicParam("rollersCount"),
           keyboardType: "decimal-pad",
         },
         {
@@ -444,7 +444,7 @@ const TechnicForm = () => {
           hidden:
             !technicType[0] || !TECHNICS[technicType[0]].params.bodyLength,
           error: bodyLength1Error || bodyLength2Error,
-          label: getLabelForParam("bodyLength"),
+          label: getLabelForTechnicParam("bodyLength"),
           keyboardType: "decimal-pad",
         },
         {
@@ -454,7 +454,7 @@ const TechnicForm = () => {
           selectedIndex: rollersTypeI,
           onChange: (evt) =>
             setRollersTypeI(evt.nativeEvent.selectedSegmentIndex),
-          label: getLabelForParam("rollerType"),
+          label: getLabelForTechnicParam("rollerType"),
           hidden:
             !technicType[0] || !TECHNICS[technicType[0]].params.rollerType,
         },
@@ -464,7 +464,7 @@ const TechnicForm = () => {
           values: INPUT_VALUES_WITH_ALL.sizeType,
           selectedIndex: sizeTypeI,
           onChange: (evt) => setSizeTypeI(evt.nativeEvent.selectedSegmentIndex),
-          label: getLabelForParam("sizeType"),
+          label: getLabelForTechnicParam("sizeType"),
           hidden: !technicType[0] || !TECHNICS[technicType[0]].params.sizeType,
         },
         {
@@ -473,7 +473,7 @@ const TechnicForm = () => {
           values: INPUT_VALUES_WITH_ALL.OSSIG,
           selectedIndex: ossigI,
           onChange: (evt) => setOssigI(evt.nativeEvent.selectedSegmentIndex),
-          label: getLabelForParam("OSSIG"),
+          label: getLabelForTechnicParam("OSSIG"),
           hidden: !technicType[0] || !TECHNICS[technicType[0]].params.OSSIG,
         },
         {
@@ -483,7 +483,7 @@ const TechnicForm = () => {
           selectedIndex: axesCountI,
           onChange: (evt) =>
             setAxesCountI(evt.nativeEvent.selectedSegmentIndex),
-          label: getLabelForParam("axesCount"),
+          label: getLabelForTechnicParam("axesCount"),
           hidden: !technicType[0] || !TECHNICS[technicType[0]].params.axesCount,
         },
         {
@@ -494,7 +494,7 @@ const TechnicForm = () => {
           selectItem: selectTrailerType,
           unselectItem: unselectTrailerType,
           placeholder: "",
-          label: getLabelForParam("trailerType"),
+          label: getLabelForTechnicParam("trailerType"),
           error: trailerTypeError,
           hidden:
             !technicType[0] || !TECHNICS[technicType[0]].params.trailerType,
@@ -506,7 +506,7 @@ const TechnicForm = () => {
           selectedIndex: loadingTypeI,
           onChange: (evt) =>
             setLoadingTypeI(evt.nativeEvent.selectedSegmentIndex),
-          label: getLabelForParam("loadingType"),
+          label: getLabelForTechnicParam("loadingType"),
           hidden:
             !technicType[0] || !TECHNICS[technicType[0]].params.loadingType,
         },

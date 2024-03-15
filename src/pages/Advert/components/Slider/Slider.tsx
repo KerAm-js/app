@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import { GREY_DARK } from "../../../../consts/colors";
 import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeGetters";
@@ -21,15 +21,16 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 import { USER } from "../../../../consts/devData";
+import { setStatusBarStyle } from "expo-status-bar";
 
 const Slider: FC<ISliderProps> = ({
   id,
   userId,
   likes,
-  params,
+  photos,
   type,
   scrollY,
-  onLike
+  onLike,
 }) => {
   const [currentSlide, setCurrentSlider] = useState(1);
   const insets = useSafeAreaInsets();
@@ -97,7 +98,7 @@ const Slider: FC<ISliderProps> = ({
       <FlatList
         style={sliderStyles.slider}
         horizontal
-        data={params.photos}
+        data={photos}
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onScrollEnd}
@@ -128,12 +129,16 @@ const Slider: FC<ISliderProps> = ({
     );
   }, []);
 
+  useEffect(() => {
+    setStatusBarStyle(!!photos.length ? 'light' : 'dark')
+  }, [])
+
   return (
     <Animated.View style={[sliderStyles.container, rContainerStyle]}>
-      {!!params.photos.length && (
+      {!!photos.length && (
         <View style={sliderStyles.currentIndexContainer}>
           <Text style={sliderStyles.currentIndex}>
-            {currentSlide}/{params.photos.length}
+            {currentSlide}/{photos.length}
           </Text>
         </View>
       )}
@@ -144,10 +149,12 @@ const Slider: FC<ISliderProps> = ({
           onPress={onLike}
         />
       </View> */}
-      <LinearGradient
-        colors={["rgba(0, 0, 0, 0.65)", "rgba(0, 0, 0, 0)"]}
-        style={[sliderStyles.shadow, { height: insets.top + 20 }]}
-      />
+      {!!photos.length && (
+        <LinearGradient
+          colors={["rgba(0, 0, 0, 0.65)", "rgba(0, 0, 0, 0)"]}
+          style={[sliderStyles.shadow, { height: insets.top + 20 }]}
+        />
+      )}
       {FlatListComponent}
     </Animated.View>
   );

@@ -14,8 +14,8 @@ const MenuBar: FC = () => {
   const { bottom } = useSafeAreaInsets();
   return <View style={[menuBarStyles.container, {paddingBottom: bottom + 10}]}>
     <MenuButton isActive={state === null} iconXmlFunc={allSvg} onPress={() => setState(null)} />
-    <MenuButton isActive={state === 'excavator'} iconXmlFunc={excavatorSvg} onPress={() => setState('excavator')} />
-    <MenuButton isActive={state === 'shovel'} iconXmlFunc={shovelSvg} onPress={() => setState('shovel')} />
+    <MenuButton isActive={state === 'technic'} iconXmlFunc={excavatorSvg} onPress={() => setState('technic')} />
+    <MenuButton isActive={state === 'material'} iconXmlFunc={shovelSvg} onPress={() => setState('material')} />
     <MenuButton isActive={state === 'dump'} iconXmlFunc={dumpSvg} onPress={() => setState('dump')} />
   </View>
 }

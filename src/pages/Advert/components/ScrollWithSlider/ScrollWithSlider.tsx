@@ -23,7 +23,7 @@ import { scrollWithSliderStyles } from "./styles";
 const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
   id,
   likes,
-  params,
+  photos,
   userId,
   type,
   children,
@@ -92,7 +92,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
         id={id}
         likes={likes}
         scrollY={scrollY}
-        params={params}
+        photos={photos}
         type={type}
         onLike={onLike}
       />

@@ -9,7 +9,7 @@ import {
 } from "../../../../consts/inputValues";
 import { MATERIALS, MATERIALS_LIST } from "../../../../consts/data";
 
-const ShovelForm = () => {
+const MaterialForm = () => {
   const [typeI, setTypeI] = useState(0);
   const [
     materialType,
@@ -76,7 +76,7 @@ const ShovelForm = () => {
         {
           id: "type",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.shovelAdvertType,
+          values: INPUT_VALUES_WITH_ALL.materialAdvertType,
           selectedIndex: typeI,
           onChange: (evt) => setTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Тип объявления",
@@ -219,7 +219,7 @@ const ShovelForm = () => {
 
   const onSubmit = () => {
     console.log({
-      type: INPUT_VALUES_WITH_ALL.shovelAdvertType[typeI],
+      type: INPUT_VALUES_WITH_ALL.materialAdvertType[typeI],
       materialType,
       transport,
       amountInWeight1,
@@ -241,4 +241,4 @@ const ShovelForm = () => {
   );
 };
 
-export default ShovelForm;
+export default MaterialForm;

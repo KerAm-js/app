@@ -112,6 +112,7 @@ export const advertStyles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: GREY_LIGHT,
+    flexWrap: 'wrap',
     flexDirection: "row",
   },
   price: {
@@ -129,6 +130,7 @@ export const advertStyles = StyleSheet.create({
     borderRadius: BORDER_RADIUS_ULTRA_SMALL,
     flexDirection: "row",
     marginRight: 7,
+    marginBottom: 7,
     flexWrap: "wrap",
   },
   paramTitle: {

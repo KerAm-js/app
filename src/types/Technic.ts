@@ -8,10 +8,15 @@ export interface ITechnicGeneral extends TGeneral {
   };
   rentalDaysCount: number;
   secondAdress?: TAdress;
-  distance?: number; // meters
+  distance?: number; // kilometers
 }
 
-export interface ITechnicOtherParams {
+export interface ITechnicParams extends TParams {
+  technicType: string;
+  mark?: string;
+  model?: string;
+  productionYear?: string;
+  equipment?: string;
   weight?: number;
   height?: number;
   volume?: number;
@@ -29,17 +34,6 @@ export interface ITechnicOtherParams {
   bodyLength?: number;
   trailerType?: "Прицеп" | "Полуприцеп" | "Корыто" | "Прямая площадка";
   loadingType?: "Задняя" | "Передняя";
-}
-
-export interface ITechnicParams extends TParams {
-  mainParams: {
-    technicType: string;
-    mark?: string;
-    model?: string;
-    productionYear?: string;
-    equipment?: string;
-  };
-  otherParams: ITechnicOtherParams;
 }
 
 export interface ITechnincPrice extends TPrice {

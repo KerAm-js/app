@@ -7,7 +7,7 @@ export const getAdvertTypeIconFunc = (advertType: TAdvertType) => {
   switch (advertType) {
     case "technic":
       return excavatorSvg;
-    case "shovel":
+    case "material":
       return shovelSvg;
     case "dump":
       return dumpSvg;
@@ -18,7 +18,7 @@ export const getAdvertTypeTitle = (advertType: TAdvertType) => {
   switch (advertType) {
     case "technic":
       return "Техника";
-    case "shovel":
+    case "material":
       return "Нерудные материалы";
     case "dump":
       return "Свалки";

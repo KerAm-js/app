@@ -1,12 +1,13 @@
 import { IDumpGeneral, IDumpParams, IDumpPrice } from "./Dump";
-import { IShovelGeneral, IShovelParams, IShovelPrice } from "./Showel";
+import { IMaterialGeneral, IMaterialParams, IMaterialPrice } from "./Material";
 import { ITechnicGeneral, ITechnicParams, ITechnincPrice } from "./Technic";
 
 export type TAdvertType = keyof IAdvertMap;
 
 interface IAdvert {
   id: string;
-  type: "technic" | "dump" | "shovel";
+  type: string;
+  transactionType: string;
   title: string;
   userId: string;
   userRating: number;
@@ -14,10 +15,12 @@ interface IAdvert {
   views: Array<string>;
   likes: Array<string>;
   username: string;
+  photos: Array<string>;
 }
 
 export interface ITechnicAdvert extends IAdvert {
   type: "technic";
+  transactionType: "Сдать в аренду" | "Взять в аренду";
   general: IAdvertMap["technic"]["general"];
   params: IAdvertMap["technic"]["params"];
   price: IAdvertMap["technic"]["price"];
@@ -25,21 +28,21 @@ export interface ITechnicAdvert extends IAdvert {
 
 export interface IDumpAdvert extends IAdvert {
   type: "dump";
-  typeOfTransaction: 'Сдать в аренду' | 'Взять в аренду';
+  transactionType: "Отвал" | "Нужен отвал" | "Вывоз" | "Нужен вывоз";
   general: IAdvertMap["dump"]["general"];
   params: IAdvertMap["dump"]["params"];
   price: IAdvertMap["dump"]["price"];
 }
 
-export interface IShovelAdvert extends IAdvert {
-  type: "shovel";
-  typeOfTransaction: 'Сдать в аренду' | 'Взять в аренду';
-  general: IAdvertMap["shovel"]["general"];
-  params: IAdvertMap["shovel"]["params"];
-  price: IAdvertMap["shovel"]["price"];
+export interface IMaterialAdvert extends IAdvert {
+  type: "material";
+  transactionType: "Купить" | "Продать";
+  general: IAdvertMap["material"]["general"];
+  params: IAdvertMap["material"]["params"];
+  price: IAdvertMap["material"]["price"];
 }
 
-export type TAdvert = ITechnicAdvert | IDumpAdvert | IShovelAdvert;
+export type TAdvert = ITechnicAdvert | IDumpAdvert | IMaterialAdvert;
 
 interface IAdvertMap {
   technic: {
@@ -47,10 +50,10 @@ interface IAdvertMap {
     params: ITechnicParams;
     price: ITechnincPrice;
   };
-  shovel: {
-    general: IShovelGeneral;
-    params: IShovelParams;
-    price: IShovelPrice;
+  material: {
+    general: IMaterialGeneral;
+    params: IMaterialParams;
+    price: IMaterialPrice;
   };
   dump: {
     general: IDumpGeneral;

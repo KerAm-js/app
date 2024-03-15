@@ -37,9 +37,9 @@ const ChooseAdvertTypePageComponent: FC<IChooseAdvertTypePageProps> = ({
         onPress={() => onPress("dump")}
       />
       <CardButton
-        type="shovel"
+        type="material"
         title="Нерудные материалы"
-        onPress={() => onPress("shovel")}
+        onPress={() => onPress("material")}
       />
     </View>
   );

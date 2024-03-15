@@ -1,4 +1,4 @@
-import { ITechnicOtherParams } from "../types/Technic";
+import { ITechnicParams } from "../types/Technic";
 
 export const EQUIPMENTS = {
   leveller: "3D нивелир",
@@ -32,11 +32,12 @@ export const FRACTIONS = {
 };
 
 export const TECHNIC_PARAMS: {
-  [key in keyof ITechnicOtherParams]: {
+  [key in keyof ITechnicParams]: {
     title: string;
     measurement?: string;
   };
 } = {
+  technicType: { title: "Вид техники" },
   weight: { title: "Вес", measurement: "тонн" },
   height: { title: "Высота", measurement: "м" },
   volume: { title: "Объём", measurement: "м3" },
@@ -58,7 +59,9 @@ export const TECHNIC_PARAMS: {
 
 export const TECHNICS: {
   [key: string]: {
-    params: { [key in keyof ITechnicOtherParams]: boolean | undefined };
+    params: {
+      [key in keyof Omit<ITechnicParams, "technicType">]: boolean | undefined;
+    };
     equipments: Array<string>;
     isTransport?: boolean;
   };

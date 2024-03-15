@@ -24,7 +24,7 @@ export const sliderStyles = StyleSheet.create({
     height: 300,
   },
   sliderEmptyContainer: {
-    height: 200,
+    height: 300,
     width,
     flex: 1,
     backgroundColor: GREY_LIGHT,

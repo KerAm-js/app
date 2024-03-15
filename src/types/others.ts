@@ -1,6 +1,6 @@
 export type TAdress = {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lon: number;
 };
 
 export type TWorkMode = "День" | "Ночь" | "Круглосуточно";
@@ -12,11 +12,9 @@ export type TGeneral = {
 };
 
 export type TParams = {
-  photos: Array<string>;
 };
 
 export type TPrice = {
   price: number;
-  paymentType: "Наличные" | "Безналичные" | "Любой";
-  paymentFor: "Смену" | "Час" | "м3/км" | "т/км" | "м3" | "Тонну";
+  paymentType: "Наличные" | "Безналичные" | "Все";
 };
