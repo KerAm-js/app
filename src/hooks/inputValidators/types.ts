@@ -16,7 +16,8 @@ export type TInputValidator = (
   value: string,
   onChangeValue: (value: string) => void,
   isValid: boolean,
-  error: string
+  error: string,
+  setInitial: () => void,
 ];
 
 export type TSelectionValidator = ({
@@ -33,5 +34,6 @@ export type TSelectionValidator = ({
   unselectItem: (value: string) => void,
   unselectAll: () => void,
   isValid: boolean,
-  error: string
+  error: string,
+  setInitial: () => void,
 ];

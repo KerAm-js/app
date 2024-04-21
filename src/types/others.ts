@@ -17,4 +17,5 @@ export type TParams = {
 export type TPrice = {
   price: number;
   paymentType: "Наличные" | "Безналичные" | "Все";
+  paymentFor: "Cмена" | "Час" | "м3/км" | "т/км" | "м3" | "Тонна";
 };

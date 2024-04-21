@@ -3,26 +3,37 @@ import RatingInput from "../RatingInput/RatingInput";
 import { FC, useState } from "react";
 import { ICommentFormModuleProps } from "./types";
 import CommentInput from "../CommentInput/CommentInput";
-import { USER } from "../../../../consts/devData";
-import { IComment } from "../../../../types/Comment";
 import BigButton from "../../../../UI/buttons/Big/BigButton";
+import { useActions } from "../../../../hooks/store/useActions";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
+import { RED } from "../../../../consts/colors";
 
 const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
-  username,
-  id,
+  addresseeName,
+  addresseeId,
   defaultComment,
 }) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { addComment, editComment } = useActions();
   const [rating, setRating] = useState<number>(defaultComment?.rate || 0);
   const [comment, setComment] = useState<string>(defaultComment?.text || "");
 
-  const submit = () => {
-    const commentObj: Omit<IComment, "id" | "authorName"> = {
-      rate: rating,
-      text: comment,
-      adresseeId: id,
-      authorId: USER.id,
-    };
-    console.log(commentObj);
+  const clearForm = () => {
+    setRating(0);
+    setComment("");
+  };
+
+  const onSubmit = () => {
+    if (defaultComment) {
+      editComment({ id: defaultComment.id, text: comment, rate: rating });
+    } else {
+      addComment({ addresseeId, addresseeName, text: comment, rate: rating });
+    }
+    clearForm();
+    navigation.goBack();
   };
 
   const disabled = defaultComment
@@ -31,11 +42,15 @@ const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
 
   return (
     <View>
-      <RatingInput username={username} rating={rating} setRating={setRating} />
+      <RatingInput
+        username={addresseeName}
+        rating={rating}
+        setRating={setRating}
+      />
       <CommentInput value={comment} onChangeText={setComment} />
       <BigButton
         title={defaultComment ? "Сохранить" : "Отправить"}
-        onPress={submit}
+        onPress={onSubmit}
         disabled={disabled}
       />
     </View>

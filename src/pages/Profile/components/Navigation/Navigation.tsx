@@ -5,11 +5,15 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import BigButton from "../../../../UI/buttons/Big/BigButton";
-import { USER, USERS_LIST } from "../../../../consts/devData";
+import { USER } from "../../../../consts/devData";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 const Navigation = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const users = useSelector((state: RootState) => state.users);
   return (
     <View style={profileNavigationStyles.container}>
       <View style={profileNavigationStyles.groupButtonsContainer}>
@@ -25,15 +29,18 @@ const Navigation = () => {
             },
             {
               title: "Ждут оценки",
-              onPress: () => navigation.navigate("AwaitingComment", {users: USERS_LIST.slice(0, 2)}),
-              circleNumber: 2
+              onPress: () =>
+                navigation.navigate("AwaitingComment", {
+                  users: users.slice(0, 2),
+                }),
+              circleNumber: 2,
             },
             {
               title: "Отзывы обо мне",
               onPress: () =>
                 navigation.navigate("CommentsToMe", {
                   user: USER,
-                  userRole: "adressee",
+                  userRole: "addressee",
                 }),
             },
           ]}
@@ -50,16 +57,19 @@ const Navigation = () => {
           data={[
             {
               title: "Мои объявления",
-              onPress: () => navigation.navigate("MyAdverts", {
-                data: USER.adverts
-              }),
+              onPress: () => navigation.navigate("MyAdverts"),
             },
           ]}
         />
       </View>
       <BigButton
         title="Разместить объявление"
-        onPress={() => navigation.navigate("ChooseAdvertType", {title: "Новое объявление", navigateTo: 'form'})}
+        onPress={() =>
+          navigation.navigate("ChooseAdvertType", {
+            title: "Новое объявление",
+            navigateTo: "form",
+          })
+        }
       />
       <Pressable style={profileNavigationStyles.supportButton}>
         <Text style={profileNavigationStyles.supportButtonTitle}>

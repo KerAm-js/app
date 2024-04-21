@@ -1,0 +1,639 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Advert": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "transactionType": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "number"
+        },
+        "author": {
+          "$ref": "#/definitions/User"
+        },
+        "views": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "likes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "transactionType",
+        "title",
+        "updatedAt",
+        "author",
+        "views",
+        "likes",
+        "photos"
+      ],
+      "additionalProperties": false
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "rating": {
+          "type": "number"
+        },
+        "ratesCount": {
+          "type": "number"
+        },
+        "comments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Comment"
+          }
+        },
+        "adverts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Advert"
+          }
+        },
+        "avatar": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "phone",
+        "username",
+        "email",
+        "description",
+        "rating",
+        "ratesCount",
+        "comments",
+        "adverts"
+      ],
+      "additionalProperties": false
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "authorId": {
+          "type": "string"
+        },
+        "authorName": {
+          "type": "string"
+        },
+        "adresseeId": {
+          "type": "string"
+        },
+        "rate": {
+          "type": "number"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "authorId",
+        "authorName",
+        "adresseeId",
+        "rate",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "TechnicAdvert": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "technic"
+        },
+        "transactionType": {
+          "type": "string",
+          "enum": [
+            "Сдать в аренду",
+            "Взять в аренду"
+          ]
+        },
+        "general": {
+          "type": "object",
+          "properties": {
+            "workMode": {
+              "type": "string",
+              "enum": [
+                "День",
+                "Ночь",
+                "Круглосуточно"
+              ]
+            },
+            "comment": {
+              "type": "string"
+            },
+            "count": {
+              "type": "number"
+            },
+            "rentalPeriod": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "type": "number"
+                },
+                "to": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "from",
+                "to"
+              ],
+              "additionalProperties": false
+            },
+            "rentalDaysCount": {
+              "type": "number"
+            },
+            "address": {
+              "type": "object",
+              "properties": {
+                "lat": {
+                  "type": "number"
+                },
+                "lon": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "lat",
+                "lon"
+              ],
+              "additionalProperties": false
+            },
+            "secondAdress": {
+              "type": "object",
+              "properties": {
+                "lat": {
+                  "type": "number"
+                },
+                "lon": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "lat",
+                "lon"
+              ],
+              "additionalProperties": false
+            },
+            "distanceBetweenAddresses": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "workMode",
+            "count",
+            "rentalDaysCount",
+            "address"
+          ],
+          "additionalProperties": false
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "technicType": {
+              "type": "string"
+            },
+            "mark": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "productionYear": {
+              "type": "string"
+            },
+            "equipment": {
+              "type": "string"
+            },
+            "weight": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            },
+            "volume": {
+              "type": "number"
+            },
+            "passengersCount": {
+              "type": "number"
+            },
+            "pipeLength": {
+              "type": "number"
+            },
+            "boomLength": {
+              "type": "number"
+            },
+            "liftingCapacity": {
+              "type": "number"
+            },
+            "performance": {
+              "type": "number"
+            },
+            "cargoType": {
+              "type": "string"
+            },
+            "rollerType": {
+              "type": "string",
+              "enum": [
+                "Гладкие",
+                "Комбинированные"
+              ]
+            },
+            "rollersCount": {
+              "type": "number"
+            },
+            "sizeType": {
+              "type": "string",
+              "enum": [
+                "Габаритный",
+                "Негабаритный"
+              ]
+            },
+            "OSSIG": {
+              "type": "string",
+              "enum": [
+                "Подключён",
+                "Не подключён"
+              ]
+            },
+            "axesCount": {
+              "type": "number"
+            },
+            "bodyLength": {
+              "type": "number"
+            },
+            "trailerType": {
+              "type": "string",
+              "enum": [
+                "Прицеп",
+                "Полуприцеп",
+                "Корыто",
+                "Прямая площадка"
+              ]
+            },
+            "loadingType": {
+              "type": "string",
+              "enum": [
+                "Задняя",
+                "Передняя"
+              ]
+            }
+          },
+          "required": [
+            "technicType"
+          ],
+          "additionalProperties": false
+        },
+        "price": {
+          "type": "object",
+          "properties": {
+            "price": {
+              "type": "number"
+            },
+            "paymentType": {
+              "type": "string",
+              "enum": [
+                "Наличные",
+                "Безналичные",
+                "Все"
+              ]
+            },
+            "paymentFor": {
+              "type": "string",
+              "enum": [
+                "Смена",
+                "Час",
+                "м3/км",
+                "т/км"
+              ]
+            }
+          },
+          "required": [
+            "price",
+            "paymentType",
+            "paymentFor"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "transactionType",
+        "general",
+        "params",
+        "price"
+      ],
+      "additionalProperties": false
+    },
+    "DumpAdvert": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "dump"
+        },
+        "transactionType": {
+          "type": "string",
+          "enum": [
+            "Отвал",
+            "Нужен отвал",
+            "Вывоз",
+            "Нужен вывоз"
+          ]
+        },
+        "general": {
+          "type": "object",
+          "properties": {
+            "workMode": {
+              "type": "string",
+              "enum": [
+                "День",
+                "Ночь",
+                "Круглосуточно"
+              ]
+            },
+            "comment": {
+              "type": "string"
+            },
+            "address": {
+              "type": "object",
+              "properties": {
+                "lat": {
+                  "type": "number"
+                },
+                "lon": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "lat",
+                "lon"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "workMode",
+            "address"
+          ],
+          "additionalProperties": false
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "wasteType": {
+              "type": "string"
+            },
+            "dangerClass": {
+              "type": "string",
+              "enum": [
+                "1 класс",
+                "2 класс",
+                "3 класс",
+                "4 класс",
+                "5 класс"
+              ]
+            },
+            "transport": {
+              "type": "string",
+              "enum": [
+                "Самосвал 3-х осный",
+                "Самосвал 4-х осный",
+                "Тонар"
+              ]
+            },
+            "measureIn": {
+              "type": "string",
+              "enum": [
+                "Тонны",
+                "м3"
+              ]
+            },
+            "amount": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "wasteType",
+            "dangerClass",
+            "transport",
+            "measureIn",
+            "amount"
+          ],
+          "additionalProperties": false
+        },
+        "price": {
+          "type": "object",
+          "properties": {
+            "price": {
+              "type": "number"
+            },
+            "paymentType": {
+              "type": "string",
+              "enum": [
+                "Наличные",
+                "Безналичные",
+                "Все"
+              ]
+            }
+          },
+          "required": [
+            "price",
+            "paymentType"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "transactionType",
+        "general",
+        "params",
+        "price"
+      ],
+      "additionalProperties": false
+    },
+    "MaterialAdvert": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "material"
+        },
+        "transactionType": {
+          "type": "string",
+          "enum": [
+            "Купить",
+            "Продать"
+          ]
+        },
+        "general": {
+          "type": "object",
+          "properties": {
+            "workMode": {
+              "type": "string",
+              "enum": [
+                "День",
+                "Ночь",
+                "Круглосуточно"
+              ]
+            },
+            "comment": {
+              "type": "string"
+            },
+            "delivery": {
+              "type": "string",
+              "enum": [
+                "С доставкой",
+                "На самовывоз"
+              ]
+            },
+            "address": {
+              "type": "object",
+              "properties": {
+                "lat": {
+                  "type": "number"
+                },
+                "lon": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "lat",
+                "lon"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "workMode",
+            "delivery",
+            "address"
+          ],
+          "additionalProperties": false
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "materialType": {
+              "type": "string"
+            },
+            "transport": {
+              "type": "string",
+              "enum": [
+                "Самосвал 3-х осный",
+                "Самосвал 4-х осный",
+                "Тонар"
+              ]
+            },
+            "measureIn": {
+              "type": "string",
+              "enum": [
+                "Тонны",
+                "м3"
+              ]
+            },
+            "amount": {
+              "type": "number"
+            },
+            "fractions": {
+              "type": "string",
+              "enum": [
+                "5-20",
+                "20-40",
+                "40-70",
+                "Отсев гранитный",
+                "Отсев гравийный",
+                "Отсев известняковый",
+                "Отсев бетонный"
+              ]
+            }
+          },
+          "required": [
+            "materialType",
+            "transport",
+            "measureIn",
+            "amount",
+            "fractions"
+          ],
+          "additionalProperties": false
+        },
+        "price": {
+          "type": "object",
+          "properties": {
+            "price": {
+              "type": "number"
+            },
+            "paymentType": {
+              "type": "string",
+              "enum": [
+                "Наличные",
+                "Безналичные",
+                "Все"
+              ]
+            }
+          },
+          "required": [
+            "price",
+            "paymentType"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "type",
+        "transactionType",
+        "general",
+        "params",
+        "price"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

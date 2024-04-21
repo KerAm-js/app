@@ -6,9 +6,12 @@ import MainInfo from "../MainInfo/MainInfo";
 import InfoTables from "../InfoTables/InfoTables";
 import AdvertComment from "../Comment/Comment";
 import AdvertUserInfo from "../UserInfo/AdvertUserInfo";
-import { USER, USERS_LIST } from "../../../../consts/devData";
+import { USER } from "../../../../consts/devData";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 const AdvertPageComponent: FC<TAdvert> = (props) => {
+  const users = useSelector((state: RootState) => state.users);
   return (
     <View>
       <ScrollWithSlider {...props}>
@@ -16,7 +19,7 @@ const AdvertPageComponent: FC<TAdvert> = (props) => {
         <InfoTables {...props} />
         <AdvertComment comment={props.general.comment} />
         <AdvertUserInfo
-          {...USERS_LIST.find((user) => user.id === props.userId) || USER}
+          {...users.find((user) => user.id === props.userId) || USER}
         />
       </ScrollWithSlider>
     </View>

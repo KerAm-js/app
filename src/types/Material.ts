@@ -19,4 +19,6 @@ export interface IMaterialParams extends TParams {
     | "Отсев бетонный";
 }
 
-export interface IMaterialPrice extends TPrice {}
+export interface IMaterialPrice extends TPrice {
+  paymentFor: "Cмена" | "Час" | "м3" | "Тонна";
+}

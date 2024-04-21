@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { View } from "react-native"
-import { IUser } from "../../../../types/User";
 import CommentForm from "../../../../modules/CommentForm";
+import { IComment } from "../../../../types/Comment";
 
-const NewCommentPageComponent: FC<IUser> = ({ id, username }) => {
+const NewCommentPageComponent: FC<Pick<IComment, 'addresseeId' | 'addresseeName'>> = (props) => {
   return <View>
-    <CommentForm.Component id={id} username={username} />
+    <CommentForm.Component {...props} />
   </View>
 }
 

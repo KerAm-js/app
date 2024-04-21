@@ -4,6 +4,8 @@ import RootNavigator from "./src/navigation";
 import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { Provider } from "react-redux";
+import { store } from "./src/store/store";
 // import YaMap from 'react-native-yamap';
 // import { YA_MAP_API_KEY } from "./src/api/yamap";
 
@@ -28,8 +30,10 @@ export default function App() {
     return null;
   }
   return (
-    <NavigationContainer onReady={onLayoutRootView}>
-      <RootNavigator />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer onReady={onLayoutRootView}>
+        <RootNavigator />
+      </NavigationContainer>
+    </Provider>
   );
 }

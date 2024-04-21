@@ -21,7 +21,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 import { USER } from "../../../../consts/devData";
-import { setStatusBarStyle } from "expo-status-bar";
 
 const Slider: FC<ISliderProps> = ({
   id,
@@ -122,16 +121,15 @@ const Slider: FC<ISliderProps> = ({
               width={60}
               height={60}
             />
+            <Text style={sliderStyles.sliderEmptyText}>
+              Пользователь не добавил фото
+            </Text>
           </View>
         }
         {...flatListOptimizationProps}
       />
     );
   }, []);
-
-  useEffect(() => {
-    setStatusBarStyle(!!photos.length ? 'light' : 'dark')
-  }, [])
 
   return (
     <Animated.View style={[sliderStyles.container, rContainerStyle]}>

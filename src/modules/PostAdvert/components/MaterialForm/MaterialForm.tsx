@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
@@ -7,18 +7,20 @@ import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { USER } from "../../../../consts/devData";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { MATERIALS, MATERIALS_LIST } from "../../../../consts/data";
+import { TMaterialForm } from "./types";
 
-const MaterialForm = () => {
+const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
   const [typeI, setTypeI] = useState(0);
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
-    minLength: 15,
+    minLength: 10,
   });
+  const [images, setImages] = useState<string[]>([]);
   const [
     materialType,
     selectMaterialType,
     unselectMaterialType,
-    __,
+    clearMaterialType,
     isMaterialTypeValid,
     materialTypeError,
   ] = useSelectionValidator({ required: true });
@@ -26,7 +28,7 @@ const MaterialForm = () => {
     transport,
     selectTransport,
     unselectTransport,
-    ____,
+    clearTransport,
     isTransportValid,
     transportError,
   ] = useSelectionValidator({ required: true });
@@ -38,7 +40,7 @@ const MaterialForm = () => {
     fractions,
     selectFractions,
     unselectFractions,
-    _____,
+    clearFractions,
     isFractionsValid,
     fractionsError,
   ] = useSelectionValidator({ required: true });
@@ -49,6 +51,7 @@ const MaterialForm = () => {
     required: true,
     minValue: 0,
   });
+  const [paymentForI, setPaymentForI] = useState(0);
   const [paymentTypeI, setPaymentTypeI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
     useInputValidator({ required: true, initValue: USER.username });
@@ -138,6 +141,13 @@ const MaterialForm = () => {
               : "Вес (тонн)",
           keyboardType: "decimal-pad",
         },
+        {
+          id: "photo",
+          type: "photo",
+          photosCount: 3,
+          images,
+          setImages,
+        },
       ],
     },
     {
@@ -178,10 +188,16 @@ const MaterialForm = () => {
           value: price,
           onChangeText: onPriceChange,
           error: priceError,
-          label:
-            INPUT_VALUES.measureIn[measureInI] === "м3"
-              ? "Цена (руб/м3)"
-              : "Цена (руб/тонн)",
+          label: 'Цена (руб)',
+        },
+        {
+          id: "paymentFor",
+          type: "segment",
+          values: INPUT_VALUES.paymentFor,
+          selectedIndex: paymentForI,
+          onChange: (evt) =>
+            setPaymentForI(evt.nativeEvent.selectedSegmentIndex),
+          label: "Оплата за",
         },
         {
           id: "paymentType",
@@ -223,26 +239,51 @@ const MaterialForm = () => {
     isMaterialTypeValid &&
     isTransportValid &&
     isAmountValid &&
+    (isFractionsValid || MATERIALS[materialType[0]]?.fractions.length === 0) &&
     isPriceValid &&
     isUsernameValid &&
     isPhoneValid;
 
   const onSubmit = () => {
-    console.log({
-      type: INPUT_VALUES.materialAdvertType[typeI],
+    submit({
+      transactionType: INPUT_VALUES.materialAdvertType[typeI],
       title,
-      materialType,
-      transport,
-      measureIn: INPUT_VALUES.measureIn[measureInI],
-      amount,
-      workMode: INPUT_VALUES.workMode[workModeIndex],
-      deliveryI: INPUT_VALUES.delivery[deliveryI],
-      comment,
-      price,
-      paymentType: INPUT_VALUES.paymentType[paymentTypeI],
+      photos: [],
+      general: {
+        delivery: INPUT_VALUES.delivery[deliveryI],
+        address: "Москва, Лефортово",
+        workMode: INPUT_VALUES.workMode[workModeIndex],
+        comment,
+      },
+      params: {
+        materialType,
+        transport,
+        measureIn: INPUT_VALUES.measureIn[measureInI],
+        amount,
+      },
+      price: {
+        price: Number(price),
+        paymentType: INPUT_VALUES.paymentType[paymentTypeI],
+      },
       username,
       phone,
     });
+    clearForm();
+  };
+
+  const clearForm = () => {
+    setTypeI(0);
+    onTitleChange("");
+    clearMaterialType();
+    clearTransport();
+    setMeasureInI(0);
+    onAmountCange("");
+    clearFractions();
+    setWorkModeIndex(0);
+    setDeliveryI(0);
+    setComment("");
+    onPriceChange("");
+    setPaymentTypeI(0);
   };
 
   return (

@@ -7,7 +7,7 @@ export const useSelectionValidator: TSelectionValidator = ({
   multySelection,
 }) => {
   const [value, setValue] = useState<Array<string>>(initValue || []);
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(!(!initValue?.length && required));
   const [error, setError] = useState(
     !initValue && required ? "Заполните данное поле" : ""
   );
@@ -30,6 +30,13 @@ export const useSelectionValidator: TSelectionValidator = ({
 
   const unselectAll = () => setValue([]);
 
+  const setInitial = () => {
+    setValue(initValue || []);
+    setIsValid(!(!initValue?.length && required));
+    setError(!initValue?.length && required ? "Заполните данное поле" : "");
+  }
+
+
   useEffect(() => {
     if (required && value.length === 0) {
       setIsValid(false);
@@ -40,5 +47,5 @@ export const useSelectionValidator: TSelectionValidator = ({
     }
   }, [value]);
 
-  return [value, selectItem, unselectItem, unselectAll, isValid, error];
+  return [value, selectItem, unselectItem, unselectAll, isValid, error, setInitial];
 };

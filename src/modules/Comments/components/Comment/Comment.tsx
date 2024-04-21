@@ -19,6 +19,9 @@ const Comment: FC<ICommentProps> = (props) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const { addresseeId, addresseeName, authorId, authorName, rate } =
+    props;
+
   const [numberOfLines, setNumberOfLines] = useState<number | undefined>(
     undefined
   );
@@ -26,8 +29,8 @@ const Comment: FC<ICommentProps> = (props) => {
   const commentText = useRef<null | Text>(null);
   const isFirstLayout = useRef<boolean>(true);
 
-  const isUserAdressee = props.adresseeId === USER.id;
-  const isUserAuthor = props.authorId === USER.id;
+  const isUserAdressee = addresseeId === USER.id;
+  const isUserAuthor = authorId === USER.id;
 
   const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
     if (event.nativeEvent.lines.length > 2 && isFirstLayout.current) {
@@ -44,8 +47,8 @@ const Comment: FC<ICommentProps> = (props) => {
   const navigateToEdition = () => {
     if (isUserAuthor)
       navigation.navigate("Comment", {
-        userId: USER.id,
-        username: USER.username,
+        addresseeId,
+        addresseeName,
         defaultComment: props,
       });
   };
@@ -57,7 +60,9 @@ const Comment: FC<ICommentProps> = (props) => {
           <Avatar size={36} />
           <View style={commentStyles.infoContainer}>
             <View style={commentStyles.usernameContainer}>
-              <Text style={commentStyles.username}>{props.authorName}</Text>
+              <Text style={commentStyles.username}>
+                {isUserAuthor ? addresseeName : authorName}
+              </Text>
               {(isUserAuthor || isUserAdressee) && (
                 <SvgXml
                   xml={isUserAuthor ? boxOutSvg() : boxInSvg()}
@@ -72,7 +77,7 @@ const Comment: FC<ICommentProps> = (props) => {
               </Text>
               <Rating
                 type="presentation"
-                rating={props.rate}
+                rating={rate}
                 backgroundColor={WHITE}
                 size={12}
               />

@@ -6,29 +6,29 @@ import Rating from "../../../../UI/Rating/Rating";
 import { FC } from "react";
 import { IUser } from "../../../../types/User";
 import Link from "../../../../UI/buttons/Link/Link";
-import { RU_LANG } from "../../../../consts/rulang";
 import BigButton from "../../../../UI/buttons/Big/BigButton";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
+import { useUserComments } from "../../../../hooks/store/useComments";
+import { USER } from "../../../../consts/devData";
 
 const AdvertUserInfo: FC<IUser> = (props) => {
-  const { id, rating, ratesCount, username, phone, comments } = props;
+  const { id, rating, username, phone } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const commentsAboutUser = comments.filter(
-    (comment) => comment.adresseeId === id
-  );
-
-  const commentsLen = commentsAboutUser.length;
+  const rates = useUserComments({
+    role: "addressee",
+    id,
+  });
 
   const call = () => {
     Linking.openURL(`tel:${phone}`);
   };
 
   const goToComments = () => {
-    navigation.navigate("UserComments", { user: props, userRole: "adressee" });
+    navigation.navigate("User", props);
   };
 
   return (
@@ -44,18 +44,13 @@ const AdvertUserInfo: FC<IUser> = (props) => {
             backgroundColor={GREY_LIGHT}
           />
           <Text style={advertUserInfoStyles.ratingText}>
-            Рейтинг {rating} (количество оценок {ratesCount})
+            Рейтинг {rating} (количество оценок {rates.length})
           </Text>
         </View>
         <Text style={advertUserInfoStyles.phone}>{phone}</Text>
-        <Link
-          title={
-            commentsLen +
-            " " +
-            (RU_LANG.comments[commentsLen] || RU_LANG.comments[0])
-          }
-          onPress={goToComments}
-        />
+        {props.id !== USER.id && (
+          <Link title={"Профиль"} onPress={goToComments} />
+        )}
       </View>
       <BigButton backgroundColor={GREEN} title="Позвонить" onPress={call} />
     </>

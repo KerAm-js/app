@@ -37,5 +37,5 @@ export interface ITechnicParams extends TParams {
 }
 
 export interface ITechnincPrice extends TPrice {
-  paymentFor: "Смену" | "Час" | "м3/км" | "т/км";
+  paymentFor: "Cмена" | "Час" | "м3/км" | "т/км";
 }

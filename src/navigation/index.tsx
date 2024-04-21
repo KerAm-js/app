@@ -22,6 +22,7 @@ import ProfilePage from "../pages/Profile";
 import RegisterPage from "../pages/Register";
 import UserPage from "../pages/User";
 import FilterPage from "../pages/Filter";
+import { View } from "react-native";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -113,13 +114,18 @@ const RootNavigator = () => {
           }}
           name="CommentsToMe"
         >
-          {({ route }) => <MyComments.Component {...route.params} />}
+          {({ route }) => <UserCommentsPage.Component {...route.params} />}
         </Stack.Screen>
         <Stack.Screen
-          options={({ route }) => ({
-            title: route.params.defaultComment
-              ? "Редактирование"
-              : "Новый отзыв",
+          options={({
+            route: {
+              params: { defaultComment },
+            },
+          }) => ({
+            title: defaultComment ? "Редактирование" : "Новый отзыв",
+            headerRight: defaultComment
+              ? () => <CommentPage.headerRight id={defaultComment.id} />
+              : undefined,
           })}
           name="Comment"
         >
@@ -130,12 +136,11 @@ const RootNavigator = () => {
             title: "Мои объявления",
           }}
           name="MyAdverts"
-        >
-          {({ route }) => <MyAdverts.Component {...route.params} />}
-        </Stack.Screen>
+          component={MyAdverts.Component}
+        />
         <Stack.Screen
           options={({ route }) => ({
-            title: getAdvertTypeTitle(route.params.type)
+            title: getAdvertTypeTitle(route.params.type),
           })}
           name="NewAdvert"
         >
@@ -143,7 +148,7 @@ const RootNavigator = () => {
         </Stack.Screen>
         <Stack.Screen
           options={({ route }) => ({
-            title: getAdvertTypeTitle(route.params.type)
+            title: getAdvertTypeTitle(route.params.type),
           })}
           name="Filter"
         >
@@ -153,7 +158,7 @@ const RootNavigator = () => {
           options={({ route }) => ({
             title:
               route.params.price.price +
-              " руб за " +
+              " руб/" +
               route.params.price.paymentFor,
             headerTransparent: true,
           })}

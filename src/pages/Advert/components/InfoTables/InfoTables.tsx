@@ -2,6 +2,7 @@ import { FC, useMemo } from "react";
 import { Text, View } from "react-native";
 import { infoTablesStyles } from "./styles";
 import { TAdvert } from "../../../../types/Advert";
+import { propTitles } from "../../../../consts/propTitles";
 
 const InfoTables: FC<TAdvert> = ({ type, general, params }) => {
   
@@ -44,7 +45,7 @@ const InfoTables: FC<TAdvert> = ({ type, general, params }) => {
         <Text style={infoTablesStyles.title}>Характеристики</Text>
         {paramsArr.map(([title, value]) => (
           <View key={title} style={infoTablesStyles.tableRow}>
-            <Text style={infoTablesStyles.rowTitle}>{title}</Text>
+            <Text style={infoTablesStyles.rowTitle}>{propTitles[title]}</Text>
             <Text style={infoTablesStyles.rowValue}>{value}</Text>
           </View>
         ))}

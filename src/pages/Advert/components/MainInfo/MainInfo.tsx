@@ -16,7 +16,7 @@ const MainInfo: FC<IMainInfoProps> = ({
   updatedAt,
 }) => {
   const payment =
-    price.paymentType === "Любой" ? "нал/безнал" : price.paymentType;
+    price.paymentType === "Все" ? "нал/безнал" : price.paymentType;
 
   const relevance = getRelevanceObj(updatedAt);
 
@@ -26,7 +26,7 @@ const MainInfo: FC<IMainInfoProps> = ({
       <View style={mainInfoStyles.rowsContainer}>
         <View style={mainInfoStyles.row}>
           <Text style={mainInfoStyles.price}>
-            {price.price + " руб за " + price.paymentFor}
+            {price.price + " руб/" + price?.paymentFor.toLowerCase()}
           </Text>
           <Text style={mainInfoStyles.infoText}>{payment}</Text>
         </View>

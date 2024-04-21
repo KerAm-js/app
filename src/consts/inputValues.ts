@@ -1,7 +1,8 @@
 export const INPUT_VALUES = {
   technicAdvertType: ["Сдать в аренду", "Взять в аренду"],
   workMode: ["День", "Ночь", "Круглосуточно"],
-  paymentFor: ["Смену", "Час", "м3/км", "т/км"],
+  paymentFor: ["Смена", "Час", "Тонна", "м3"],
+  paymentForTechnic: ["Смена", "Час", "м3/км", "т/км"],
   paymentType: ["Наличные", "Безналичные", "Все"],
   dumpAdvertType: ["Отвал", "Нужен отвал", "Вывоз", "Нужен вывоз"],
   wasteTypes: [

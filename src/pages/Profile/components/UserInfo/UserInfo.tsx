@@ -10,29 +10,29 @@ import Link from "../../../../UI/buttons/Link/Link";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
+import { useUserComments } from "../../../../hooks/store/useComments";
+import { USER } from "../../../../consts/devData";
 
 const UserInfo: FC<IUser> = (props) => {
-  const {
-    id,
-    username,
-    phone,
-    email,
-    rating,
-    ratesCount,
-    description,
-    comments,
-  } = props;
+  const { id, username, phone, email, rating, description } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const commentsAboutUser = comments.filter(
-    (comment) => comment.adresseeId === id
-  );
+  const commentsAboutUser = useUserComments({
+    role: "addressee",
+    id,
+    textOnly: true,
+  });
+
+  const rates = useUserComments({
+    role: "addressee",
+    id,
+  });
 
   const commentsLen = commentsAboutUser.length;
 
   const goToComments = () => {
-    navigation.navigate("UserComments", { user: props, userRole: "adressee" });
+    navigation.navigate("UserComments", { user: props, userRole: "addressee" });
   };
 
   return (
@@ -45,10 +45,9 @@ const UserInfo: FC<IUser> = (props) => {
           backgroundColor={GREY_LIGHT}
         />
         <Text style={userInfoStyles.ratingText}>
-          Рейтинг {rating} (количество оценок {ratesCount})
+          Рейтинг {rating} (количество оценок {rates.length})
         </Text>
-      </View>
-      {!!commentsLen && (
+        {!!commentsLen && id !== USER.id && (
         <Link
           title={
             commentsLen +
@@ -58,6 +57,7 @@ const UserInfo: FC<IUser> = (props) => {
           onPress={goToComments}
         />
       )}
+      </View>
       <InfoCard title="Телефон" content={phone} />
       <InfoCard title="Почта" content={email} />
       {!!description && <InfoCard title="Описание" content={description} />}

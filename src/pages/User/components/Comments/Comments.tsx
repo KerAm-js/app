@@ -9,10 +9,15 @@ import { RootStackParamList } from "../../../../navigation/types";
 import { FC } from "react";
 import { IUser } from "../../../../types/User";
 
-const Comments: FC<IUser> = (user) => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+const Comments: FC<IUser> = ({ username, id }) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const onPress = () => navigation.navigate("NewComment", user)
+  const onPress = () =>
+    navigation.navigate("NewComment", {
+      addresseeId: id,
+      addresseeName: username,
+    });
 
   return (
     <View style={commentsStyles.container}>

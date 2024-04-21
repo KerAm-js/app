@@ -2,7 +2,8 @@ export interface IComment {
   id: string;
   authorId: string;
   authorName: string;
-  adresseeId: string;
+  addresseeId: string;
+  addresseeName: string;
   rate: number;
   text: string;
 }

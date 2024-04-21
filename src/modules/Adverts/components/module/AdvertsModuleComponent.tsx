@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { FlatList } from "react-native";
 import { IAdvertsModuleProps } from "./types";
 import Advert from "../Advert/Advert";

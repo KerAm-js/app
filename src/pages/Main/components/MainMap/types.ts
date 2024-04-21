@@ -1,5 +1,6 @@
-import { IAdvert } from "../../../../types/Advert";
+import { TAdvert } from "../../../../types/Advert";
+
 
 export type TMainMapProps = {
-  adverts: Array<IAdvert>;
+  adverts: Array<TAdvert>;
 };

@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native";
-import { GREY_LIGHT, WHITE } from "../../../../consts/colors";
+import { GREY_DARK, GREY_LIGHT, WHITE } from "../../../../consts/colors";
 import {} from "../../../../consts/borders";
 import { SMALL_F_SIZE } from "../../../../consts/texts";
 
@@ -28,8 +28,15 @@ export const sliderStyles = StyleSheet.create({
     width,
     flex: 1,
     backgroundColor: GREY_LIGHT,
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    paddingBottom: 40,
     alignItems: "center",
+  },
+  sliderEmptyText: {
+    marginTop: 10,
+    fontSize: SMALL_F_SIZE,
+    fontFamily: "Gilroy-Medium",
+    color: GREY_DARK,
   },
   currentIndexContainer: {
     bottom: 15,

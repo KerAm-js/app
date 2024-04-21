@@ -30,6 +30,7 @@ export const userInfoStyles = StyleSheet.create({
     color: GREY_DARK,
     fontSize: SMALL_F_SIZE,
     fontFamily: 'Gilroy-Medium',
-    marginTop: 8
+    marginTop: 8,
+    marginBottom: 10,
   },
 });

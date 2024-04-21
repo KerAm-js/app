@@ -3,13 +3,16 @@ import { useState } from "react";
 import { searchUsersStyles } from "./styles";
 import UserCard from "../../../../components/UserCard/UserCard";
 import SearchBar from "../../../../UI/inputs/SearchBar/SearchBar";
-import { USERS_LIST } from "../../../../consts/devData";
 import { filterUsers } from "../../helpers/filterUsers";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 const SearchUsersModuleComponent = () => {
   const [search, setSearch] = useState("");
 
-  const filteredUsers = filterUsers(USERS_LIST, search);
+  const users = useSelector((state: RootState) => state.users);
+
+  const filteredUsers = filterUsers(users, search);
 
   return (
     <View style={searchUsersStyles.container}>

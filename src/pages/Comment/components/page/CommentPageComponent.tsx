@@ -4,17 +4,11 @@ import CommmentFormModule from "../../../../modules/CommentForm/index";
 import { FC } from "react";
 import { ICommentPageProps } from "./types";
 
-const CommentPageComponent: FC<ICommentPageProps> = ({
-  username,
-  userId,
-  defaultComment,
-}) => {
+const CommentPageComponent: FC<ICommentPageProps> = (props) => {
   return (
     <View style={commentPageStyles.container}>
       <CommmentFormModule.Component
-        username={username}
-        id={userId}
-        defaultComment={defaultComment}
+        {...props}
       />
     </View>
   );

@@ -7,6 +7,7 @@ export type TAdvertType = keyof IAdvertMap;
 interface IAdvert {
   id: string;
   type: string;
+  status: 'published' | 'stopped' | 'deleted',
   transactionType: string;
   title: string;
   userId: string;

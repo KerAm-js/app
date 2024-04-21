@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
@@ -6,22 +6,23 @@ import { useSelectionValidator } from "../../../../hooks/inputValidators/useSele
 import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { USER } from "../../../../consts/devData";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
+import { TDumpForm } from "./types";
 
-const DumpForm = () => {
-  const [type, selectType, unselectType, _, isTypeValid, typeError] =
+const DumpForm: FC<TDumpForm> = ({ submit }) => {
+  const [type, selectType, unselectType, clearType, isTypeValid, typeError] =
     useSelectionValidator({
       required: true,
       initValue: [INPUT_VALUES.dumpAdvertType[0]],
     });
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
-    minLength: 15,
+    minLength: 10,
   });
   const [
     wasteType,
     selectWasteType,
     unselectWasteType,
-    __,
+    clearWasteType,
     isWasteTypeValid,
     wasteTypeError,
   ] = useSelectionValidator({ required: true });
@@ -29,7 +30,7 @@ const DumpForm = () => {
     dangerClass,
     selectDangerClass,
     unselectDangerClass,
-    ___,
+    clearDangerClass,
     isDangerClassValid,
     dangerClassError,
   ] = useSelectionValidator({ required: true });
@@ -37,7 +38,7 @@ const DumpForm = () => {
     transport,
     selectTransport,
     unselectTransport,
-    ____,
+    clearTransport,
     isTransportValid,
     transportError,
   ] = useSelectionValidator({ required: true });
@@ -51,6 +52,7 @@ const DumpForm = () => {
     required: true,
     minValue: 0,
   });
+  const [paymentForI, setPaymentForI] = useState(0);
   const [paymentTypeI, setPaymentTypeI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
     useInputValidator({ required: true, initValue: USER.username });
@@ -171,10 +173,16 @@ const DumpForm = () => {
           value: price,
           onChangeText: onPriceChange,
           error: priceError,
-          label:
-            INPUT_VALUES.measureIn[measureInI] === "м3"
-              ? "Цена (руб/м3)"
-              : "Цена (руб/тонн)",
+          label: "Цена (руб)",
+        },
+        {
+          id: "paymentFor",
+          type: "segment",
+          values: INPUT_VALUES.paymentFor,
+          selectedIndex: paymentForI,
+          onChange: (evt) =>
+            setPaymentForI(evt.nativeEvent.selectedSegmentIndex),
+          label: "Оплата за",
         },
         {
           id: "paymentType",
@@ -223,21 +231,44 @@ const DumpForm = () => {
     isPhoneValid;
 
   const onSubmit = () => {
-    console.log({
-      type,
+    submit({
+      type: "dump",
       title,
-      wasteType,
-      dangerClass,
-      transport,
-      measureIn: INPUT_VALUES.measureIn[measureInI],
-      amount,
-      workMode: INPUT_VALUES.workMode[workModeIndex],
-      comment,
-      price,
-      paymentType: INPUT_VALUES.paymentType[paymentTypeI],
+      photos: [],
+      general: {
+        address: "Москва, Лефортово",
+        workMode: INPUT_VALUES.workMode[workModeIndex],
+        comment,
+      },
+      params: {
+        wasteType,
+        dangerClass,
+        transport,
+        measureIn: INPUT_VALUES.measureIn[measureInI],
+        amount,
+      },
+      price: {
+        price: Number(price),
+        paymentType: INPUT_VALUES.paymentType[paymentTypeI],
+      },
       username,
       phone,
     });
+    clearForm();
+  };
+
+  const clearForm = () => {
+    clearType();
+    onTitleChange("");
+    clearWasteType();
+    clearDangerClass();
+    clearTransport();
+    setMeasureInI(0);
+    onAmountCange("");
+    setWorkModeIndex(0);
+    setComment("");
+    onPriceChange("");
+    setPaymentTypeI(0);
   };
 
   return (

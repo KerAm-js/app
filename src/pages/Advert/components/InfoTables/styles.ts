@@ -10,8 +10,9 @@ export const infoTablesStyles = StyleSheet.create({
   },
   table: {
     borderRadius: BORDER_RADIUS_SMALL,
-    padding: 15,
+    padding: 12,
     paddingBottom: 10,
+    paddingTop: 15,
     backgroundColor: WHITE,
     marginBottom: 15,
   },
@@ -22,8 +23,8 @@ export const infoTablesStyles = StyleSheet.create({
   },
   tableRow: {
     flexDirection: 'row',
-    gap: 10,
-    marginBottom: 5
+    gap: 8,
+    marginBottom: 7,
   },
   rowTitle: {
     fontSize: SMALL_F_SIZE,

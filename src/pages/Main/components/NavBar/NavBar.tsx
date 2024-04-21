@@ -9,24 +9,18 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { USERS_LIST } from "../../../../consts/devData";
-import { TAdvert } from "../../../../types/Advert";
 import NavText from "../NavText/NavText";
 import { RU_LANG } from "../../../../consts/rulang";
 import { StatusBar } from "expo-status-bar";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 const NavBar: FC = () => {
   const { top } = useSafeAreaInsets();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const [adverts, setAdverts] = useState<Array<TAdvert>>([]);
-
-  useLayoutEffect(() => {
-    let ads: Array<TAdvert> = [];
-    USERS_LIST.forEach((user) => (ads = [...ads, ...user.adverts]));
-    setAdverts(ads);
-  }, []);
+  const adverts = useSelector((state: RootState) => state.adverts)
 
   return (
     <View style={[navBarStyles.container, { paddingTop: top < 15 ? 15 : top }]}>

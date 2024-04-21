@@ -1,6 +1,3 @@
-import { TAdvert } from "./Advert";
-import { IComment } from "./Comment";
-
 export interface IUser {
   id: string;
   phone: string;
@@ -9,7 +6,9 @@ export interface IUser {
   description: string;
   rating: number;
   ratesCount: number;
-  comments: Array<IComment>;
-  adverts: Array<TAdvert>;
+  comments: Array<string>;
+  adverts: Array<string>;
   avatar?: string;
 }
+
+

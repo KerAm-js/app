@@ -86,7 +86,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
   }, []);
   return (
     <>
-      <AnimatedStatusBar scrollY={scrollY} />
+      <AnimatedStatusBar photosLength={photos.length} scrollY={scrollY} />
       <Slider
         userId={userId}
         id={id}

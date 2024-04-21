@@ -10,4 +10,6 @@ export interface IDumpParams extends TParams {
   amount: number;
 }
 
-export interface IDumpPrice extends TPrice {}
+export interface IDumpPrice extends TPrice {
+  paymentFor: "Cмена" | "Час" | "м3" | "Тонна";
+}

@@ -3,9 +3,9 @@ import { IAwaitingCommentPageProps } from "../pages/AwaitingComment/components/p
 import { IChooseAdvertTypePageProps } from "../pages/ChooseAdvertType/components/page/types";
 import { ICommentPageProps } from "../pages/Comment/components/page/types";
 import { IModalProps } from "../pages/Modal/components/page/types";
-import { IMyAdvertsPageProps } from "../pages/MyAdverts/components/page/types";
 import { IMyCommentsPageProps } from "../pages/MyComments/components/MyCommentsPage/types";
 import { TAdvert } from "../types/Advert";
+import { IComment } from "../types/Comment";
 import { IUser } from "../types/User";
 
 export interface IAnimatedHeaderComponentProps {
@@ -21,14 +21,14 @@ export type RootStackParamList = {
   User: IUser;
   UserSearch: undefined;
   MyComments: IMyCommentsPageProps;
-  MyAdverts: IMyAdvertsPageProps;
+  MyAdverts: undefined;
   CommentsToMe: IMyCommentsPageProps;
   Comment: ICommentPageProps;
   Modal: IModalProps;
   Advert: TAdvert;
   AwaitingComment: IAwaitingCommentPageProps;
   UserComments: ICommentsModuleProps;
-  NewComment: IUser;
+  NewComment: Pick<IComment, "addresseeId" | "addresseeName">;
   ChooseAdvertType: IChooseAdvertTypePageProps;
   AdvertsList: Pick<TAdvert, "type">;
   NewAdvert: Pick<TAdvert, "type">;

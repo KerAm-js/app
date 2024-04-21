@@ -4,9 +4,9 @@ import { TInputValidator } from "./types";
 export const usePhoneValidator: TInputValidator = (props) => {
   const {initValue, required} = props || {}; 
   const [value, setValue] = useState(initValue || '');
-  const [isValid, setIsValid] = useState(!!initValue);
+  const [isValid, setIsValid] = useState(required ? !!initValue?.length : false);
   const [error, setError] = useState(
-    !initValue && required ? "Заполните данное поле" : ""
+    !initValue?.length && required ? "Заполните данное поле" : ""
   );
 
   const onChangeValue = (text: string) => {
@@ -43,5 +43,11 @@ export const usePhoneValidator: TInputValidator = (props) => {
     }
   };
 
-  return [value, onChangeValue, isValid, error];
+  const setInitial = () => {
+    setValue(initValue || "");
+    setIsValid(required ? !!initValue?.length : false);
+    setError(!initValue?.length && required ? "Заполните данное поле" : "");
+  }
+
+  return [value, onChangeValue, isValid, error, setInitial];
 };

@@ -73,7 +73,7 @@
       "price": {
         "price": "number",
         "paymentType": ["Наличные", "Безналичные", "Любой"],
-        "paymentFor": ["Смену", "Час", "м3/км", "т/км"]
+        "paymentFor": ["Смена", "Час", "м3/км", "т/км"]
       }
     },
     "DumpAdvert": {
@@ -84,5 +84,17 @@
       "type": "technic",
       "transactionType": ["buy", "sell"]
     }
+  },
+  "User": {
+    "id": "string",
+    "phone": "string",
+    "username": "string",
+    "email": "string",
+    "description": "string",
+    "rating": "number",
+    "ratesCount": "number",
+    "comments": "Array<IComment>",
+    "adverts": "Array<string>",
+    "avatar": "string | undefined"
   }
 }

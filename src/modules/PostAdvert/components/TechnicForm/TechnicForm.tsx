@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { TECHNICS, TECHNIC_PARAMS, TECHS_LIST } from "../../../../consts/data";
@@ -9,23 +9,30 @@ import { DATE_REGEX } from "../../../../consts/regex";
 import { USER } from "../../../../consts/devData";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
+import { TTechnicForm } from "./types";
 
-const TechnicForm = () => {
+const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
   const [typeI, setTypeI] = useState(0);
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
-    minLength: 15,
+    minLength: 10,
   });
   const [
     technicType,
     selectTechnicType,
     unselectTechnicType,
-    _,
+    clearTechnicType,
     isTechnicTypeValid,
     technicTypeError,
   ] = useSelectionValidator({ required: true });
   const [mark, onChangeMark] = useInputValidator();
   const [model, onModelChange] = useInputValidator();
+  const [prodYear, onProdYearChange, isProdYearValid, prodYearError] =
+    useInputValidator({
+      minLength: 4,
+      minValue: 1800,
+      maxValue: new Date().getFullYear(),
+    });
   const [weight, onWeightChange, isWeightValid, weightError] =
     useInputValidator({
       required: true,
@@ -111,12 +118,7 @@ const TechnicForm = () => {
   ] = useSelectionValidator({
     required: true,
   });
-  const [prodYear, onProdYearChange, isProdYearValid, prodYearError] =
-    useInputValidator({
-      minLength: 4,
-      minValue: 1800,
-      maxValue: new Date().getFullYear(),
-    });
+  const [loadingTypeI, setLoadingTypeI] = useState(0);
   const [
     equipment,
     selectEquipment,
@@ -125,7 +127,6 @@ const TechnicForm = () => {
     __,
     equipmentError,
   ] = useSelectionValidator({ multySelection: true });
-  const [loadingTypeI, setLoadingTypeI] = useState(0);
   const [images, setImages] = useState<string[]>([]);
   const [count, onCountChange, isCountValid, countError] = useInputValidator({
     required: true,
@@ -456,8 +457,8 @@ const TechnicForm = () => {
         {
           id: "rentalPeriod",
           type: "interval",
-          firstPlaceholder: "ДД.ММ.ГГГГ",
-          secondPlaceholder: "ДД.ММ.ГГГГ",
+          firstPlaceholder: "ГГГГ.ММ.ДД",
+          secondPlaceholder: "ГГГГ.ММ.ДД",
           firstValue: firstDate,
           secondValue: secondDate,
           onFirstValueChange: onFirstDateChange,
@@ -504,7 +505,7 @@ const TechnicForm = () => {
         {
           id: "paymentFor",
           type: "segment",
-          values: INPUT_VALUES.paymentFor,
+          values: INPUT_VALUES.paymentForTechnic,
           selectedIndex: paymentForI,
           onChange: (evt) =>
             setPaymentForI(evt.nativeEvent.selectedSegmentIndex),
@@ -557,61 +558,130 @@ const TechnicForm = () => {
     isPriceValid &&
     isUsernameValid &&
     isPhoneValid &&
-    isWeightValid &&
-    isHeightValid &&
-    isVolumeValid &&
-    isPassengersCountValid &&
-    isPipeLengthValid &&
-    isBoomLengthValid &&
-    isLiftingCapacityValid &&
-    isPerformanceValid &&
-    isCargoTypeValid &&
-    isRollersCountValid &&
-    isBodyLengthValid &&
-    isTrailerTypeValid;
+    (isWeightValid || !TECHNICS[technicType[0]].params.weight) &&
+    (isHeightValid || !TECHNICS[technicType[0]].params.height) &&
+    (isVolumeValid || !TECHNICS[technicType[0]].params.volume) &&
+    (isPassengersCountValid ||
+      !TECHNICS[technicType[0]].params.passengersCount) &&
+    (isPipeLengthValid || !TECHNICS[technicType[0]].params.pipeLength) &&
+    (isBoomLengthValid || !TECHNICS[technicType[0]].params.boomLength) &&
+    (isLiftingCapacityValid ||
+      !TECHNICS[technicType[0]].params.liftingCapacity) &&
+    (isPerformanceValid || !TECHNICS[technicType[0]].params.performance) &&
+    (isCargoTypeValid || !TECHNICS[technicType[0]].params.cargoType) &&
+    (isRollersCountValid || !TECHNICS[technicType[0]].params.rollersCount) &&
+    (isBodyLengthValid || !TECHNICS[technicType[0]].params.bodyLength) &&
+    (isTrailerTypeValid || !TECHNICS[technicType[0]].params.trailerType);
 
   const onSubmit = () => {
-    console.log({
-      type: INPUT_VALUES.technicAdvertType[typeI],
+    submit({
+      type: "technic",
+      transactionType: INPUT_VALUES.technicAdvertType[typeI],
       title,
-      technicType,
-      mark,
-      model,
-      prodYear,
-      weight,
-      height,
-      volume,
-      passengersCount,
-      pipeLength,
-      boomLength,
-      liftingCapacity,
-      performance,
-      cargoType,
-      rollerType: INPUT_VALUES.rollerType[rollersTypeI],
-      rollersCount,
-      sizeType: INPUT_VALUES.sizeType[sizeTypeI],
-      OSSIG: INPUT_VALUES.OSSIG[ossigI],
-      axesCount: INPUT_VALUES.axesCount[axesCountI],
-      bodyLength,
-      trailerType,
-      loadingType: INPUT_VALUES.loadingType[loadingTypeI],
-      equipment,
-      images,
-      count,
-      workMode: INPUT_VALUES.workMode[workModeIndex],
-      rentalPeriod:
-        firstDate && secondDate && isFirstDateValid && isSecondDateValid
-          ? firstDate + " - " + secondDate
+      equipment:
+        TECHNICS[technicType[0]]?.equipments.length !== 0
+          ? equipment
           : undefined,
-      rentalDaysCount,
-      comment,
-      price,
-      paymentFor: INPUT_VALUES.paymentFor[paymentForI],
-      paymentType: INPUT_VALUES.paymentType[paymentTypeI],
       username,
       phone,
+      photos: images,
+      general: {
+        count: Number(count),
+        workMode: INPUT_VALUES.workMode[workModeIndex],
+        rentalPeriod:
+          firstDate && secondDate && isFirstDateValid && isSecondDateValid
+            ? { from: new Date(firstDate).valueOf(), to: new Date(secondDate).valueOf() }
+            : undefined,
+        rentalDaysCount: Number(rentalDaysCount),
+        address: "Москва, Люблино",
+        comment,
+      },
+      params: {
+        technicType: technicType[0],
+        mark,
+        model,
+        prodYear,
+        weight: TECHNICS[technicType[0]].params.weight
+          ? Number(weight)
+          : undefined,
+        height: TECHNICS[technicType[0]].params.height
+          ? Number(height)
+          : undefined,
+        volume: TECHNICS[technicType[0]].params.volume
+          ? Number(volume)
+          : undefined,
+        passengersCount: TECHNICS[technicType[0]].params.passengersCount
+          ? Number(passengersCount)
+          : undefined,
+        pipeLength: TECHNICS[technicType[0]].params.pipeLength
+          ? Number(pipeLength)
+          : undefined,
+        boomLength: TECHNICS[technicType[0]].params.boomLength
+          ? Number(boomLength)
+          : undefined,
+        liftingCapacity: TECHNICS[technicType[0]].params.liftingCapacity
+          ? Number(liftingCapacity)
+          : undefined,
+        performance: TECHNICS[technicType[0]].params.performance
+          ? Number(performance)
+          : undefined,
+        cargoType: TECHNICS[technicType[0]].params.cargoType
+          ? cargoType
+          : undefined,
+        rollerType: TECHNICS[technicType[0]].params.rollerType
+          ? INPUT_VALUES.rollerType[rollersTypeI]
+          : undefined,
+        rollersCount: TECHNICS[technicType[0]].params.rollersCount
+          ? Number(rollersCount)
+          : undefined,
+        sizeType: TECHNICS[technicType[0]].params.sizeType
+          ? INPUT_VALUES.sizeType[sizeTypeI]
+          : undefined,
+        OSSIG: TECHNICS[technicType[0]].params.OSSIG
+          ? INPUT_VALUES.OSSIG[ossigI]
+          : undefined,
+        axesCount: TECHNICS[technicType[0]].params.axesCount
+          ? INPUT_VALUES.axesCount[axesCountI]
+          : undefined,
+        bodyLength: TECHNICS[technicType[0]].params.bodyLength
+          ? Number(bodyLength)
+          : undefined,
+        trailerType: TECHNICS[technicType[0]].params.trailerType
+          ? trailerType
+          : undefined,
+        loadingType: TECHNICS[technicType[0]].params.loadingType
+          ? INPUT_VALUES.loadingType[loadingTypeI]
+          : undefined,
+      },
+      price: {
+        price: Number(price),
+        paymentFor: INPUT_VALUES.paymentFor[paymentForI],
+        paymentType: INPUT_VALUES.paymentType[paymentTypeI],
+      },
     });
+    clearForm();
   };
+
+  const clearForm = () => {
+    clearParams();
+    setTypeI(0);
+    onTitleChange('');
+    clearTechnicType();
+    onChangeMark('');
+    onModelChange('');
+    onProdYearChange('');
+    unselectAllEquipments();
+    setImages([]);
+    onCountChange('');
+    setWorkModeIndex(0);
+    onFirstDateChange('');
+    onSecondDateChange('');
+    onRentalDaysCountChange('');
+    setComment('');
+    onPriceChange('');
+    setPaymentForI(0);
+    setPaymentTypeI(0);
+  }
 
   const clearParams = () => {
     onWeightChange("");
@@ -632,7 +702,9 @@ const TechnicForm = () => {
     setRollersTypeI(0);
   };
 
-  useEffect(() => {}, [technicType]);
+  useEffect(() => {
+    clearParams();
+  }, [technicType]);
 
   useEffect(() => {
     if (firstDate && isFirstDateValid && secondDate && isSecondDateValid) {

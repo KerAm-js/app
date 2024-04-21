@@ -3,16 +3,13 @@ import Comment from "../Comment/Comment";
 import { commentsModuleStyles } from "./styles";
 import { FC } from "react";
 import { ICommentsModuleProps } from "./types";
+import { useUserComments } from "../../../../hooks/store/useComments";
 
 const CommentsModuleComponent: FC<ICommentsModuleProps> = ({
   user,
   userRole,
 }) => {
-  const comments = user.comments.filter((comment) => {
-    return userRole === "adressee"
-      ? comment.adresseeId === user.id
-      : comment.authorId === user.id;
-  });
+  const comments = useUserComments({role: userRole, id: user.id, textOnly: true});
   return (
     <FlatList
       style={commentsModuleStyles.container}

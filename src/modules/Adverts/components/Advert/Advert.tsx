@@ -45,10 +45,7 @@ const Advert: FC<TAdvert> = (props) => {
   };
   const isLiked = useMemo(() => !!likes.find((item) => item === USER.id), []);
   const paramsArr = useMemo(() => {
-    const result: Array<[string, string]> = []
-    for (let param in params) {
-      result.push([param, params[param]])
-    }
+    const result: Array<[string, string]> = Object.entries(params);
     return result;
   }, []);
 
