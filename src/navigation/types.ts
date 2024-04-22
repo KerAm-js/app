@@ -2,7 +2,6 @@ import { ICommentsModuleProps } from "../modules/Comments/components/module/type
 import { IAwaitingCommentPageProps } from "../pages/AwaitingComment/components/page/types";
 import { IChooseAdvertTypePageProps } from "../pages/ChooseAdvertType/components/page/types";
 import { ICommentPageProps } from "../pages/Comment/components/page/types";
-import { IModalProps } from "../pages/Modal/components/page/types";
 import { IMyCommentsPageProps } from "../pages/MyComments/components/MyCommentsPage/types";
 import { TAdvert } from "../types/Advert";
 import { IComment } from "../types/Comment";
@@ -22,9 +21,10 @@ export type RootStackParamList = {
   UserSearch: undefined;
   MyComments: IMyCommentsPageProps;
   MyAdverts: undefined;
+  DeletedAdverts: undefined;
   CommentsToMe: IMyCommentsPageProps;
   Comment: ICommentPageProps;
-  Modal: IModalProps;
+  Modal: TAdvert;
   Advert: TAdvert;
   AwaitingComment: IAwaitingCommentPageProps;
   UserComments: ICommentsModuleProps;

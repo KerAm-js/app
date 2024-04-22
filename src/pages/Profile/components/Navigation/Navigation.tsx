@@ -59,6 +59,10 @@ const Navigation = () => {
               title: "Мои объявления",
               onPress: () => navigation.navigate("MyAdverts"),
             },
+            {
+              title: "Удалённые объявления",
+              onPress: () => navigation.navigate("DeletedAdverts"),
+            },
           ]}
         />
       </View>

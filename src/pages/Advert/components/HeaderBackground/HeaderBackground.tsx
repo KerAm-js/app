@@ -9,7 +9,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { animatedHeaderBackgroundStyles } from "./styles";
-import { IAnimatedHeaderComponentProps } from "../../types";
+import { IAnimatedHeaderComponentProps } from "../../../../navigation/types";
 
 const AnimatedHeaderBackground: FC<IAnimatedHeaderComponentProps> = ({
   scrollY,

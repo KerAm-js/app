@@ -1,19 +1,20 @@
 import { View } from "react-native";
 import AdvertsModule from "../../../../modules/Adverts";
-import { myAdvertsPageStyles } from "./styles";
+import { FC } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { USER } from "../../../../consts/devData";
 
-const MyAdvertsPageComponent = () => {
+const DeletedAdvertsPageComponent: FC = () => {
   const adverts = useSelector((state: RootState) => state.adverts);
 
-  const filtered = adverts.filter((ad) => ad.userId === USER.id && ad.status !== 'deleted');
+  const filtered = adverts.filter((ad) => ad.userId === USER.id && ad.status === 'deleted');
+  
   return (
-    <View style={myAdvertsPageStyles.container}>
+    <View>
       <AdvertsModule.Component data={filtered} />
     </View>
   );
 };
 
-export default MyAdvertsPageComponent;
+export default DeletedAdvertsPageComponent;

@@ -11,10 +11,10 @@ import Animated, {
 import { FC, useEffect, useRef } from "react";
 import { Dimensions, View } from "react-native";
 import LikeButton from "../../../../UI/buttons/Like/LikeButton";
-import AnimatedHeaderBackButton from "../../../../navigation/components/HeaderBack/HeaderBack";
-import AnimatedHeaderBackground from "../../../../navigation/components/HeaderBackground/HeaderBackground";
-import AnimatedHeaderRightButton from "../../../../navigation/components/HeaderRight/HeaderRight";
-import AnimatedHeaderTitle from "../../../../navigation/components/HeaderTitle/HeaderTitle";
+import AnimatedHeaderBackButton from "../HeaderBack/HeaderBack";
+import AnimatedHeaderBackground from "../HeaderBackground/HeaderBackground";
+import AnimatedHeaderRightButton from "../HeaderRight/HeaderRight";
+import AnimatedHeaderTitle from "../HeaderTitle/HeaderTitle";
 import { sliderStyles } from "../Slider/styles";
 import { IScrollWithSliderProps } from "./types";
 import AnimatedStatusBar from "../AnimatedStatusBar/AnimatedStatusBar";

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { TEXT_F_SIZE } from "../../../consts/texts";
+import { TEXT_F_SIZE } from "../../../../consts/texts";
 
 export const animatedHeaderTitleStyles = StyleSheet.create({
   title: {

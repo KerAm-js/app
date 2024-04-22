@@ -9,10 +9,10 @@ import Animated, {
 import { TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { useNavigation } from "@react-navigation/native";
-import { arrowLeftSvg } from "../../../assets/svg/arrowLeft";
+import { arrowLeftSvg } from "../../../../assets/svg/arrowLeft";
 import { animatedHeaderLeftStyles } from "./styles";
 import { IAnimatedHeaderBackButtonProps } from "./types";
-import { GREY_DARK, WHITE } from "../../../consts/colors";
+import { GREY_DARK, WHITE } from "../../../../consts/colors";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);

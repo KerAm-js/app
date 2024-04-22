@@ -7,7 +7,7 @@ const initialState: Array<TAdvert> = [
     id: "0",
     userId: "1",
     username: "ДунСтрой Групп",
-    status: 'published',
+    status: "published",
     userRating: 4.7,
     type: "technic",
     updatedAt: Date.now(),
@@ -53,7 +53,7 @@ const initialState: Array<TAdvert> = [
     id: "1",
     userId: "2",
     username: "User 1",
-    status: 'published',
+    status: "published",
     userRating: 3.7,
     type: "technic",
     updatedAt: Date.now() - 1000 * 3600,
@@ -101,7 +101,7 @@ const initialState: Array<TAdvert> = [
     id: "2",
     userId: "2",
     username: "User 1",
-    status: 'published',
+    status: "published",
     userRating: 3.7,
     type: "dump",
     updatedAt: Date.now() - 1000 * 3600,
@@ -117,7 +117,7 @@ const initialState: Array<TAdvert> = [
     price: {
       price: 10000,
       paymentType: "Наличные",
-      paymentFor: 'Тонна'
+      paymentFor: "Тонна",
     },
     params: {
       wasteType: MATERIALS_LIST[0],
@@ -136,8 +136,20 @@ const advertsSlice = createSlice({
     addAdvert: (state, action) => {
       state.push(action.payload);
     },
+    stopAdvert: (state, action) => {
+      const advert = state.find((advert) => advert.id === action.payload);
+      if (advert) advert.status = "stopped";
+    },
     deleteAdvert: (state, action) => {
-      return state.filter((advert) => advert.id !== action.payload);
+      const advert = state.find((advert) => advert.id === action.payload);
+      if (advert) advert.status = "deleted";
+    },
+    republishAdvert: (state, action) => {
+      const advert = state.find((advert) => advert.id === action.payload);
+      if (advert) {
+        advert.status = "published"
+        advert.updatedAt = Date.now();
+      };
     },
   },
 });

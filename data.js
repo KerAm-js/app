@@ -1,6 +1,4 @@
-import { ITechnicParams } from "../types/Technic";
-
-export const EQUIPMENTS = {
+const EQUIPMENTS = {
   leveller: "3D нивелир",
   cuttingBlade: "Режущий отвал",
   pushingBlade: "Толкающий отвал",
@@ -21,7 +19,7 @@ export const EQUIPMENTS = {
   waterDustSupression: "Водяное пылеподавление",
 };
 
-export const FRACTIONS = {
+const FRACTIONS = {
   fr5_20: "5-20",
   fr20_40: "20-40",
   fr40_70: "40-70",
@@ -31,23 +29,7 @@ export const FRACTIONS = {
   concreteScreening: "Отсев бетонный",
 };
 
-export const TRANSACTION_TYPES = {
-  "Сдать в аренду": "Аренда",
-  "Взять в аренду": "Нужна аренда",
-  "Отвал": "Отвал",
-  "Нужен отвал": "Нужен отвал",
-  "Вывоз": "Вывоз",
-  "Нужен вывоз": "Нужен вывоз",
-  "Купить": "Купля",
-  "Продать": "Продажа",
-}
-
-export const TECHNIC_PARAMS: {
-  [key in keyof ITechnicParams]: {
-    title: string;
-    measurement?: string;
-  };
-} = {
+const TECHNIC_PARAMS = {
   technicType: { title: "Вид техники" },
   weight: { title: "Вес", measurement: "тонн" },
   height: { title: "Высота", measurement: "м" },
@@ -68,15 +50,7 @@ export const TECHNIC_PARAMS: {
   loadingType: { title: "Тип погрузки" },
 };
 
-export const TECHNICS: {
-  [key: string]: {
-    params: {
-      [key in keyof Omit<ITechnicParams, "technicType">]: boolean | undefined;
-    };
-    equipments: Array<string>;
-    isTransport?: boolean;
-  };
-} = {
+const TECHNICS = {
   Автовышка: {
     equipments: [],
     params: { boomLength: true, liftingCapacity: true },
@@ -405,11 +379,7 @@ export const TECHNICS: {
   },
 };
 
-export const MATERIALS: {
-  [key: string]: {
-    fractions: Array<string>;
-  };
-} = {
+const MATERIALS = {
   "Асфальтная крошка": {
     fractions: [],
   },
@@ -473,20 +443,3 @@ export const MATERIALS: {
     ],
   },
 };
-
-const materialsList = (
-  Object.keys(MATERIALS) as Array<keyof typeof MATERIALS>
-).reduce((accumulator, current) => {
-  accumulator.push(current);
-  return accumulator;
-}, [] as Array<keyof typeof MATERIALS>);
-
-const technicsList = (
-  Object.keys(TECHNICS) as Array<keyof typeof TECHNICS>
-).reduce((accumulator, current) => {
-  accumulator.push(current);
-  return accumulator;
-}, [] as Array<keyof typeof TECHNICS>);
-
-export const TECHS_LIST = technicsList.map((item) => item.toString());
-export const MATERIALS_LIST = materialsList.map((item) => item.toString());

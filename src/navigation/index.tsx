@@ -7,7 +7,6 @@ import CommentPage from "../pages/Comment";
 import MyAdverts from "../pages/MyAdverts";
 import MyModal from "../pages/Modal";
 import AdvertPage from "../pages/Advert";
-import AnimatedHeaderBackButton from "./components/HeaderBack/HeaderBack";
 import AwaitingCommentPage from "../pages/AwaitingComment";
 import UserCommentsPage from "../pages/UserComments";
 import NewCommentPage from "../pages/NewComment";
@@ -22,7 +21,7 @@ import ProfilePage from "../pages/Profile";
 import RegisterPage from "../pages/Register";
 import UserPage from "../pages/User";
 import FilterPage from "../pages/Filter";
-import { View } from "react-native";
+import DeletedAdvertsPage from "../pages/DeletedAdverts";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -35,7 +34,7 @@ const RootNavigator = () => {
           headerBackVisible: false,
           headerTitleStyle: navigationStyles.title,
           headerStyle: navigationStyles.header,
-          headerLeft: () => <AnimatedHeaderBackButton />,
+          headerLeft: () => <AdvertPage.HeaderBack />,
         }}
       >
         <Stack.Screen
@@ -137,6 +136,13 @@ const RootNavigator = () => {
           }}
           name="MyAdverts"
           component={MyAdverts.Component}
+        />
+        <Stack.Screen
+          options={{
+            title: "Удалённые объявления",
+          }}
+          name="DeletedAdverts"
+          component={DeletedAdvertsPage.Component}
         />
         <Stack.Screen
           options={({ route }) => ({

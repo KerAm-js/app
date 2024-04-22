@@ -109,9 +109,7 @@ export const advertStyles = StyleSheet.create({
   },
   paramsContainer: {
     paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: GREY_LIGHT,
+    paddingTop: 10,
     flexWrap: 'wrap',
     flexDirection: "row",
   },
@@ -121,7 +119,7 @@ export const advertStyles = StyleSheet.create({
   },
   paymentFor: {
     fontSize: LABEL_F_SIZE,
-    fontFamily: "Gilroy-Semibold",
+    fontFamily: "Gilroy-Medium",
   },
   param: {
     backgroundColor: GREY_LIGHT,
@@ -147,7 +145,10 @@ export const advertStyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 15,
-    paddingTop: 7,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: GREY_LIGHT,
+    marginTop: 8,
   },
   advertInfo: {
     flexDirection: "row",

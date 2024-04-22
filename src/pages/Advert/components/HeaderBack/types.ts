@@ -1,4 +1,4 @@
-import { IAnimatedHeaderComponentProps } from "../../types";
+import { IAnimatedHeaderComponentProps } from "../../../../navigation/types";
 
 export interface IAnimatedHeaderBackButtonProps extends IAnimatedHeaderComponentProps {
   isCircle?: boolean;

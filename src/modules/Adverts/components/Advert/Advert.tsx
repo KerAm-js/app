@@ -5,7 +5,7 @@ import Rating from "../../../../UI/Rating/Rating";
 import { FC, useMemo } from "react";
 import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 import { advertStyles } from "./styles";
-import { BLACK_DARK, GREY_DARK, WHITE } from "../../../../consts/colors";
+import { BLACK_DARK, GREY_DARK, RED, WHITE } from "../../../../consts/colors";
 import Slider from "./Slider";
 import { pointSvg } from "../../../../assets/svg/point";
 import { SvgXml } from "react-native-svg";
@@ -20,6 +20,7 @@ import { TAdvert } from "../../../../types/Advert";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
+import { TRANSACTION_TYPES } from "../../../../consts/data";
 
 const Advert: FC<TAdvert> = (props) => {
   const {
@@ -36,12 +37,14 @@ const Advert: FC<TAdvert> = (props) => {
     general,
     params,
     price,
+    transactionType,
+    status,
   } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const openModal = () => {
-    navigation.navigate("Modal", { advertId: id });
+    navigation.navigate("Modal", props);
   };
   const isLiked = useMemo(() => !!likes.find((item) => item === USER.id), []);
   const paramsArr = useMemo(() => {
@@ -116,24 +119,44 @@ const Advert: FC<TAdvert> = (props) => {
         </View>
         <View style={advertStyles.bottomContainer}>
           <Text style={advertStyles.price}>
-            {price.price}{" "}
+            {price.price}
             <Text style={advertStyles.paymentFor}>
-              руб{type === "technic" ? " за " + price.paymentFor : null}
+              {" руб/" + price?.paymentFor.toLowerCase()}
             </Text>
           </Text>
-          <View style={advertStyles.advertInfo}>
-            <SvgXml xml={watchSvg(relevance.color)} width={12} height={12} />
-            <Text
-              style={[advertStyles.advertInfoText, { color: relevance.color }]}
-            >
-              {relevance.string}
-            </Text>
-            <SvgXml xml={eyeSvg(GREY_DARK)} width={12} height={12} />
-            <Text style={advertStyles.advertInfoText}>{views.length}</Text>
-            <SvgXml xml={likeFillSvg(GREY_DARK)} width={12} height={12} />
-            <Text style={advertStyles.advertInfoText}>{likes.length}</Text>
-          </View>
+          <Text style={advertStyles.paymentFor}>
+            {TRANSACTION_TYPES[transactionType]}
+          </Text>
         </View>
+        {status !== "deleted" && (
+          <View style={advertStyles.bottomContainer}>
+            {status === "stopped" ? (
+              <Text style={[advertStyles.paymentFor, { color: RED }]}>
+                Снято с публикации
+              </Text>
+            ) : (
+              <View style={advertStyles.advertInfo}>
+                <SvgXml
+                  xml={watchSvg(relevance.color)}
+                  width={12}
+                  height={12}
+                />
+                <Text
+                  style={[
+                    advertStyles.advertInfoText,
+                    { color: relevance.color },
+                  ]}
+                >
+                  {relevance.string}
+                </Text>
+                <SvgXml xml={eyeSvg(GREY_DARK)} width={12} height={12} />
+                <Text style={advertStyles.advertInfoText}>{views.length}</Text>
+                <SvgXml xml={likeFillSvg(GREY_DARK)} width={12} height={12} />
+                <Text style={advertStyles.advertInfoText}>{likes.length}</Text>
+              </View>
+            )}
+          </View>
+        )}
       </Pressable>
     </View>
   );
