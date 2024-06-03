@@ -7,28 +7,42 @@ import { SvgXml } from "react-native-svg";
 import { eyeSvg } from "../../../../assets/svg/eye";
 import { likeFillSvg } from "../../../../assets/svg/likeFill";
 import { GREY_DARK } from "../../../../consts/colors";
+import { TRANSACTION_TYPES } from "../../../../consts/data";
+import { getPriceString } from "../../../../modules/Adverts/helpers/getPaymentFor";
+import { TAdvert } from "../../../../types/Advert";
 
-const MainInfo: FC<IMainInfoProps> = ({
-  title,
-  price,
-  likes,
-  views,
-  updatedAt,
-}) => {
+const MainInfo: FC<TAdvert> = (props) => {
+  const { title, price, likes, views, updatedAt, transactionType } = props;
   const payment =
     price.paymentType === "Все" ? "нал/безнал" : price.paymentType;
 
   const relevance = getRelevanceObj(updatedAt);
 
+  const priceString = getPriceString(props);
+
   return (
     <View style={mainInfoStyles.container}>
       <Text style={mainInfoStyles.title}>{title}</Text>
+      <Text style={mainInfoStyles.subtitle}>
+        {TRANSACTION_TYPES[transactionType]}
+      </Text>
       <View style={mainInfoStyles.rowsContainer}>
         <View style={mainInfoStyles.row}>
-          <Text style={mainInfoStyles.price}>
-            {price.price + " руб/" + price?.paymentFor.toLowerCase()}
+          <View style={mainInfoStyles.pricesContainer}>
+            <Text style={mainInfoStyles.price}>
+              {priceString.first[0]}
+              {priceString.first[1]}
+            </Text>
+            {priceString.second && (
+              <Text style={mainInfoStyles.price}>
+                {priceString.second[0]}
+                {priceString.second[1]}
+              </Text>
+            )}
+          </View>
+          <Text style={[mainInfoStyles.infoText, { alignSelf: "flex-start" }]}>
+            {payment}
           </Text>
-          <Text style={mainInfoStyles.infoText}>{payment}</Text>
         </View>
         <View style={mainInfoStyles.row}>
           <Text style={[mainInfoStyles.infoText, { color: relevance.color }]}>

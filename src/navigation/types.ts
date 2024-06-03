@@ -8,7 +8,7 @@ import { IComment } from "../types/Comment";
 import { IUser } from "../types/User";
 
 export interface IAnimatedHeaderComponentProps {
-  scrollY?: {value: number};
+  scrollY?: { value: number };
 }
 
 export type RootStackParamList = {
@@ -32,5 +32,6 @@ export type RootStackParamList = {
   ChooseAdvertType: IChooseAdvertTypePageProps;
   AdvertsList: Pick<TAdvert, "type">;
   NewAdvert: Pick<TAdvert, "type">;
+  AdvertImages: Pick<TAdvert, "id"> & {isPhotosRequired: boolean};
   Filter: Pick<TAdvert, "type">;
 };

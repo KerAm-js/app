@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
@@ -42,17 +42,36 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
     isTransportValid,
     transportError,
   ] = useSelectionValidator({ required: true });
-  const [measureInI, setMeasureInI] = useState(0);
+  const [measureI, setMeasureI] = useState(0);
+  const [
+    coefficient,
+    onCoefficientChange,
+    isCoefficientValid,
+    coefficientError,
+  ] = useInputValidator({ required: true, minValue: 1, initValue: "1.5" });
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
     { required: true, minValue: 1 }
   );
   const [workModeIndex, setWorkModeIndex] = useState(0);
   const [comment, setComment] = useState("");
-  const [price, onPriceChange, isPriceValid, priceError] = useInputValidator({
+  const [
+    priceForWeight,
+    onPriceForWeightChange,
+    isPriceForWeightValid,
+    priceForWeightError,
+  ] = useInputValidator({
     required: true,
     minValue: 0,
   });
-  const [paymentForI, setPaymentForI] = useState(0);
+  const [
+    priceForVolume,
+    onPriceForVolumeChange,
+    isPriceForVolumeValid,
+    priceForVolumeError,
+  ] = useInputValidator({
+    required: true,
+    minValue: 0,
+  });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
     useInputValidator({ required: true, initValue: USER.username });
@@ -121,13 +140,12 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           label: "Вид транспорта",
         },
         {
-          id: "measureIn",
+          id: "measure",
           type: "segment",
-          values: INPUT_VALUES.measureIn,
-          selectedIndex: measureInI,
-          onChange: (evt) =>
-            setMeasureInI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Измерять в",
+          values: INPUT_VALUES.measure,
+          selectedIndex: measureI,
+          onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
+          label: "Измерять",
         },
         {
           id: "amount",
@@ -136,9 +154,18 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           error: amountError,
           value: amount,
           label:
-            INPUT_VALUES.measureIn[measureInI] === "м3"
+            INPUT_VALUES.measure[measureI] === "Объём"
               ? "Объём (м3)"
-              : "Вес (тонн)",
+              : "Вес (т)",
+          keyboardType: "decimal-pad",
+        },
+        {
+          id: "coefficient",
+          type: "input",
+          onChangeText: onCoefficientChange,
+          error: coefficientError,
+          value: coefficient,
+          label: "Коэффициент (вес/объём)",
           keyboardType: "decimal-pad",
         },
       ],
@@ -168,21 +195,24 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
       title: "Информация о цене",
       inputs: [
         {
-          id: "price",
+          id: "priceForWeight",
           type: "input",
-          value: price,
-          onChangeText: onPriceChange,
-          error: priceError,
-          label: "Цена (руб)",
+          value: priceForWeight,
+          onChangeText: onPriceForWeightChange,
+          error: priceForWeightError,
+          label: "Цена (руб/т)",
+          keyboardType: "decimal-pad",
+          editable: INPUT_VALUES.measure[measureI] === "Вес",
         },
         {
-          id: "paymentFor",
-          type: "segment",
-          values: INPUT_VALUES.paymentFor,
-          selectedIndex: paymentForI,
-          onChange: (evt) =>
-            setPaymentForI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Оплата за",
+          id: "priceForVolume",
+          type: "input",
+          value: priceForVolume,
+          onChangeText: onPriceForVolumeChange,
+          error: priceForVolumeError,
+          label: "Цена (руб/м3)",
+          keyboardType: "decimal-pad",
+          editable: INPUT_VALUES.measure[measureI] === "Объём",
         },
         {
           id: "paymentType",
@@ -226,35 +256,46 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
     isDangerClassValid &&
     isTransportValid &&
     isAmountValid &&
-    isPriceValid &&
+    isPriceForWeightValid &&
+    isPriceForVolumeValid &&
+    isCoefficientValid &&
     isUsernameValid &&
     isPhoneValid;
 
+  const transactionType = type[0];
+  const isPhotosAllowed =
+    transactionType === INPUT_VALUES.dumpAdvertType[0] ||
+    transactionType === INPUT_VALUES.dumpAdvertType[2];
+
   const onSubmit = () => {
-    submit({
-      type: "dump",
-      title,
-      photos: [],
-      general: {
-        address: "Москва, Лефортово",
-        workMode: INPUT_VALUES.workMode[workModeIndex],
-        comment,
+    submit(
+      {
+        type: "dump",
+        transactionType: type,
+        title,
+        photos: [],
+        general: {
+          address: "Москва, Лефортово",
+          workMode: INPUT_VALUES.workMode[workModeIndex],
+          comment,
+        },
+        params: {
+          wasteType,
+          dangerClass,
+          transport,
+          measure: INPUT_VALUES.measure[measureI],
+          amount,
+          coefficient,
+        },
+        price: {
+          price: Number(priceForWeight),
+          paymentType: INPUT_VALUES.paymentType[paymentTypeI],
+        },
+        username,
+        phone,
       },
-      params: {
-        wasteType,
-        dangerClass,
-        transport,
-        measureIn: INPUT_VALUES.measureIn[measureInI],
-        amount,
-      },
-      price: {
-        price: Number(price),
-        paymentType: INPUT_VALUES.paymentType[paymentTypeI],
-      },
-      username,
-      phone,
-    });
-    clearForm();
+      isPhotosAllowed
+    );
   };
 
   const clearForm = () => {
@@ -263,20 +304,43 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
     clearWasteType();
     clearDangerClass();
     clearTransport();
-    setMeasureInI(0);
+    setMeasureI(0);
     onAmountCange("");
     setWorkModeIndex(0);
     setComment("");
-    onPriceChange("");
+    onPriceForVolumeChange("");
+    onPriceForWeightChange("");
+    onCoefficientChange("");
     setPaymentTypeI(0);
   };
 
+  useEffect(() => {
+    if (
+      priceForWeight &&
+      coefficient &&
+      INPUT_VALUES.measure[measureI] === "Вес"
+    ) {
+      const priceVolume = Number(priceForWeight) * Number(coefficient);
+      onPriceForVolumeChange(Math.floor(priceVolume).toString());
+    }
+  }, [coefficient, priceForWeight]);
+
+  useEffect(() => {
+    if (
+      priceForVolume &&
+      coefficient &&
+      INPUT_VALUES.measure[measureI] === "Объём"
+    ) {
+      const priceWeight = Number(priceForVolume) / Number(coefficient);
+      onPriceForWeightChange(Math.floor(priceWeight).toString());
+    }
+  }, [priceForVolume]);
   return (
     <Form
       inputs={inputs}
       isFormValid={isFormValid}
       onSubmit={onSubmit}
-      submitTitle="Опубликовать"
+      submitTitle={isPhotosAllowed ? "Далее" : "Опубликовать"}
     />
   );
 };

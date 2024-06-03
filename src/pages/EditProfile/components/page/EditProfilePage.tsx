@@ -11,7 +11,7 @@ const EditProfilePageComponent = () => {
       keyboardVerticalOffset={headerHeight}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <ScrollView style={editProfilePageStyles.scrollView}>
+      <ScrollView showsVerticalScrollIndicator={false} style={editProfilePageStyles.scrollView}>
         <EditProfileModule.Component />
       </ScrollView>
     </KeyboardAvoidingView>

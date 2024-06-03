@@ -1,13 +1,20 @@
-import { IDumpGeneral, IDumpParams, IDumpPrice } from "./Dump";
-import { IMaterialGeneral, IMaterialParams, IMaterialPrice } from "./Material";
-import { ITechnicGeneral, ITechnicParams, ITechnincPrice } from "./Technic";
+import { IDumpGeneral, IDumpParams, IDumpPrice, TDumpTransactionType } from "./Dump";
+import { IMaterialGeneral, IMaterialParams, IMaterialPrice, TMaterialTransactionType } from "./Material";
+import {
+  ITechnicGeneral,
+  ITechnicParams,
+  ITechnicPrice,
+  TTechnicTransactionType,
+} from "./Technic";
+
+export type TAdvert = ITechnicAdvert | IDumpAdvert | IMaterialAdvert;
 
 export type TAdvertType = keyof IAdvertMap;
 
 interface IAdvert {
   id: string;
-  type: string;
-  status: 'published' | 'stopped' | 'deleted',
+  type: TAdvertType;
+  status: "published" | "stopped" | "deleted";
   transactionType: string;
   title: string;
   userId: string;
@@ -21,7 +28,7 @@ interface IAdvert {
 
 export interface ITechnicAdvert extends IAdvert {
   type: "technic";
-  transactionType: "Сдать в аренду" | "Взять в аренду";
+  transactionType: TTechnicTransactionType;
   general: IAdvertMap["technic"]["general"];
   params: IAdvertMap["technic"]["params"];
   price: IAdvertMap["technic"]["price"];
@@ -29,7 +36,7 @@ export interface ITechnicAdvert extends IAdvert {
 
 export interface IDumpAdvert extends IAdvert {
   type: "dump";
-  transactionType: "Отвал" | "Нужен отвал" | "Вывоз" | "Нужен вывоз";
+  transactionType: TDumpTransactionType;
   general: IAdvertMap["dump"]["general"];
   params: IAdvertMap["dump"]["params"];
   price: IAdvertMap["dump"]["price"];
@@ -37,19 +44,17 @@ export interface IDumpAdvert extends IAdvert {
 
 export interface IMaterialAdvert extends IAdvert {
   type: "material";
-  transactionType: "Купить" | "Продать";
+  transactionType: TMaterialTransactionType;
   general: IAdvertMap["material"]["general"];
   params: IAdvertMap["material"]["params"];
   price: IAdvertMap["material"]["price"];
 }
 
-export type TAdvert = ITechnicAdvert | IDumpAdvert | IMaterialAdvert;
-
 interface IAdvertMap {
   technic: {
     general: ITechnicGeneral;
     params: ITechnicParams;
-    price: ITechnincPrice;
+    price: ITechnicPrice;
   };
   material: {
     general: IMaterialGeneral;

@@ -78,7 +78,7 @@
 //     wasteType: string;
 //     dangerClass: "1 класс" | "2 класс" | "3 класс" | "4 класс" | "5 класс";
 //     transport: "Самосвал 3-х осный" | "Самосвал 4-х осный" | "Тонар";
-//     measureIn: "Тонны" | "м3";
+//     measure: "Тонны" | "м3";
 //     amount: number;
 //   };
 //   price: {
@@ -102,7 +102,7 @@
 //   params: {
 //     materialType: string;
 //     transport: "Самосвал 3-х осный" | "Самосвал 4-х осный" | "Тонар";
-//     measureIn: "Тонны" | "м3";
+//     measure: "Тонны" | "м3";
 //     amount: number;
 //     fractions:
 //       | "5-20"

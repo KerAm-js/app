@@ -6,4 +6,7 @@ export const scrollWithSliderStyles = StyleSheet.create({
     width: "100%",
     backgroundColor: GREY_LIGHT,
   },
+  bottomView: {
+    height: 200
+  }
 })

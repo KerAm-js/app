@@ -223,7 +223,7 @@ const TechnicForm = () => {
   ] = useSelectionValidator({
     required: true,
     multySelection: true,
-    initValue: [INPUT_VALUES.paymentFor[0]],
+    initValue: [INPUT_VALUES.paymentForTechnic[0]],
   });
   const [
     priceForShift1,
@@ -564,7 +564,7 @@ const TechnicForm = () => {
         {
           id: "paymentFor",
           type: "selection",
-          itemsList: INPUT_VALUES.paymentFor,
+          itemsList: INPUT_VALUES.paymentForTechnic,
           value: paymentFor,
           selectItem: selectPaymentFor,
           unselectItem: unselectPaymentFor,
@@ -576,7 +576,7 @@ const TechnicForm = () => {
         {
           id: "priceForShift",
           type: "interval",
-          hidden: !paymentFor.includes(INPUT_VALUES.paymentFor[0]),
+          hidden: !paymentFor.includes(INPUT_VALUES.paymentForTechnic[0]),
           firstValue: priceForShift1,
           secondValue: priceForShift2,
           onFirstValueChange: onPriceForShift1Change,
@@ -587,7 +587,7 @@ const TechnicForm = () => {
         {
           id: "priceForHour",
           type: "interval",
-          hidden: !paymentFor.includes(INPUT_VALUES.paymentFor[1]),
+          hidden: !paymentFor.includes(INPUT_VALUES.paymentForTechnic[1]),
           firstValue: priceForHour1,
           secondValue: priceForHour2,
           onFirstValueChange: onPriceForHour1Change,
@@ -598,7 +598,7 @@ const TechnicForm = () => {
         {
           id: "priceForVolumeDistance",
           type: "interval",
-          hidden: !paymentFor.includes(INPUT_VALUES.paymentFor[2]),
+          hidden: !paymentFor.includes(INPUT_VALUES.paymentForTechnic[2]),
           firstValue: priceForVolumeDistance1,
           secondValue: priceForVolumeDistance2,
           onFirstValueChange: onPriceForVolumeDistance1Change,
@@ -609,7 +609,7 @@ const TechnicForm = () => {
         {
           id: "priceForWeightDistance",
           type: "interval",
-          hidden: !paymentFor.includes(INPUT_VALUES.paymentFor[3]),
+          hidden: !paymentFor.includes(INPUT_VALUES.paymentForTechnic[3]),
           firstValue: priceForWeightDistance1,
           secondValue: priceForWeightDistance2,
           onFirstValueChange: onPriceForWeightDistance1Change,
@@ -649,7 +649,9 @@ const TechnicForm = () => {
     isPriceForWeightDistance2Valid;
 
   const onSubmit = () => {
-    console.log({});
+    console.log(
+      
+    );
   };
 
   return (

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TAdvert } from "../../../types/Advert";
 import { MATERIALS_LIST } from "../../../consts/data";
 
@@ -117,14 +117,14 @@ const initialState: Array<TAdvert> = [
     price: {
       price: 10000,
       paymentType: "Наличные",
-      paymentFor: "Тонна",
     },
     params: {
       wasteType: MATERIALS_LIST[0],
       dangerClass: "1 класс",
       transport: "Самосвал 3-х осный",
-      measureIn: "Тоннах",
+      measure: "weight",
       amount: 2,
+      coefficient: 1.6,
     },
   },
 ];
@@ -135,6 +135,13 @@ const advertsSlice = createSlice({
   reducers: {
     addAdvert: (state, action) => {
       state.push(action.payload);
+    },
+    addPhotosToAdvert: (
+      state,
+      { payload }: PayloadAction<Pick<TAdvert, "id" | "photos">>
+    ) => {
+      const advert = state.find((advert) => advert.id === payload.id);
+      if (advert) advert.photos = payload.photos;
     },
     stopAdvert: (state, action) => {
       const advert = state.find((advert) => advert.id === action.payload);
@@ -147,9 +154,9 @@ const advertsSlice = createSlice({
     republishAdvert: (state, action) => {
       const advert = state.find((advert) => advert.id === action.payload);
       if (advert) {
-        advert.status = "published"
+        advert.status = "published";
         advert.updatedAt = Date.now();
-      };
+      }
     },
   },
 });

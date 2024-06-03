@@ -21,7 +21,7 @@ const SelectionMenu: FC<TSelectionMenuProps> = ({
 
   const selectedItemsContainerStyle = useAnimatedStyle(() => {
     return {
-      height: withTiming(isShown ? 44 : 0, {duration: 150}),
+      height: withTiming(isShown ? 44 : 0, { duration: 150 }),
       opacity: isOpened.value,
       borderBottomWidth: withTiming(isShown ? 1 : 0),
     };

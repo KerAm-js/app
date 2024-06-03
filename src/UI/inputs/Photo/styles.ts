@@ -12,8 +12,8 @@ export const photoInputStyles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     borderStyle: "dashed",
     borderWidth: 1,
     borderColor: GREY_DARK,
@@ -43,9 +43,8 @@ export const photoInputStyles = StyleSheet.create({
     justifyContent: "center",
   },
   imageContainer: {
-    width: 100,
-    height: 100,
-
+    width: 150,
+    height: 150,
   },
   image: {
     borderRadius: BORDER_RADIUS_SMALL

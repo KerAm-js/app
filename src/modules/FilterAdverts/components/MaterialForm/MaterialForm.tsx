@@ -35,7 +35,7 @@ const MaterialForm = () => {
     isFractionsValid,
     fractionsError,
   ] = useSelectionValidator({ multySelection: true });
-  const [measureInI, setMeasureInI] = useState(0);
+  const [measureI, setMeasureI] = useState(0);
   const [
     amountInWeight1,
     onAmountInWeight1Change,
@@ -63,10 +63,30 @@ const MaterialForm = () => {
 
   const [workModeIndex, setWorkModeIndex] = useState(0);
   const [deliveryI, setDeliveryI] = useState(0);
-  const [price1, onPrice1Change, isPrice1Valid, price1Error] =
-    useInputValidator({ minValue: 1 });
-  const [price2, onPrice2Change, isPrice2Valid, price2Error] =
-    useInputValidator({ minValue: 1 });
+  const [
+    priceForWeight1,
+    onPriceForWeight1Change,
+    isPriceForWeight1Valid,
+    priceForWeight1Error,
+  ] = useInputValidator({ minValue: 1 });
+  const [
+    priceForWeight2,
+    onPriceForWeight2Change,
+    isPriceForWeight2Valid,
+    priceForWeight2Error,
+  ] = useInputValidator({ minValue: 1 });
+  const [
+    priceForVolume1,
+    onPriceForVolume1Change,
+    isPriceForVolume1Valid,
+    priceForVolume1Error,
+  ] = useInputValidator({ minValue: 1 });
+  const [
+    priceForVolume2,
+    onPriceForVolume2Change,
+    isPriceForVolume2Valid,
+    priceForVolume2Error,
+  ] = useInputValidator({ minValue: 1 });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
 
   const inputs: TFormInputsArray = [
@@ -76,7 +96,7 @@ const MaterialForm = () => {
         {
           id: "type",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.materialAdvertType,
+          values: INPUT_VALUES.materialAdvertType,
           selectedIndex: typeI,
           onChange: (evt) => setTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Тип объявления",
@@ -124,29 +144,28 @@ const MaterialForm = () => {
           label: "Фракции",
         },
         {
-          id: "measureIn",
+          id: "measure",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.measureIn,
-          selectedIndex: measureInI,
-          onChange: (evt) =>
-            setMeasureInI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Измерять в",
+          values: INPUT_VALUES_WITH_ALL.measure,
+          selectedIndex: measureI,
+          onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
+          label: "Измерять",
         },
         {
           id: "amountInWeight",
           type: "interval",
-          hidden: INPUT_VALUES_WITH_ALL.measureIn[measureInI] === 'м3',
+          hidden: INPUT_VALUES_WITH_ALL.measure[measureI] === "Объём",
           firstValue: amountInWeight1,
           secondValue: amountInWeight2,
           onFirstValueChange: onAmountInWeight1Change,
           onSecondValueChange: onAmountInWeight2Change,
           error: amountInWeight1Error || amountInWeight2Error,
-          label: "Вес (тонн)",
+          label: "Вес (т)",
         },
         {
           id: "amountInVolume",
           type: "interval",
-          hidden: INPUT_VALUES_WITH_ALL.measureIn[measureInI] === 'Тоннах',
+          hidden: INPUT_VALUES_WITH_ALL.measure[measureI] === "Вес",
           firstValue: amountInVolume1,
           secondValue: amountInVolume2,
           onFirstValueChange: onAmountInVolume1Change,
@@ -162,7 +181,7 @@ const MaterialForm = () => {
         {
           id: "workMode",
           type: "segment",
-          values: INPUT_VALUES.workMode,
+          values: INPUT_VALUES_WITH_ALL.workMode,
           selectedIndex: workModeIndex,
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
@@ -182,17 +201,28 @@ const MaterialForm = () => {
       title: "Информация о цене",
       inputs: [
         {
-          id: "price",
+          id: "priceForWeight",
           type: "interval",
-          firstValue: price1,
-          secondValue: price2,
-          onFirstValueChange: onPrice1Change,
-          onSecondValueChange: onPrice2Change,
-          error: price1Error || price2Error,
-          label:
-            INPUT_VALUES.measureIn[measureInI] === "м3"
-              ? "Цена (руб/м3)"
-              : "Цена (руб/тонн)",
+          hidden:
+            INPUT_VALUES_WITH_ALL.measure[measureI] === "Объём",
+          firstValue: priceForWeight1,
+          secondValue: priceForWeight2,
+          onFirstValueChange: onPriceForWeight1Change,
+          onSecondValueChange: onPriceForWeight2Change,
+          error: priceForWeight1Error || priceForWeight2Error,
+          label: "Цена (руб/(т/км))",
+        },
+        {
+          id: "priceForVolume",
+          type: "interval",
+          hidden:
+            INPUT_VALUES_WITH_ALL.measure[measureI] === "Вес",
+          firstValue: priceForVolume1,
+          secondValue: priceForVolume2,
+          onFirstValueChange: onPriceForVolume1Change,
+          onSecondValueChange: onPriceForVolume2Change,
+          error: priceForVolume1Error || priceForVolume2Error,
+          label: "Цена (руб/(м3/км))",
         },
         {
           id: "paymentType",
@@ -212,22 +242,24 @@ const MaterialForm = () => {
     isAmountInWeight2Valid &&
     isAmountInVolume1Valid &&
     isAmountInVolume2Valid &&
-    isPrice1Valid &&
-    isPrice2Valid &&
-    isTransportValid &&
-    isMaterialTypeValid;
+    isPriceForVolume1Valid &&
+    isPriceForVolume2Valid &&
+    isPriceForWeight1Valid &&
+    isPriceForWeight2Valid;
 
   const onSubmit = () => {
     console.log({
-      type: INPUT_VALUES_WITH_ALL.materialAdvertType[typeI],
+      type: INPUT_VALUES.materialAdvertType[typeI],
       materialType,
       transport,
       amountInWeight1,
       amountInWeight2,
       amountInVolume1,
       amountInVolume2,
-      price1,
-      price2,
+      priceForVolume1,
+      priceForVolume2,
+      priceForWeight1,
+      priceForWeight2
     });
   };
 

@@ -1,3 +1,6 @@
 export type TDumpForm = {
-  submit: (a: object) => void
-}
+  submit: (
+    ad: object,
+    isPhotosAllowed: boolean,
+  ) => void;
+};

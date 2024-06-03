@@ -35,7 +35,8 @@ const Selection = withLabelAndError<TSelectionProps>(
 
     const menuHeight =
       !!value.length && multySelection && itemsList.length > 10 ? 44 : 0;
-    const baseHeight = itemsList.length > 8 ? 326 : INPUT_HEIGHT + 46 * itemsList.length;
+    const baseHeight =
+      itemsList.length > 8 ? 326 : INPUT_HEIGHT + 46 * itemsList.length;
 
     const toggleHeight = () => {
       if (isOpened.value) {
@@ -150,6 +151,7 @@ const Selection = withLabelAndError<TSelectionProps>(
           )}
           <Animated.ScrollView
             style={[selectionStyles.scrollView, scrollViewStyle]}
+            nestedScrollEnabled
           >
             {filteredList.current.length ? (
               filteredList.current.map((item, index) => {

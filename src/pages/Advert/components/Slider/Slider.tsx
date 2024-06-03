@@ -3,10 +3,11 @@ import {
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
   Text,
   View,
 } from "react-native";
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import React, { FC, useCallback, useMemo, useState } from "react";
 import { SvgXml } from "react-native-svg";
 import { GREY_DARK } from "../../../../consts/colors";
 import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeGetters";
@@ -19,12 +20,12 @@ import Animated, {
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import LikeButton from "../../../../UI/buttons/Like/LikeButton";
-import { USER } from "../../../../consts/devData";
+// import { USER } from "../../../../consts/devData";
+// import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 
 const Slider: FC<ISliderProps> = ({
-  id,
-  userId,
+  // id,
+  // userId,
   likes,
   photos,
   type,
@@ -33,7 +34,7 @@ const Slider: FC<ISliderProps> = ({
 }) => {
   const [currentSlide, setCurrentSlider] = useState(1);
   const insets = useSafeAreaInsets();
-  const isLiked = useMemo(() => !!likes.find((item) => item === USER.id), []);
+  // const isLiked = useMemo(() => !!likes.find((item) => item === USER.id), []);
 
   const { width: windowWidth } = Dimensions.get("window");
 
@@ -147,7 +148,7 @@ const Slider: FC<ISliderProps> = ({
           onPress={onLike}
         />
       </View> */}
-      {!!photos.length && (
+      {!!photos.length && Platform.OS === 'ios' && (
         <LinearGradient
           colors={["rgba(0, 0, 0, 0.65)", "rgba(0, 0, 0, 0)"]}
           style={[sliderStyles.shadow, { height: insets.top + 20 }]}

@@ -35,7 +35,7 @@ const PhotoInput: FC<IPhotoInputProps> = ({
   };
 
   return (
-    <ScrollView horizontal contentContainerStyle={photoInputStyles.container}>
+    <ScrollView showsHorizontalScrollIndicator={false} horizontal contentContainerStyle={photoInputStyles.container}>
       {new Array(photosCount).fill(0).map((_, i) => {
         if (!!images[i]) {
           return (
@@ -43,8 +43,8 @@ const PhotoInput: FC<IPhotoInputProps> = ({
               <Image
                 style={photoInputStyles.image}
                 source={{ uri: images[i] }}
-                width={100}
-                height={100}
+                width={150}
+                height={150}
               />
               <Pressable
                 onPress={() => deleteImage(i)}

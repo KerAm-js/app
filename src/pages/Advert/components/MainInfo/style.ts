@@ -12,6 +12,13 @@ export const mainInfoStyles = StyleSheet.create({
     fontFamily: 'Gilroy-Bold',
     paddingHorizontal: SCREEN_PADDING,
   },
+  subtitle: {
+    fontSize: TEXT_F_SIZE,
+    fontFamily: 'Gilroy-Bold',
+    paddingHorizontal: SCREEN_PADDING,
+    marginTop: 10,
+    color: GREY_DARK
+  },
   rowsContainer: {
     marginVertical: 15,
     paddingHorizontal: SCREEN_PADDING,
@@ -26,6 +33,9 @@ export const mainInfoStyles = StyleSheet.create({
     borderBottomColor: GREY_MIDDLE,
     borderBottomWidth: 1,
     minHeight: 40,
+  },
+  pricesContainer: {
+    gap: 8
   },
   price: {
     fontSize: TEXT_F_SIZE,

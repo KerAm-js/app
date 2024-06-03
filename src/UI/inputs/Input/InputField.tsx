@@ -1,12 +1,7 @@
 import { Pressable, TextInput, View } from "react-native";
 import { IInputProps } from "./types";
 import { inputStyles } from "./styles";
-import {
-  BLUE,
-  GREY_DARK,
-  RED,
-  WHITE,
-} from "../../../consts/colors";
+import { BLUE, GREY_DARK, RED, WHITE } from "../../../consts/colors";
 import { FC, useState } from "react";
 import { TWithLabelAndErrorChildrenProps } from "../../../components/HOC/WithLabelAndError/types";
 import { SvgXml } from "react-native-svg";
@@ -44,13 +39,11 @@ const InputField: FC<IInputProps & TWithLabelAndErrorChildrenProps> = ({
         inputStyles.container,
         flexed && { flex: 1 },
         errorShown && { borderColor: RED },
+        props.editable === false && { opacity: 0.5 },
       ]}
     >
       <TextInput
-        style={[
-          inputStyles.input,
-          props.editable === false && { color: GREY_DARK },
-        ]}
+        style={[inputStyles.input]}
         onFocus={onFocus}
         onBlur={onBlur}
         placeholderTextColor={GREY_DARK}
@@ -64,11 +57,16 @@ const InputField: FC<IInputProps & TWithLabelAndErrorChildrenProps> = ({
       />
       {value &&
         (secureTextEntry === undefined ? (
-          <Pressable style={inputStyles.clearInputButton} onPress={clearInput}>
-            <View style={inputStyles.clearInputCircle}>
-              <SvgXml xml={cancelSvg(WHITE)} width={8} height={8} />
-            </View>
-          </Pressable>
+          props.editable && (
+            <Pressable
+              style={inputStyles.clearInputButton}
+              onPress={clearInput}
+            >
+              <View style={inputStyles.clearInputCircle}>
+                <SvgXml xml={cancelSvg(WHITE)} width={8} height={8} />
+              </View>
+            </Pressable>
+          )
         ) : (
           <Pressable
             style={inputStyles.clearInputButton}

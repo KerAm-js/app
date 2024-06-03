@@ -9,7 +9,6 @@ import { BLACK_DARK, GREY_DARK, RED, WHITE } from "../../../../consts/colors";
 import Slider from "./Slider";
 import { pointSvg } from "../../../../assets/svg/point";
 import { SvgXml } from "react-native-svg";
-import Param from "./Param";
 import { watchSvg } from "../../../../assets/svg/watch";
 import { eyeSvg } from "../../../../assets/svg/eye";
 import { likeFillSvg } from "../../../../assets/svg/likeFill";
@@ -21,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { TRANSACTION_TYPES } from "../../../../consts/data";
+import { getPriceString } from "../../helpers/getPaymentFor";
 
 const Advert: FC<TAdvert> = (props) => {
   const {
@@ -47,10 +47,10 @@ const Advert: FC<TAdvert> = (props) => {
     navigation.navigate("Modal", props);
   };
   const isLiked = useMemo(() => !!likes.find((item) => item === USER.id), []);
-  const paramsArr = useMemo(() => {
-    const result: Array<[string, string]> = Object.entries(params);
-    return result;
-  }, []);
+  // const paramsArr = useMemo(() => {
+  //   const result: Array<[string, string]> = Object.entries(params);
+  //   return result;
+  // }, []);
 
   const onLike = (value: boolean) => {
     console.log(
@@ -61,6 +61,8 @@ const Advert: FC<TAdvert> = (props) => {
   const relevance = getRelevanceObj(updatedAt);
 
   const goToAdvertPage = () => navigation.navigate("Advert", props);
+
+  const priceString = getPriceString(props);
 
   return (
     <View style={advertStyles.container}>
@@ -97,7 +99,7 @@ const Advert: FC<TAdvert> = (props) => {
                   "rgba(0, 0, 0, 0.6)",
                   "rgba(0, 0, 0, 0.85)",
                 ]
-              : []
+              : ["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0)"]
           }
           style={advertStyles.titleBackdrop}
         >
@@ -112,18 +114,28 @@ const Advert: FC<TAdvert> = (props) => {
         </LinearGradient>
       </View>
       <Pressable onPress={goToAdvertPage}>
-        <View style={advertStyles.paramsContainer}>
+        {/* <View style={advertStyles.paramsContainer}>
           {paramsArr.map((entry) => (
             <Param key={entry[0]} param={entry[0]} content={String(entry[1])} />
           ))}
-        </View>
-        <View style={advertStyles.bottomContainer}>
-          <Text style={advertStyles.price}>
-            {price.price}
-            <Text style={advertStyles.paymentFor}>
-              {" руб/" + price?.paymentFor.toLowerCase()}
+        </View> */}
+        <View style={advertStyles.priceContainer}>
+          <View>
+            <Text style={advertStyles.price}>
+              {priceString.first[0]}
+              <Text style={advertStyles.paymentFor}>
+                {priceString.first[1]}
+              </Text>
             </Text>
-          </Text>
+            {priceString.second && (
+              <Text style={advertStyles.price}>
+                {priceString.second[0]}
+                <Text style={advertStyles.paymentFor}>
+                  {priceString.second[1]}
+                </Text>
+              </Text>
+            )}
+          </View>
           <Text style={advertStyles.paymentFor}>
             {TRANSACTION_TYPES[transactionType]}
           </Text>

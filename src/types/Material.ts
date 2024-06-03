@@ -1,13 +1,16 @@
 import { TGeneral, TParams, TPrice } from "./others";
 
+export type TMaterialTransactionType = "Купить" | "Продать";
+
 export interface IMaterialGeneral extends TGeneral {
   delivery: "С доставкой" | "На самовывоз";
 }
 
 export interface IMaterialParams extends TParams {
   materialType: string;
+  coefficient: number;
   transport: "Самосвал 3-х осный" | "Самосвал 4-х осный" | "Тонар";
-  measureIn: "Тоннах" | "м3";
+  measure: "weight" | "volume";
   amount: number;
   fractions:
     | "5-20"
@@ -20,5 +23,4 @@ export interface IMaterialParams extends TParams {
 }
 
 export interface IMaterialPrice extends TPrice {
-  paymentFor: "Cмена" | "Час" | "м3" | "Тонна";
 }

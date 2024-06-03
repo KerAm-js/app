@@ -6,7 +6,7 @@ import { newAdvertPageStyles } from "./styles";
 
 const NewAdvertPageComponent: FC<Pick<TAdvert, "type">> = ({ type }) => {
   return (
-    <ScrollView style={newAdvertPageStyles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={newAdvertPageStyles.container}>
       <PostAdvertModule.Component type={type} />
       <View style={{ height: 100 }} />
     </ScrollView>

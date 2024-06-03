@@ -7,16 +7,23 @@ import { useActions } from "../../../../hooks/store/useActions";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { USER } from "../../../../consts/devData";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
 
 const PostAdvertModuleComponent: FC<Pick<TAdvert, "type">> = ({ type }) => {
   const { addAdvert } = useActions();
   const adverts = useSelector((state: RootState) => state.adverts);
-  
-  const onSubmit = (ad: object) => {
+
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const onSubmit = (ad: object, isPhotosAllowed: boolean) => {
+    const id = adverts.length.toString();
     addAdvert({
       ...ad,
       type,
-      id: adverts.length.toString(),
+      id,
       likes: [],
       views: [],
       userId: USER.id,
@@ -24,6 +31,14 @@ const PostAdvertModuleComponent: FC<Pick<TAdvert, "type">> = ({ type }) => {
       username: USER.username,
       updatedAt: Date.now(),
     });
+    if (isPhotosAllowed) {
+      navigation.navigate("AdvertImages", {
+        id,
+        isPhotosRequired: type === "technic",
+      });
+    } else {
+      navigation.navigate("Profile");
+    }
   };
   switch (type) {
     case "technic":

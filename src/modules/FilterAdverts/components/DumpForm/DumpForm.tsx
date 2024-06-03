@@ -3,7 +3,7 @@ import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import { INPUT_VALUES } from "../../../../consts/inputValues";
+import { INPUT_VALUES, INPUT_VALUES_WITH_ALL } from "../../../../consts/inputValues";
 
 const DumpForm = () => {
   const [type, selectType, unselectType, _, isTypeValid, typeError] =
@@ -35,11 +35,31 @@ const DumpForm = () => {
     isTransportValid,
     transportError,
   ] = useSelectionValidator({ multySelection: true });
-  const [measureInI, setMeasureInI] = useState(0);
-  const [amount1, onAmount1Change, isAmount1Valid, amount1Error] =
-  useInputValidator({ minValue: 1 });
-  const [amount2, onAmount2Change, isAmount2Valid, amount2Error] =
-  useInputValidator({ minValue: 1 });
+  const [measureI, setMeasureI] = useState(0);
+  const [
+    amountInWeight1,
+    onAmountInWeight1Change,
+    isAmountInWeight1Valid,
+    amountInWeight1Error,
+  ] = useInputValidator({ minValue: 1 });
+  const [
+    amountInWeight2,
+    onAmountInWeight2Change,
+    isAmountInWeight2Valid,
+    amountInWeight2Error,
+  ] = useInputValidator({ minValue: 1 });
+  const [
+    amountInVolume1,
+    onAmountInVolume1Change,
+    isAmountInVolume1Valid,
+    amountInVolume1Error,
+  ] = useInputValidator({ minValue: 1 });
+  const [
+    amountInVolume2,
+    onAmountInVolume2Change,
+    isAmountInVolume2Valid,
+    amountInVolume2Error,
+  ] = useInputValidator({ minValue: 1 });
 
   const [workModeIndex, setWorkModeIndex] = useState(0);
   const [price1, onPrice1Change, isPrice1Valid, price1Error] =
@@ -105,26 +125,35 @@ const DumpForm = () => {
           label: "Виды транспорта",
         },
         {
-          id: "measureIn",
+          id: "measure",
           type: "segment",
-          values: INPUT_VALUES.measureIn,
-          selectedIndex: measureInI,
+          values: INPUT_VALUES_WITH_ALL.measure,
+          selectedIndex: measureI,
           onChange: (evt) =>
-            setMeasureInI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Измерять в",
+            setMeasureI(evt.nativeEvent.selectedSegmentIndex),
+          label: "Измерять",
         },
         {
-          id: "amount",
+          id: "amountInWeight",
           type: "interval",
-          firstValue: amount1,
-          secondValue: amount2,
-          onFirstValueChange: onAmount1Change,
-          onSecondValueChange: onAmount2Change,
-          error: amount1Error || amount2Error,
-          label:
-            INPUT_VALUES.measureIn[measureInI] === "м3"
-              ? "Объём (м3)"
-              : "Вес (тонн)",
+          hidden: INPUT_VALUES_WITH_ALL.measure[measureI] === 'Объём',
+          firstValue: amountInWeight1,
+          secondValue: amountInWeight2,
+          onFirstValueChange: onAmountInWeight1Change,
+          onSecondValueChange: onAmountInWeight2Change,
+          error: amountInWeight1Error || amountInWeight2Error,
+          label: "Вес (т)",
+        },
+        {
+          id: "amountInVolume",
+          type: "interval",
+          hidden: INPUT_VALUES_WITH_ALL.measure[measureI] === 'Вес',
+          firstValue: amountInVolume1,
+          secondValue: amountInVolume2,
+          onFirstValueChange: onAmountInVolume1Change,
+          onSecondValueChange: onAmountInVolume2Change,
+          error: amountInVolume1Error || amountInVolume2Error,
+          label: "Объём (м3)",
         },
       ],
     },
@@ -134,7 +163,7 @@ const DumpForm = () => {
         {
           id: "workMode",
           type: "segment",
-          values: INPUT_VALUES.workMode,
+          values: INPUT_VALUES_WITH_ALL.workMode,
           selectedIndex: workModeIndex,
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
@@ -154,9 +183,9 @@ const DumpForm = () => {
           onSecondValueChange: onPrice2Change,
           error: price1Error || price2Error,
           label:
-            INPUT_VALUES.measureIn[measureInI] === "м3"
-              ? "Цена (руб/м3)"
-              : "Цена (руб/тонн)",
+            INPUT_VALUES.measure[measureI] === "Вес"
+              ? "Цена (руб/тонн)"
+              : "Цена (руб/м3)",
         },
         {
           id: "paymentType",
@@ -172,8 +201,10 @@ const DumpForm = () => {
   ];
 
   const isFormValid =
-    isAmount1Valid &&
-    isAmount2Valid &&
+    isAmountInVolume1Valid &&
+    isAmountInVolume2Valid &&
+    isAmountInWeight1Valid && 
+    isAmountInWeight2Valid &&
     isDangerClassValid &&
     isPrice1Valid &&
     isPrice2Valid &&
@@ -187,8 +218,10 @@ const DumpForm = () => {
       wasteType,
       transport,
       dangerClass,
-      amount1,
-      amount2,
+      amountInVolume1,
+      amountInVolume2,
+      amountInWeight1,
+      amountInWeight2,
       price1,
       price2
     });

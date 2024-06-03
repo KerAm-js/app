@@ -1,5 +1,7 @@
 import { TAdress, TGeneral, TParams, TPrice } from "./others";
 
+export type TTechnicTransactionType = "Сдать в аренду" | "Взять в аренду";
+
 export interface ITechnicGeneral extends TGeneral {
   count: number;
   rentalPeriod?: {
@@ -36,6 +38,6 @@ export interface ITechnicParams extends TParams {
   loadingType?: "Задняя" | "Передняя";
 }
 
-export interface ITechnincPrice extends TPrice {
+export interface ITechnicPrice extends TPrice {
   paymentFor: "Cмена" | "Час" | "м3/км" | "т/км";
 }

@@ -3,10 +3,8 @@ export type TAdress = {
   lon: number;
 };
 
-export type TWorkMode = "День" | "Ночь" | "Круглосуточно";
-
 export type TGeneral = {
-  workMode: TWorkMode;
+  workMode: "День" | "Ночь" | "24 часа";
   comment?: string;
   address: string;
 };
@@ -17,5 +15,4 @@ export type TParams = {
 export type TPrice = {
   price: number;
   paymentType: "Наличные" | "Безналичные" | "Все";
-  paymentFor: "Cмена" | "Час" | "м3/км" | "т/км" | "м3" | "Тонна";
 };

@@ -9,7 +9,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { FC, useEffect, useRef } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, Platform, View } from "react-native";
 import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 import AnimatedHeaderBackButton from "../HeaderBack/HeaderBack";
 import AnimatedHeaderBackground from "../HeaderBackground/HeaderBackground";
@@ -86,7 +86,9 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
   }, []);
   return (
     <>
-      <AnimatedStatusBar photosLength={photos.length} scrollY={scrollY} />
+      {Platform.OS === "ios" && (
+        <AnimatedStatusBar photosLength={photos.length} scrollY={scrollY} />
+      )}
       <Slider
         userId={userId}
         id={id}
@@ -97,6 +99,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
         onLike={onLike}
       />
       <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
         ref={scrollRef}
         style={{ paddingTop: sliderStyles.image.height + insets.top }}
         onScroll={scrollHandler}
@@ -114,6 +117,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
         >
           {children}
         </View>
+        <View style={scrollWithSliderStyles.bottomView} />
       </Animated.ScrollView>
     </>
   );

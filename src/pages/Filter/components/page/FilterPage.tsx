@@ -6,7 +6,7 @@ import FilterAdvertsModule from "../../../../modules/FilterAdverts";
 
 const FilterPageComponent: FC<Pick<TAdvert, "type">> = ({ type }) => {
   return (
-    <ScrollView style={filterStyles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={filterStyles.container}>
       <FilterAdvertsModule.Component type={type} />
       <View style={{ height: 100 }} />
     </ScrollView>

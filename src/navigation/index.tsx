@@ -22,6 +22,8 @@ import RegisterPage from "../pages/Register";
 import UserPage from "../pages/User";
 import FilterPage from "../pages/Filter";
 import DeletedAdvertsPage from "../pages/DeletedAdverts";
+import AdvertImagesPage from "../pages/AdvertImages";
+import AdvertsModule from "../modules/Adverts";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -37,8 +39,16 @@ const RootNavigator = () => {
           headerLeft: () => <AdvertPage.HeaderBack />,
         }}
       >
-        <Stack.Screen
+        {/* <Stack.Screen
           options={{ headerShown: false }}
+          name="Main"
+          component={MainPage.Component}
+        /> */}
+        <Stack.Screen
+          options={{
+            headerLeft: MainPage.HeaderLeft,
+            headerRight: MainPage.HeaderRight,
+          }}
           name="Main"
           component={MainPage.Component}
         />
@@ -152,6 +162,9 @@ const RootNavigator = () => {
         >
           {({ route }) => <NewAdvertPage.Component {...route.params} />}
         </Stack.Screen>
+        <Stack.Screen options={{ title: "Фото" }} name="AdvertImages">
+          {({ route }) => <AdvertImagesPage.Component {...route.params} />}
+        </Stack.Screen>
         <Stack.Screen
           options={({ route }) => ({
             title: getAdvertTypeTitle(route.params.type),
@@ -161,13 +174,13 @@ const RootNavigator = () => {
           {({ route }) => <FilterPage.Component {...route.params} />}
         </Stack.Screen>
         <Stack.Screen
-          options={({ route }) => ({
-            title:
-              route.params.price.price +
-              " руб/" +
-              route.params.price.paymentFor,
-            headerTransparent: true,
-          })}
+          options={({ route }) => {
+            const priceString = AdvertsModule.getPriceString(route.params);
+            return {
+              title: priceString.first[0].toString() + priceString.first[1],
+              headerTransparent: true,
+            };
+          }}
           name="Advert"
         >
           {({ route }) => <AdvertPage.Component {...route.params} />}

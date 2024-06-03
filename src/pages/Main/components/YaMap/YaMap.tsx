@@ -55,7 +55,7 @@ function init() {
     <View style={{ flex: 1 }}>
       <NavBar />
       <WebView style={mainMapStyles.map} source={{ html }} />
-      <MenuBar />
+      <MenuBar  />
     </View>
   );
 };

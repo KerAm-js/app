@@ -5,7 +5,6 @@ import { TAdvert } from "../../../../types/Advert";
 import { propTitles } from "../../../../consts/propTitles";
 
 const InfoTables: FC<TAdvert> = ({ type, general, params }) => {
-  
   const getArrFromObj = (
     obj: { [key: string]: number | string | any },
     arr: Array<[string, string | number]>
@@ -20,10 +19,8 @@ const InfoTables: FC<TAdvert> = ({ type, general, params }) => {
   };
 
   const paramsArr = useMemo(() => {
-    let arr: Array<[string, string | number]> = [];
-    const obj = { ...params, photos: undefined, type: undefined };
-    getArrFromObj(obj, arr);
-    return arr;
+    const result: Array<[string, string]> = Object.entries(params);
+    return result;
   }, []);
 
   const rentalPeriod =
@@ -43,12 +40,30 @@ const InfoTables: FC<TAdvert> = ({ type, general, params }) => {
     <View style={infoTablesStyles.container}>
       <View style={infoTablesStyles.table}>
         <Text style={infoTablesStyles.title}>Характеристики</Text>
-        {paramsArr.map(([title, value]) => (
-          <View key={title} style={infoTablesStyles.tableRow}>
-            <Text style={infoTablesStyles.rowTitle}>{propTitles[title]}</Text>
-            <Text style={infoTablesStyles.rowValue}>{value}</Text>
-          </View>
-        ))}
+        {paramsArr.map(([title, value]) => {
+          if (!propTitles[title] || !value) {
+            return null;
+          }
+          let titleString = propTitles[title].title;
+          let valueString = value;
+          if (title === "amount" && type !== "technic") {
+            if (params.measure === "weight") {
+              titleString = "Вес";
+              valueString += " т";
+            } else {
+              titleString = "Объём";
+              valueString += " м3";
+            }
+          } else if (propTitles[title]?.measurement) {
+              valueString += " " + propTitles[title].measurement;
+          }
+          return (
+            <View key={title} style={infoTablesStyles.tableRow}>
+              <Text style={infoTablesStyles.rowTitle}>{titleString}</Text>
+              <Text style={infoTablesStyles.rowValue}>{valueString}</Text>
+            </View>
+          );
+        })}
       </View>
       <View style={infoTablesStyles.table}>
         <Text style={infoTablesStyles.title}>Общие данные</Text>

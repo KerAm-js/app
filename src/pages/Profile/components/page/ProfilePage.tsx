@@ -7,7 +7,7 @@ import { USER } from "../../../../consts/devData";
 
 const ProfilePageComponent = () => {
   return (
-    <ScrollView style={profilePageStyles.container}>
+    <ScrollView showsVerticalScrollIndicator={false} style={profilePageStyles.container}>
       <AvatarBlock />
       <UserInfo
         {...USER}
