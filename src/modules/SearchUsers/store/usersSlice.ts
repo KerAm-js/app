@@ -11,6 +11,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     comments: [],
     adverts: [],
   },
@@ -22,6 +23,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
@@ -33,6 +35,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
@@ -44,6 +47,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
@@ -55,6 +59,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
@@ -66,6 +71,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
@@ -77,6 +83,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
@@ -88,6 +95,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
@@ -99,6 +107,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
@@ -110,6 +119,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
@@ -121,6 +131,7 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
@@ -132,17 +143,15 @@ const initialState: Array<IUser> = [
     email: "test@mail.ru",
     rating: 3.7,
     ratesCount: 12,
+    likes: [],
     adverts: [],
     comments: [],
   },
   USER
 ];
 
-const usersSlice = createSlice({
+export const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {},
 });
-
-export const usersReducer = usersSlice.reducer;
-export const usersActions = usersSlice.actions;

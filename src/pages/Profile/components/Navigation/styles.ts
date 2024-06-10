@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { BLUE, GREY_LIGHT } from "../../../../consts/colors";
+import { BLUE, GREY_LIGHT, RED } from "../../../../consts/colors";
 import { TEXT_F_SIZE } from "../../../../consts/texts";
 
 export const profileNavigationStyles = StyleSheet.create({
@@ -12,8 +12,17 @@ export const profileNavigationStyles = StyleSheet.create({
     gap: 10,
     marginBottom: 20,
   },
-  supportButton: {
+  logoutButton: {
     marginTop: 20,
+  },
+  supportButton: {
+    marginTop: 12,
+  },
+  logoutButtonTitle: {
+    color: RED,
+    fontSize: TEXT_F_SIZE,
+    fontFamily: 'Gilroy-Semibold',
+    textAlign: 'center',
   },
   supportButtonTitle: {
     color: BLUE,

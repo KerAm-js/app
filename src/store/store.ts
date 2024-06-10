@@ -1,16 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { advertsReducer } from "../modules/Adverts/store/advertsSlice";
-import { usersReducer } from "../modules/SearchUsers/store/usersSlice";
-import { commentsReducer } from "../modules/Comments/store/commentsSlice";
-import { filterReducer } from "../modules/FilterAdverts/store/filterSlice";
+import { advertsSlice } from "../modules/Adverts/store/advertsSlice";
+import { usersSlice } from "../modules/SearchUsers/store/usersSlice";
+import { commemtsSlice } from "../modules/Comments/store/commentsSlice";
+import { filterSlice } from "../modules/FilterAdverts/store/filterSlice";
+import { authSlice } from "../modules/Auth/store/authSlice";
 
 export const store = configureStore({
   reducer: {
-    adverts: advertsReducer,
-    users: usersReducer,
-    comments: commentsReducer,
-    filter: filterReducer,
-  }
-})
+    adverts: advertsSlice.reducer,
+    users: usersSlice.reducer,
+    comments: commemtsSlice.reducer,
+    filter: filterSlice.reducer,
+    auth: authSlice.reducer,
+  },
+});
 
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;

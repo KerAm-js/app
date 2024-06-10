@@ -6,6 +6,7 @@ export interface IUser {
   description: string;
   rating: number;
   ratesCount: number;
+  likes: Array<string>;
   comments: Array<string>;
   adverts: Array<string>;
   avatar?: string;

@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { usePhoneValidator } from "../../../hooks/inputValidators/usePhoneValidator";
 import { useInputValidator } from "../../../hooks/inputValidators/useInputValidator";
-import { TFormInput, TFormInputsArray } from "../../../components/Form/types";
+import { TFormInputsArray } from "../../../components/Form/types";
 import { EMAIL_REGEX } from "../../../consts/regex";
 import Form from "../../../components/Form/Form";
 import { editProfileModuleStyles } from "./styles";
@@ -82,7 +82,7 @@ const EditProfileModuleComponent = () => {
         email,
         description,
       };
-      console.log(userData);
+      // console.log(userData);
     }
   };
 

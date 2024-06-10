@@ -1,12 +1,15 @@
-import { TFormInput, TFormInputsArray } from "../../../components/Form/types";
-import { registerModuleStyles } from "./styles";
-import { View } from "react-native";
-import Form from "../../../components/Form/Form";
-import { useInputValidator } from "../../../hooks/inputValidators/useInputValidator";
-import { usePhoneValidator } from "../../../hooks/inputValidators/usePhoneValidator";
-import { EMAIL_REGEX } from "../../../consts/regex";
+import { Alert, View } from "react-native";
+import Form from "../../../../components/Form/Form";
+import { TFormInputsArray } from "../../../../components/Form/types";
+import { EMAIL_REGEX } from "../../../../consts/regex";
+import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
+import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
+import { authModuleStyles } from "../styles";
+import { useAuth } from "../../../../hooks/store/useAuth";
+import { useActions } from "../../../../hooks/store/useActions";
+import { useEffect } from "react";
 
-const RegisterModuleComponent = () => {
+const Register = () => {
   const [username, onChangeUsername, isUsernameValid, usernameError] =
     useInputValidator({ initValue: "", minLength: 2 });
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
@@ -19,15 +22,18 @@ const RegisterModuleComponent = () => {
   const [password, onPasswordChange, isPasswordValid, passwordError] =
     useInputValidator({
       initValue: "",
-      minLength: 6,
+      minLength: 3,
     });
   const [password2, onPassword2Change, isPassword2Valid, password2Error] =
     useInputValidator({
       initValue: "",
-      minLength: 6,
+      minLength: 3,
       confirmedValue: password,
       confirmingErrorMessage: "Пароли не совпадают",
     });
+
+  const { registerThunk } = useActions();
+  const { isLoading, error } = useAuth();
 
   const inputs: TFormInputsArray = [
     {
@@ -96,26 +102,25 @@ const RegisterModuleComponent = () => {
 
   const onSubmit = () => {
     if (isFormValid) {
-      const userData = {
-        username,
-        phone,
-        email,
-        password,
-      };
-      console.log(userData);
+      registerThunk({ username, phone, email, password, description: " " });
     }
   };
 
+  useEffect(() => {
+    if (error) Alert.alert(error?.title, error?.message);
+  }, [error]);
+
   return (
-    <View style={registerModuleStyles.container}>
+    <View style={authModuleStyles.container}>
       <Form
         inputs={inputs}
         submitTitle="Зарегистрироваться"
         onSubmit={onSubmit}
         isFormValid={isFormValid}
+        isLoading={isLoading}
       />
     </View>
   );
 };
 
-export default RegisterModuleComponent;
+export default Register;

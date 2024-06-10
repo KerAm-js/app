@@ -60,7 +60,7 @@ const UserInfo: FC<IUser> = (props) => {
       </View>
       <InfoCard title="Телефон" content={phone} />
       <InfoCard title="Почта" content={email} />
-      {!!description && <InfoCard title="Описание" content={description} />}
+      {!!description.trim() && <InfoCard title="Описание" content={description} />}
     </View>
   );
 };

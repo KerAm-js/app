@@ -6,7 +6,7 @@ import AuthModule from "../../../../modules/Auth";
 const AuthPageComponent = () => {
   return (
     <View style={authPageStyles.container}>
-      <AuthModule.Component />
+      <AuthModule.LogIn />
       <Footer />
     </View>
   );

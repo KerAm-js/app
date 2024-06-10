@@ -8,12 +8,16 @@ import BigButton from "../../../../UI/buttons/Big/BigButton";
 import { USER } from "../../../../consts/devData";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
+import { useActions } from "../../../../hooks/store/useActions";
 
 const Navigation = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const users = useSelector((state: RootState) => state.users);
+
+  const { logOut } = useActions();
+
   return (
     <View style={profileNavigationStyles.container}>
       <View style={profileNavigationStyles.groupButtonsContainer}>
@@ -75,6 +79,14 @@ const Navigation = () => {
           })
         }
       />
+      <Pressable
+        onPress={() => logOut()}
+        style={profileNavigationStyles.logoutButton}
+      >
+        <Text style={profileNavigationStyles.logoutButtonTitle}>
+          Выйти из аккаунта
+        </Text>
+      </Pressable>
       <Pressable style={profileNavigationStyles.supportButton}>
         <Text style={profileNavigationStyles.supportButtonTitle}>
           Служба поддержки

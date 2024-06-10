@@ -41,7 +41,7 @@ const initialState: Array<IComment> = [
   },
 ];
 
-const commemtsSlice = createSlice({
+export const commemtsSlice = createSlice({
   name: "comments",
   initialState,
   reducers: {
@@ -68,6 +68,3 @@ const commemtsSlice = createSlice({
     },
   },
 });
-
-export const commentsReducer = commemtsSlice.reducer;
-export const commentsActions = commemtsSlice.actions;

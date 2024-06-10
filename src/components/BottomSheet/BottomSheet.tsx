@@ -37,7 +37,7 @@ const BottomSheet: FC<IBottomSheetProps> = ({ actions, title }) => {
   const closeModal = () => {
     translateY.value = withTiming(
       0,
-      { duration: 350 },
+      undefined,
       (isFinished: boolean | undefined) => {
         if (isFinished) {
           runOnJS(navigation.goBack)();
@@ -61,7 +61,7 @@ const BottomSheet: FC<IBottomSheetProps> = ({ actions, title }) => {
         translateY.value <= -context.value.height + OVERDRAG ||
         translateY.value + context.value.height < OVERDRAG * 3
       ) {
-        translateY.value = withSpring(-context.value.height + OVERDRAG);
+        translateY.value = withSpring(-context.value.height);
       } else {
         runOnJS(closeModal)();
       }
@@ -87,9 +87,7 @@ const BottomSheet: FC<IBottomSheetProps> = ({ actions, title }) => {
 
   const onLayout = (evt: LayoutChangeEvent) => {
     const height = evt.nativeEvent.layout.height;
-    translateY.value = withTiming(-height + OVERDRAG, {
-      duration: 350,
-    });
+    translateY.value = withTiming(-height + OVERDRAG);
     context.value.height = height;
   };
 

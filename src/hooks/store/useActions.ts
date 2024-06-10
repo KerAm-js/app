@@ -1,16 +1,20 @@
 import { useMemo } from "react";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import { advertsActions } from "../../modules/Adverts/store/advertsSlice";
-import { usersActions } from "../../modules/SearchUsers/store/usersSlice";
-import { commentsActions } from "../../modules/Comments/store/commentsSlice";
-import { filterActions } from "../../modules/FilterAdverts/store/filterSlice";
+import { advertsSlice } from "../../modules/Adverts/store/advertsSlice";
+import { usersSlice } from "../../modules/SearchUsers/store/usersSlice";
+import { commemtsSlice } from "../../modules/Comments/store/commentsSlice";
+import { filterSlice } from "../../modules/FilterAdverts/store/filterSlice";
+import * as authActions from "../../modules/Auth/store/authActions";
+import { authSlice } from "../../modules/Auth/store/authSlice";
 
 const actions = {
-  ...advertsActions,
-  ...usersActions,
-  ...commentsActions,
-  ...filterActions,
+  ...advertsSlice.actions,
+  ...usersSlice.actions,
+  ...commemtsSlice.actions,
+  ...filterSlice.actions,
+  ...authActions,
+  ...authSlice.actions,
 };
 
 export const useActions = () => {

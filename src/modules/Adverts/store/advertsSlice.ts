@@ -121,7 +121,7 @@ const initialState: Array<TAdvert> = [
     params: {
       wasteType: MATERIALS_LIST[0],
       dangerClass: "1 класс",
-      transport: "Самосвал 3-х осный",
+      transport: ["Самосвал 3-х осный"],
       measure: "weight",
       amount: 2,
       coefficient: 1.6,
@@ -129,7 +129,7 @@ const initialState: Array<TAdvert> = [
   },
 ];
 
-const advertsSlice = createSlice({
+export const advertsSlice = createSlice({
   name: "adverts",
   initialState,
   reducers: {
@@ -160,6 +160,3 @@ const advertsSlice = createSlice({
     },
   },
 });
-
-export const advertsReducer = advertsSlice.reducer;
-export const advertsActions = advertsSlice.actions;

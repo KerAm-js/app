@@ -9,7 +9,7 @@ export interface IMaterialGeneral extends TGeneral {
 export interface IMaterialParams extends TParams {
   materialType: string;
   coefficient: number;
-  transport: "Самосвал 3-х осный" | "Самосвал 4-х осный" | "Тонар";
+  transport: Array<"Самосвал 3-х осный" | "Самосвал 4-х осный" | "Тонар">;
   measure: "weight" | "volume";
   amount: number;
   fractions:

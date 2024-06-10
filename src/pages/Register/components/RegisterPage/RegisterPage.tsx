@@ -1,7 +1,7 @@
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { registerPageStyles } from "./styles";
-import RegisterModule from "../../../../modules/Register";
+import AuthModule from "../../../../modules/Auth";
 
 const RegisterPageComponent = () => {
   const headerHeight = useHeaderHeight();
@@ -12,7 +12,7 @@ const RegisterPageComponent = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView showsVerticalScrollIndicator={false} style={registerPageStyles.scrollView}>
-        <RegisterModule.Component />
+        <AuthModule.Register />
       </ScrollView>
     </KeyboardAvoidingView>
   );

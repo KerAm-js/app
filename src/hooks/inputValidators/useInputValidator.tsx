@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TInputValidator } from "./types";
 import { RU_LANG } from "../../consts/rulang";
 
@@ -15,10 +15,10 @@ export const useInputValidator: TInputValidator = (props) => {
     maxValue,
   } = props || {};
 
-  const [value, setValue] = useState(initValue || "");
-  const [isValid, setIsValid] = useState(required ? !!initValue : true);
+  const [value, setValue] = useState("");
+  const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState(
-    !initValue?.length && required ? "Заполните данное поле" : ""
+    !initValue && required ? "Заполните данное поле" : ""
   );
 
   const onChangeValue = (text: string) => {
@@ -56,10 +56,18 @@ export const useInputValidator: TInputValidator = (props) => {
   };
 
   const setInitial = () => {
-    setValue(initValue || "");
-    setIsValid(required ? !!initValue : true);
-    setError(!initValue?.length && required ? "Заполните данное поле" : "");
-  }
+    if (initValue) {
+      onChangeValue(initValue);
+    } else {
+      setValue("");
+      setIsValid(false);
+      setError(!initValue && required ? "Заполните данное поле" : "");
+    }
+  };
+
+  useEffect(() => {
+    if (initValue) onChangeValue(initValue);
+  }, []);
 
   return [value, onChangeValue, isValid, error, setInitial];
 };

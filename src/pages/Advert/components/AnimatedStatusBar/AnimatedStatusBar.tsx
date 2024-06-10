@@ -1,32 +1,32 @@
 import { FC, useState } from "react";
-import { StatusBar, StatusBarStyle } from "react-native";
 import { runOnJS, useAnimatedReaction } from "react-native-reanimated";
 import { IAnimatedStatusBarProps } from "./types";
+import { StatusBar } from "expo-status-bar";
 
 const AnimatedStatusBar: FC<IAnimatedStatusBarProps> = ({
   scrollY,
   photosLength,
 }) => {
-  const [barStyle, setBarStyle] = useState<StatusBarStyle>(
-    photosLength !== 0 ? "light-content" : "dark-content"
+  const [barStyle, setBarStyle] = useState<"light" | "dark">(
+    photosLength !== 0 ? "light" : "dark"
   );
 
   useAnimatedReaction(
     () => scrollY.value,
     (curr, _) => {
-      if (curr >= 250 && barStyle !== "dark-content") {
-        runOnJS(setBarStyle)("dark-content");
+      if (curr >= 250 && barStyle !== "dark") {
+        runOnJS(setBarStyle)("dark");
       } else if (
         curr < 250 &&
         photosLength !== 0 &&
-        barStyle !== "light-content"
+        barStyle !== "light"
       ) {
-        runOnJS(setBarStyle)("light-content");
+        runOnJS(setBarStyle)("light");
       }
     }
   );
 
-  return <StatusBar barStyle={barStyle} animated />;
+  return <StatusBar style={barStyle} animated />;
 };
 
 export default AnimatedStatusBar;

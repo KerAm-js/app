@@ -11,12 +11,14 @@ import { formStyles } from "./styles";
 import SegmentedControlWithLabel from "../../UI/inputs/SegmentedControl/SegmentedControl";
 import Title from "../../UI/Title/Title";
 import PhotoInput from "../../UI/inputs/Photo/PhotoInput";
+import { useAuth } from "../../hooks/store/useAuth";
 
 const Form: FC<TFormProps> = ({
   inputs,
   onSubmit,
   submitTitle,
   isFormValid,
+  isLoading,
 }) => {
   return (
     <View>
@@ -60,6 +62,7 @@ const Form: FC<TFormProps> = ({
         title={submitTitle}
         onPress={onSubmit}
         disabled={!isFormValid}
+        isLoading={isLoading}
       />
     </View>
   );

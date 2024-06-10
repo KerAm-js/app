@@ -50,4 +50,5 @@ export type TFormProps = {
   submitTitle: string;
   isFormValid: boolean;
   inputs: TFormInputsArray;
+  isLoading?: boolean;
 };

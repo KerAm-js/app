@@ -7,6 +7,7 @@ export type TBigButtonProps = {
   disabled?: boolean;
   iconXmlFunc?: typeof userSvg;
   noShadow?: boolean;
+  isLoading?: boolean;
   backgroundColor?:
     | typeof BLACK_LIGHT
     | typeof GREEN

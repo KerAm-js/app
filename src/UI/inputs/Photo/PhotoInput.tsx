@@ -26,7 +26,7 @@ const PhotoInput: FC<IPhotoInputProps> = ({
         setImages(results);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

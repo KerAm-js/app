@@ -1,7 +1,9 @@
-import Component from "./components/AuthModule";
+import LogIn from "./components/LogIn/LogIn";
+import Register from "./components/Register/Register";
 
 const AuthModule = {
-  Component,
+  LogIn,
+  Register
 };
 
 export default AuthModule;

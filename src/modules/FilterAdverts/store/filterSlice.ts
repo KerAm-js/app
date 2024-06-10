@@ -12,7 +12,7 @@ const initialState: TFilterState = {
   material: undefined,
 };
 
-const filterSlice = createSlice({
+export const filterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
@@ -26,6 +26,3 @@ const filterSlice = createSlice({
     },
   },
 });
-
-export const filterActions = filterSlice.actions;
-export const filterReducer = filterSlice.reducer;

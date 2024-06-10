@@ -1,4 +1,4 @@
-import { StatusBar, View } from "react-native";
+import { View } from "react-native";
 import { navBarStyles } from "./styles";
 import NavButton from "../NavButton/NavButton";
 import { userSvg } from "../../../../assets/svg/user";
@@ -23,7 +23,6 @@ const NavBar: FC = () => {
 
   return (
     <View style={[navBarStyles.container, { paddingTop: top < 15 ? 15 : top }]}>
-      <StatusBar barStyle="default" />
       <NavText
         text={
           adverts.length === 0
