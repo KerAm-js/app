@@ -8,19 +8,18 @@ import { boxOutSvg } from "../../../../assets/svg/boxOut";
 import { boxInSvg } from "../../../../assets/svg/boxIn";
 import Rating from "../../../../UI/Rating/Rating";
 import { WHITE } from "../../../../consts/colors";
-import { USER } from "../../../../consts/devData";
 import { arrowRightSvg } from "../../../../assets/svg/arrowRight";
 import { TextLayoutEventData } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const Comment: FC<ICommentProps> = (props) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  const { addresseeId, addresseeName, authorId, authorName, rate } =
-    props;
+  const { user } = useAuth();
+  const { addresseeId, addresseeName, authorId, authorName, rate } = props;
 
   const [numberOfLines, setNumberOfLines] = useState<number | undefined>(
     undefined
@@ -29,8 +28,8 @@ const Comment: FC<ICommentProps> = (props) => {
   const commentText = useRef<null | Text>(null);
   const isFirstLayout = useRef<boolean>(true);
 
-  const isUserAdressee = addresseeId === USER.id;
-  const isUserAuthor = authorId === USER.id;
+  const isUserAdressee = addresseeId === user?.id;
+  const isUserAuthor = authorId === user?.id;
 
   const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
     if (event.nativeEvent.lines.length > 2 && isFirstLayout.current) {

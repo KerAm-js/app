@@ -9,5 +9,6 @@ export const USER: IUser = {
   rating: 4.7,
   ratesCount: 12,
   comments: [],
+  likes: [],
   adverts: ["0"],
 };

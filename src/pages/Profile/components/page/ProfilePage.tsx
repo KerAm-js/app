@@ -3,16 +3,21 @@ import AvatarBlock from "../AvatarBlock/AvatarBlock";
 import UserInfo from "../UserInfo/UserInfo";
 import Navigation from "../Navigation/Navigation";
 import { profilePageStyles } from "./styles";
-import { USER } from "../../../../consts/devData";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const ProfilePageComponent = () => {
+  const { user } = useAuth();
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={profilePageStyles.container}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={profilePageStyles.container}
+    >
       <AvatarBlock />
-      <UserInfo
-        {...USER}
-        comments={[]} // navigate to comments button is in navigation
-      />
+      {user && (
+        <UserInfo
+          {...user}
+        />
+      )}
       <Navigation />
     </ScrollView>
   );

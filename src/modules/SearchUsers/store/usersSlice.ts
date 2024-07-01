@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../../../types/User";
-import { USER } from "../../../consts/devData";
 
 const initialState: Array<IUser> = [
   {
@@ -147,7 +146,6 @@ const initialState: Array<IUser> = [
     adverts: [],
     comments: [],
   },
-  USER
 ];
 
 export const usersSlice = createSlice({

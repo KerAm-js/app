@@ -11,13 +11,13 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { useUserComments } from "../../../../hooks/store/useComments";
-import { USER } from "../../../../consts/devData";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const AdvertUserInfo: FC<IUser> = (props) => {
   const { id, rating, username, phone } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+  const {user} = useAuth();
   const rates = useUserComments({
     role: "addressee",
     id,
@@ -48,7 +48,7 @@ const AdvertUserInfo: FC<IUser> = (props) => {
           </Text>
         </View>
         <Text style={advertUserInfoStyles.phone}>{phone}</Text>
-        {props.id !== USER.id && (
+        {props.id !== user?.id && (
           <Link title={"Профиль"} onPress={goToComments} />
         )}
       </View>

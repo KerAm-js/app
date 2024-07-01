@@ -13,7 +13,18 @@ import { RootStackParamList } from "../../../../navigation/types";
 import { useUserComments } from "../../../../hooks/store/useComments";
 import { USER } from "../../../../consts/devData";
 
-const UserInfo: FC<IUser> = (props) => {
+const UserInfo: FC<
+  Pick<
+    IUser,
+    | "id"
+    | "username"
+    | "phone"
+    | "email"
+    | "description"
+    | "rating"
+    | "ratesCount"
+  >
+> = (props) => {
   const { id, username, phone, email, rating, description } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -39,28 +50,37 @@ const UserInfo: FC<IUser> = (props) => {
     <View style={userInfoStyles.container}>
       <Text style={userInfoStyles.username}>{username}</Text>
       <View style={userInfoStyles.ratingContainer}>
-        <Rating
-          rating={rating}
-          type="presentation"
-          backgroundColor={GREY_LIGHT}
-        />
-        <Text style={userInfoStyles.ratingText}>
-          Рейтинг {rating} (количество оценок {rates.length})
-        </Text>
+        {rating ? (
+          <>
+            <Rating
+              rating={rating}
+              type="presentation"
+              backgroundColor={GREY_LIGHT}
+            />
+
+            <Text style={userInfoStyles.ratingText}>
+              Рейтинг {rating} (количество оценок {rates.length})
+            </Text>
+          </>
+        ) : (
+          <Text style={userInfoStyles.ratingText}>Нет оценок</Text>
+        )}
         {!!commentsLen && id !== USER.id && (
-        <Link
-          title={
-            commentsLen +
-            " " +
-            (RU_LANG.comments[commentsLen] || RU_LANG.comments[0])
-          }
-          onPress={goToComments}
-        />
-      )}
+          <Link
+            title={
+              commentsLen +
+              " " +
+              (RU_LANG.comments[commentsLen] || RU_LANG.comments[0])
+            }
+            onPress={goToComments}
+          />
+        )}
       </View>
       <InfoCard title="Телефон" content={phone} />
       <InfoCard title="Почта" content={email} />
-      {!!description.trim() && <InfoCard title="Описание" content={description} />}
+      {description && !!description.trim() && (
+        <InfoCard title="Описание" content={description} />
+      )}
     </View>
   );
 };

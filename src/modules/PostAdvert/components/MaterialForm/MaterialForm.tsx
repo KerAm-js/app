@@ -4,12 +4,13 @@ import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES } from "../../../../consts/inputValues";
-import { USER } from "../../../../consts/devData";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { MATERIALS, MATERIALS_LIST } from "../../../../consts/data";
 import { TMaterialForm } from "./types";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
+  const {user} = useAuth();
   const [typeI, setTypeI] = useState(0);
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
@@ -72,10 +73,10 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
   });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
-    useInputValidator({ required: true, initValue: USER.username });
+    useInputValidator({ required: true, initValue: user?.username });
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
     required: true,
-    initValue: USER.phone,
+    initValue: user?.phone,
   });
 
   const inputs: TFormInputsArray = [

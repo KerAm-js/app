@@ -12,7 +12,7 @@ export const getErrorMessage = (error: unknown | any): IError => {
       if (code === 401) {
         title = error.response?.data.message;
         message = "Пожалуйста, проверьте данные и повторите попытку";
-      } else if (code >= 400) {
+      } else if (code >= 400 && code < 500) {
         message =
           "Возможно, вы ввели данные некорректно. Пожалуйста, проверьте данные и повторите попытку";
       } else if (code >= 500) {

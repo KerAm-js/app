@@ -2,7 +2,7 @@ import { TAdvertType } from "./../../types/Advert";
 import { useMemo } from "react";
 import { RootState } from "./../../store/store";
 import { useSelector } from "react-redux";
-import { USER } from "../../consts/devData";
+import { useAuth } from "./useAuth";
 
 export const useAdverts = (type: TAdvertType) => {
   const adverts = useSelector((state: RootState) => state.adverts);
@@ -15,9 +15,11 @@ export const useAdverts = (type: TAdvertType) => {
 };
 
 export const useFilteredAdverts = (type: TAdvertType) => {
-  const {adverts, filter} = useSelector((state: RootState) => state);
+  const { adverts, filter } = useSelector((state: RootState) => state);
+  const { user } = useAuth();
   const filtered = useMemo(
-    () => adverts.filter((ad) => ad.type === type && ad.userId !== USER.id),
+    () =>
+      adverts.filter((ad) => ad.type === type && ad.userId !== user?.id),
     [adverts, type]
   );
   return filtered;

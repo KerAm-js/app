@@ -1,64 +1,55 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { api } from "../../../api/api";
+import { IUser } from "../../../types/User";
 
-interface NewUserRequest {
-  username: string;
-  password: string;
-  email: string;
-  phone: string;
-  description: string;
-}
-
-interface NewUserResponse {
-  id: number;
-  username: string;
-  phone: string;
-  email: string;
-}
-
-interface TokenRequest {
-  email: string;
-  password: string;
-}
-
-interface TokenResponse {
-  token: string;
-}
-
-export const usersApi = createApi({
-  reducerPath: 'usersApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8189' }),
+const usersApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    newUser: builder.mutation<NewUserResponse, NewUserRequest>({
-      query: (userData) => ({
-        url: '/demo/sign_up',
-        method: 'POST',
-        body: userData,
-      }),
-    }),
-    getAdamToken: builder.mutation<TokenResponse, TokenRequest>({
-      query: () => ({
-        url: '/demo/auth',
-        method: 'POST',
-        body: {
-          email: 'smgbysgm@gmail.com',
-          password: '100',
+    getUsers: builder.query<
+      Array<
+        Pick<
+          IUser,
+          | "id"
+          | "username"
+          | "phone"
+          | "email"
+          | "description"
+          | "rating"
+          | "ratesCount"
+        >
+      >,
+      { username: string; from: number; to: number }
+    >({
+      query: ({ username, from, to }) =>
+        `/users/${username}?from=${from}&to=${to}`,
+      providesTags: () => [
+        {
+          type: "Users",
         },
-      }),
+      ],
     }),
-    getUserById: builder.query<void, number>({
-      query: (userId) => `/demo/user/${userId}`,
-    }),
-    getToken: builder.mutation<TokenResponse, TokenRequest>({
-      query: (credentials) => ({
-        url: '/demo/auth',
-        method: 'POST',
-        body: credentials,
-      }),
+    getUserById: builder.query<
+      Pick<
+        IUser,
+        | "id"
+        | "username"
+        | "phone"
+        | "email"
+        | "description"
+        | "rating"
+        | "ratesCount"
+      >,
+      string
+    >({
+      query: (userId) => `/user/${userId}`,
+      providesTags: () => [
+        {
+          type: "Users",
+        },
+      ],
     }),
   }),
 });
 
-export const { useNewUserMutation, useGetAdamTokenMutation, useGetUserByIdQuery, useGetTokenMutation } = usersApi;
+export const { useGetUserByIdQuery, useGetUsersQuery } = usersApi;
 
 // Usage example:
 // const { isLoading: isCreatingUser, mutate: createUser } = useNewUserMutation();

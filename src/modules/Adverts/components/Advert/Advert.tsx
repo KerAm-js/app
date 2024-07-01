@@ -13,7 +13,6 @@ import { watchSvg } from "../../../../assets/svg/watch";
 import { eyeSvg } from "../../../../assets/svg/eye";
 import { likeFillSvg } from "../../../../assets/svg/likeFill";
 import { getRelevanceObj } from "../../helpers/getRelevance";
-import { USER } from "../../../../consts/devData";
 import { circlesSvg } from "../../../../assets/svg/circles";
 import { TAdvert } from "../../../../types/Advert";
 import { useNavigation } from "@react-navigation/native";
@@ -21,6 +20,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { TRANSACTION_TYPES } from "../../../../consts/data";
 import { getPriceString } from "../../helpers/getPaymentFor";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const Advert: FC<TAdvert> = (props) => {
   const {
@@ -43,10 +43,11 @@ const Advert: FC<TAdvert> = (props) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const { user } = useAuth();
   const openModal = () => {
     navigation.navigate("Modal", props);
   };
-  const isLiked = useMemo(() => !!likes.find((item) => item === USER.id), []);
+  const isLiked = useMemo(() => !!likes.find((item) => item === user?.id), []);
   // const paramsArr = useMemo(() => {
   //   const result: Array<[string, string]> = Object.entries(params);
   //   return result;
@@ -77,7 +78,7 @@ const Advert: FC<TAdvert> = (props) => {
             size={12}
           />
         </View>
-        {USER.id === userId ? (
+        {user?.id === userId ? (
           <Pressable onPress={openModal} style={advertStyles.editButton}>
             <SvgXml xml={circlesSvg()} />
           </Pressable>

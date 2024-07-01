@@ -6,19 +6,20 @@ import { EMAIL_REGEX } from "../../../consts/regex";
 import Form from "../../../components/Form/Form";
 import { editProfileModuleStyles } from "./styles";
 import { useState } from "react";
-import { USER } from "../../../consts/devData";
+import { useAuth } from "../../../hooks/store/useAuth";
 
 const EditProfileModuleComponent = () => {
+  const { user } = useAuth();
   const [username, onChangeUsername, isUsernameValid, usernameError] =
-    useInputValidator({ initValue: USER.username, minLength: 2 });
+    useInputValidator({ initValue: user?.username, minLength: 2 });
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
-    initValue: USER.phone,
+    initValue: user?.phone,
   });
   const [email, onEmailChange, isEmailValid, emailError] = useInputValidator({
-    initValue: USER.email,
+    initValue: user?.email,
     pattern: EMAIL_REGEX,
   });
-  const [description, setDescription] = useState(USER.description);
+  const [description, setDescription] = useState(user?.description || '');
 
   const inputs: TFormInputsArray = [
     {
@@ -69,10 +70,10 @@ const EditProfileModuleComponent = () => {
     isPhoneValid &&
     isUsernameValid &&
     isEmailValid &&
-    (username !== USER.username ||
-      phone !== USER.phone ||
-      email !== USER.email ||
-      description !== USER.description);
+    (username !== user?.username ||
+      phone !== user?.phone ||
+      email !== user?.email ||
+      description !== user?.description);
 
   const onSubmit = () => {
     if (isFormValid) {
@@ -82,7 +83,6 @@ const EditProfileModuleComponent = () => {
         email,
         description,
       };
-      // console.log(userData);
     }
   };
 

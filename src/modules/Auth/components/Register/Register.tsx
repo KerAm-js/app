@@ -32,7 +32,7 @@ const Register = () => {
       confirmingErrorMessage: "Пароли не совпадают",
     });
 
-  const { registerThunk } = useActions();
+  const { registerThunk, clearError } = useActions();
   const { isLoading, error } = useAuth();
 
   const inputs: TFormInputsArray = [
@@ -109,6 +109,12 @@ const Register = () => {
   useEffect(() => {
     if (error) Alert.alert(error?.title, error?.message);
   }, [error]);
+
+  useEffect(() => {
+    if (error) {
+      clearError();
+    }
+  }, [])
 
   return (
     <View style={authModuleStyles.container}>

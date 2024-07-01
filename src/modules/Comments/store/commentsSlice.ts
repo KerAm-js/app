@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IComment } from "../../../types/Comment";
-import { USER } from "../../../consts/devData";
 
 const initialState: Array<IComment> = [
   {
@@ -52,8 +51,8 @@ export const commemtsSlice = createSlice({
         text: action.payload.text,
         addresseeId: action.payload.addresseeId,
         addresseeName: action.payload.addresseeName,
-        authorId: USER.id,
-        authorName: USER.username,
+        authorId: action.payload.user.id,
+        authorName: action.payload.user.username,
       });
     },
     editComment: (state, action) => {

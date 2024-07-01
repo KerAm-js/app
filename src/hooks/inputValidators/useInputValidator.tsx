@@ -16,7 +16,7 @@ export const useInputValidator: TInputValidator = (props) => {
   } = props || {};
 
   const [value, setValue] = useState("");
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(required ? !!initValue : true);
   const [error, setError] = useState(
     !initValue && required ? "Заполните данное поле" : ""
   );
@@ -60,7 +60,7 @@ export const useInputValidator: TInputValidator = (props) => {
       onChangeValue(initValue);
     } else {
       setValue("");
-      setIsValid(false);
+      setIsValid(required ? !!initValue : true);
       setError(!initValue && required ? "Заполните данное поле" : "");
     }
   };

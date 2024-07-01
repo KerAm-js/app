@@ -648,11 +648,7 @@ const TechnicForm = () => {
     isPriceForWeightDistance1Valid &&
     isPriceForWeightDistance2Valid;
 
-  const onSubmit = () => {
-    console.log(
-      
-    );
-  };
+  const onSubmit = () => {};
 
   return (
     <Form

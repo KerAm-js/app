@@ -17,7 +17,16 @@ export type RootStackParamList = {
   EditProfile: undefined;
   Auth: undefined;
   Register: undefined;
-  User: IUser;
+  User: Pick<
+    IUser,
+    | "id"
+    | "username"
+    | "phone"
+    | "email"
+    | "description"
+    | "rating"
+    | "ratesCount"
+  >;
   UserSearch: undefined;
   MyComments: IMyCommentsPageProps;
   MyAdverts: undefined;
@@ -32,6 +41,6 @@ export type RootStackParamList = {
   ChooseAdvertType: IChooseAdvertTypePageProps;
   AdvertsList: Pick<TAdvert, "type">;
   NewAdvert: Pick<TAdvert, "type">;
-  AdvertImages: Pick<TAdvert, "id"> & {isPhotosRequired: boolean};
+  AdvertImages: Pick<TAdvert, "id"> & { isPhotosRequired: boolean };
   Filter: Pick<TAdvert, "type">;
 };

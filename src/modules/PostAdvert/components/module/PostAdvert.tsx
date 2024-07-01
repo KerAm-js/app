@@ -6,13 +6,14 @@ import MaterialForm from "../MaterialForm/MaterialForm";
 import { useActions } from "../../../../hooks/store/useActions";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
-import { USER } from "../../../../consts/devData";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const PostAdvertModuleComponent: FC<Pick<TAdvert, "type">> = ({ type }) => {
   const { addAdvert } = useActions();
+  const {user} = useAuth();
   const adverts = useSelector((state: RootState) => state.adverts);
 
   const navigation =
@@ -26,9 +27,9 @@ const PostAdvertModuleComponent: FC<Pick<TAdvert, "type">> = ({ type }) => {
       id,
       likes: [],
       views: [],
-      userId: USER.id,
-      userRating: USER.rating,
-      username: USER.username,
+      userId: user?.id,
+      userRating: user?.rating,
+      username: user?.username,
       updatedAt: Date.now(),
     });
     if (isPhotosAllowed) {

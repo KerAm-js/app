@@ -25,15 +25,31 @@ import DeletedAdvertsPage from "../pages/DeletedAdverts";
 import AdvertImagesPage from "../pages/AdvertImages";
 import AdvertsModule from "../modules/Adverts";
 import { useAuth } from "../hooks/store/useAuth";
+import { FC, useEffect } from "react";
+import { useActions } from "../hooks/store/useActions";
+import * as SplashScreen from "expo-splash-screen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const RootNavigator = () => {
-  const { token } = useAuth();
+const RootNavigator: FC = () => {
+  const { token, autoAuthPending, error, user } = useAuth();
+  const { autoLoginThunk } = useActions();
+
+  useEffect(() => {
+    if (!token) {
+      autoLoginThunk();
+    }
+  }, []);
+
+  if (autoAuthPending) {
+    return null;
+  } else if ((token && user) || error) {
+    SplashScreen.hideAsync();
+  }
 
   return (
     <Stack.Navigator initialRouteName="Main">
-      {token ? (
+      {token && user ? (
         <>
           <Stack.Group
             screenOptions={{

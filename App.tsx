@@ -1,7 +1,6 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./src/navigation";
-import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Provider } from "react-redux";
@@ -20,18 +19,12 @@ export default function App() {
     "Gilroy-Semibold": require("./src/assets/fonts/Gilroy-Semibold.ttf"),
   });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
   if (!fontsLoaded) {
     return null;
   }
   return (
     <Provider store={store}>
-      <NavigationContainer onReady={onLayoutRootView}>
+      <NavigationContainer>
         <RootNavigator />
       </NavigationContainer>
     </Provider>

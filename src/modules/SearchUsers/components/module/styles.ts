@@ -15,4 +15,7 @@ export const searchUsersStyles = StyleSheet.create({
     paddingHorizontal: SCREEN_PADDING,
     paddingBottom: 70,
   },
+  loader: {
+    marginTop: 50
+  }
 });

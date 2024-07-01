@@ -4,11 +4,12 @@ import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES } from "../../../../consts/inputValues";
-import { USER } from "../../../../consts/devData";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { TDumpForm } from "./types";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const DumpForm: FC<TDumpForm> = ({ submit }) => {
+  const { user } = useAuth();
   const [type, selectType, unselectType, clearType, isTypeValid, typeError] =
     useSelectionValidator({
       required: true,
@@ -74,10 +75,10 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
   });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
-    useInputValidator({ required: true, initValue: USER.username });
+    useInputValidator({ required: true, initValue: user?.username });
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
     required: true,
-    initValue: USER.phone,
+    initValue: user?.phone,
   });
 
   const inputs: TFormInputsArray = [

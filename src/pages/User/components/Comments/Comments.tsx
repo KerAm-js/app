@@ -1,7 +1,6 @@
 import { View } from "react-native";
 import BigButton from "../../../../UI/buttons/Big/BigButton";
 import { BLUE } from "../../../../consts/colors";
-import { pencilSvg } from "../../../../assets/svg/pencil";
 import { commentsStyles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -23,7 +22,6 @@ const Comments: FC<IUser> = ({ username, id }) => {
     <View style={commentsStyles.container}>
       <BigButton
         onPress={onPress}
-        iconXmlFunc={pencilSvg}
         title="Написать отзыв"
         backgroundColor={BLUE}
       />

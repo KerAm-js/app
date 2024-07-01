@@ -1,6 +1,15 @@
 import { IUser } from "../../../../types/User";
 
 export interface ICommentsModuleProps {
-  user: IUser
-  userRole: 'addressee' | 'author',
+  user: Pick<
+    IUser,
+    | "id"
+    | "username"
+    | "phone"
+    | "email"
+    | "description"
+    | "rating"
+    | "ratesCount"
+  >;
+  userRole: "addressee" | "author";
 }

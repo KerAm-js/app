@@ -5,18 +5,22 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import BigButton from "../../../../UI/buttons/Big/BigButton";
-import { USER } from "../../../../consts/devData";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import { useActions } from "../../../../hooks/store/useActions";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const Navigation = () => {
+  const { logoutThunk } = useActions();
+  const {user} = useAuth();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const users = useSelector((state: RootState) => state.users);
 
-  const { logOut } = useActions();
+  if (!user) {
+    return null;
+  }
 
   return (
     <View style={profileNavigationStyles.container}>
@@ -27,23 +31,23 @@ const Navigation = () => {
               title: "Мои отзывы",
               onPress: () =>
                 navigation.navigate("MyComments", {
-                  user: USER,
+                  user: user,
                   userRole: "author",
                 }),
             },
-            {
-              title: "Ждут оценки",
-              onPress: () =>
-                navigation.navigate("AwaitingComment", {
-                  users: users.slice(0, 2),
-                }),
-              circleNumber: 2,
-            },
+            // {
+            //   title: "Ждут оценки",
+            //   onPress: () =>
+            //     navigation.navigate("AwaitingComment", {
+            //       users: users.slice(0, 2),
+            //     }),
+            //   circleNumber: 2,
+            // },
             {
               title: "Отзывы обо мне",
               onPress: () =>
                 navigation.navigate("CommentsToMe", {
-                  user: USER,
+                  user: user,
                   userRole: "addressee",
                 }),
             },
@@ -80,7 +84,7 @@ const Navigation = () => {
         }
       />
       <Pressable
-        onPress={() => logOut()}
+        onPress={() => logoutThunk()}
         style={profileNavigationStyles.logoutButton}
       >
         <Text style={profileNavigationStyles.logoutButtonTitle}>

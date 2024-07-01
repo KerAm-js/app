@@ -6,12 +6,13 @@ import { useInputValidator } from "../../../../hooks/inputValidators/useInputVal
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { DATE_REGEX } from "../../../../consts/regex";
-import { USER } from "../../../../consts/devData";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
 import { TTechnicForm } from "./types";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
+  const { user } = useAuth();
   const [typeI, setTypeI] = useState(0);
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
@@ -135,12 +136,12 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
   const [firstDate, onFirstDateChange, isFirstDateValid, firstDateError] =
     useInputValidator({
       pattern: DATE_REGEX,
-      patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
+      patternErrorMessage: "Введите дату по шаблону ГГГГ.ММ.ДД",
     });
   const [secondDate, onSecondDateChange, isSecondDateValid, secondDateError] =
     useInputValidator({
       pattern: DATE_REGEX,
-      patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
+      patternErrorMessage: "Введите дату по шаблону ГГГГ.ММ.ДД",
     });
   const [
     rentalDaysCount,
@@ -156,10 +157,10 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
   const [paymentForI, setPaymentForI] = useState(0);
   const [paymentTypeI, setPaymentTypeI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
-    useInputValidator({ required: true, initValue: USER.username });
+    useInputValidator({ required: true, initValue: user?.username });
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
     required: true,
-    initValue: USER.phone,
+    initValue: user?.phone,
   });
 
   const inputs: TFormInputsArray = [
@@ -652,7 +653,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           paymentType: INPUT_VALUES.paymentType[paymentTypeI],
         },
       },
-      isPhotosAllowed,
+      isPhotosAllowed
     );
   };
 

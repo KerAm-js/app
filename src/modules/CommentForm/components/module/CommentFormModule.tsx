@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { RED } from "../../../../consts/colors";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
   addresseeName,
@@ -17,6 +18,7 @@ const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { user } = useAuth();
   const { addComment, editComment } = useActions();
   const [rating, setRating] = useState<number>(defaultComment?.rate || 0);
   const [comment, setComment] = useState<string>(defaultComment?.text || "");
@@ -28,9 +30,9 @@ const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
 
   const onSubmit = () => {
     if (defaultComment) {
-      editComment({ id: defaultComment.id, text: comment, rate: rating });
+      editComment({ id: defaultComment.id, text: comment, rate: rating, user });
     } else {
-      addComment({ addresseeId, addresseeName, text: comment, rate: rating });
+      addComment({ addresseeId, addresseeName, text: comment, rate: rating, user });
     }
     clearForm();
     navigation.goBack();

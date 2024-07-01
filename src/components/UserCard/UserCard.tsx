@@ -9,13 +9,23 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/types";
 import { IUser } from "../../types/User";
 
-const UserCard: FC<IUser> = (user) => {
+const UserCard: FC<Pick<
+IUser,
+| "id"
+| "username"
+| "phone"
+| "email"
+| "description"
+| "rating"
+| "ratesCount"
+>> = (user) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const onPress = () => {
     navigation.navigate("User", user);
   };
+  
   return (
     <Pressable onPress={onPress} style={userCardStyles.container}>
       <View style={userCardStyles.userData}>

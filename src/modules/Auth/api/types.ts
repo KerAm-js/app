@@ -5,12 +5,12 @@ export interface IRegisterRequest
   password: string;
 }
 
-export interface IRegisterResponse extends Pick<IUser, "email" | "username" | "phone"> {
+export interface IRegisterResponse
+  extends Pick<IUser, "email" | "username" | "phone"> {
   id: string;
 }
 
-export interface ILogInRequest
-  extends Pick<IUser, "email"> {
+export interface ILogInRequest extends Pick<IUser, "email"> {
   password: string;
 }
 
@@ -22,3 +22,10 @@ export interface IError {
   title: string;
   message: string;
 }
+
+export interface IGetUserByTokenResponse
+  extends Omit<
+    IUser,
+    | "likes"
+    | "comments"
+  > {}

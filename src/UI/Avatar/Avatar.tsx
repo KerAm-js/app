@@ -1,12 +1,31 @@
-import { Image, Platform, View } from "react-native";
+import { Image, Platform, Pressable, View } from "react-native";
 import { avatarStyles } from "./styles";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { TAvatarProps } from "./types";
 import { BLACK_DARK, WHITE } from "../../consts/colors";
+import * as ImagePicker from "expo-image-picker";
 
-const Avatar: FC<TAvatarProps> = ({ size = 120 }) => {
+const Avatar: FC<TAvatarProps> = ({ size = 120, applyAvatarEdititing }) => {
+  const [image, setImage] = useState<string | null>();
+
+  const pickImageAsync = async () => {
+    try {
+      let result: ImagePicker.ImagePickerResult =
+        await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsMultipleSelection: false,
+        });
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <View
+    <Pressable
+      onPress={applyAvatarEdititing ? pickImageAsync : undefined}
       style={[
         avatarStyles.container,
         { width: size, height: size },
@@ -44,13 +63,28 @@ const Avatar: FC<TAvatarProps> = ({ size = 120 }) => {
             { width: size / 1.2, height: size / 1.2 },
           ]}
         >
-          <Image
-            style={{ width: size / 1.71, height: size / 1.71 }}
-            source={require("../../assets/images/avatar.jpg")}
-          />
+          {image ? (
+            <Image
+              style={{
+                width: "100%",
+                height: "100%",
+                borderRadius: 50,
+              }}
+              source={{ uri: image }}
+            />
+          ) : (
+            <Image
+              style={{
+                width: size / 1.71,
+                height: size / 1.71,
+                borderRadius: 50,
+              }}
+              source={require("../../assets/images/avatar.jpg")}
+            />
+          )}
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
