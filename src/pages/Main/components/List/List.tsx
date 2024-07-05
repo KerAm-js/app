@@ -2,19 +2,24 @@ import { View } from "react-native";
 import MenuBar from "../MenuBar/MenuBar";
 import AdvertsModule from "../../../../modules/Adverts";
 import { useAdverts } from "../../../../hooks/store/useAdverts";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { TAdvertType } from "../../../../types/Advert";
 import { listStyles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { RU_LANG } from "../../../../consts/rulang";
+import * as SplashScreen from "expo-splash-screen";
 
 const List = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [advertType, setAdvertType] = useState<TAdvertType>("technic");
   const data = useAdverts(advertType);
+
+  useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({

@@ -25,17 +25,16 @@ import DeletedAdvertsPage from "../pages/DeletedAdverts";
 import AdvertImagesPage from "../pages/AdvertImages";
 import AdvertsModule from "../modules/Adverts";
 import { useAuth } from "../hooks/store/useAuth";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useLayoutEffect } from "react";
 import { useActions } from "../hooks/store/useActions";
-import * as SplashScreen from "expo-splash-screen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator: FC = () => {
-  const { token, autoAuthPending, error, user } = useAuth();
+  const { token, autoAuthPending, user } = useAuth();
   const { autoLoginThunk } = useActions();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!token) {
       autoLoginThunk();
     }
@@ -43,8 +42,6 @@ const RootNavigator: FC = () => {
 
   if (autoAuthPending) {
     return null;
-  } else if ((token && user) || error) {
-    SplashScreen.hideAsync();
   }
 
   return (

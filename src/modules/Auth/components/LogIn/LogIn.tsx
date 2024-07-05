@@ -6,7 +6,8 @@ import { authModuleStyles } from "../styles";
 import { EMAIL_REGEX } from "../../../../consts/regex";
 import { useActions } from "../../../../hooks/store/useActions";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
+import * as SplashScreen from "expo-splash-screen";
 
 const LogIn = () => {
   const [email, onEmailChange, isEmailValid, emailError] = useInputValidator({
@@ -22,7 +23,7 @@ const LogIn = () => {
     });
 
   const { logInThunk, clearError } = useActions();
-  const { isLoading, error, token, user } = useAuth();
+  const { isLoading, error, autoAuthPending } = useAuth();
 
   const inputs: TFormInputsArray = [
     {
@@ -60,15 +61,18 @@ const LogIn = () => {
     }
   };
 
-  useEffect(() => {
-    if (error) Alert.alert(error?.title, error?.message);
-  }, [error]);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (!autoAuthPending) {
+      SplashScreen.hideAsync();
+    }
     if (error) {
       clearError();
     }
   }, []);
+
+  useEffect(() => {
+    if (error) Alert.alert(error);
+  }, [error]);
 
   return (
     <View style={authModuleStyles.container}>

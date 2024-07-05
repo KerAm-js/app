@@ -7,7 +7,7 @@ import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneVal
 import { authModuleStyles } from "../styles";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useActions } from "../../../../hooks/store/useActions";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 
 const Register = () => {
   const [username, onChangeUsername, isUsernameValid, usernameError] =
@@ -106,15 +106,15 @@ const Register = () => {
     }
   };
 
-  useEffect(() => {
-    if (error) Alert.alert(error?.title, error?.message);
-  }, [error]);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (error) {
       clearError();
     }
   }, [])
+
+  useEffect(() => {
+    if (error) Alert.alert(error);
+  }, [error]);
 
   return (
     <View style={authModuleStyles.container}>

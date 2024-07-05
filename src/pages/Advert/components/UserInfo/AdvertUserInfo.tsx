@@ -34,7 +34,7 @@ const AdvertUserInfo: FC<IUser> = (props) => {
   return (
     <>
       <View style={advertUserInfoStyles.container}>
-        <Avatar size={50} />
+        <Avatar size={50} userId={id} />
         <Text style={advertUserInfoStyles.username}>{username}</Text>
         <View style={advertUserInfoStyles.ratingContainer}>
           <Rating

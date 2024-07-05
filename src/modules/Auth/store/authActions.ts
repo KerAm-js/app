@@ -1,14 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { authApi } from "../api/authApi";
 import {
-  IError,
-  IGetUserByTokenResponse,
   ILogInRequest,
-  ILogInResponse,
   IRegisterRequest,
   IRegisterResponse,
 } from "../api/types";
-import { getErrorMessage } from "../helpers/getErrorMessage";
+import { handleError } from "../helpers/getErrorMessage";
 import * as SecureStore from "expo-secure-store";
 import { TOKEN } from "../consts";
 import { IUser } from "../../../types/User";
@@ -31,7 +28,7 @@ export const logInThunk = createAsyncThunk<
     user: IUser;
   },
   ILogInRequest,
-  { rejectValue: IError }
+  { rejectValue: string }
 >("auth/login", async (credentials: ILogInRequest, thunkApi) => {
   try {
     const tokenRes = await authApi.logIn(credentials);
@@ -40,16 +37,16 @@ export const logInThunk = createAsyncThunk<
       const user = await getUserByToken(token);
       return { user, token };
     }
-    return thunkApi.rejectWithValue(getErrorMessage(""));
+    return thunkApi.rejectWithValue(handleError(""));
   } catch (err) {
-    return thunkApi.rejectWithValue(getErrorMessage(err));
+    return thunkApi.rejectWithValue(handleError(err));
   }
 });
 
 export const registerThunk = createAsyncThunk<
   IRegisterResponse & { token: string },
   IRegisterRequest,
-  { rejectValue: IError }
+  { rejectValue: string }
 >("auth/register", async (user, thunkApi) => {
   try {
     const response = await authApi.register(user);
@@ -60,7 +57,7 @@ export const registerThunk = createAsyncThunk<
     await SecureStore.setItemAsync(TOKEN, responseToken.data.token);
     return { ...response.data, token: responseToken.data.token };
   } catch (err) {
-    return thunkApi.rejectWithValue(getErrorMessage(err));
+    return thunkApi.rejectWithValue(handleError(err));
   }
 });
 
@@ -70,17 +67,17 @@ export const autoLoginThunk = createAsyncThunk<
     user: IUser;
   },
   undefined,
-  { rejectValue: IError }
+  { rejectValue: string }
 >("auth/autologin", async (_, thunkApi) => {
   try {
     const token = await SecureStore.getItemAsync(TOKEN);
-    if (token) {
+    if (token && token.length) {
       const user = await getUserByToken(token);
       return { user, token };
     }
-    return thunkApi.rejectWithValue(getErrorMessage(""));
+    return thunkApi.rejectWithValue(handleError(""));
   } catch (error) {
-    return thunkApi.rejectWithValue(getErrorMessage(error));
+    return thunkApi.rejectWithValue(handleError(error));
   }
 });
 
@@ -90,7 +87,7 @@ export const logoutThunk = createAsyncThunk(
     try {
       await SecureStore.setItemAsync(TOKEN, "");
     } catch (error) {
-      return thunkApi.rejectWithValue(getErrorMessage(""));
+      return thunkApi.rejectWithValue(handleError(""));
     }
   }
 );

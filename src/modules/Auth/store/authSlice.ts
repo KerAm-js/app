@@ -6,19 +6,17 @@ import {
   logoutThunk,
   registerThunk,
 } from "./authActions";
-import { IError } from "../api/types";
-import { getErrorMessage } from "../helpers/getErrorMessage";
 
 const initialState: {
   token?: string;
   isLoading: boolean;
   autoAuthPending: boolean;
-  error?: IError;
+  error?: string;
   user?: IUser;
 } = {
   token: undefined,
   user: undefined,
-  autoAuthPending: false,
+  autoAuthPending: true,
   isLoading: false,
   error: undefined,
 };
@@ -34,25 +32,23 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(logInThunk.pending, (state) => {
       state.isLoading = true;
+      state.autoAuthPending = false;
       state.error = undefined;
     });
     builder.addCase(logInThunk.fulfilled, (state, action) => {
       const { token, user } = action.payload;
       state.isLoading = false;
       state.error = undefined;
-      state.token = action.payload.token;
-      state.user = {...user};
+      state.token = token;
+      state.user = { ...user };
     });
     builder.addCase(logInThunk.rejected, (state, action) => {
-      const { title, message } = getErrorMessage("");
       state.isLoading = false;
-      state.error = {
-        title: action.payload?.title || title,
-        message: action.payload?.message || message,
-      };
+      state.error = action.payload;
     });
     builder.addCase(registerThunk.pending, (state) => {
       state.isLoading = true;
+      state.autoAuthPending = false;
       state.error = undefined;
     });
     builder.addCase(registerThunk.fulfilled, (state, action) => {
@@ -72,12 +68,8 @@ export const authSlice = createSlice({
       state.token = token;
     });
     builder.addCase(registerThunk.rejected, (state, action) => {
-      const { title, message } = getErrorMessage("");
       state.isLoading = false;
-      state.error = {
-        title: action.payload?.title || title,
-        message: action.payload?.message || message,
-      };
+      state.error = action.payload;
     });
     builder.addCase(autoLoginThunk.pending, (state) => {
       state.autoAuthPending = true;
@@ -87,16 +79,15 @@ export const authSlice = createSlice({
       const { token, user } = action.payload;
       state.autoAuthPending = false;
       state.error = undefined;
-      state.user = {...user};
+      state.user = { ...user };
       state.token = token;
     });
     builder.addCase(autoLoginThunk.rejected, (state, action) => {
-      const { title, message } = getErrorMessage("");
       state.autoAuthPending = false;
-      state.error = {
-        title: action.payload?.title || title,
-        message: action.payload?.message || message,
-      };
+      state.token = undefined;
+      state.user = undefined;
+      state.isLoading = false;
+      state.error = undefined;
     });
     builder.addCase(logoutThunk.fulfilled, (state, action) => {
       state.token = undefined;

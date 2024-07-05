@@ -56,7 +56,7 @@ const Comment: FC<ICommentProps> = (props) => {
     <View style={commentStyles.container}>
       <Pressable onPress={navigateToEdition} style={commentStyles.card}>
         <View style={commentStyles.topContainer}>
-          <Avatar size={36} />
+          <Avatar size={36} userId={isUserAuthor ? addresseeId : authorId} />
           <View style={commentStyles.infoContainer}>
             <View style={commentStyles.usernameContainer}>
               <Text style={commentStyles.username}>

@@ -68,7 +68,7 @@ const Advert: FC<TAdvert> = (props) => {
   return (
     <View style={advertStyles.container}>
       <Pressable style={advertStyles.topContainer} onPress={goToAdvertPage}>
-        <Avatar size={36} />
+        <Avatar size={36} userId={userId} />
         <View style={advertStyles.userInfo}>
           <Text style={advertStyles.username}>{username}</Text>
           <Rating

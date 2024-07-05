@@ -13,16 +13,14 @@ import { useAuth } from "../../../../hooks/store/useAuth";
 const AdvertPageComponent: FC<TAdvert> = (props) => {
   const users = useSelector((state: RootState) => state.users);
   const { user } = useAuth();
-  const info = users.find((user) => user.id === props.userId) || user
+  const info = users.find((user) => user.id === props.userId) || user;
   return (
     <View>
       <ScrollWithSlider {...props}>
         <MainInfo {...props} />
         <InfoTables {...props} />
-        <AdvertComment comment={props.general.comment} />
-        {
-          info && <AdvertUserInfo {...info} />
-        }
+        <AdvertComment userId={props.userId} comment={props.general.comment} />
+        {info && <AdvertUserInfo {...info} />}
       </ScrollWithSlider>
     </View>
   );

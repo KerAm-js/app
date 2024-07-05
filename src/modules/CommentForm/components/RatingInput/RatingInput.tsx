@@ -8,12 +8,13 @@ import { IRatingInputProps } from "./types";
 
 const RatingInput: FC<IRatingInputProps> = ({
   username,
+  userId,
   rating,
   setRating,
 }) => {
   return (
     <View style={ratingInputStyles.container}>
-      <Avatar size={50} />
+      <Avatar size={50} userId={userId} />
       <View style={ratingInputStyles.inputContainer}>
         <Text style={ratingInputStyles.username}>{username}</Text>
         <Rating type="button" rating={rating} setRating={setRating} />

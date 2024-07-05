@@ -29,7 +29,7 @@ IUser,
   return (
     <Pressable onPress={onPress} style={userCardStyles.container}>
       <View style={userCardStyles.userData}>
-        <Avatar size={36} />
+        <Avatar size={36} userId={user.id} />
         <View>
           <Text style={userCardStyles.username}>{user.username}</Text>
           <Text style={userCardStyles.phone}>{user.phone}</Text>

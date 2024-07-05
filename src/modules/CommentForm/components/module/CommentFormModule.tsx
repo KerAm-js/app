@@ -8,7 +8,6 @@ import { useActions } from "../../../../hooks/store/useActions";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { RED } from "../../../../consts/colors";
 import { useAuth } from "../../../../hooks/store/useAuth";
 
 const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
@@ -46,6 +45,7 @@ const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
     <View>
       <RatingInput
         username={addresseeName}
+        userId={addresseeId}
         rating={rating}
         setRating={setRating}
       />

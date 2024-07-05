@@ -12,7 +12,7 @@ const ProfilePageComponent = () => {
       showsVerticalScrollIndicator={false}
       style={profilePageStyles.container}
     >
-      <AvatarBlock />
+      <AvatarBlock userId={user?.id || ''} />
       {user && (
         <UserInfo
           {...user}

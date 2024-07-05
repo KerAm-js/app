@@ -15,6 +15,7 @@ const PhotoInput: FC<IPhotoInputProps> = ({
 }) => {
   const pickImageAsync = async () => {
     try {
+      global.FormData
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: true,

@@ -1,6 +1,13 @@
 import { AxiosError, isAxiosError } from "axios";
 import { IError } from "../api/types";
 
+export const handleError = (error: unknown | any): string => {
+  if (isAxiosError(error)) {
+    return error.response?.data.message || error.message;
+  }
+  return 'Неизвестная ошибка';
+}
+
 export const getErrorMessage = (error: unknown | any): IError => {
   let title = `Неизвестная ошибка`;
   let message =

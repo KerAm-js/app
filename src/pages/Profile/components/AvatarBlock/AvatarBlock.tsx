@@ -1,11 +1,12 @@
 import { View } from "react-native"
 import Avatar from "../../../../UI/Avatar/Avatar";
 import { avatarBlockStyles } from "./styles";
-import { useAuth } from "../../../../hooks/store/useAuth";
+import { FC } from "react";
+import { IUser } from "../../../../types/User";
 
-const AvatarBlock = () => {
+const AvatarBlock: FC<{ userId: IUser['id'] }> = ({ userId }) => {
   return <View style={avatarBlockStyles.container}>
-    <Avatar />
+    <Avatar userId={userId} applyAvatarEdititing />
     <View style={avatarBlockStyles.backgroundElement}/>
   </View>
 }
