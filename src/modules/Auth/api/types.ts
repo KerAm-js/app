@@ -24,8 +24,13 @@ export interface IError {
 }
 
 export interface IGetUserByTokenResponse
-  extends Omit<
-    IUser,
-    | "likes"
-    | "comments"
-  > {}
+  extends Pick<
+  IUser,
+  | "id"
+  | "username"
+  | "phone"
+  | "description"
+  | "email"
+  | "rating"
+  | "ratesCount"
+> {}

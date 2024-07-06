@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../../../types/User";
 import {
   autoLoginThunk,
+  getCurrentUserThunk,
   logInThunk,
   logoutThunk,
   registerThunk,
@@ -30,6 +31,21 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getCurrentUserThunk.pending, (state) => {
+      state.isLoading = true;
+      state.autoAuthPending = false;
+      state.error = undefined;
+    });
+    builder.addCase(getCurrentUserThunk.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.error = undefined;
+      state.user = {...action.payload, likes: [], comments: [], adverts: []};
+    });
+    builder.addCase(getCurrentUserThunk.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+
     builder.addCase(logInThunk.pending, (state) => {
       state.isLoading = true;
       state.autoAuthPending = false;

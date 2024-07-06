@@ -25,8 +25,9 @@ import DeletedAdvertsPage from "../pages/DeletedAdverts";
 import AdvertImagesPage from "../pages/AdvertImages";
 import AdvertsModule from "../modules/Adverts";
 import { useAuth } from "../hooks/store/useAuth";
-import { FC, useEffect, useLayoutEffect } from "react";
+import { FC, useLayoutEffect } from "react";
 import { useActions } from "../hooks/store/useActions";
+import { useCurrentUserQuery } from "../modules/EditProfile/api/profile.api";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -41,12 +42,13 @@ const RootNavigator: FC = () => {
   }, []);
 
   if (autoAuthPending) {
+    console.log('ok')
     return null;
   }
 
   return (
     <Stack.Navigator initialRouteName="Main">
-      {token && user ? (
+      {(token && user) ? (
         <>
           <Stack.Group
             screenOptions={{

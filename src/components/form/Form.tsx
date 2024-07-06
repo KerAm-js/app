@@ -60,7 +60,7 @@ const Form: FC<TFormProps> = ({
       <BigButton
         title={submitTitle}
         onPress={onSubmit}
-        disabled={!isFormValid}
+        disabled={!isFormValid || isLoading}
         isLoading={isLoading}
       />
     </View>

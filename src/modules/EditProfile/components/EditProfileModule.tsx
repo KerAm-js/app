@@ -1,25 +1,35 @@
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import { usePhoneValidator } from "../../../hooks/inputValidators/usePhoneValidator";
 import { useInputValidator } from "../../../hooks/inputValidators/useInputValidator";
 import { TFormInputsArray } from "../../../components/Form/types";
-import { EMAIL_REGEX } from "../../../consts/regex";
 import Form from "../../../components/Form/Form";
 import { editProfileModuleStyles } from "./styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks/store/useAuth";
+import { useUpdateProfileMutation } from "../api/profile.api";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { useActions } from "../../../hooks/store/useActions";
+
+const isFetchBaseQueryError = (error: any): error is FetchBaseQueryError =>
+  "status" in error;
 
 const EditProfileModuleComponent = () => {
-  const { user } = useAuth();
+  const { user, token, isLoading } = useAuth();
+  const { getCurrentUserThunk } = useActions();
+  const [updateProfile, result] = useUpdateProfileMutation();
+
   const [username, onChangeUsername, isUsernameValid, usernameError] =
     useInputValidator({ initValue: user?.username, minLength: 2 });
   const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
     initValue: user?.phone,
   });
-  const [email, onEmailChange, isEmailValid, emailError] = useInputValidator({
-    initValue: user?.email,
-    pattern: EMAIL_REGEX,
-  });
-  const [description, setDescription] = useState(user?.description || '');
+  const [description, setDescription] = useState(user?.description || "");
+  const [password, onPasswordChange, isPasswordValid, passwordError] =
+    useInputValidator({
+      initValue: "",
+      minLength: 3,
+      required: true,
+    });
 
   const inputs: TFormInputsArray = [
     {
@@ -45,22 +55,23 @@ const EditProfileModuleComponent = () => {
           textContentType: "telephoneNumber",
         },
         {
-          id: "email",
-          type: "input",
-          value: email,
-          onChangeText: onEmailChange,
-          error: emailError,
-          placeholder: "",
-          label: "E-mail",
-          keyboardType: "email-address",
-        },
-        {
           id: "description",
           type: "textArea",
           value: description,
           onChangeText: (text: string) => setDescription(text),
           placeholder: "",
           label: "Описание",
+        },
+        {
+          id: "password",
+          type: "input",
+          value: password,
+          onChangeText: onPasswordChange,
+          placeholder: "Ваш пароль",
+          label: "Пароль",
+          secureTextEntry: true,
+          keyboardType: "numbers-and-punctuation",
+          error: passwordError,
         },
       ],
     },
@@ -69,10 +80,9 @@ const EditProfileModuleComponent = () => {
   const isFormValid =
     isPhoneValid &&
     isUsernameValid &&
-    isEmailValid &&
+    isPasswordValid &&
     (username !== user?.username ||
       phone !== user?.phone ||
-      email !== user?.email ||
       description !== user?.description);
 
   const onSubmit = () => {
@@ -80,11 +90,25 @@ const EditProfileModuleComponent = () => {
       const userData = {
         username,
         phone,
-        email,
+        password,
         description,
       };
+      updateProfile({ userData, token: token || "" });
     }
   };
+
+  useEffect(() => {
+    if (result.isSuccess && token) {
+      getCurrentUserThunk(token);
+      Alert.alert("Ваши данные успешно обновлены!");
+    }
+    if (result.isError) {
+      Alert.alert(
+        "Что-то пошло не так",
+        "Убедитесь, что данные введены корректно и вы подключены к сети"
+      );
+    }
+  }, [result]);
 
   return (
     <View style={editProfileModuleStyles.container}>
@@ -93,6 +117,7 @@ const EditProfileModuleComponent = () => {
         submitTitle="Сохранить"
         onSubmit={onSubmit}
         isFormValid={isFormValid}
+        isLoading={result.isLoading || isLoading}
       />
     </View>
   );

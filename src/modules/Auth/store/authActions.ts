@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { authApi } from "../api/authApi";
 import {
+  IGetUserByTokenResponse,
   ILogInRequest,
   IRegisterRequest,
   IRegisterResponse,
@@ -13,14 +14,28 @@ import { IUser } from "../../../types/User";
 const getUserByToken = async (token: string) => {
   await SecureStore.setItemAsync(TOKEN, token);
   const userRes = await authApi.getUserByToken(token);
-  const likesRes = await authApi.getUserLikesByToken(token);
-  const commentsRes = await authApi.getUserCommentsByToken(token);
+  // const likesRes = await authApi.getUserLikesByToken(token);
+  // const commentsRes = await authApi.getUserCommentsByToken(token);
   return {
     ...userRes.data,
-    comments: commentsRes.data,
-    likes: likesRes.data,
+    likes: [],
+    comments: [],
+    adverts: [],
   };
 };
+
+export const getCurrentUserThunk = createAsyncThunk<
+  IGetUserByTokenResponse,
+  string,
+  { rejectValue: string }
+>("auth/current-user", async (credentials, thunkApi) => {
+  try {
+    const response = await authApi.getUserByToken(credentials);
+    return response.data;
+  } catch (err) {
+    return thunkApi.rejectWithValue(handleError(err));
+  }
+});
 
 export const logInThunk = createAsyncThunk<
   {
@@ -29,7 +44,7 @@ export const logInThunk = createAsyncThunk<
   },
   ILogInRequest,
   { rejectValue: string }
->("auth/login", async (credentials: ILogInRequest, thunkApi) => {
+>("auth/login", async (credentials, thunkApi) => {
   try {
     const tokenRes = await authApi.logIn(credentials);
     const { token } = tokenRes.data;

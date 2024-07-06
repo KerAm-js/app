@@ -4,7 +4,7 @@ import { arrowRightSvg } from "../../../assets/svg/arrowRight";
 import { buttonsGroupStyles } from "./styles";
 import { FC } from "react";
 import { TGroupButtonProps } from "./types";
-import { GREY_MIDDLE } from "../../../consts/colors";
+import { GREY_LIGHT } from "../../../consts/colors";
 
 const GroupButton: FC<TGroupButtonProps> = ({
   title,
@@ -17,7 +17,7 @@ const GroupButton: FC<TGroupButtonProps> = ({
       onPress={onPress}
       style={[
         buttonsGroupStyles.button,
-        showBorder && { borderTopColor: GREY_MIDDLE },
+        showBorder && { borderTopColor: GREY_LIGHT },
       ]}
     >
       <Text style={buttonsGroupStyles.buttonTitle}>{title}</Text>

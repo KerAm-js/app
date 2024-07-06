@@ -1,7 +1,7 @@
 import Component from "./components/EditProfileModule";
 
 const EditProfileModule = {
-  Component,
+  Component
 };
 
 export default EditProfileModule;

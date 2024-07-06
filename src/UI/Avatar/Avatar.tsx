@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { avatarStyles } from "./styles";
-import { FC, useRef, useState } from "react";
+import { FC, useState } from "react";
 import { TAvatarProps } from "./types";
 import { BLACK_DARK, WHITE } from "../../consts/colors";
 import * as ImagePicker from "expo-image-picker";
@@ -62,7 +62,6 @@ const Avatar: FC<TAvatarProps> = ({
   applyAvatarEdititing,
   userId,
 }) => {
-  const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useAuth();
   const pickImageAsync = async () => {
@@ -109,7 +108,6 @@ const Avatar: FC<TAvatarProps> = ({
             format: ImageManipulator.SaveFormat.JPEG,
           }
         );
-        setImage(image.uri);
         const formData = new FormData();
         if (image) {
           formData.append("avatar", {

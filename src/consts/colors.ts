@@ -1,4 +1,4 @@
-export const GREY_LIGHT = '#F3F3F5';
+export const GREY_LIGHT = '#F3F4F5';
 export const GREY_MIDDLE = '#DDDDDD';
 export const GREY_DARK = '#999999'
 export const WHITE = '#FFFFFF';

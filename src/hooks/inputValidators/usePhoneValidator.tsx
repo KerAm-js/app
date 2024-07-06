@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TInputValidator } from "./types";
 
 export const usePhoneValidator: TInputValidator = (props) => {
@@ -48,6 +48,10 @@ export const usePhoneValidator: TInputValidator = (props) => {
     setIsValid(required ? !!initValue?.length : false);
     setError(!initValue?.length && required ? "Заполните данное поле" : "");
   }
+
+  useEffect(() => {
+    if (initValue) onChangeValue(initValue);
+  }, []);
 
   return [value, onChangeValue, isValid, error, setInitial];
 };
