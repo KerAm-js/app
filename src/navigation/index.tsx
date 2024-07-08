@@ -42,7 +42,6 @@ const RootNavigator: FC = () => {
   }, []);
 
   if (autoAuthPending) {
-    console.log('ok')
     return null;
   }
 

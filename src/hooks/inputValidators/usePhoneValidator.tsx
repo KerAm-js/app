@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import { TInputValidator } from "./types";
+import { TPhoneInputValidator } from "./types";
 import { toPhoneFormat } from "../../helpers/toPhoneFormat";
 
-export const usePhoneValidator: TInputValidator = (props) => {
+export const usePhoneValidator: TPhoneInputValidator = (props) => {
   const { initValue, required } = props || {};
-  console.log(initValue)
   const [value, setValue] = useState(toPhoneFormat(initValue || ""));
   const [number, setNumber] = useState(initValue || "");
-  const [isValid, setIsValid] = useState(
-    required ? !!initValue?.length : false
-  );
+  const [isValid, setIsValid] = useState(initValue?.length === 11 || false);
+
   const [error, setError] = useState(
     !initValue?.length && required ? "Заполните данное поле" : ""
   );

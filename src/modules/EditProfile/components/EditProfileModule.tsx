@@ -7,11 +7,9 @@ import { editProfileModuleStyles } from "./styles";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks/store/useAuth";
 import { useUpdateProfileMutation } from "../api/profile.api";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useActions } from "../../../hooks/store/useActions";
-
-const isFetchBaseQueryError = (error: any): error is FetchBaseQueryError =>
-  "status" in error;
+import { useIsUsernameAvailableQuery } from "../../../api/api";
+import { USERNAME_REGEX } from "../../../consts/regex";
 
 const EditProfileModuleComponent = () => {
   const { user, token, isLoading } = useAuth();
@@ -19,10 +17,17 @@ const EditProfileModuleComponent = () => {
   const [updateProfile, result] = useUpdateProfileMutation();
 
   const [username, onChangeUsername, isUsernameValid, usernameError] =
-    useInputValidator({ initValue: user?.username, minLength: 2 });
-  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] = usePhoneValidator({
-    initValue: user?.phone,
-  });
+    useInputValidator({
+      initValue: user?.username,
+      minLength: 2,
+      pattern: USERNAME_REGEX,
+      patternErrorMessage:
+        "Данное поле может содержать только латинские буквы, цифры и нижние подчёркивания",
+    });
+  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] =
+    usePhoneValidator({
+      initValue: user?.phone,
+    });
   const [description, setDescription] = useState(user?.description || "");
   const [password, onPasswordChange, isPasswordValid, passwordError] =
     useInputValidator({
@@ -31,6 +36,12 @@ const EditProfileModuleComponent = () => {
       required: true,
     });
 
+  const { data: isUsernameAvailable } = useIsUsernameAvailableQuery(username, {
+    skip:
+      username.length < 2 ||
+      username.toLowerCase() === user?.username.toLowerCase(),
+  });
+
   const inputs: TFormInputsArray = [
     {
       inputs: [
@@ -38,7 +49,12 @@ const EditProfileModuleComponent = () => {
           id: "username",
           type: "input",
           value: username,
-          error: usernameError,
+          errorShown: isUsernameAvailable === false,
+          error: usernameError
+            ? usernameError
+            : !isUsernameAvailable && username.length > 1
+            ? "Это имя пользователя занято"
+            : "",
           onChangeText: onChangeUsername,
           placeholder: "",
           label: "Имя пользователя",
@@ -53,7 +69,7 @@ const EditProfileModuleComponent = () => {
           label: "Телефон",
           keyboardType: "phone-pad",
           textContentType: "telephoneNumber",
-          maxLength: 16
+          maxLength: 16,
         },
         {
           id: "description",
@@ -82,6 +98,7 @@ const EditProfileModuleComponent = () => {
     isPhoneValid &&
     isUsernameValid &&
     isPasswordValid &&
+    isUsernameAvailable &&
     (username !== user?.username ||
       phone !== user?.phone ||
       description !== user?.description);

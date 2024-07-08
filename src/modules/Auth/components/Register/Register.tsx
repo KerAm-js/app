@@ -1,20 +1,31 @@
 import { Alert, View } from "react-native";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
-import { EMAIL_REGEX } from "../../../../consts/regex";
+import { EMAIL_REGEX, USERNAME_REGEX } from "../../../../consts/regex";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { authModuleStyles } from "../styles";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useActions } from "../../../../hooks/store/useActions";
 import { useEffect, useLayoutEffect } from "react";
+import {
+  useIsEmailAvailableQuery,
+  useIsUsernameAvailableQuery,
+} from "../../../../api/api";
 
 const Register = () => {
   const [username, onChangeUsername, isUsernameValid, usernameError] =
-    useInputValidator({ initValue: "", minLength: 2 });
-  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] = usePhoneValidator({
-    initValue: "",
-  });
+    useInputValidator({
+      initValue: "",
+      minLength: 2,
+      pattern: USERNAME_REGEX,
+      patternErrorMessage:
+        "Данное поле может содержать только латинские буквы, цифры и нижние подчёркивания",
+    });
+  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] =
+    usePhoneValidator({
+      initValue: "",
+    });
   const [email, onEmailChange, isEmailValid, emailError] = useInputValidator({
     initValue: "",
     pattern: EMAIL_REGEX,
@@ -32,6 +43,12 @@ const Register = () => {
       confirmingErrorMessage: "Пароли не совпадают",
     });
 
+  const { data: isUsernameAvailable } = useIsUsernameAvailableQuery(username, {
+    skip: username.length < 2,
+  });
+  const { data: isEmailAvailable } = useIsEmailAvailableQuery(email, {
+    skip: email.length < 5,
+  });
   const { registerThunk, clearError } = useActions();
   const { isLoading, error } = useAuth();
 
@@ -42,7 +59,12 @@ const Register = () => {
           id: "username",
           type: "input",
           value: username,
-          error: usernameError,
+          errorShown: isUsernameAvailable === false,
+          error: usernameError
+            ? usernameError
+            : !isUsernameAvailable && username.length > 1
+            ? "Это имя пользователя занято"
+            : "",
           onChangeText: onChangeUsername,
           placeholder: "",
           label: "Имя пользователя",
@@ -57,14 +79,19 @@ const Register = () => {
           label: "Телефон",
           keyboardType: "phone-pad",
           textContentType: "telephoneNumber",
-          maxLength: 16
+          maxLength: 16,
         },
         {
           id: "email",
           type: "input",
           value: email,
           onChangeText: onEmailChange,
-          error: emailError,
+          errorShown: isEmailAvailable === false,
+          error: emailError
+            ? emailError
+            : !isEmailAvailable && email.length > 4
+            ? "Этот e-mail занят"
+            : "",
           placeholder: "",
           label: "E-mail",
           keyboardType: "email-address",
@@ -97,7 +124,9 @@ const Register = () => {
 
   const isFormValid =
     isUsernameValid &&
+    isUsernameAvailable &&
     isEmailValid &&
+    isEmailAvailable &&
     isPhoneValid &&
     isPasswordValid &&
     isPassword2Valid;
@@ -112,7 +141,7 @@ const Register = () => {
     if (error) {
       clearError();
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (error) Alert.alert(error);

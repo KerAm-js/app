@@ -18,6 +18,16 @@ export type TInputValidator = (
   isValid: boolean,
   error: string,
   setInitial: () => void,
+];
+
+export type TPhoneInputValidator = (
+  props?: TInputValidatorProps
+) => [
+  value: string,
+  onChangeValue: (value: string) => void,
+  isValid: boolean,
+  error: string,
+  setInitial: () => void,
   number: string,
 ];
 

@@ -1,7 +1,10 @@
 import { Text, View } from "react-native";
-import React, { ComponentType, FC, useState } from "react";
+import React, { ComponentType, FC, useEffect, useState } from "react";
 import { BLUE } from "../../../consts/colors";
-import { TWithLabelAndErrorChildrenProps, TWithLabelAndErrorProps } from "./types";
+import {
+  TWithLabelAndErrorChildrenProps,
+  TWithLabelAndErrorProps,
+} from "./types";
 import { withLabelAndErrorStyles } from "./styles";
 
 function WithLabelAndError<T>(
@@ -10,9 +13,16 @@ function WithLabelAndError<T>(
   return (hocProps: T & TWithLabelAndErrorProps) => {
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const [errorShown, setErrorShown] = useState(false);
+
+    useEffect(() => {
+      setErrorShown(hocProps.errorShown || errorShown);
+    }, [hocProps.errorShown]);
+
     return (
       <View style={withLabelAndErrorStyles.container}>
-        <Text style={[withLabelAndErrorStyles.label, isFocused && { color: BLUE }]}>
+        <Text
+          style={[withLabelAndErrorStyles.label, isFocused && { color: BLUE }]}
+        >
           {hocProps.label}
         </Text>
         <Input

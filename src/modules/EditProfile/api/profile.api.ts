@@ -59,7 +59,6 @@ const profileApi = api.injectEndpoints({
         meta,
         arg
       ) => {
-        console.log(response.data.error);
         return response.data.error;
       },
     }),

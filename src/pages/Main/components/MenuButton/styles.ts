@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { BLACK_DARK, WHITE } from "../../../../consts/colors";
+import { WHITE } from "../../../../consts/colors";
 import { BORDER_RADIUS_SMALL } from "../../../../consts/borders";
 
 export const menuButtonStyles = StyleSheet.create({
@@ -9,6 +9,7 @@ export const menuButtonStyles = StyleSheet.create({
     backgroundColor: WHITE,
     borderRadius: BORDER_RADIUS_SMALL,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderCurve: 'continuous'
   }
 })

@@ -7,4 +7,5 @@ export type TWithLabelAndErrorChildrenProps = {
 export type TWithLabelAndErrorProps = {
   label: string;
   error?: string;
+  errorShown?: boolean;
 };

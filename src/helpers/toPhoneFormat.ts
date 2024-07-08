@@ -1,4 +1,5 @@
-export const toPhoneFormat = (phone: string) => {
+export const toPhoneFormat = (str: string) => {
+  let phone = str[0] === '+' ? str.slice(1) : str;
   const result =
     (phone[0] ? "+7" : "") +
     (phone[1] ? " " + phone.slice(1, 4) : "") +

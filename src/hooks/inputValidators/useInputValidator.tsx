@@ -35,6 +35,7 @@ export const useInputValidator: TInputValidator = (props) => {
       setIsValid(false);
       setError("Заполните данное поле");
     } else if (text.length > 0 && pattern && !pattern.test(text)) {
+      console.log(text);
       setError(patternErrorMessage || "Некорректные данные");
       setIsValid(false);
     } else if (confirmedValue && text === confirmedValue) {
