@@ -12,6 +12,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { useUserComments } from "../../../../hooks/store/useComments";
 import { USER } from "../../../../consts/devData";
+import { toPhoneFormat } from "../../../../helpers/toPhoneFormat";
 
 const UserInfo: FC<
   Pick<
@@ -76,7 +77,7 @@ const UserInfo: FC<
           />
         )}
       </View>
-      <InfoCard title="Телефон" content={phone} />
+      <InfoCard title="Телефон" content={toPhoneFormat(phone)} />
       <InfoCard title="Почта" content={email} />
       {description && !!description.trim() && (
         <InfoCard title="Описание" content={description} />

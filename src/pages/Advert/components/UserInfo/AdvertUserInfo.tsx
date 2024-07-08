@@ -12,6 +12,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { useUserComments } from "../../../../hooks/store/useComments";
 import { useAuth } from "../../../../hooks/store/useAuth";
+import { toPhoneFormat } from "../../../../helpers/toPhoneFormat";
 
 const AdvertUserInfo: FC<IUser> = (props) => {
   const { id, rating, username, phone } = props;
@@ -24,7 +25,7 @@ const AdvertUserInfo: FC<IUser> = (props) => {
   });
 
   const call = () => {
-    Linking.openURL(`tel:${phone}`);
+    Linking.openURL(`tel:+${phone}`);
   };
 
   const goToComments = () => {
@@ -47,7 +48,7 @@ const AdvertUserInfo: FC<IUser> = (props) => {
             Рейтинг {rating} (количество оценок {rates.length})
           </Text>
         </View>
-        <Text style={advertUserInfoStyles.phone}>{phone}</Text>
+        <Text style={advertUserInfoStyles.phone}>{toPhoneFormat(phone)}</Text>
         {props.id !== user?.id && (
           <Link title={"Профиль"} onPress={goToComments} />
         )}

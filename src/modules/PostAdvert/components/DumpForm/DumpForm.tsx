@@ -76,7 +76,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
   const [paymentTypeI, setPaymentTypeI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
     useInputValidator({ required: true, initValue: user?.username });
-  const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
+  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] = usePhoneValidator({
     required: true,
     initValue: user?.phone,
   });
@@ -240,11 +240,13 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
         {
           id: "phone",
           type: "input",
-          value: phone,
+          value: phoneText,
           onChangeText: onPhoneChange,
           error: phoneError,
           label: "Имя пользователя",
           keyboardType: "phone-pad",
+          textContentType: "telephoneNumber",
+          maxLength: 16
         },
       ],
     },

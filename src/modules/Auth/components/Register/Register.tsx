@@ -12,7 +12,7 @@ import { useEffect, useLayoutEffect } from "react";
 const Register = () => {
   const [username, onChangeUsername, isUsernameValid, usernameError] =
     useInputValidator({ initValue: "", minLength: 2 });
-  const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
+  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] = usePhoneValidator({
     initValue: "",
   });
   const [email, onEmailChange, isEmailValid, emailError] = useInputValidator({
@@ -50,12 +50,14 @@ const Register = () => {
         {
           id: "phone",
           type: "input",
-          value: phone,
+          value: phoneText,
           onChangeText: onPhoneChange,
           error: phoneError,
           placeholder: "",
           label: "Телефон",
           keyboardType: "phone-pad",
+          textContentType: "telephoneNumber",
+          maxLength: 16
         },
         {
           id: "email",

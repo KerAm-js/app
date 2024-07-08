@@ -18,6 +18,7 @@ export type TInputValidator = (
   isValid: boolean,
   error: string,
   setInitial: () => void,
+  number: string,
 ];
 
 export type TSelectionValidator = ({

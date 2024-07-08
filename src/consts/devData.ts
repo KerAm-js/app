@@ -2,7 +2,7 @@ import { IUser } from "../types/User";
 
 export const USER: IUser = {
   id: "1",
-  phone: "+7 928 123-45-67",
+  phone: "79281234567",
   username: "ДунСтрой Групп",
   email: "email@mail.ru",
   description: "Описание к аккаунту",

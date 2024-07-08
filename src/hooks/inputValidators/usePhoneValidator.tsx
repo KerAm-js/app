@@ -1,40 +1,24 @@
 import { useEffect, useState } from "react";
 import { TInputValidator } from "./types";
+import { toPhoneFormat } from "../../helpers/toPhoneFormat";
 
 export const usePhoneValidator: TInputValidator = (props) => {
-  const {initValue, required} = props || {}; 
-  const [value, setValue] = useState(initValue || '');
-  const [isValid, setIsValid] = useState(required ? !!initValue?.length : false);
+  const { initValue, required } = props || {};
+  console.log(initValue)
+  const [value, setValue] = useState(toPhoneFormat(initValue || ""));
+  const [number, setNumber] = useState(initValue || "");
+  const [isValid, setIsValid] = useState(
+    required ? !!initValue?.length : false
+  );
   const [error, setError] = useState(
     !initValue?.length && required ? "Заполните данное поле" : ""
   );
 
-  const onChangeValue = (text: string) => {
-    const phone = text.replaceAll(/[^\d]/g, "");
-    if (text.length < value.length) {
-      setValue(text);
-    } else if (phone.length === 1) {
-      setValue("+7 ");
-    } else if (phone.length <= 4) {
-      setValue(`+7 ${phone.slice(1, 4)}`);
-    } else if (phone.length <= 7) {
-      setValue(`+7 ${phone.slice(1, 4)} ${phone.slice(4)}`);
-    } else if (phone.length <= 9) {
-      setValue(
-        `+7 ${phone.slice(1, 4)} ${phone.slice(4, 7)}-${phone.slice(7)}`
-      );
-    } else if (phone.length <= 11) {
-      setValue(
-        `+7 ${phone.slice(1, 4)} ${phone.slice(4, 7)}-${phone.slice(
-          7,
-          9
-        )}-${phone.slice(9)}`
-      );
-    }
-    if (phone.length === 11) {
+  const validateNumber = (number: string) => {
+    if (number.length === 11) {
       setIsValid(true);
       setError("");
-    } else if (text.length === 0 && required) {
+    } else if (number.length === 0 && required) {
       setIsValid(false);
       setError("Заполните данное поле");
     } else {
@@ -43,15 +27,23 @@ export const usePhoneValidator: TInputValidator = (props) => {
     }
   };
 
+  const onChangeValue = (text: string) => {
+    let newNumber = number + text[text.length - 1];
+    if (text.length < value.length) {
+      newNumber = number.slice(0, -1);
+      setNumber(newNumber);
+    } else {
+      setNumber(text.length === 1 ? "7" : newNumber);
+    }
+    setValue(toPhoneFormat(newNumber));
+    validateNumber(newNumber);
+  };
+
   const setInitial = () => {
     setValue(initValue || "");
     setIsValid(required ? !!initValue?.length : false);
     setError(!initValue?.length && required ? "Заполните данное поле" : "");
-  }
+  };
 
-  useEffect(() => {
-    if (initValue) onChangeValue(initValue);
-  }, []);
-
-  return [value, onChangeValue, isValid, error, setInitial];
+  return [value, onChangeValue, isValid, error, setInitial, number];
 };

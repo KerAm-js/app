@@ -24,7 +24,7 @@ IUser,
       style={userPageStyles.container}
       ListHeaderComponent={
         <View>
-          <ProfilePage.AvatarBlock />
+          <ProfilePage.AvatarBlock userId={user.id} />
           <ProfilePage.UserInfo {...user} />
           {/* <Comments {...user} /> */}
           {/* <AdvertsModule.Header dataLength={user.adverts.length} /> */}

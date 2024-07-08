@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, View } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { searchUsersStyles } from "./styles";
 import UserCard from "../../../../components/UserCard/UserCard";
 import SearchBar from "../../../../UI/inputs/SearchBar/SearchBar";
@@ -8,20 +8,36 @@ import { BLACK_DARK } from "../../../../consts/colors";
 
 const SearchUsersModuleComponent = () => {
   const [search, setSearch] = useState("");
+  const [pagination, setPagination] = useState({ from: 0, to: 20 });
 
   const {
     isLoading,
     isFetching,
-    error,
     data: users,
+    error,
+    status,
   } = useGetUsersQuery(
     {
       username: search,
-      from: 0,
-      to: 20,
+      from: pagination.from,
+      to: pagination.to,
     },
     { skip: !search }
   );
+
+  const onEndReached = () => {
+    setPagination((prev) => ({ from: prev.to + 1, to: prev.to + 3 }));
+  };
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setPagination((prev) => ({ from: 0, to: prev.to + 2 }));
+  //   }, 5000);
+  // }, [])
+
+  useEffect(() => {
+    console.log(users, status, error);
+  }, [users]);
 
   return (
     <View style={searchUsersStyles.container}>
@@ -41,7 +57,7 @@ const SearchUsersModuleComponent = () => {
           data={search ? users : []}
           style={searchUsersStyles.list}
           contentContainerStyle={searchUsersStyles.flatlistContent}
-          renderItem={({ item }) => <UserCard key={item.phone} {...item} />}
+          renderItem={({ item }) => <UserCard key={item.email} {...item} />}
         />
       )}
     </View>

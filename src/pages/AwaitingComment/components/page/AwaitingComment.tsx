@@ -12,7 +12,7 @@ const AwaitingCommentPageComponent: FC<IAwaitingCommentPageProps> = ({
       <FlatList
         data={users}
         contentContainerStyle={awaitingCommentPageStyles.contentContainer}
-        renderItem={({ item }) => <UserCard key={item.phone} {...item} />}
+        renderItem={({ item }) => <UserCard key={item.email} {...item} />}
       />
     </View>
   );

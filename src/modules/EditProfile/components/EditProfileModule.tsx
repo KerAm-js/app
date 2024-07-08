@@ -20,7 +20,7 @@ const EditProfileModuleComponent = () => {
 
   const [username, onChangeUsername, isUsernameValid, usernameError] =
     useInputValidator({ initValue: user?.username, minLength: 2 });
-  const [phone, onPhoneChange, isPhoneValid, phoneError] = usePhoneValidator({
+  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] = usePhoneValidator({
     initValue: user?.phone,
   });
   const [description, setDescription] = useState(user?.description || "");
@@ -46,13 +46,14 @@ const EditProfileModuleComponent = () => {
         {
           id: "phone",
           type: "input",
-          value: phone,
+          value: phoneText,
           onChangeText: onPhoneChange,
           error: phoneError,
           placeholder: "",
           label: "Телефон",
           keyboardType: "phone-pad",
           textContentType: "telephoneNumber",
+          maxLength: 16
         },
         {
           id: "description",

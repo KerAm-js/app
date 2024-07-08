@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/types";
 import { IUser } from "../../types/User";
+import { toPhoneFormat } from "../../helpers/toPhoneFormat";
 
 const UserCard: FC<Pick<
 IUser,
@@ -32,7 +33,7 @@ IUser,
         <Avatar size={36} userId={user.id} />
         <View>
           <Text style={userCardStyles.username}>{user.username}</Text>
-          <Text style={userCardStyles.phone}>{user.phone}</Text>
+          <Text style={userCardStyles.phone}>{toPhoneFormat(user.phone)}</Text>
         </View>
       </View>
       <SvgXml xml={arrowRightSvg()} width={14} height={14} />
