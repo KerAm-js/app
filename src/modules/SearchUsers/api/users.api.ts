@@ -1,50 +1,38 @@
 import { api } from "../../../api/api";
 import { IUser } from "../../../types/User";
 
+interface GetUserByIdRequest {
+  id: number;
+}
+
+interface GetUserByIdResponse
+  extends Pick<
+    IUser,
+    | "id"
+    | "username"
+    | "phone"
+    | "email"
+    | "description"
+    | "rating"
+    | "ratesCount"
+  > {}
+
+interface GetUsersRequest {
+  username: string;
+  from: number;
+  to: number;
+}
+
 const usersApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getUsers: builder.query<
-      Array<
-        Pick<
-          IUser,
-          | "id"
-          | "username"
-          | "phone"
-          | "email"
-          | "description"
-          | "rating"
-          | "ratesCount"
-        >
-      >,
-      { username: string; from: number; to: number }
-    >({
+    getUsers: builder.query<Array<GetUserByIdResponse>, GetUsersRequest>({
       query: ({ username, from, to }) =>
-        `/users/${username}?from=${from}&to=${to}`,
-      providesTags: () => [
-        {
-          type: "Users",
-        },
-      ],
+        `/users/find-by-name/?username=${username}&from=${from}&to=${to}`,
+      providesTags: ["User"],
     }),
-    getUserById: builder.query<
-      Pick<
-        IUser,
-        | "id"
-        | "username"
-        | "phone"
-        | "email"
-        | "description"
-        | "rating"
-        | "ratesCount"
-      >,
-      string
-    >({
-      query: (userId) => `/user/${userId}`,
-      providesTags: () => [
-        {
-          type: "Users",
-        },
-      ],
+    getUserById: builder.query<GetUserByIdResponse, GetUserByIdRequest>({
+      query: ({ id }) => `/user/${id}`,
+      providesTags: ["User"],
     }),
   }),
 });

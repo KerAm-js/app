@@ -8,7 +8,7 @@ import { RootStackParamList } from "../../../../navigation/types";
 import { FC } from "react";
 import { IUser } from "../../../../types/User";
 
-const Comments: FC<IUser> = ({ username, id }) => {
+const Comments: FC<Pick<IUser, 'id' | 'username'>> = ({ username, id }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 

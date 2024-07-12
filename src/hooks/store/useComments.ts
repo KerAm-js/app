@@ -8,7 +8,7 @@ export const useUserComments = ({
   textOnly,
 }: {
   role?: "addressee" | "author";
-  id?: string;
+  id?: number;
   textOnly?: boolean;
 }) => {
   const comments = useSelector((state: RootState) => state.comments);

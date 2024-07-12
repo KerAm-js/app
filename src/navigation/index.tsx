@@ -27,7 +27,6 @@ import AdvertsModule from "../modules/Adverts";
 import { useAuth } from "../hooks/store/useAuth";
 import { FC, useLayoutEffect } from "react";
 import { useActions } from "../hooks/store/useActions";
-import { useCurrentUserQuery } from "../modules/EditProfile/api/profile.api";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

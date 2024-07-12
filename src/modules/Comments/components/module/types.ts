@@ -1,15 +1,3 @@
 import { IUser } from "../../../../types/User";
 
-export interface ICommentsModuleProps {
-  user: Pick<
-    IUser,
-    | "id"
-    | "username"
-    | "phone"
-    | "email"
-    | "description"
-    | "rating"
-    | "ratesCount"
-  >;
-  userRole: "addressee" | "author";
-}
+export interface ICommentsModuleProps extends Pick<IUser, "id"> {}

@@ -1,24 +1,23 @@
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import RatingInput from "../RatingInput/RatingInput";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { ICommentFormModuleProps } from "./types";
 import CommentInput from "../CommentInput/CommentInput";
 import BigButton from "../../../../UI/buttons/Big/BigButton";
-import { useActions } from "../../../../hooks/store/useActions";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../../../navigation/types";
 import { useAuth } from "../../../../hooks/store/useAuth";
+import {
+  useNewCommentMutation,
+  useUpdateCommentMutation,
+} from "../../../Comments/api/comments.api";
 
 const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
   addresseeName,
   addresseeId,
   defaultComment,
 }) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const { user } = useAuth();
-  const { addComment, editComment } = useActions();
+  const { user, token } = useAuth();
+  const [addComment, addCommentResult] = useNewCommentMutation();
+  const [updateComment, updateCommentResult] = useUpdateCommentMutation();
   const [rating, setRating] = useState<number>(defaultComment?.rate || 0);
   const [comment, setComment] = useState<string>(defaultComment?.text || "");
 
@@ -28,18 +27,40 @@ const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
   };
 
   const onSubmit = () => {
-    if (defaultComment) {
-      editComment({ id: defaultComment.id, text: comment, rate: rating, user });
-    } else {
-      addComment({ addresseeId, addresseeName, text: comment, rate: rating, user });
+    if (user && token) {
+      if (defaultComment) {
+        updateComment({
+          comment: { id: defaultComment.id, text: comment, rate: rating },
+          token,
+        });
+      } else {
+        addComment({
+          comment: {
+            addresseeId,
+            text: comment,
+            rate: rating,
+            authorId: user.id,
+          },
+          token,
+        });
+        clearForm();
+      }
     }
-    clearForm();
-    navigation.goBack();
   };
 
   const disabled = defaultComment
     ? rating === defaultComment.rate && comment === defaultComment.text
     : !rating;
+
+  useEffect(() => {
+    if (addCommentResult.error) Alert.alert("Что пошло не так");
+    if (addCommentResult.isSuccess) Alert.alert("Ваш отзыв успешно добавлен");
+  }, [addCommentResult]);
+
+  useEffect(() => {
+    if (updateCommentResult.error) Alert.alert("Что пошло не так");
+    if (addCommentResult.isSuccess) Alert.alert("Изменения сохранены");
+  }, [updateCommentResult]);
 
   return (
     <View>
@@ -53,7 +74,16 @@ const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
       <BigButton
         title={defaultComment ? "Сохранить" : "Отправить"}
         onPress={onSubmit}
-        disabled={disabled}
+        disabled={
+          disabled ||
+          updateCommentResult.isLoading ||
+          addCommentResult.isLoading
+        }
+        isLoading={
+          defaultComment
+            ? updateCommentResult.isLoading
+            : addCommentResult.isLoading
+        }
       />
     </View>
   );

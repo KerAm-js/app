@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { FlatList } from "react-native";
 import { IAdvertsModuleProps } from "./types";
 import Advert from "../Advert/Advert";
@@ -9,7 +9,7 @@ const AdvertsModuleComponent: FC<IAdvertsModuleProps> = (props) => {
   return (
     <FlatList
       renderItem={({ item }) => <Advert {...item} />}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.id.toString()}
       contentContainerStyle={advertsModuleStyles.contentContainer}
       ListHeaderComponent={() => (
         <AdvertsListHeader dataLength={props.data?.length || 0} />

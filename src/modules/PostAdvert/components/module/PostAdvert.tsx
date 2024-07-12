@@ -20,7 +20,7 @@ const PostAdvertModuleComponent: FC<Pick<TAdvert, "type">> = ({ type }) => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const onSubmit = (ad: object, isPhotosAllowed: boolean) => {
-    const id = adverts.length.toString();
+    const id = adverts.length;
     addAdvert({
       ...ad,
       type,

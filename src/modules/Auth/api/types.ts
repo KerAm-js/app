@@ -6,9 +6,7 @@ export interface IRegisterRequest
 }
 
 export interface IRegisterResponse
-  extends Pick<IUser, "email" | "username" | "phone"> {
-  id: string;
-}
+  extends Pick<IUser, "id" | "email" | "username" | "phone"> {}
 
 export interface ILogInRequest extends Pick<IUser, "email"> {
   password: string;
@@ -25,12 +23,12 @@ export interface IError {
 
 export interface IGetUserByTokenResponse
   extends Pick<
-  IUser,
-  | "id"
-  | "username"
-  | "phone"
-  | "description"
-  | "email"
-  | "rating"
-  | "ratesCount"
-> {}
+    IUser,
+    | "id"
+    | "username"
+    | "phone"
+    | "description"
+    | "email"
+    | "rating"
+    | "ratesCount"
+  > {}

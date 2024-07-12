@@ -35,10 +35,6 @@ const SearchUsersModuleComponent = () => {
   //   }, 5000);
   // }, [])
 
-  useEffect(() => {
-    console.log(users, status, error);
-  }, [users]);
-
   return (
     <View style={searchUsersStyles.container}>
       <SearchBar

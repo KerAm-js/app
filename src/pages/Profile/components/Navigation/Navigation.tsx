@@ -5,18 +5,14 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import BigButton from "../../../../UI/buttons/Big/BigButton";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../store/store";
 import { useActions } from "../../../../hooks/store/useActions";
 import { useAuth } from "../../../../hooks/store/useAuth";
 
 const Navigation = () => {
   const { logoutThunk } = useActions();
-  const {user} = useAuth();
+  const { user, token } = useAuth();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  const users = useSelector((state: RootState) => state.users);
 
   if (!user) {
     return null;
@@ -31,8 +27,7 @@ const Navigation = () => {
               title: "Мои отзывы",
               onPress: () =>
                 navigation.navigate("MyComments", {
-                  user: user,
-                  userRole: "author",
+                  id: user.id,
                 }),
             },
             // {
@@ -43,14 +38,14 @@ const Navigation = () => {
             //     }),
             //   circleNumber: 2,
             // },
-            {
-              title: "Отзывы обо мне",
-              onPress: () =>
-                navigation.navigate("CommentsToMe", {
-                  user: user,
-                  userRole: "addressee",
-                }),
-            },
+            // {
+            //   title: "Отзывы обо мне",
+            //   onPress: () =>
+            //     navigation.navigate("CommentsToMe", {
+            //       user: user,
+            //       userRole: "addressee",
+            //     }),
+            // },
           ]}
         />
         <ButtonsGroup

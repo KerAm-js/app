@@ -1,4 +1,4 @@
 export interface IImageFormProps {
-  advertId: string;
+  advertId: number;
   isPhotosRequired: boolean;
 }

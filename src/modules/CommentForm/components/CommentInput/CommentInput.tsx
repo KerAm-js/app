@@ -1,7 +1,6 @@
 import TextAreaField from "../../../../UI/inputs/TextArea/TextAreaField";
 import React, { FC } from "react";
 import { ICommentInputProps } from "./types";
-import Title from "../../../../UI/Title/Title";
 import { View } from "react-native";
 import { commentInputStyles } from "./styles";
 

@@ -25,7 +25,7 @@ export const useFilteredAdverts = (type: TAdvertType) => {
   return filtered;
 };
 
-export const useUserAdverts = (userId: string) => {
+export const useUserAdverts = (userId: number) => {
   const adverts = useSelector((state: RootState) => state.adverts);
   const filtered = useMemo(
     () => adverts.filter((ad) => ad.userId === userId),

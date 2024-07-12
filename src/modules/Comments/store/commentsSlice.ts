@@ -3,37 +3,37 @@ import { IComment } from "../../../types/Comment";
 
 const initialState: Array<IComment> = [
   {
-    id: "1",
-    addresseeId: "1",
+    id: 1,
+    addresseeId: 1,
     addresseeName: "ДунСтрой Групп",
-    authorId: "3",
+    authorId: 3,
     authorName: "User 2",
     text: "Comments are good",
     rate: 5,
   },
   {
-    id: "2",
-    addresseeId: "1",
+    id: 2,
+    addresseeId: 1,
     addresseeName: "ДунСтрой Групп",
-    authorId: "2",
+    authorId: 2,
     authorName: "User 1",
     text: "Comment",
     rate: 4,
   },
   {
-    id: "3",
-    addresseeId: "2",
+    id: 3,
+    addresseeId: 2,
     addresseeName: "User 1",
-    authorId: "3",
+    authorId: 3,
     authorName: "User 2",
     text: "Comment",
     rate: 4,
   },
   {
-    id: "4",
-    addresseeId: "2",
+    id: 4,
+    addresseeId: 2,
     addresseeName: "User 1",
-    authorId: "1",
+    authorId: 1,
     authorName: "ДунСтрой Групп",
     text: "Comment",
     rate: 5,
@@ -46,7 +46,7 @@ export const commemtsSlice = createSlice({
   reducers: {
     addComment: (state, action) => {
       state.push({
-        id: String(state.length + 1),
+        id: state.length + 1,
         rate: action.payload.rate,
         text: action.payload.text,
         addresseeId: action.payload.addresseeId,

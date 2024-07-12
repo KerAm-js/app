@@ -20,7 +20,6 @@ const Comment: FC<ICommentProps> = (props) => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { user } = useAuth();
   const { addresseeId, addresseeName, authorId, authorName, rate } = props;
-
   const [numberOfLines, setNumberOfLines] = useState<number | undefined>(
     undefined
   );
@@ -62,13 +61,13 @@ const Comment: FC<ICommentProps> = (props) => {
               <Text style={commentStyles.username}>
                 {isUserAuthor ? addresseeName : authorName}
               </Text>
-              {(isUserAuthor || isUserAdressee) && (
+              {/* {(isUserAuthor) && (
                 <SvgXml
                   xml={isUserAuthor ? boxOutSvg() : boxInSvg()}
                   width={16}
                   height={16}
                 />
-              )}
+              )} */}
             </View>
             <View style={commentStyles.rateContainer}>
               <Text style={commentStyles.rateInfo}>

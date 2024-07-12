@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUser } from "../../../types/User";
 import {
   autoLoginThunk,
@@ -14,12 +14,14 @@ const initialState: {
   autoAuthPending: boolean;
   error?: string;
   user?: IUser;
+  isRefetching: boolean;
 } = {
   token: undefined,
   user: undefined,
   autoAuthPending: true,
   isLoading: false,
   error: undefined,
+  isRefetching: false,
 };
 
 export const authSlice = createSlice({
@@ -28,6 +30,9 @@ export const authSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = undefined;
+    },
+    setRefetching: (state, action: PayloadAction<boolean>) => {
+      state.isRefetching = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -39,7 +44,7 @@ export const authSlice = createSlice({
     builder.addCase(getCurrentUserThunk.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = undefined;
-      state.user = {...action.payload, likes: [], comments: [], adverts: []};
+      state.user = { ...action.payload, likes: [], comments: [], adverts: [] };
     });
     builder.addCase(getCurrentUserThunk.rejected, (state, action) => {
       state.isLoading = false;

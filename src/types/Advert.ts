@@ -12,16 +12,16 @@ export type TAdvert = ITechnicAdvert | IDumpAdvert | IMaterialAdvert;
 export type TAdvertType = keyof IAdvertMap;
 
 interface IAdvert {
-  id: string;
+  id: number;
   type: TAdvertType;
   status: "published" | "stopped" | "deleted";
   transactionType: string;
   title: string;
-  userId: string;
+  userId: number;
   userRating: number;
   updatedAt: number;
-  views: Array<string>;
-  likes: Array<string>;
+  views: Array<number>;
+  likes: Array<number>;
   username: string;
   photos: Array<string>;
 }
