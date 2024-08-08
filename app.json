@@ -9,6 +9,14 @@
     "owner": "amir_gendargenoevskiy",
     "plugins": [
       [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      [
         "expo-camera",
         {
           "cameraPermission": "Allow $(Duna) to access your camera."
@@ -19,16 +27,17 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ]
+      ],
+      "expo-build-properties",
+      "expo-font",
+      "expo-secure-store"
     ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.amirkerimov.duna"

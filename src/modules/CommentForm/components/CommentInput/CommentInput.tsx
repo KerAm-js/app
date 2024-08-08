@@ -5,6 +5,7 @@ import { View } from "react-native";
 import { commentInputStyles } from "./styles";
 
 const CommentInput: FC<ICommentInputProps> = ({ value, onChangeText }) => {
+  
   return (
     <View style={commentInputStyles.inputContainer}>
       <TextAreaField

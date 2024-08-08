@@ -1,5 +1,8 @@
+import { TValue } from "../types";
+
 export type TSelectionItemProps = {
-  title: string;
+  item: TValue;
   isChecked: boolean;
-  onPress: () => void;
+  select: (item: TValue) => void;
+  unselect: (item: TValue) => void;
 };

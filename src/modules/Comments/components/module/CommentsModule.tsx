@@ -9,7 +9,7 @@ import {
 import { ICommentsModuleProps } from "./types";
 import { useAuth } from "../../../../hooks/store/useAuth";
 
-const CommentsModuleComponent: FC<ICommentsModuleProps> = ({ id }) => {
+const CommentsModuleComponent: FC<ICommentsModuleProps> = ({ id, isMyComments }) => {
   const { token, user } = useAuth();
   const isCurrentUser = user?.id === id;
 
@@ -30,7 +30,7 @@ const CommentsModuleComponent: FC<ICommentsModuleProps> = ({ id }) => {
       style={commentsModuleStyles.container}
       data={isCurrentUser ? currUserComments.data : comments.data}
       contentContainerStyle={commentsModuleStyles.contentContainer}
-      renderItem={({ item }) => <Comment key={item.id} {...item} />}
+      renderItem={({ item }) => <Comment isMyComments={isMyComments} key={item.id} {...item} />}
     />
   );
 };

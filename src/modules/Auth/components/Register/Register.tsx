@@ -62,7 +62,7 @@ const Register = () => {
           errorShown: isUsernameAvailable === false,
           error: usernameError
             ? usernameError
-            : !isUsernameAvailable && username.length > 1
+            : isUsernameAvailable === false && username.length > 1
             ? "Это имя пользователя занято"
             : "",
           onChangeText: onChangeUsername,
@@ -89,7 +89,7 @@ const Register = () => {
           errorShown: isEmailAvailable === false,
           error: emailError
             ? emailError
-            : !isEmailAvailable && email.length > 4
+            : isEmailAvailable === false && email.length > 4
             ? "Этот e-mail занят"
             : "",
           placeholder: "",
@@ -124,9 +124,9 @@ const Register = () => {
 
   const isFormValid =
     isUsernameValid &&
-    isUsernameAvailable &&
+    isUsernameAvailable !== false &&
     isEmailValid &&
-    isEmailAvailable &&
+    isEmailAvailable !== false &&
     isPhoneValid &&
     isPasswordValid &&
     isPassword2Valid;

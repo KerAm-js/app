@@ -1,4 +1,10 @@
-import { Keyboard, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Keyboard,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { TSelectionProps } from "./types";
 import { selectionStyles } from "./styles";
@@ -16,112 +22,90 @@ import { INPUT_HEIGHT } from "../../../consts/views";
 
 const Selection = withLabelAndError<TSelectionProps>(
   ({
-    itemsList,
+    itemsList = [],
     value,
     selectItem,
     unselectItem,
-    unselectAll,
     placeholder,
-    multySelection,
+    usesDataFromApi,
     errorShown,
     setErrorShown,
     setIsFocused,
+    isLoading,
+    setSearch,
+    search,
   }) => {
     const [text, setText] = useState<string>("");
-    const filteredList = useRef<Array<string>>([...itemsList]);
-    const isOpened = useSharedValue(0);
+    const [isOpened, setIsOpened] = useState(false);
     const containerHeight = useSharedValue(INPUT_HEIGHT);
     const selectedItemsObj = useRef<{ [key: string]: boolean }>({});
-
-    const menuHeight =
-      !!value.length && multySelection && itemsList.length > 10 ? 44 : 0;
+    const inputRef = useRef<TextInput | null>(null);
+    const menuHeight = !!value.length && usesDataFromApi ? 44 : 0;
     const baseHeight =
-      itemsList.length > 8 ? 326 : INPUT_HEIGHT + 46 * itemsList.length;
+      itemsList.length > 7 ? 326 : INPUT_HEIGHT + 46 * itemsList.length;
 
     const toggleHeight = () => {
-      if (isOpened.value) {
-        isOpened.value = withTiming(0);
+      if (isOpened) {
         containerHeight.value = withTiming(INPUT_HEIGHT);
-        inputRef.current?.blur();
+        if (inputRef.current) inputRef.current.blur();
         setIsFocused && setIsFocused(false);
         setErrorShown && setErrorShown(true);
       } else {
-        filteredList.current = [...itemsList];
+        if (inputRef.current && usesDataFromApi) inputRef.current.focus();
         setText("");
-        isOpened.value = withTiming(1);
         containerHeight.value = withTiming(baseHeight + menuHeight);
         setIsFocused && setIsFocused(true);
         Keyboard.dismiss();
       }
+      setIsOpened(!isOpened);
     };
 
-    const inputRef = useRef<TextInput | null>(null);
+    const handleValueChange = () => {
+      selectedItemsObj.current = {};
+      value.forEach((item) => {
+        selectedItemsObj.current[item.id] = true;
+      });
+      if (isOpened) containerHeight.value = withTiming(baseHeight + menuHeight);
+    };
 
-    const listContainerStyle = useAnimatedStyle(() => {
-      return {
-        height: containerHeight.value,
-      };
-    }, [isOpened.value]);
+    const handleItemsChange = () => {
+      const listLength = itemsList.length;
 
-    const scrollViewStyle = useAnimatedStyle(() => {
-      return {
-        opacity: isOpened.value,
-      };
-    }, [isOpened.value]);
-
-    const onChangeSearchText = (text: string) => {
-      filteredList.current = text
-        ? itemsList.filter((item: string) =>
-            item.includes(text[0].toUpperCase() + text.slice(1))
-          )
-        : [...itemsList];
-      setText(text);
-
-      const listLength = filteredList.current.length;
-      const isTooMuchItems = listLength > 8;
+      const isTooMuchItems = listLength > 7;
       const newContainerHeight =
         listLength === 0
           ? 105 + menuHeight
           : isTooMuchItems
           ? baseHeight + menuHeight
           : listLength * 46 + INPUT_HEIGHT + menuHeight;
-      containerHeight.value = withTiming(newContainerHeight);
+      if (isOpened) containerHeight.value = withTiming(newContainerHeight);
     };
 
-    const onSelectItem = (item: string) => {
-      if (!selectedItemsObj.current[item]) {
-        selectItem(item);
-        if (multySelection) {
-          selectedItemsObj.current[item] = true;
-          if (value.length === 0 && itemsList.length > 10)
-            containerHeight.value = withTiming(containerHeight.value + 44);
-        } else {
-          selectedItemsObj.current = { [item]: true };
-          toggleHeight();
-        }
+    const handleSearchTextChange = (text: string) => {
+      if (usesDataFromApi) {
+        setSearch(text);
       } else {
-        unselectItem(item);
-        if (multySelection) {
-          selectedItemsObj.current[item] = false;
-          if (value.length === 1 && itemsList.length > 10)
-            containerHeight.value = withTiming(containerHeight.value - 44);
-        } else {
-          selectedItemsObj.current = {};
-        }
+        setText(text);
       }
     };
 
-    const onUnselectAll = () => {
-      containerHeight.value = withTiming(containerHeight.value - 44);
-      selectedItemsObj.current = {};
-      unselectAll && unselectAll();
-    };
+    const listContainerStyle = useAnimatedStyle(() => {
+      return {
+        height: containerHeight.value,
+      };
+    }, [isOpened]);
+
+    const scrollViewStyle = useAnimatedStyle(() => {
+      return {
+        opacity: withTiming(isOpened ? 1 : 0),
+      };
+    }, [isOpened]);
 
     useEffect(() => {
-      value.forEach((item) => {
-        selectedItemsObj.current[item] = true;
-      });
-    }, []);
+      if (usesDataFromApi) handleItemsChange();
+    }, [itemsList]);
+
+    handleValueChange();
 
     return (
       <View style={selectionStyles.container}>
@@ -135,39 +119,44 @@ const Selection = withLabelAndError<TSelectionProps>(
           <SelectionSearchBar
             isOpened={isOpened}
             onPress={toggleHeight}
-            inputValue={text}
-            onInputChange={onChangeSearchText}
+            inputValue={usesDataFromApi ? search : text}
+            onInputChange={handleSearchTextChange}
             inputRef={inputRef}
             selectedItemsArr={value}
             placeholder={placeholder}
+            isApi={usesDataFromApi}
           />
-          {multySelection && itemsList.length > 10 && (
+          {!!menuHeight && (
             <SelectionMenu
               selectedItemsArr={value}
               isOpened={isOpened}
               unselectItem={unselectItem}
-              unselectAll={onUnselectAll}
             />
           )}
           <Animated.ScrollView
             style={[selectionStyles.scrollView, scrollViewStyle]}
             nestedScrollEnabled
           >
-            {filteredList.current.length ? (
-              filteredList.current.map((item, index) => {
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : itemsList.length ? (
+              itemsList.map((item, index) => {
                 return (
                   <SelectionItem
                     key={index + Date.now()}
-                    title={item}
-                    isChecked={selectedItemsObj.current[item]}
-                    onPress={() => onSelectItem(item)}
+                    item={item}
+                    isChecked={selectedItemsObj.current[item.id]}
+                    select={selectItem}
+                    unselect={unselectItem}
                   />
                 );
               })
             ) : (
-              <Text style={selectionStyles.notFoundMessage}>
-                Совпадений не найдено
-              </Text>
+              (
+                <Text style={selectionStyles.notFoundMessage}>
+                  Совпадений не найдено
+                </Text>
+              )
             )}
           </Animated.ScrollView>
         </Animated.View>

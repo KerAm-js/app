@@ -1,11 +1,13 @@
 import { TextInput } from "react-native";
+import { TValue } from "../types";
 
 export type TSelectionSearchBarProps = {
   onPress: () => void;
-  isOpened: { value: number };
-  selectedItemsArr: Array<string>;
+  isOpened: boolean;
+  selectedItemsArr: Array<TValue>;
   placeholder?: string;
-  inputRef: {current: TextInput | null},
+  isApi?: boolean;
+  inputRef: {current: TextInput | null};
   inputValue: string;
-  onInputChange: (text: string) => void
+  onInputChange: (text: string) => void;
 };

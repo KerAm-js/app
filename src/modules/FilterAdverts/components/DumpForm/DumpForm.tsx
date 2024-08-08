@@ -4,6 +4,7 @@ import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES, INPUT_VALUES_WITH_ALL } from "../../../../consts/inputValues";
+import { ITransportType, useGetTransportByLetterQuery } from "../../../PostAdvert/api/postAdvert.api";
 
 const DumpForm = () => {
   const [type, selectType, unselectType, _, isTypeValid, typeError] =
@@ -34,7 +35,10 @@ const DumpForm = () => {
     ____,
     isTransportValid,
     transportError,
-  ] = useSelectionValidator({ multySelection: true });
+    setTransportInitial,
+    transportSearch,
+    setTransportSearch,
+  ] = useSelectionValidator<ITransportType>({ multySelection: true });
   const [measureI, setMeasureI] = useState(0);
   const [
     amountInWeight1,
@@ -68,6 +72,9 @@ const DumpForm = () => {
     useInputValidator({ minValue: 1 });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
 
+  const { data: transports, isFetching: isTransportLoading } =
+    useGetTransportByLetterQuery(transportSearch);
+
   const inputs: TFormInputsArray = [
     {
       title: "Объявление",
@@ -82,6 +89,7 @@ const DumpForm = () => {
           error: typeError,
           placeholder: "",
           label: "Тип объявления",
+          usesDataFromApi: false,
         },
       ],
     },
@@ -96,9 +104,9 @@ const DumpForm = () => {
           unselectItem: unselectWasteType,
           itemsList: INPUT_VALUES.wasteTypes,
           error: wasteTypeError,
-          multySelection: true,
           placeholder: "",
           label: "Виды отходов",
+          usesDataFromApi: false,
         },
         {
           id: "dangerClass",
@@ -108,9 +116,9 @@ const DumpForm = () => {
           unselectItem: unselectDangerClass,
           itemsList: INPUT_VALUES.dangerClasses,
           error: dangerClassError,
-          multySelection: true,
           placeholder: "",
           label: "Классы опасности",
+          usesDataFromApi: false,
         },
         {
           id: "transport",
@@ -118,11 +126,13 @@ const DumpForm = () => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList: INPUT_VALUES.dumpTransport,
+          itemsList: !!transportSearch && !isTransportLoading ? transports : [],
           error: transportError,
-          multySelection: true,
-          placeholder: "",
-          label: "Виды транспорта",
+          label: "Вид транспорта",
+          usesDataFromApi: true,
+          search: transportSearch,
+          setSearch: setTransportSearch,
+          isLoading: isTransportLoading,
         },
         {
           id: "measure",

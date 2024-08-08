@@ -89,8 +89,9 @@ export const autoLoginThunk = createAsyncThunk<
     if (token && token.length) {
       const user = await getUserByToken(token);
       return { user, token };
+    } else {
+      return thunkApi.rejectWithValue(handleError(""));
     }
-    return thunkApi.rejectWithValue(handleError(""));
   } catch (error) {
     return thunkApi.rejectWithValue(handleError(error));
   }

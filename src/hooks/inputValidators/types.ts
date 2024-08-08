@@ -2,12 +2,12 @@ type TInputValidatorProps = {
   initValue?: string;
   minLength?: number;
   pattern?: RegExp;
-  patternErrorMessage?: string,
+  patternErrorMessage?: string;
   required?: boolean;
   confirmedValue?: string;
   confirmingErrorMessage?: string;
-  minValue?: number,
-  maxValue?: number,
+  minValue?: number;
+  maxValue?: number;
 };
 
 export type TInputValidator = (
@@ -17,7 +17,7 @@ export type TInputValidator = (
   onChangeValue: (value: string) => void,
   isValid: boolean,
   error: string,
-  setInitial: () => void,
+  setInitial: () => void
 ];
 
 export type TPhoneInputValidator = (
@@ -28,23 +28,23 @@ export type TPhoneInputValidator = (
   isValid: boolean,
   error: string,
   setInitial: () => void,
-  number: string,
+  number: string
 ];
 
-export type TSelectionValidator = ({
-  initValue,
-  required,
-  multySelection, 
-}: {
-  initValue?: Array<string>;
+export type TSelectionValidatorProps<T> = {
+  initValue?: Array<T>;
   required?: boolean;
   multySelection?: boolean;
-}) => [
-  value: Array<string>,
-  selectItem: (value: string) => void,
-  unselectItem: (value: string) => void,
+};
+
+export type TSelectionValidatorReturn<T> = [
+  value: Array<T>,
+  selectItem: (value: T) => void,
+  unselectItem: (value: T) => void,
   unselectAll: () => void,
   isValid: boolean,
   error: string,
   setInitial: () => void,
+  search: string,
+  setSearch: (value: string) => void
 ];

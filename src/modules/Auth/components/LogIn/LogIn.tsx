@@ -17,7 +17,7 @@ const LogIn = () => {
   });
   const [password, onPasswordChange, isPasswordValid, passwordError] =
     useInputValidator({
-      initValue: "",
+      initValue: "100",
       minLength: 3,
       required: true,
     });

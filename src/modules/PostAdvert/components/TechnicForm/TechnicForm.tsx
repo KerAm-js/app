@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
-import { TECHNICS, TECHS_LIST } from "../../../../consts/data";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES } from "../../../../consts/inputValues";
@@ -10,6 +9,11 @@ import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneVal
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
 import { TTechnicForm } from "./types";
 import { useAuth } from "../../../../hooks/store/useAuth";
+import {
+  ITechnicType,
+  useGetTechnicTypesByLetterQuery,
+} from "../../api/postAdvert.api";
+import { handleError } from "../../../Auth/helpers/getErrorMessage";
 
 const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
   const { user } = useAuth();
@@ -25,7 +29,10 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
     clearTechnicType,
     isTechnicTypeValid,
     technicTypeError,
-  ] = useSelectionValidator({ required: true });
+    setTechnicTypeInitial,
+    techTypeSearch,
+    setTechTypeSearch,
+  ] = useSelectionValidator<ITechnicType>({ required: true });
   const [mark, onChangeMark] = useInputValidator();
   const [model, onModelChange] = useInputValidator();
   const [prodYear, onProdYearChange, isProdYearValid, prodYearError] =
@@ -164,6 +171,66 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
       initValue: user?.phone,
     });
 
+  const {
+    data: techTypes,
+    isFetching: isTechnicTypeLoading,
+    error,
+  } = useGetTechnicTypesByLetterQuery(techTypeSearch, {
+    skip: !techTypeSearch,
+  });
+
+  const hasWeight = !!technicType[0]?.parameters.find(
+    (param) => param.name === "weight"
+  );
+  const hasHeight = !!technicType[0]?.parameters.find(
+    (param) => param.name === "height"
+  );
+  const hasVolume = !!technicType[0]?.parameters.find(
+    (param) => param.name === "volume"
+  );
+  const hasPassengersCount = !!!technicType[0]?.parameters.find(
+    (param) => param.name === "passengers_count"
+  );
+  const hasPipeLength = !!technicType[0]?.parameters.find(
+    (param) => param.name === "pipe_length"
+  );
+  const hasBoomLength = !!technicType[0]?.parameters.find(
+    (param) => param.name === "boom_length"
+  );
+  const hasLiftingCapacity = !!technicType[0]?.parameters.find(
+    (param) => param.name === "lifting_capacity"
+  );
+  const hasPerformance = !!technicType[0]?.parameters.find(
+    (param) => param.name === "performance"
+  );
+  const hasCargoType = !!technicType[0]?.parameters.find(
+    (param) => param.name === "cargo_type"
+  );
+  const hasRollerType = !!technicType[0]?.parameters.find(
+    (param) => param.name === "roller_type"
+  );
+  const hasRollersCount = !!technicType[0]?.parameters.find(
+    (param) => param.name === "rollers_count"
+  );
+  const hasSizeType = !!technicType[0]?.parameters.find(
+    (param) => param.name === "size_type"
+  );
+  const hasOSSIG = !!technicType[0]?.parameters.find(
+    (param) => param.name === "ossig"
+  );
+  const hasAxesCount = !!technicType[0]?.parameters.find(
+    (param) => param.name === "axes_count"
+  );
+  const hasBodyLength = !!technicType[0]?.parameters.find(
+    (param) => param.name === "body_length"
+  );
+  const hasTrailerType = !!technicType[0]?.parameters.find(
+    (param) => param.name === "trailer_type"
+  );
+  const hasLoadingType = !!technicType[0]?.parameters.find(
+    (param) => param.name === "loading_type"
+  );
+
   const inputs: TFormInputsArray = [
     {
       title: "Объявление",
@@ -194,13 +261,16 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "technicType",
           type: "selection",
-          itemsList: TECHS_LIST,
+          itemsList: !!techTypeSearch && !isTechnicTypeLoading ? techTypes : [],
+          isLoading: isTechnicTypeLoading,
           value: technicType,
           selectItem: selectTechnicType,
           unselectItem: unselectTechnicType,
-          multySelection: false,
           label: "Вид техники",
-          error: technicTypeError,
+          error: technicTypeError || handleError(error),
+          usesDataFromApi: true,
+          search: techTypeSearch,
+          setSearch: setTechTypeSearch,
         },
         {
           id: "mark",
@@ -228,23 +298,20 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "equipment",
           type: "selection",
-          hidden:
-            !technicType[0] ||
-            TECHNICS[technicType[0]]?.equipments.length === 0,
-          itemsList: TECHNICS[technicType[0]]?.equipments || [],
+          hidden: !technicType[0] || technicType[0]?.equipments.length === 0,
+          itemsList: technicType[0]?.equipments || [],
           value: equipment,
           selectItem: selectEquipment,
           unselectItem: unselectEquipment,
-          unselectAll: unselectAllEquipments,
-          multySelection: true,
           label: "Дополнительное оборудование",
           error: equipmentError,
+          usesDataFromApi: false,
         },
         {
           id: "weight",
           type: "input",
           value: weight,
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.weight,
+          hidden: !technicType[0] || !hasWeight,
           onChangeText: onWeightChange,
           error: weightError,
           label: getLabelForTechnicParam("weight"),
@@ -256,7 +323,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: height,
           onChangeText: onHeightChange,
           error: heightError,
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.height,
+          hidden: !technicType[0] || !hasHeight,
           label: getLabelForTechnicParam("height"),
           keyboardType: "decimal-pad",
         },
@@ -266,7 +333,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: volume,
           onChangeText: onVolumeChange,
           error: volumeError,
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.volume,
+          hidden: !technicType[0] || !hasVolume,
           label: getLabelForTechnicParam("volume"),
           keyboardType: "decimal-pad",
         },
@@ -276,8 +343,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: passengersCount,
           onChangeText: onPassengersCountChange,
           error: passengersCountError,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.passengersCount,
+          hidden: !technicType[0] || !hasPassengersCount,
           label: getLabelForTechnicParam("passengersCount"),
           keyboardType: "decimal-pad",
         },
@@ -287,8 +353,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: pipeLength,
           onChangeText: onPipeLengthChange,
           error: pipeLengthError,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.pipeLength,
+          hidden: !technicType[0] || !hasPipeLength,
           label: getLabelForTechnicParam("pipeLength"),
           keyboardType: "decimal-pad",
         },
@@ -298,8 +363,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: boomLength,
           onChangeText: onBoomLengthChange,
           error: boomLengthError,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.boomLength,
+          hidden: !technicType[0] || !hasBoomLength,
           label: getLabelForTechnicParam("boomLength"),
           keyboardType: "decimal-pad",
         },
@@ -309,8 +373,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: liftingCapacity,
           onChangeText: onLiftingCapacityChange,
           error: liftingCapacityError,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.liftingCapacity,
+          hidden: !technicType[0] || !hasLiftingCapacity,
           label: getLabelForTechnicParam("liftingCapacity"),
           keyboardType: "decimal-pad",
         },
@@ -320,8 +383,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: performance,
           onChangeText: onPerformanceChange,
           error: performanceError,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.performance,
+          hidden: !technicType[0] || !hasPerformance,
           label: getLabelForTechnicParam("performance"),
           keyboardType: "decimal-pad",
         },
@@ -331,7 +393,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: cargoType,
           onChangeText: onCargoTypeChange,
           error: cargoTypeError,
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.cargoType,
+          hidden: !technicType[0] || !hasCargoType,
           label: getLabelForTechnicParam("cargoType"),
           maxLength: 30,
         },
@@ -343,8 +405,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           onChange: (evt) =>
             setRollersTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("rollerType"),
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.rollerType,
+          hidden: !technicType[0] || !hasRollerType,
         },
         {
           id: "rollersCount",
@@ -352,8 +413,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: rollersCount,
           onChangeText: onRollersCountChange,
           error: rollersCountError,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.rollersCount,
+          hidden: !technicType[0] || !hasRollersCount,
           label: getLabelForTechnicParam("rollersCount"),
           keyboardType: "decimal-pad",
         },
@@ -364,7 +424,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           selectedIndex: sizeTypeI,
           onChange: (evt) => setSizeTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("sizeType"),
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.sizeType,
+          hidden: !technicType[0] || !hasSizeType,
         },
         {
           id: "ossig",
@@ -373,7 +433,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           selectedIndex: ossigI,
           onChange: (evt) => setOssigI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("OSSIG"),
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.OSSIG,
+          hidden: !technicType[0] || !hasOSSIG,
         },
         {
           id: "axesCount",
@@ -383,7 +443,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           onChange: (evt) =>
             setAxesCountI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("axesCount"),
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.axesCount,
+          hidden: !technicType[0] || !hasAxesCount,
         },
         {
           id: "bodyLength",
@@ -391,8 +451,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: bodyLength,
           onChangeText: onBodyLengthChange,
           error: bodyLengthError,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.bodyLength,
+          hidden: !technicType[0] || !hasBodyLength,
           label: getLabelForTechnicParam("bodyLength"),
           keyboardType: "decimal-pad",
         },
@@ -403,11 +462,10 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           value: trailerType,
           selectItem: selectTrailerType,
           unselectItem: unselectTrailerType,
-
           label: getLabelForTechnicParam("trailerType"),
           error: trailerTypeError,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.trailerType,
+          usesDataFromApi: false,
+          hidden: !technicType[0] || !hasTrailerType,
         },
         {
           id: "loadingType",
@@ -417,8 +475,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           onChange: (evt) =>
             setLoadingTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("loadingType"),
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.loadingType,
+          hidden: !technicType[0] || !hasLoadingType,
         },
       ],
     },
@@ -549,20 +606,18 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
     isPriceValid &&
     isUsernameValid &&
     isPhoneValid &&
-    (isWeightValid || !TECHNICS[technicType[0]].params.weight) &&
-    (isHeightValid || !TECHNICS[technicType[0]].params.height) &&
-    (isVolumeValid || !TECHNICS[technicType[0]].params.volume) &&
-    (isPassengersCountValid ||
-      !TECHNICS[technicType[0]].params.passengersCount) &&
-    (isPipeLengthValid || !TECHNICS[technicType[0]].params.pipeLength) &&
-    (isBoomLengthValid || !TECHNICS[technicType[0]].params.boomLength) &&
-    (isLiftingCapacityValid ||
-      !TECHNICS[technicType[0]].params.liftingCapacity) &&
-    (isPerformanceValid || !TECHNICS[technicType[0]].params.performance) &&
-    (isCargoTypeValid || !TECHNICS[technicType[0]].params.cargoType) &&
-    (isRollersCountValid || !TECHNICS[technicType[0]].params.rollersCount) &&
-    (isBodyLengthValid || !TECHNICS[technicType[0]].params.bodyLength) &&
-    (isTrailerTypeValid || !TECHNICS[technicType[0]].params.trailerType);
+    (isWeightValid || !hasWeight) &&
+    (isHeightValid || !hasHeight) &&
+    (isVolumeValid || !hasVolume) &&
+    (isPassengersCountValid || !hasPassengersCount) &&
+    (isPipeLengthValid || !hasPipeLength) &&
+    (isBoomLengthValid || !hasBodyLength) &&
+    (isLiftingCapacityValid || !hasLiftingCapacity) &&
+    (isPerformanceValid || !hasPerformance) &&
+    (isCargoTypeValid || !hasCargoType) &&
+    (isRollersCountValid || !hasRollersCount) &&
+    (isBodyLengthValid || !hasBodyLength) &&
+    (isTrailerTypeValid || !hasTrailerType);
 
   const transactionType = INPUT_VALUES.technicAdvertType[typeI];
   const isPhotosAllowed = transactionType === "Сдать в аренду";
@@ -573,9 +628,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         transactionType,
         title,
         equipment:
-          TECHNICS[technicType[0]]?.equipments.length !== 0
-            ? equipment
-            : undefined,
+          technicType[0]?.equipments.length !== 0 ? equipment : undefined,
         username,
         phone,
         general: {
@@ -597,55 +650,31 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           mark,
           model,
           prodYear,
-          weight: TECHNICS[technicType[0]].params.weight
-            ? Number(weight)
-            : undefined,
-          height: TECHNICS[technicType[0]].params.height
-            ? Number(height)
-            : undefined,
-          volume: TECHNICS[technicType[0]].params.volume
-            ? Number(volume)
-            : undefined,
-          passengersCount: TECHNICS[technicType[0]].params.passengersCount
+          weight: hasWeight ? Number(weight) : undefined,
+          height: hasHeight ? Number(height) : undefined,
+          volume: hasVolume ? Number(volume) : undefined,
+          passengersCount: hasPassengersCount
             ? Number(passengersCount)
             : undefined,
-          pipeLength: TECHNICS[technicType[0]].params.pipeLength
-            ? Number(pipeLength)
-            : undefined,
-          boomLength: TECHNICS[technicType[0]].params.boomLength
-            ? Number(boomLength)
-            : undefined,
-          liftingCapacity: TECHNICS[technicType[0]].params.liftingCapacity
+          pipeLength: hasPipeLength ? Number(pipeLength) : undefined,
+          boomLength: hasBodyLength ? Number(boomLength) : undefined,
+          liftingCapacity: hasLiftingCapacity
             ? Number(liftingCapacity)
             : undefined,
-          performance: TECHNICS[technicType[0]].params.performance
-            ? Number(performance)
-            : undefined,
-          cargoType: TECHNICS[technicType[0]].params.cargoType
-            ? cargoType
-            : undefined,
-          rollerType: TECHNICS[technicType[0]].params.rollerType
+          performance: hasPerformance ? Number(performance) : undefined,
+          cargoType: hasCargoType ? cargoType : undefined,
+          rollerType: hasRollerType
             ? INPUT_VALUES.rollerType[rollersTypeI]
             : undefined,
-          rollersCount: TECHNICS[technicType[0]].params.rollersCount
-            ? Number(rollersCount)
-            : undefined,
-          sizeType: TECHNICS[technicType[0]].params.sizeType
-            ? INPUT_VALUES.sizeType[sizeTypeI]
-            : undefined,
-          OSSIG: TECHNICS[technicType[0]].params.OSSIG
-            ? INPUT_VALUES.OSSIG[ossigI]
-            : undefined,
-          axesCount: TECHNICS[technicType[0]].params.axesCount
+          rollersCount: hasRollersCount ? Number(rollersCount) : undefined,
+          sizeType: hasSizeType ? INPUT_VALUES.sizeType[sizeTypeI] : undefined,
+          OSSIG: hasOSSIG ? INPUT_VALUES.OSSIG[ossigI] : undefined,
+          axesCount: hasAxesCount
             ? Number(INPUT_VALUES.axesCount[axesCountI])
             : undefined,
-          bodyLength: TECHNICS[technicType[0]].params.bodyLength
-            ? Number(bodyLength)
-            : undefined,
-          trailerType: TECHNICS[technicType[0]].params.trailerType
-            ? trailerType
-            : undefined,
-          loadingType: TECHNICS[technicType[0]].params.loadingType
+          bodyLength: hasBodyLength ? Number(bodyLength) : undefined,
+          trailerType: hasTrailerType ? trailerType : undefined,
+          loadingType: hasLoadingType
             ? INPUT_VALUES.loadingType[loadingTypeI]
             : undefined,
         },

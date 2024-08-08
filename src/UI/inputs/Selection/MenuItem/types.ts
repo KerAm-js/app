@@ -1,4 +1,6 @@
+import { TValue } from "../types";
+
 export type TMenuItemProps = {
-  title: string;
+  item: TValue;
   onPressX: () => void;
 }

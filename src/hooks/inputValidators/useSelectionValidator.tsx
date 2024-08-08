@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import { TSelectionValidator } from "./types";
+import { TSelectionValidatorProps, TSelectionValidatorReturn } from "./types";
 
-export const useSelectionValidator: TSelectionValidator = ({
+export function useSelectionValidator<T>({
   initValue,
   required,
   multySelection,
-}) => {
-  const [value, setValue] = useState<Array<string>>(initValue || []);
+}: TSelectionValidatorProps<T>): TSelectionValidatorReturn<T> {
+  const [search, setSearch] = useState("");
+  const [value, setValue] = useState<T[]>(initValue || []);
   const [isValid, setIsValid] = useState(!(!initValue?.length && required));
   const [error, setError] = useState(
-    !initValue && required ? "Заполните данное поле" : ""
+    !initValue?.length && required ? "Заполните данное поле" : ""
   );
 
-  const selectItem = (selectedItem: string) => {
+  const selectItem = (selectedItem: T) => {
     if (multySelection) {
       setValue((value) => [...value, selectedItem]);
     } else {
@@ -20,7 +21,7 @@ export const useSelectionValidator: TSelectionValidator = ({
     }
   };
 
-  const unselectItem = (unselectedItem: string) => {
+  const unselectItem = (unselectedItem: T) => {
     if (multySelection) {
       setValue((value) => value.filter((item) => unselectedItem !== item));
     } else {
@@ -34,8 +35,7 @@ export const useSelectionValidator: TSelectionValidator = ({
     setValue(initValue || []);
     setIsValid(!(!initValue?.length && required));
     setError(!initValue?.length && required ? "Заполните данное поле" : "");
-  }
-
+  };
 
   useEffect(() => {
     if (required && value.length === 0) {
@@ -47,5 +47,15 @@ export const useSelectionValidator: TSelectionValidator = ({
     }
   }, [value]);
 
-  return [value, selectItem, unselectItem, unselectAll, isValid, error, setInitial];
-};
+  return [
+    value,
+    selectItem,
+    unselectItem,
+    unselectAll,
+    isValid,
+    error,
+    setInitial,
+    search,
+    setSearch,
+  ];
+}

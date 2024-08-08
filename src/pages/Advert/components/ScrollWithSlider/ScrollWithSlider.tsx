@@ -38,10 +38,14 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
   const scrollY = useSharedValue(0);
   const context = useSharedValue({ y: 0 });
 
-  const scrollToTop = () =>
-    scrollRef.current?.scrollTo({ y: 0, animated: true });
-  const scrollToMainInfo = () =>
-    scrollRef.current?.scrollTo({ y: 256, animated: true });
+  const scrollToTop = () => {
+    if (scrollRef.current)
+      scrollRef.current?.scrollTo({ y: 0, animated: true });
+  };
+  const scrollToMainInfo = () => {
+    if (scrollRef.current)
+      scrollRef.current?.scrollTo({ y: 256, animated: true });
+  };
 
   const scrollHandler = useAnimatedScrollHandler({
     onBeginDrag: (e) => {

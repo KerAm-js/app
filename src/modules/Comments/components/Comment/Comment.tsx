@@ -19,7 +19,7 @@ const Comment: FC<ICommentProps> = (props) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { user } = useAuth();
-  const { addresseeId, addresseeName, authorId, authorName, rate } = props;
+  const { addresseeId, addresseeName, authorId, authorName, rate, isMyComments } = props;
   const [numberOfLines, setNumberOfLines] = useState<number | undefined>(
     undefined
   );
@@ -55,11 +55,11 @@ const Comment: FC<ICommentProps> = (props) => {
     <View style={commentStyles.container}>
       <Pressable onPress={navigateToEdition} style={commentStyles.card}>
         <View style={commentStyles.topContainer}>
-          <Avatar size={36} userId={isUserAuthor ? addresseeId : authorId} />
+          <Avatar size={36} userId={isMyComments ? addresseeId : authorId} />
           <View style={commentStyles.infoContainer}>
             <View style={commentStyles.usernameContainer}>
               <Text style={commentStyles.username}>
-                {isUserAuthor ? addresseeName : authorName}
+                {isMyComments ? addresseeName : authorName}
               </Text>
               {/* {(isUserAuthor) && (
                 <SvgXml

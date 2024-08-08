@@ -10,7 +10,7 @@ export const authModuleStyles = StyleSheet.create({
     backgroundColor: GREY_LIGHT,
     paddingTop:
       screenHeight < 770
-        ? SCREEN_PADDING_TOP
-        : Dimensions.get("screen").height * 0.1,
+        ? SCREEN_PADDING_TOP 
+        : Dimensions.get("screen").height * 0.08,
   },
 });

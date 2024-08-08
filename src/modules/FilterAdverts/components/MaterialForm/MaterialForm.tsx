@@ -8,6 +8,7 @@ import {
   INPUT_VALUES_WITH_ALL,
 } from "../../../../consts/inputValues";
 import { MATERIALS, MATERIALS_LIST } from "../../../../consts/data";
+import { IMaterialType, useGetMaterialTypeByLetterQuery, useGetTransportByLetterQuery } from "../../../PostAdvert/api/postAdvert.api";
 
 const MaterialForm = () => {
   const [typeI, setTypeI] = useState(0);
@@ -18,7 +19,10 @@ const MaterialForm = () => {
     __,
     isMaterialTypeValid,
     materialTypeError,
-  ] = useSelectionValidator({});
+    setMaterialTypeInitial,
+    materialTypeSearch,
+    setMaterialTypeSearch,
+  ] = useSelectionValidator<IMaterialType>({});
   const [
     transport,
     selectTransport,
@@ -26,6 +30,9 @@ const MaterialForm = () => {
     ____,
     isTransportValid,
     transportError,
+    setTransportInitial,
+    transportSearch,
+    setTransportSearch,
   ] = useSelectionValidator({ multySelection: true });
   const [
     fractions,
@@ -89,6 +96,16 @@ const MaterialForm = () => {
   ] = useInputValidator({ minValue: 1 });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
 
+  const { data: materialTypes, isFetching: isMaterialTypesLoading } =
+    useGetMaterialTypeByLetterQuery(materialTypeSearch, {
+      skip: !materialTypeSearch,
+    });
+
+  const { data: transports, isFetching: isTransportsFetching } =
+    useGetTransportByLetterQuery(transportSearch, {
+      skip: !transportSearch,
+    });
+
   const inputs: TFormInputsArray = [
     {
       title: "Объявление",
@@ -112,10 +129,16 @@ const MaterialForm = () => {
           value: materialType,
           selectItem: selectMaterialType,
           unselectItem: unselectMaterialType,
-          itemsList: MATERIALS_LIST,
+          itemsList:
+            !!materialTypeSearch && !isMaterialTypesLoading
+              ? materialTypes
+              : [],
           error: materialTypeError,
-          placeholder: "",
           label: "Вид материала",
+          usesDataFromApi: true,
+          search: materialTypeSearch,
+          setSearch: setMaterialTypeSearch,
+          isLoading: isMaterialTypesLoading,
         },
         {
           id: "transport",
@@ -123,11 +146,14 @@ const MaterialForm = () => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList: INPUT_VALUES.dumpTransport,
+          itemsList:
+            !!transportSearch && !isTransportsFetching ? transports : [],
           error: transportError,
-          multySelection: true,
-          placeholder: "",
-          label: "Виды транспорта",
+          label: "Вид транспорта",
+          usesDataFromApi: true,
+          search: transportSearch,
+          setSearch: setTransportSearch,
+          isLoading: isTransportsFetching,
         },
         {
           id: "fractions",
@@ -135,13 +161,13 @@ const MaterialForm = () => {
           value: fractions,
           selectItem: selectFractions,
           unselectItem: unselectFractions,
-          itemsList: MATERIALS[materialType[0]]?.fractions || [],
+          itemsList: materialType[0]?.fractions || [],
           error: fractionsError,
           hidden:
             !materialType[0] ||
-            MATERIALS[materialType[0]]?.fractions.length === 0,
-          multySelection: true,
+            materialType[0]?.fractions.length === 0,
           label: "Фракции",
+          usesDataFromApi: false,
         },
         {
           id: "measure",

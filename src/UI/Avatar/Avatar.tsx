@@ -185,13 +185,31 @@ const Avatar: FC<TAvatarProps> = ({
               <ActivityIndicator />
             </View>
           ) : (
-            <Image
-              style={avatarStyles.image}
-              source={{
-                uri: `http://188.0.167.98:9636/demo/user/avatar/${userId}`,
-              }}
-              defaultSource={require("../../assets/images/avatar.jpg")}
-            />
+            <>
+              <Image
+                style={avatarStyles.image}
+                source={{
+                  uri: `${API_URL}/user/avatar/${userId}`,
+                }}
+                defaultSource={require("../../assets/images/avatar.jpg")}
+              />
+              {Platform.OS === "android" && (
+                <Image
+                  style={[
+                    avatarStyles.image,
+                    {
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      zIndex: -1,
+                    },
+                  ]}
+                  source={require("../../assets/images/avatar.jpg")}
+                />
+              )}
+            </>
           )}
         </View>
       </View>

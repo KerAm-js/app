@@ -1,6 +1,7 @@
+import { TValue } from "../types";
+
 export type TSelectionMenuProps = {
-  selectedItemsArr: Array<string>;
+  selectedItemsArr: Array<TValue>;
   unselectItem: (key: string) => void;
-  isOpened: { value: number };
-  unselectAll: () => void;
+  isOpened: boolean;
 };

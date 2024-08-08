@@ -10,8 +10,10 @@ export const selectionSearchBarStyles = StyleSheet.create({
     paddingLeft: 15,
     height: INPUT_HEIGHT,
     paddingRight: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: GREY_LIGHT,
+  },
+  line: {
+    height: 1,
+    backgroundColor: GREY_LIGHT
   },
   input: {
     paddingHorizontal: 10,

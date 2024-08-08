@@ -7,6 +7,7 @@ import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { TDumpForm } from "./types";
 import { useAuth } from "../../../../hooks/store/useAuth";
+import { ITransportType, useGetTransportByLetterQuery } from "../../api/postAdvert.api";
 
 const DumpForm: FC<TDumpForm> = ({ submit }) => {
   const { user } = useAuth();
@@ -42,7 +43,10 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
     clearTransport,
     isTransportValid,
     transportError,
-  ] = useSelectionValidator({ required: true });
+    setTransportInitial,
+    transportSearch,
+    setTransportSearch,
+  ] = useSelectionValidator<ITransportType>({ required: true });
   const [measureI, setMeasureI] = useState(0);
   const [
     coefficient,
@@ -76,10 +80,14 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
   const [paymentTypeI, setPaymentTypeI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
     useInputValidator({ required: true, initValue: user?.username });
-  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] = usePhoneValidator({
-    required: true,
-    initValue: user?.phone,
-  });
+  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] =
+    usePhoneValidator({
+      required: true,
+      initValue: user?.phone,
+    });
+
+  const { data: transports, isFetching: isTransportLoading } =
+    useGetTransportByLetterQuery(transportSearch);
 
   const inputs: TFormInputsArray = [
     {
@@ -94,6 +102,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           itemsList: INPUT_VALUES.dumpAdvertType,
           error: typeError,
           label: "Тип объявления",
+          usesDataFromApi: false,
         },
         {
           id: "title",
@@ -119,6 +128,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           itemsList: INPUT_VALUES.wasteTypes,
           error: wasteTypeError,
           label: "Вид отходов",
+          usesDataFromApi: false,
         },
         {
           id: "dangerClass",
@@ -129,6 +139,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           itemsList: INPUT_VALUES.dangerClasses,
           error: dangerClassError,
           label: "Класс опасности",
+          usesDataFromApi: false,
         },
         {
           id: "transport",
@@ -136,9 +147,13 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList: INPUT_VALUES.dumpTransport,
+          itemsList: !!transportSearch && !isTransportLoading ? transports : [],
           error: transportError,
           label: "Вид транспорта",
+          usesDataFromApi: true,
+          search: transportSearch,
+          setSearch: setTransportSearch,
+          isLoading: isTransportLoading,
         },
         {
           id: "measure",
@@ -246,7 +261,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           label: "Имя пользователя",
           keyboardType: "phone-pad",
           textContentType: "telephoneNumber",
-          maxLength: 16
+          maxLength: 16,
         },
       ],
     },

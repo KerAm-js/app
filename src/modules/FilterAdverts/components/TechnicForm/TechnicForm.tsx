@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
-import { TECHNICS, TECHS_LIST } from "../../../../consts/data";
+import { TECHNICS } from "../../../../consts/data";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import {
@@ -10,17 +10,22 @@ import {
 } from "../../../../consts/inputValues";
 import { DATE_REGEX } from "../../../../consts/regex";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
+import { ITechnicType, useGetTechnicTypesByLetterQuery } from "../../../PostAdvert/api/postAdvert.api";
+import { handleError } from "../../../Auth/helpers/getErrorMessage";
 
 const TechnicForm = () => {
   const [typeI, setTypeI] = useState(0);
   const [
     technicType,
-    selectTechnicTyoe,
+    selectTechnicType,
     unselectTechnicType,
     _,
     isTechnicTypeValid,
     technicTypeError,
-  ] = useSelectionValidator({ required: true });
+    setTechnicTypeInitial,
+    technicTypeSearch,
+    setTechnicTypeSearch,
+  ] = useSelectionValidator<ITechnicType>({ required: true });
   const [
     equipment,
     selectEquipment,
@@ -275,6 +280,60 @@ const TechnicForm = () => {
   ] = useInputValidator({ minValue: 1 });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
 
+  const {
+    data: techTypes,
+    isFetching: isTechnicTypeLoading,
+    error,
+  } = useGetTechnicTypesByLetterQuery(technicTypeSearch, {
+    skip: !technicTypeSearch,
+  });
+
+  const hasWeight = !!technicType[0]?.parameters.find(
+    (param) => param.name === "weight"
+  );
+  const hasHeight = !!technicType[0]?.parameters.find(
+    (param) => param.name === "height"
+  );
+  const hasVolume = !!technicType[0]?.parameters.find(
+    (param) => param.name === "volume"
+  );
+  const hasPassengersCount = !!!technicType[0]?.parameters.find(
+    (param) => param.name === "passengers_count"
+  );
+  const hasPipeLength = !!technicType[0]?.parameters.find(
+    (param) => param.name === "pipe_length"
+  );
+  const hasBoomLength = !!technicType[0]?.parameters.find(
+    (param) => param.name === "boom_length"
+  );
+  const hasLiftingCapacity = !!technicType[0]?.parameters.find(
+    (param) => param.name === "lifting_capacity"
+  );
+  const hasPerformance = !!technicType[0]?.parameters.find(
+    (param) => param.name === "performance"
+  );
+  const hasRollerType = !!technicType[0]?.parameters.find(
+    (param) => param.name === "roller_type"
+  );
+  const hasSizeType = !!technicType[0]?.parameters.find(
+    (param) => param.name === "size_type"
+  );
+  const hasOSSIG = !!technicType[0]?.parameters.find(
+    (param) => param.name === "ossig"
+  );
+  const hasAxesCount = !!technicType[0]?.parameters.find(
+    (param) => param.name === "axes_count"
+  );
+  const hasBodyLength = !!technicType[0]?.parameters.find(
+    (param) => param.name === "body_length"
+  );
+  const hasTrailerType = !!technicType[0]?.parameters.find(
+    (param) => param.name === "trailer_type"
+  );
+  const hasLoadingType = !!technicType[0]?.parameters.find(
+    (param) => param.name === "loading_type"
+  );
+
   const inputs: TFormInputsArray = [
     {
       title: "Объявление",
@@ -295,30 +354,30 @@ const TechnicForm = () => {
         {
           id: "technicType",
           type: "selection",
-          itemsList: TECHS_LIST,
+          itemsList: !!technicTypeSearch && !isTechnicTypeLoading ? techTypes : [],
+          isLoading: isTechnicTypeLoading,
           value: technicType,
-          selectItem: selectTechnicTyoe,
+          selectItem: selectTechnicType,
           unselectItem: unselectTechnicType,
-          placeholder: "",
-          multySelection: false,
           label: "Вид техники",
-          error: technicTypeError,
+          error: technicTypeError || handleError(error),
+          usesDataFromApi: true,
+          search: technicTypeSearch,
+          setSearch: setTechnicTypeSearch,
         },
         {
           id: "equipment",
           type: "selection",
           hidden:
             !technicType[0] ||
-            TECHNICS[technicType[0]]?.equipments.length === 0,
-          itemsList: TECHNICS[technicType[0]]?.equipments || [],
+            technicType[0]?.equipments.length === 0,
+          itemsList: technicType[0]?.equipments || [],
           value: equipment,
           selectItem: selectEquipment,
           unselectItem: unselectEquipment,
-          unselectAll: unselectAllEquipments,
-          placeholder: "",
-          multySelection: true,
           label: "Дополнительное оборудование",
           error: equipmentError,
+          usesDataFromApi: false,
         },
         {
           id: "weight",
@@ -327,7 +386,7 @@ const TechnicForm = () => {
           secondValue: weight2,
           onFirstValueChange: onWeight1Change,
           onSecondValueChange: onWeight2Change,
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.weight,
+          hidden: !technicType[0] || !hasWeight,
           error: weight1Error || weight2Error,
           label: getLabelForTechnicParam("weight"),
           keyboardType: "decimal-pad",
@@ -339,7 +398,7 @@ const TechnicForm = () => {
           secondValue: height2,
           onFirstValueChange: onHeight1Change,
           onSecondValueChange: onHeight2Change,
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.height,
+          hidden: !technicType[0] || !hasHeight,
           error: height1Error || height2Error,
           label: getLabelForTechnicParam("height"),
           keyboardType: "decimal-pad",
@@ -351,7 +410,7 @@ const TechnicForm = () => {
           secondValue: volume2,
           onFirstValueChange: onVolume1Change,
           onSecondValueChange: onVolume2Change,
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.volume,
+          hidden: !technicType[0] || !hasVolume,
           error: volume1Error || volume2Error,
           label: getLabelForTechnicParam("volume"),
           keyboardType: "decimal-pad",
@@ -363,8 +422,7 @@ const TechnicForm = () => {
           secondValue: passengersCount2,
           onFirstValueChange: onPassengersCount1Change,
           onSecondValueChange: onPassengersCount2Change,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.passengersCount,
+          hidden: !technicType[0] || !hasPassengersCount,
           error: passengersCount1Error || passengersCount2Error,
           label: getLabelForTechnicParam("passengersCount"),
           keyboardType: "decimal-pad",
@@ -376,8 +434,7 @@ const TechnicForm = () => {
           secondValue: pipeLength2,
           onFirstValueChange: onPipeLength1Change,
           onSecondValueChange: onPipeLength2Change,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.pipeLength,
+          hidden: !technicType[0] || !hasPipeLength,
           error: pipeLength1Error || pipeLength2Error,
           label: getLabelForTechnicParam("pipeLength"),
           keyboardType: "decimal-pad",
@@ -389,8 +446,7 @@ const TechnicForm = () => {
           secondValue: boomLength2,
           onFirstValueChange: onBoomLength1Change,
           onSecondValueChange: onBoomLength2Change,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.boomLength,
+          hidden: !technicType[0] || !hasBoomLength,
           error: boomLength1Error || boomLength2Error,
           label: getLabelForTechnicParam("boomLength"),
           keyboardType: "decimal-pad",
@@ -402,8 +458,7 @@ const TechnicForm = () => {
           secondValue: liftingCapacity2,
           onFirstValueChange: onLiftingCapacity1Change,
           onSecondValueChange: onLiftingCapacity2Change,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.liftingCapacity,
+          hidden: !technicType[0] || !hasLiftingCapacity,
           error: liftingCapacity1Error || liftingCapacity2Error,
           label: getLabelForTechnicParam("liftingCapacity"),
           keyboardType: "decimal-pad",
@@ -415,8 +470,7 @@ const TechnicForm = () => {
           secondValue: performance2,
           onFirstValueChange: onPerformance1Change,
           onSecondValueChange: onPerformance2Change,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.performance,
+          hidden: !technicType[0] || !hasPerformance,
           error: performance1Error || performance2Error,
           label: getLabelForTechnicParam("performance"),
           keyboardType: "decimal-pad",
@@ -428,21 +482,19 @@ const TechnicForm = () => {
           secondValue: rollersCount2,
           onFirstValueChange: onRollersCount1Change,
           onSecondValueChange: onRollersCount2Change,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.rollersCount,
+          hidden: !technicType[0] || !hasRollerType,
           error: rollersCount1Error || rollersCount2Error,
           label: getLabelForTechnicParam("rollersCount"),
           keyboardType: "decimal-pad",
         },
         {
-          id: "boyLength",
+          id: "bodyLength",
           type: "interval",
           firstValue: bodyLength1,
           secondValue: bodyLength2,
           onFirstValueChange: onBodyLength1Change,
           onSecondValueChange: onBodyLength2Change,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.bodyLength,
+          hidden: !technicType[0] || !hasBodyLength,
           error: bodyLength1Error || bodyLength2Error,
           label: getLabelForTechnicParam("bodyLength"),
           keyboardType: "decimal-pad",
@@ -455,8 +507,7 @@ const TechnicForm = () => {
           onChange: (evt) =>
             setRollersTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("rollerType"),
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.rollerType,
+          hidden: !technicType[0] || !hasRollerType,
         },
         {
           id: "sizeType",
@@ -465,7 +516,7 @@ const TechnicForm = () => {
           selectedIndex: sizeTypeI,
           onChange: (evt) => setSizeTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("sizeType"),
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.sizeType,
+          hidden: !technicType[0] || !hasSizeType,
         },
         {
           id: "ossig",
@@ -474,7 +525,7 @@ const TechnicForm = () => {
           selectedIndex: ossigI,
           onChange: (evt) => setOssigI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("OSSIG"),
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.OSSIG,
+          hidden: !technicType[0] || !hasOSSIG,
         },
         {
           id: "axesCount",
@@ -484,7 +535,7 @@ const TechnicForm = () => {
           onChange: (evt) =>
             setAxesCountI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("axesCount"),
-          hidden: !technicType[0] || !TECHNICS[technicType[0]].params.axesCount,
+          hidden: !technicType[0] || !hasAxesCount,
         },
         {
           id: "trailerType",
@@ -496,8 +547,8 @@ const TechnicForm = () => {
           placeholder: "",
           label: getLabelForTechnicParam("trailerType"),
           error: trailerTypeError,
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.trailerType,
+          usesDataFromApi: false,
+          hidden: !technicType[0] || !hasTrailerType,
         },
         {
           id: "loadingType",
@@ -507,8 +558,7 @@ const TechnicForm = () => {
           onChange: (evt) =>
             setLoadingTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("loadingType"),
-          hidden:
-            !technicType[0] || !TECHNICS[technicType[0]].params.loadingType,
+          hidden: !technicType[0] || !hasLoadingType,
         },
       ],
     },
@@ -569,9 +619,9 @@ const TechnicForm = () => {
           selectItem: selectPaymentFor,
           unselectItem: unselectPaymentFor,
           placeholder: "",
-          multySelection: true,
           label: "Оплата за",
           error: paymentForError,
+          usesDataFromApi: false,
         },
         {
           id: "priceForShift",

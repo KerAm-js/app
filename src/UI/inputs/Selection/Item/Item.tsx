@@ -8,32 +8,43 @@ import {
 } from "../../../../consts/colors";
 import { selectionItemStyles } from "./styles";
 import { TSelectionItemProps } from "./types";
-import { FC } from "react";
+import React, { FC } from "react";
 
-const SelectionItem: FC<TSelectionItemProps> = ({
-  title,
-  isChecked,
-  onPress,
-}: TSelectionItemProps) => {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        selectionItemStyles.container,
-        isChecked && { backgroundColor: BLACK_LIGHT_OPACITY },
-      ]}
-    >
-      <View
+const SelectionItem: FC<TSelectionItemProps> = React.memo(
+  ({ item, isChecked, select, unselect }: TSelectionItemProps) => {
+
+    const onPress = () => {
+      if (isChecked) {
+        unselect(item);
+      } else {
+        select(item);
+      }
+    };
+    return (
+      <Pressable
+        onPress={onPress}
         style={[
-          selectionItemStyles.checkButton,
-          isChecked && { backgroundColor: BLACK_LIGHT },
+          selectionItemStyles.container,
+          isChecked && { backgroundColor: BLACK_LIGHT_OPACITY },
         ]}
       >
-        {isChecked && <SvgXml xml={checkedSvg(WHITE)} width={10} height={8} />}
-      </View>
-      <Text style={selectionItemStyles.title}>{title}</Text>
-    </Pressable>
-  );
-};
+        <View
+          style={[
+            selectionItemStyles.checkButton,
+            isChecked && { backgroundColor: BLACK_LIGHT },
+          ]}
+        >
+          {isChecked && (
+            <SvgXml xml={checkedSvg(WHITE)} width={10} height={8} />
+          )}
+        </View>
+        <Text style={selectionItemStyles.title}>{item.name}</Text>
+      </Pressable>
+    );
+  },
+  (prev, curr) => {
+    return prev.isChecked === curr.isChecked;
+  }
+);
 
 export default SelectionItem;

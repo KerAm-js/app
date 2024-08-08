@@ -52,7 +52,7 @@ const EditProfileModuleComponent = () => {
           errorShown: isUsernameAvailable === false,
           error: usernameError
             ? usernameError
-            : !isUsernameAvailable && username.length > 1
+            : isUsernameAvailable === false && username.length > 1
             ? "Это имя пользователя занято"
             : "",
           onChangeText: onChangeUsername,
@@ -98,7 +98,7 @@ const EditProfileModuleComponent = () => {
     isPhoneValid &&
     isUsernameValid &&
     isPasswordValid &&
-    isUsernameAvailable &&
+    isUsernameAvailable !== false &&
     (username !== user?.username ||
       phone !== user?.phone ||
       description !== user?.description);

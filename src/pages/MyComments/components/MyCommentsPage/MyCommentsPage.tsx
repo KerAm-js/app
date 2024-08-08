@@ -7,7 +7,7 @@ import { IMyCommentsPageProps } from "./types";
 const MyCommentsPageComponent: FC<IMyCommentsPageProps> = (props) => {
   return (
     <View style={myCommentsPageStyles.container}>
-      <CommentsModule.Component {...props} />
+      <CommentsModule.Component {...props} isMyComments />
     </View>
   );
 };

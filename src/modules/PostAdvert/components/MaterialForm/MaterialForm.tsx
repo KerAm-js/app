@@ -5,12 +5,17 @@ import { useInputValidator } from "../../../../hooks/inputValidators/useInputVal
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
-import { MATERIALS, MATERIALS_LIST } from "../../../../consts/data";
 import { TMaterialForm } from "./types";
 import { useAuth } from "../../../../hooks/store/useAuth";
+import {
+  IMaterialType,
+  ITransportType,
+  useGetMaterialTypeByLetterQuery,
+  useGetTransportByLetterQuery,
+} from "../../api/postAdvert.api";
 
 const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [typeI, setTypeI] = useState(0);
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
@@ -23,7 +28,10 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
     clearMaterialType,
     isMaterialTypeValid,
     materialTypeError,
-  ] = useSelectionValidator({ required: true });
+    setMaterialTypeInitial,
+    materialTypeSearch,
+    setMaterialTypeSearch,
+  ] = useSelectionValidator<IMaterialType>({ required: true });
   const [
     transport,
     selectTransport,
@@ -31,7 +39,10 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
     clearTransport,
     isTransportValid,
     transportError,
-  ] = useSelectionValidator({ required: true });
+    setTransportInitial,
+    transportSearch,
+    setTransportSearch,
+  ] = useSelectionValidator<ITransportType>({ required: true });
   const [measureI, setMeasureI] = useState(0);
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
     { required: true, minValue: 1 }
@@ -74,10 +85,21 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
   const [paymentTypeI, setPaymentTypeI] = useState(0);
   const [username, onUsernameChange, isUsernameValid, usernameError] =
     useInputValidator({ required: true, initValue: user?.username });
-  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] = usePhoneValidator({
-    required: true,
-    initValue: user?.phone,
-  });
+  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] =
+    usePhoneValidator({
+      required: true,
+      initValue: user?.phone,
+    });
+
+  const { data: materialTypes, isFetching: isMaterialTypesLoading } =
+    useGetMaterialTypeByLetterQuery(materialTypeSearch, {
+      skip: !materialTypeSearch,
+    });
+
+  const { data: transports, isFetching: isTransportsFetching } =
+    useGetTransportByLetterQuery(transportSearch, {
+      skip: !transportSearch,
+    });
 
   const inputs: TFormInputsArray = [
     {
@@ -112,9 +134,16 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
           value: materialType,
           selectItem: selectMaterialType,
           unselectItem: unselectMaterialType,
-          itemsList: MATERIALS_LIST,
+          itemsList:
+            !!materialTypeSearch && !isMaterialTypesLoading
+              ? materialTypes
+              : [],
           error: materialTypeError,
           label: "Вид материала",
+          usesDataFromApi: true,
+          search: materialTypeSearch,
+          setSearch: setMaterialTypeSearch,
+          isLoading: isMaterialTypesLoading,
         },
         {
           id: "transport",
@@ -122,9 +151,14 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList: INPUT_VALUES.dumpTransport,
+          itemsList:
+            !!transportSearch && !isTransportsFetching ? transports : [],
           error: transportError,
           label: "Вид транспорта",
+          usesDataFromApi: true,
+          search: transportSearch,
+          setSearch: setTransportSearch,
+          isLoading: isTransportsFetching,
         },
         {
           id: "fractions",
@@ -132,12 +166,11 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
           value: fractions,
           selectItem: selectFractions,
           unselectItem: unselectFractions,
-          itemsList: MATERIALS[materialType[0]]?.fractions || [],
-          hidden:
-            !materialType[0] ||
-            MATERIALS[materialType[0]]?.fractions.length === 0,
+          itemsList: materialType[0] ? materialType[0].fractions : [],
+          hidden: !materialType[0] || materialType[0].fractions.length === 0,
           error: fractionsError,
           label: "Фракция",
+          usesDataFromApi: false,
         },
         {
           id: "measure",
@@ -253,7 +286,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
           label: "Имя пользователя",
           keyboardType: "phone-pad",
           textContentType: "telephoneNumber",
-          maxLength: 16
+          maxLength: 16,
         },
       ],
     },
@@ -265,7 +298,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
     isTransportValid &&
     isAmountValid &&
     isCoefficientValid &&
-    (isFractionsValid || MATERIALS[materialType[0]]?.fractions.length === 0) &&
+    (isFractionsValid || materialType[0]?.fractions.length === 0) &&
     isPriceForWeightValid &&
     isPriceForVolumeValid &&
     isUsernameValid &&
@@ -291,7 +324,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
           transport,
           measure: INPUT_VALUES.measure[measureI],
           amount,
-          coefficient
+          coefficient,
         },
         price: {
           price: Number(priceForWeight),
