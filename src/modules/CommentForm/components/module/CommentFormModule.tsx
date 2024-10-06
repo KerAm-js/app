@@ -59,7 +59,7 @@ const CommentFormModuleComponent: FC<ICommentFormModuleProps> = ({
 
   useEffect(() => {
     if (updateCommentResult.error) Alert.alert("Что пошло не так");
-    if (addCommentResult.isSuccess) Alert.alert("Изменения сохранены");
+    if (updateCommentResult.isSuccess) Alert.alert("Изменения сохранены");
   }, [updateCommentResult]);
 
   return (

@@ -1,97 +1,84 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { Text, View } from "react-native";
 import { infoTablesStyles } from "./styles";
-import { TAdvert } from "../../../../types/Advert";
+import { IAdvert } from "../../../../types/Advert";
+import { TableProps, TableRowData } from "./Table";
+import { TECHNIC_PARAMS } from "../../../../consts/data";
+import { ENUM_TITLES } from "../../../../consts/enums";
 import { propTitles } from "../../../../consts/propTitles";
 
-const InfoTables: FC<TAdvert> = ({ type, general, params }) => {
-  const getArrFromObj = (
-    obj: { [key: string]: number | string | any },
-    arr: Array<[string, string | number]>
-  ) => {
-    for (let key in obj) {
-      if (typeof obj[key] !== "string" && typeof obj[key] !== "number") {
-        getArrFromObj(obj[key], arr);
-      } else {
-        arr.push([key, obj[key]]);
+const InfoTables: FC<IAdvert> = (advert) => {
+  const chars: TableProps = { title: "Характеристики", data: [] };
+  const general: TableProps = { title: "Общие данные", data: [] };
+
+  if (advert.advertType === "TECHNIC") {
+    for (let key in TECHNIC_PARAMS) {
+      const param = key as keyof typeof TECHNIC_PARAMS;
+      const title = TECHNIC_PARAMS[param]?.title;
+      const value = advert[param];
+      if (title && value !== "NOT_SPECIFIED" && value !== 0) {
+        let data: TableRowData;
+        if (typeof value === "boolean") {
+          //OSSIG
+          data = {
+            title,
+            value: advert[param] ? "Подключён" : "Не подключён",
+          };
+        } else if (value in ENUM_TITLES) {
+          data = {
+            title,
+            value: ENUM_TITLES[value as keyof typeof ENUM_TITLES],
+          };
+        } else {
+          const measurement = TECHNIC_PARAMS[param]?.measurement;
+          data = {
+            title,
+            value: value + (measurement ? +" " + measurement : ""),
+          };
+        }
+        chars.data.push(data);
       }
     }
-  };
+    general.data.push({
+      title: propTitles.shiftType,
+      value: advert.shiftType,
+    });
+    const rentalPeriod =
+      new Date(advert.rentalFrom).toLocaleDateString().replaceAll("/", ".") +
+      " - " +
+      new Date(advert.rentalTo).toLocaleDateString().replaceAll("/", ".");
 
-  const paramsArr = useMemo(() => {
-    const result: Array<[string, string]> = Object.entries(params);
-    return result;
-  }, []);
+    general.data.push({
+      title: propTitles.rentalPeriod,
+      value: rentalPeriod,
+    });
+    general.data.push({
+      title: propTitles.rentalDaysCount,
+      value: advert.rentalDaysCount,
+    });
+  }
+  if (advert.advertType === "DUMP") {
+    chars.data.push({
+      title: propTitles.shiftType,
+      value: advert.shiftType,
+    });
+    general.data.push({
+      title: propTitles.shiftType,
+      value: advert.shiftType,
+    });
+  }
+  if (advert.advertType === "NON_MATERIAL") {
+    general.data.push({
+      title: propTitles.shiftType,
+      value: advert.shiftType,
+    });
+    general.data.push({
+      title: propTitles.delivery,
+      value: advert.delivery,
+    });
+  }
 
-  const rentalPeriod =
-    type === "technic"
-      ? general.rentalPeriod
-        ? new Date(general.rentalPeriod.from)
-            .toLocaleDateString()
-            .replaceAll("/", ".") +
-          " - " +
-          new Date(general.rentalPeriod.to)
-            .toLocaleDateString()
-            .replaceAll("/", ".")
-        : general.rentalDaysCount + " дней"
-      : undefined;
-
-  return (
-    <View style={infoTablesStyles.container}>
-      <View style={infoTablesStyles.table}>
-        <Text style={infoTablesStyles.title}>Характеристики</Text>
-        {paramsArr.map(([title, value]) => {
-          if (!propTitles[title] || !value) {
-            return null;
-          }
-          let titleString = propTitles[title].title;
-          let valueString = value;
-          if (title === "amount" && type !== "technic") {
-            if (params.measure === "weight") {
-              titleString = "Вес";
-              valueString += " т";
-            } else {
-              titleString = "Объём";
-              valueString += " м3";
-            }
-          } else if (propTitles[title]?.measurement) {
-              valueString += " " + propTitles[title].measurement;
-          }
-          return (
-            <View key={title} style={infoTablesStyles.tableRow}>
-              <Text style={infoTablesStyles.rowTitle}>{titleString}</Text>
-              <Text style={infoTablesStyles.rowValue}>{valueString}</Text>
-            </View>
-          );
-        })}
-      </View>
-      <View style={infoTablesStyles.table}>
-        <Text style={infoTablesStyles.title}>Общие данные</Text>
-        <View style={infoTablesStyles.tableRow}>
-          <Text style={infoTablesStyles.rowTitle}>Режим работы</Text>
-          <Text style={infoTablesStyles.rowValue}>{general.workMode}</Text>
-        </View>
-        {!!rentalPeriod && (
-          <View style={infoTablesStyles.tableRow}>
-            <Text style={infoTablesStyles.rowTitle}>Срок аренды</Text>
-            <Text style={infoTablesStyles.rowValue}>{rentalPeriod}</Text>
-          </View>
-        )}
-        {type === "technic" && !!general.count && (
-          <View style={infoTablesStyles.tableRow}>
-            <Text style={infoTablesStyles.rowTitle}>Количество единиц</Text>
-            <Text style={infoTablesStyles.rowValue}>{general.count}</Text>
-          </View>
-        )}
-        {type === "technic" && !!general.distance && (
-          <View style={infoTablesStyles.tableRow}>
-            <Text style={infoTablesStyles.rowTitle}>Плечо перевозки</Text>
-            <Text style={infoTablesStyles.rowValue}>{general.distance}</Text>
-          </View>
-        )}
-      </View>
-    </View>
-  );
+  return <View style={infoTablesStyles.container}></View>;
 };
 
 export default InfoTables;

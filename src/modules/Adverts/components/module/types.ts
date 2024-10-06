@@ -1,8 +1,8 @@
 import { FlatListProps } from "react-native";
-import { TAdvert } from "../../../../types/Advert";
+import { IAdvert } from "../../../../types/Advert";
 
 export interface IAdvertsModuleProps
   extends Omit<
-    FlatListProps<TAdvert>,
+    FlatListProps<IAdvert>,
     "renderItem" | "keyExtractor"
   > {}

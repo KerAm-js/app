@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import React, { ComponentType, FC, useEffect, useState } from "react";
+import React, { ComponentType, useEffect, useState } from "react";
 import { BLUE } from "../../../consts/colors";
 import {
   TWithLabelAndErrorChildrenProps,

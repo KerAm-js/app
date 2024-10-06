@@ -3,46 +3,8 @@ import {
   DumpAdvertDto,
   IAdvert,
   MaterialAdvertDto,
-  TAdvertType,
   TechnicAdvertDto,
 } from "../../../types/Advert";
-import { IImage } from "../../../UI/inputs/Photo/types";
-
-interface FormDataValue {
-  uri: string;
-  name: string;
-  type: string;
-}
-
-interface FormData {
-  append(
-    name: string,
-    value: string | Blob | FormDataValue,
-    fileName?: string
-  ): void;
-  delete(name: string): void;
-  get(name: string): FormDataEntryValue | null;
-  getAll(name: string): FormDataEntryValue[];
-  has(name: string): boolean;
-  set(
-    name: string,
-    value: string | Blob | FormDataValue,
-    fileName?: string
-  ): void;
-}
-
-declare let FormData: {
-  prototype: FormData;
-  new (form?: HTMLFormElement): FormData;
-};
-
-interface FormData {
-  entries(): IterableIterator<[string, string | File]>;
-  keys(): IterableIterator<string>;
-  values(): IterableIterator<string | File>;
-  forEach(): IterableIterator<string>;
-  [Symbol.iterator](): IterableIterator<string | File>;
-}
 
 export type TEquipment = { id: number; name: string };
 export type TParameter = { id: number; name: string };
@@ -98,7 +60,8 @@ export const postAdvertApi = api.injectEndpoints({
         url: "/secured/advert-technic/new",
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
         body: advert,
       }),
@@ -109,20 +72,6 @@ export const postAdvertApi = api.injectEndpoints({
     >({
       query: ({ advert, token }) => ({
         url: "/secured/advert-material/new",
-        method: "POST",
-        body: advert,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }),
-    }),
-    addDumpAdvert: builder.mutation<
-      IAdvert,
-      { advert: DumpAdvertDto; token: string }
-    >({
-      query: ({ advert, token }) => ({
-        url: "/secured/advert-dump/new",
         method: "POST",
         body: advert,
         headers: {
@@ -151,33 +100,18 @@ export const postAdvertApi = api.injectEndpoints({
         url: `/material-type/by-letter/${text}`,
       }),
     }),
-    uploadImageToAdvert: builder.mutation<
-      string,
+    uploadImageToAdvert: builder.mutation<void, FormData>(
       {
-        image: IImage;
-        advertType: TAdvertType;
-        advertId: IAdvert["id"];
-        token: string;
-      }
-    >({
-      query: ({ image, advertType, advertId, token }) => {
-        const formData = new FormData();
-        formData.append("image", image);
-        formData.append("advert_type", advertType);
-        formData.append("order_id", advertId.toString());
-        return {
+        query: (formData) => ({
           url: "/secured/upload-image/advert",
           method: "POST",
           body: formData,
-          formData: true,
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
           },
-          responseHandler: "text",
-        };
-      },
-    }),
+        }),
+      }
+    ),
     getImageNamesByOrderId: builder.query<
       string[],
       GetImageNamesByOrderIdParams
@@ -206,7 +140,6 @@ export const postAdvertApi = api.injectEndpoints({
 export const {
   useAddTechnicAdvertMutation,
   useAddMaterialAdvertMutation,
-  useAddDumpAdvertMutation,
   useGetTechnicAdvertsByUserQuery,
   useGetTechnicTypesByLetterQuery,
   useGetTransportByLetterQuery,

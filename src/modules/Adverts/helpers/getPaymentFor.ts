@@ -1,14 +1,17 @@
-import { TAdvert } from "../../../types/Advert";
+import { IAdvert } from "../../../types/Advert";
 
-export const getPriceString = ({ type, price, params }: TAdvert) => {
+export const getPriceString = (advert: IAdvert) => {
   return {
     first: [
-      price.price,
-      " руб/" + (type === "technic" ? price.paymentFor.toLowerCase() : "т"),
+      advert.price,
+      " руб/" +
+        (advert.advertType === "TECHNIC"
+          ? advert?.paymentUnit?.toLowerCase()
+          : "т"),
     ],
     second:
-      type === "technic"
+      advert.advertType === "TECHNIC"
         ? undefined
-        : [price.price * params.coefficient, " руб/м3"],
+        : [advert.price * advert.coefficient, " руб/м3"],
   };
 };

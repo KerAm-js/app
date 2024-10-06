@@ -14,7 +14,7 @@ import { SvgXml } from "react-native-svg";
 import { GREY_DARK } from "../../../../consts/colors";
 import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeGetters";
 
-const Slider: FC<IAdvertSliderProps> = ({ photos, type }) => {
+const Slider: FC<IAdvertSliderProps> = ({ photos, advertType }) => {
   const [currentSlide, setCurrentSlider] = useState(1);
 
   const windowWidth = Dimensions.get("window").width;
@@ -69,7 +69,7 @@ const Slider: FC<IAdvertSliderProps> = ({ photos, type }) => {
         ListEmptyComponent={
           <View style={advertStyles.sliderEmptyContainer}>
             <SvgXml
-              xml={getAdvertTypeIconFunc(type)(GREY_DARK)}
+              xml={getAdvertTypeIconFunc(advertType)(GREY_DARK)}
               width={60}
               height={60}
             />

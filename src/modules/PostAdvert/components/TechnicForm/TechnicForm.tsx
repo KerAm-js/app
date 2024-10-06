@@ -1,23 +1,43 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { DATE_REGEX } from "../../../../consts/regex";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
-import { TTechnicForm } from "./types";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import {
   ITechnicType,
+  TEquipment,
+  useAddTechnicAdvertMutation,
   useGetTechnicTypesByLetterQuery,
 } from "../../api/postAdvert.api";
 import { handleError } from "../../../Auth/helpers/getErrorMessage";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
+import {
+  AXES_COUNTS,
+  ENUMS,
+  LOADING_TYPES,
+  PAYMENT_TYPES,
+  PAYMENT_UNITS,
+  ROLLER_TYPES,
+  SHIFT_TYPES,
+  SIZE_TYPES,
+  TECHNIC_TRANSACTION_TYPES,
+  TRAILER_TYPES,
+} from "../../../../consts/enums";
+import { ITechnicAdvert, TechnicAdvertDto } from "../../../../types/Advert";
+import { Alert } from "react-native";
 
-const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
-  const { user } = useAuth();
-  const [typeI, setTypeI] = useState(0);
+const TechnicForm = () => {
+  const { user, token } = useAuth();
+  const [addAdvert, addAdvertResult] = useAddTechnicAdvertMutation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [transactionTypeI, setTransactionTypeI] = useState(0);
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
     minLength: 10,
@@ -123,7 +143,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
     ___,
     isTrailerTypeValid,
     trailerTypeError,
-  ] = useSelectionValidator({
+  ] = useSelectionValidator<ITechnicAdvert["trailerType"]>({
     required: true,
   });
   const [loadingTypeI, setLoadingTypeI] = useState(0);
@@ -134,7 +154,9 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
     unselectAllEquipments,
     __,
     equipmentError,
-  ] = useSelectionValidator({ multySelection: true });
+  ] = useSelectionValidator<TEquipment>({
+    multySelection: true,
+  });
   const [count, onCountChange, isCountValid, countError] = useInputValidator({
     required: true,
     minValue: 1,
@@ -163,13 +185,6 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
   });
   const [paymentForI, setPaymentForI] = useState(0);
   const [paymentTypeI, setPaymentTypeI] = useState(0);
-  const [username, onUsernameChange, isUsernameValid, usernameError] =
-    useInputValidator({ required: true, initValue: user?.username });
-  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] =
-    usePhoneValidator({
-      required: true,
-      initValue: user?.phone,
-    });
 
   const {
     data: techTypes,
@@ -188,7 +203,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
   const hasVolume = !!technicType[0]?.parameters.find(
     (param) => param.name === "volume"
   );
-  const hasPassengersCount = !!!technicType[0]?.parameters.find(
+  const hasPassengersCount = !!technicType[0]?.parameters.find(
     (param) => param.name === "passengers_count"
   );
   const hasPipeLength = !!technicType[0]?.parameters.find(
@@ -238,9 +253,10 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "type",
           type: "segment",
-          values: INPUT_VALUES.technicAdvertType,
-          selectedIndex: typeI,
-          onChange: (evt) => setTypeI(evt.nativeEvent.selectedSegmentIndex),
+          values: ENUMS.technincTransactionTypes,
+          selectedIndex: transactionTypeI,
+          onChange: (evt) =>
+            setTransactionTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Тип объявления",
         },
         {
@@ -267,7 +283,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           selectItem: selectTechnicType,
           unselectItem: unselectTechnicType,
           label: "Вид техники",
-          error: technicTypeError || handleError(error),
+          error: technicTypeError || (error ? handleError(error) : ""),
           usesDataFromApi: true,
           search: techTypeSearch,
           setSearch: setTechTypeSearch,
@@ -400,7 +416,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "rollersType",
           type: "segment",
-          values: INPUT_VALUES.rollerType,
+          values: ENUMS.rollerTypes,
           selectedIndex: rollersTypeI,
           onChange: (evt) =>
             setRollersTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -420,7 +436,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "sizeType",
           type: "segment",
-          values: INPUT_VALUES.sizeType,
+          values: ENUMS.sizeTypes,
           selectedIndex: sizeTypeI,
           onChange: (evt) => setSizeTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("sizeType"),
@@ -429,7 +445,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "ossig",
           type: "segment",
-          values: INPUT_VALUES.OSSIG,
+          values: ["Не подключён", "Подключён"],
           selectedIndex: ossigI,
           onChange: (evt) => setOssigI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("OSSIG"),
@@ -438,7 +454,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "axesCount",
           type: "segment",
-          values: INPUT_VALUES.axesCount,
+          values: AXES_COUNTS,
           selectedIndex: axesCountI,
           onChange: (evt) =>
             setAxesCountI(evt.nativeEvent.selectedSegmentIndex),
@@ -458,7 +474,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "trailerType",
           type: "selection",
-          itemsList: INPUT_VALUES.trailerType,
+          itemsList: ENUMS.trailerTypes,
           value: trailerType,
           selectItem: selectTrailerType,
           unselectItem: unselectTrailerType,
@@ -470,7 +486,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "loadingType",
           type: "segment",
-          values: INPUT_VALUES.loadingType,
+          values: ENUMS.loadingTypes,
           selectedIndex: loadingTypeI,
           onChange: (evt) =>
             setLoadingTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -489,13 +505,12 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
           error: countError,
           value: count,
           label: "Количество единиц техники",
-
           keyboardType: "decimal-pad",
         },
         {
           id: "workMode",
           type: "segment",
-          values: INPUT_VALUES.workMode,
+          values: ENUMS.shiftTypes,
           selectedIndex: workModeIndex,
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
@@ -552,7 +567,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "paymentFor",
           type: "segment",
-          values: INPUT_VALUES.paymentForTechnic,
+          values: ENUMS.paymentTypes,
           selectedIndex: paymentForI,
           onChange: (evt) =>
             setPaymentForI(evt.nativeEvent.selectedSegmentIndex),
@@ -561,35 +576,11 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
         {
           id: "paymentType",
           type: "segment",
-          values: INPUT_VALUES.paymentType,
+          values: ENUMS.paymentUnits,
           selectedIndex: paymentTypeI,
           onChange: (evt) =>
             setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Способ оплаты",
-        },
-      ],
-    },
-    {
-      title: "Данные пользователя",
-      inputs: [
-        {
-          id: "username",
-          type: "input",
-          value: username,
-          onChangeText: onUsernameChange,
-          error: usernameError,
-          label: "Имя пользователя",
-        },
-        {
-          id: "phone",
-          type: "input",
-          value: phoneText,
-          onChangeText: onPhoneChange,
-          error: phoneError,
-          label: "Имя пользователя",
-          keyboardType: "phone-pad",
-          textContentType: "telephoneNumber",
-          maxLength: 16,
         },
       ],
     },
@@ -604,8 +595,6 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
     isSecondDateValid &&
     isRentalDaysCountValid &&
     isPriceValid &&
-    isUsernameValid &&
-    isPhoneValid &&
     (isWeightValid || !hasWeight) &&
     (isHeightValid || !hasHeight) &&
     (isVolumeValid || !hasVolume) &&
@@ -619,93 +608,68 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
     (isBodyLengthValid || !hasBodyLength) &&
     (isTrailerTypeValid || !hasTrailerType);
 
-  const transactionType = INPUT_VALUES.technicAdvertType[typeI];
-  const isPhotosAllowed = transactionType === "Сдать в аренду";
+  const transactionType = TECHNIC_TRANSACTION_TYPES[transactionTypeI];
+  const isPhotosAllowed = transactionType === "GIVE_A_RENT";
+
   const onSubmit = () => {
-    submit(
-      {
-        type: "technic",
+    if (user) {
+      const trailerTypeI = ENUMS.trailerTypes.findIndex(
+        (item) => item === trailerType[0]
+      );
+      const advert: TechnicAdvertDto = {
+        advertType: "TECHNIC",
         transactionType,
         title,
-        equipment:
-          technicType[0]?.equipments.length !== 0 ? equipment : undefined,
-        username,
-        phone,
-        general: {
-          count: Number(count),
-          workMode: INPUT_VALUES.workMode[workModeIndex],
-          rentalPeriod:
-            firstDate && secondDate && isFirstDateValid && isSecondDateValid
-              ? {
-                  from: new Date(firstDate).valueOf(),
-                  to: new Date(secondDate).valueOf(),
-                }
-              : undefined,
-          rentalDaysCount: Number(rentalDaysCount),
-          address: "Москва, Люблино",
-          comment,
-        },
-        params: {
-          technicType: technicType[0],
-          mark,
-          model,
-          prodYear,
-          weight: hasWeight ? Number(weight) : undefined,
-          height: hasHeight ? Number(height) : undefined,
-          volume: hasVolume ? Number(volume) : undefined,
-          passengersCount: hasPassengersCount
-            ? Number(passengersCount)
-            : undefined,
-          pipeLength: hasPipeLength ? Number(pipeLength) : undefined,
-          boomLength: hasBodyLength ? Number(boomLength) : undefined,
-          liftingCapacity: hasLiftingCapacity
-            ? Number(liftingCapacity)
-            : undefined,
-          performance: hasPerformance ? Number(performance) : undefined,
-          cargoType: hasCargoType ? cargoType : undefined,
-          rollerType: hasRollerType
-            ? INPUT_VALUES.rollerType[rollersTypeI]
-            : undefined,
-          rollersCount: hasRollersCount ? Number(rollersCount) : undefined,
-          sizeType: hasSizeType ? INPUT_VALUES.sizeType[sizeTypeI] : undefined,
-          OSSIG: hasOSSIG ? INPUT_VALUES.OSSIG[ossigI] : undefined,
-          axesCount: hasAxesCount
-            ? Number(INPUT_VALUES.axesCount[axesCountI])
-            : undefined,
-          bodyLength: hasBodyLength ? Number(bodyLength) : undefined,
-          trailerType: hasTrailerType ? trailerType : undefined,
-          loadingType: hasLoadingType
-            ? INPUT_VALUES.loadingType[loadingTypeI]
-            : undefined,
-        },
-        price: {
-          price: Number(price),
-          paymentFor: INPUT_VALUES.paymentForTechnic[paymentForI],
-          paymentType: INPUT_VALUES.paymentType[paymentTypeI],
-        },
-      },
-      isPhotosAllowed
-    );
-  };
-
-  const clearForm = () => {
-    clearParams();
-    setTypeI(0);
-    onTitleChange("");
-    clearTechnicType();
-    onChangeMark("");
-    onModelChange("");
-    onProdYearChange("");
-    unselectAllEquipments();
-    onCountChange("");
-    setWorkModeIndex(0);
-    onFirstDateChange("");
-    onSecondDateChange("");
-    onRentalDaysCountChange("");
-    setComment("");
-    onPriceChange("");
-    setPaymentForI(0);
-    setPaymentTypeI(0);
+        equipment: equipment || [],
+        unitAmount: Number(count),
+        shiftType: SHIFT_TYPES[workModeIndex],
+        rentalFrom: new Date(firstDate.replaceAll(".", "-")).toISOString(),
+        rentalTo: new Date(secondDate.replaceAll(".", "-")).toISOString(),
+        rentalDaysCount: Number(rentalDaysCount),
+        isTransport: !!technicType[0].parameters.find(
+          (p) => p.name === "transport"
+        ),
+        addressLat: 45,
+        addressLon: 45,
+        description: comment,
+        technicType: technicType[0].name,
+        technicMark: mark,
+        technicModel: model,
+        productionYear: Number(prodYear),
+        weight: hasWeight ? Number(weight) : 0,
+        height: hasHeight ? Number(height) : 0,
+        volume: hasVolume ? Number(volume) : 0,
+        passengersCount: hasPassengersCount ? Number(passengersCount) : 0,
+        pipeLength: hasPipeLength ? Number(pipeLength) : 0,
+        boomLength: hasBodyLength ? Number(boomLength) : 0,
+        liftingCapacity: hasLiftingCapacity ? Number(liftingCapacity) : 0,
+        performance: hasPerformance ? Number(performance) : 0,
+        cargoType: hasCargoType ? cargoType : "",
+        rollerType: hasRollerType
+          ? ROLLER_TYPES[rollersTypeI]
+          : "NOT_SPECIFIED",
+        rollersCount: hasRollersCount ? Number(rollersCount) : 0,
+        sizeType: hasSizeType ? SIZE_TYPES[sizeTypeI] : "NOT_SPECIFIED",
+        OSSIG: hasOSSIG ? !!ossigI : false,
+        axesCount: hasAxesCount ? Number(AXES_COUNTS[axesCountI]) : 0,
+        bodyLength: hasBodyLength ? Number(bodyLength) : 0,
+        trailerType:
+          hasTrailerType && trailerTypeI
+            ? TRAILER_TYPES[trailerTypeI]
+            : "NOT_SPECIFIED",
+        loadingType: hasLoadingType
+          ? LOADING_TYPES[loadingTypeI]
+          : "NOT_SPECIFIED",
+        price: Number(price),
+        paymentUnit: PAYMENT_UNITS[paymentForI],
+        paymentType: PAYMENT_TYPES[paymentTypeI],
+      };
+      console.log(advert);
+      addAdvert({
+        advert,
+        token: token || "",
+      });
+    }
   };
 
   const clearParams = () => {
@@ -728,13 +692,33 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
   };
 
   useEffect(() => {
+    console.log("isLoading", addAdvertResult.isLoading);
+    console.log("data", addAdvertResult.data);
+    console.log("error", addAdvertResult.error);
+    if (addAdvertResult.isSuccess) {
+      if (isPhotosAllowed) {
+        navigation.navigate("AdvertImages", {
+          id: addAdvertResult.data.id,
+          isPhotosRequired:
+            addAdvertResult.data.transactionType === "GIVE_A_RENT",
+          advertType: "TECHNIC",
+        });
+      } else {
+        navigation.navigate("Profile");
+      }
+    } else if (error) {
+      Alert.alert("Ошибка", "Что-то пошло не так");
+    }
+  }, [addAdvertResult]);
+
+  useEffect(() => {
     clearParams();
   }, [technicType]);
 
   useEffect(() => {
     if (firstDate && isFirstDateValid && secondDate && isSecondDateValid) {
-      const first = new Date(firstDate.split(".").reverse().join("-"));
-      const second = new Date(secondDate.split(".").reverse().join("-"));
+      const first = new Date(firstDate.replaceAll(".", "-"));
+      const second = new Date(secondDate.replaceAll(".", "-"));
       const daysCount =
         Math.round(
           (second.valueOf() - first.valueOf()) / (1000 * 60 * 60 * 24)
@@ -749,6 +733,7 @@ const TechnicForm: FC<TTechnicForm> = ({ submit }) => {
       isFormValid={isFormValid}
       onSubmit={onSubmit}
       submitTitle={isPhotosAllowed ? "Далее" : "Опубликовать"}
+      isLoading={addAdvertResult.isLoading}
     />
   );
 };

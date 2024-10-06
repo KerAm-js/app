@@ -1,20 +1,19 @@
 import { FC } from "react";
 import { Text, View } from "react-native";
-import { IMainInfoProps } from "./types";
 import { mainInfoStyles } from "./style";
 import { getRelevanceObj } from "../../../../modules/Adverts/helpers/getRelevance";
 import { SvgXml } from "react-native-svg";
 import { eyeSvg } from "../../../../assets/svg/eye";
 import { likeFillSvg } from "../../../../assets/svg/likeFill";
 import { GREY_DARK } from "../../../../consts/colors";
-import { TRANSACTION_TYPES } from "../../../../consts/data";
+import { TRANSACTION_TYPE_TITLE } from "../../../../consts/data";
 import { getPriceString } from "../../../../modules/Adverts/helpers/getPaymentFor";
-import { TAdvert } from "../../../../types/Advert";
+import { Advert } from "../../../../types/Advert";
 
-const MainInfo: FC<TAdvert> = (props) => {
-  const { title, price, likes, views, updatedAt, transactionType } = props;
+const MainInfo: FC<Advert> = (props) => {
+  const { title, paymentType, likes, views, updatedAt, transactionType } = props;
   const payment =
-    price.paymentType === "Все" ? "нал/безнал" : price.paymentType;
+    paymentType === "ANY" ? "нал/безнал" : paymentType;
 
   const relevance = getRelevanceObj(updatedAt);
 
@@ -24,7 +23,7 @@ const MainInfo: FC<TAdvert> = (props) => {
     <View style={mainInfoStyles.container}>
       <Text style={mainInfoStyles.title}>{title}</Text>
       <Text style={mainInfoStyles.subtitle}>
-        {TRANSACTION_TYPES[transactionType]}
+        {TRANSACTION_TYPE_TITLE[transactionType]}
       </Text>
       <View style={mainInfoStyles.rowsContainer}>
         <View style={mainInfoStyles.row}>

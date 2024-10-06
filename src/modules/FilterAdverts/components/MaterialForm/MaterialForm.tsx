@@ -7,7 +7,6 @@ import {
   INPUT_VALUES,
   INPUT_VALUES_WITH_ALL,
 } from "../../../../consts/inputValues";
-import { MATERIALS, MATERIALS_LIST } from "../../../../consts/data";
 import { IMaterialType, useGetMaterialTypeByLetterQuery, useGetTransportByLetterQuery } from "../../../PostAdvert/api/postAdvert.api";
 
 const MaterialForm = () => {

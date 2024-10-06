@@ -5,22 +5,24 @@ import { TAdvertType } from "../types/Advert";
 
 export const getAdvertTypeIconFunc = (advertType: TAdvertType) => {
   switch (advertType) {
-    case "technic":
+    case "TECHNIC":
       return excavatorSvg;
-    case "material":
+    case "NON_MATERIAL":
       return shovelSvg;
-    case "dump":
+    case "DUMP":
       return dumpSvg;
+    default:
+      return excavatorSvg;
   }
 };
 
 export const getAdvertTypeTitle = (advertType: TAdvertType) => {
   switch (advertType) {
-    case "technic":
+    case "TECHNIC":
       return "Техника";
-    case "material":
+    case "NON_MATERIAL":
       return "Нерудные материалы";
-    case "dump":
+    case "DUMP":
       return "Свалки";
   }
-}
+};

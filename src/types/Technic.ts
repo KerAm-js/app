@@ -1,24 +1,10 @@
-import { TAdress, TGeneral, TParams, TPrice } from "./others";
+export type NOT_SPECIFIED = "NOT_SPECIFIED";
 
-export type TTechnicTransactionType = "Сдать в аренду" | "Взять в аренду";
-
-export interface ITechnicGeneral extends TGeneral {
-  count: number;
-  rentalPeriod?: {
-    from: number; //date
-    to: number; //date
-  };
-  rentalDaysCount: number;
-  secondAdress?: TAdress;
-  distance?: number; // kilometers
-}
-
-export interface ITechnicParams extends TParams {
+export type TechnicParams = {
   technicType: string;
-  mark?: string;
-  model?: string;
-  productionYear?: string;
-  equipment?: string;
+  technicMark: string;
+  technicModel: string;
+  productionYear: number;
   weight?: number;
   height?: number;
   volume?: number;
@@ -28,16 +14,17 @@ export interface ITechnicParams extends TParams {
   liftingCapacity?: number;
   performance?: number;
   cargoType?: string;
-  rollerType?: "Гладкие" | "Комбинированные";
+  rollerType?: "SMOOTH" | "MIXED" | NOT_SPECIFIED;
   rollersCount?: number;
-  sizeType?: "Габаритный" | "Негабаритный";
-  OSSIG?: "Подключён" | "Не подключён";
+  sizeType?: "OVERSIZE" | "OVERALL" | NOT_SPECIFIED;
+  OSSIG?: boolean;
   axesCount?: number;
   bodyLength?: number;
-  trailerType?: "Прицеп" | "Полуприцеп" | "Корыто" | "Прямая площадка";
-  loadingType?: "Задняя" | "Передняя";
-}
-
-export interface ITechnicPrice extends TPrice {
-  paymentFor: "Cмена" | "Час" | "м3/км" | "т/км";
+  trailerType?:
+    | "FLAT_TRAILER"
+    | "LOWBOY"
+    | "SEMI_TRAILER"
+    | "TRAILER"
+    | NOT_SPECIFIED;
+  loadingType?: "FRONT" | "REAR" | NOT_SPECIFIED;
 }

@@ -1,7 +1,7 @@
-import { TAdvert } from "../../../../types/Advert";
+import { IAdvert } from "../../../../types/Advert";
 
 export interface IMainInfoProps
   extends Pick<
-    TAdvert,
+  IAdvert,
     "title" | "price" | "views" | "updatedAt" | "likes" | 'transactionType'
   > {}

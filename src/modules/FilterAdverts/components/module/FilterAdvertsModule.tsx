@@ -1,16 +1,16 @@
 import { FC } from "react";
-import { TAdvert } from "../../../../types/Advert";
+import { IAdvert } from "../../../../types/Advert";
 import TechnicForm from "../TechnicForm/TechnicForm";
 import DumpForm from "../DumpForm/DumpForm";
 import MaterialForm from "../MaterialForm/MaterialForm";
 
-const FilterAdvertsModuleComponent: FC<Pick<TAdvert, "type">> = ({ type }) => {
-  switch (type) {
-    case "technic":
+const FilterAdvertsModuleComponent: FC<Pick<IAdvert, "advertType">> = ({ advertType }) => {
+  switch (advertType) {
+    case "TECHNIC":
       return <TechnicForm />;
-    case "dump":
+    case "DUMP":
       return <DumpForm />;
-    case "material":
+    case "NON_MATERIAL":
       return <MaterialForm />;
     default:
       return null;

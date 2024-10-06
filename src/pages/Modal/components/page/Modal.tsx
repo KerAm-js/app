@@ -4,9 +4,9 @@ import { modalStyles } from "./styles";
 import BottomSheet from "../../../../components/BottomSheet/BottomSheet";
 import { TSheetButtonProps } from "../../../../components/BottomSheet/types";
 import { useActions } from "../../../../hooks/store/useActions";
-import { TAdvert } from "../../../../types/Advert";
+import { IAdvert } from "../../../../types/Advert";
 
-const MyModal: FC<TAdvert> = ({ id, status }) => {
+const MyModal: FC<IAdvert> = ({ id }) => {
   const { deleteAdvert, stopAdvert, republishAdvert } = useActions();
   const actions: Array<TSheetButtonProps> = [
     {

@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
-import { TAdvert } from "../../../../types/Advert";
+import { IAdvert } from "../../../../types/Advert";
 
 export interface IScrollWithSliderProps
   extends PropsWithChildren<
-    Pick<TAdvert, "type" | "photos" | "likes" | "userId" | "id">
+    Pick<IAdvert, "advertType" | "photos" | "likes" | "ownerId" | "id">
   > {}

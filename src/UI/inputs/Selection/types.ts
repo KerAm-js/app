@@ -1,4 +1,4 @@
-export type TValue = { id: number; name: string } & any;
+export type TValue = { id: number; name: string } | any;
 
 export type TSelectionProps =
   | {

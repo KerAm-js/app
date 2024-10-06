@@ -14,7 +14,7 @@ import * as SplashScreen from "expo-splash-screen";
 const List = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [advertType, setAdvertType] = useState<TAdvertType>("technic");
+  const [advertType, setAdvertType] = useState<TAdvertType>("TECHNIC");
   const data = useAdverts(advertType);
 
   useEffect(() => {

@@ -1,3 +1,4 @@
+import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { navigationStyles } from "./styles";
 import UserSearchPage from "../pages/UserSearch";
@@ -77,7 +78,7 @@ const RootNavigator: FC = () => {
             </Stack.Screen>
             <Stack.Screen
               options={({ route }) => ({
-                title: getAdvertTypeTitle(route.params.type),
+                title: getAdvertTypeTitle(route.params.advertType),
               })}
               name="AdvertsList"
             >
@@ -173,7 +174,7 @@ const RootNavigator: FC = () => {
             />
             <Stack.Screen
               options={({ route }) => ({
-                title: getAdvertTypeTitle(route.params.type),
+                title: getAdvertTypeTitle(route.params.advertType),
               })}
               name="NewAdvert"
             >
@@ -184,7 +185,7 @@ const RootNavigator: FC = () => {
             </Stack.Screen>
             <Stack.Screen
               options={({ route }) => ({
-                title: getAdvertTypeTitle(route.params.type),
+                title: getAdvertTypeTitle(route.params.advertType),
               })}
               name="Filter"
             >

@@ -6,6 +6,7 @@ import {
   Pressable,
   View,
 } from "react-native";
+import React from "react";
 import { avatarStyles } from "./styles";
 import { FC, useState } from "react";
 import { TAvatarProps } from "./types";
@@ -64,6 +65,7 @@ const Avatar: FC<TAvatarProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useAuth();
+
   const pickImageAsync = async () => {
     try {
       let result: ImagePicker.ImagePickerResult =

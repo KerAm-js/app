@@ -1,69 +1,103 @@
-import { IDumpGeneral, IDumpParams, IDumpPrice, TDumpTransactionType } from "./Dump";
-import { IMaterialGeneral, IMaterialParams, IMaterialPrice, TMaterialTransactionType } from "./Material";
-import {
-  ITechnicGeneral,
-  ITechnicParams,
-  ITechnicPrice,
-  TTechnicTransactionType,
-} from "./Technic";
+import { TechnicParams, NOT_SPECIFIED } from "./Technic";
 
-export type TAdvert = ITechnicAdvert | IDumpAdvert | IMaterialAdvert;
+export type TAdvertType = "TECHNIC" | "DUMP" | "NON_MATERIAL" | "OTHER";
 
-export type TAdvertType = keyof IAdvertMap;
-
-interface IAdvert {
-  id: number;
-  type: TAdvertType;
-  status: "published" | "stopped" | "deleted";
+type AdvertDto = {
+  advertType: TAdvertType;
+  addressLat: number;
+  addressLon: number;
   transactionType: string;
+  shiftType: "DAY" | "FULL" | "NIGHT";
   title: string;
-  userId: number;
-  userRating: number;
+  price: number;
+  paymentType: "ANY" | "CASH" | "NON_CASH";
+  description?: string;
+};
+
+interface BaseAdvert {
+  id: number;
+  advertStatus: "DELETED" | "STOPPER" | "PUBLISHED";
+  ownerId: number;
   updatedAt: number;
   views: Array<number>;
   likes: Array<number>;
-  username: string;
   photos: Array<string>;
 }
 
-export interface ITechnicAdvert extends IAdvert {
-  type: "technic";
-  transactionType: TTechnicTransactionType;
-  general: IAdvertMap["technic"]["general"];
-  params: IAdvertMap["technic"]["params"];
-  price: IAdvertMap["technic"]["price"];
+export interface TechnicAdvertDto extends AdvertDto, TechnicParams {
+  advertType: "TECHNIC";
+  transactionType: "GIVE_A_RENT" | "TAKE_A_RENT";
+  unitAmount: number;
+  isTransport: boolean;
+  rentalFrom: string;
+  rentalTo: string;
+  rentalDaysCount: number;
+  equipment: Array<{ id: number; name: string }>;
+  secondAddressLat?: number;
+  secondAddressLon?: number;
+  distance?: number;
+  paymentUnit: "HOUR" | "SHIFT" | "М3_КМ" | "Т_КМ";
 }
 
-export interface IDumpAdvert extends IAdvert {
-  type: "dump";
-  transactionType: TDumpTransactionType;
-  general: IAdvertMap["dump"]["general"];
-  params: IAdvertMap["dump"]["params"];
-  price: IAdvertMap["dump"]["price"];
+export interface DumpAdvertDto extends AdvertDto {
+  advertType: "DUMP";
+  advertStatus: BaseAdvert['advertStatus'];
+  transactionType:
+    | "NEED_SOIL_DUMP"
+    | "NEED_SOIL_REMOVAL"
+    | "SOIL_DUMP"
+    | "SOIL_REMOVAL";
+  wasteType: string;
+  coefficient: number;
+  dumpTransport: Array<{ id: number; name: string }>;
+  measureIn: "VOLUME" | "WEIGHT";
+  amount: number;
+  dangerClass: "CLASS_1" | "CLASS_2" | "CLASS_3" | "CLASS_4" | "CLASS_5";
 }
 
-export interface IMaterialAdvert extends IAdvert {
-  type: "material";
-  transactionType: TMaterialTransactionType;
-  general: IAdvertMap["material"]["general"];
-  params: IAdvertMap["material"]["params"];
-  price: IAdvertMap["material"]["price"];
+export interface MaterialAdvertDto extends AdvertDto {
+  advertType: "NON_MATERIAL";
+  advertStatus: BaseAdvert['advertStatus'];
+  transactionType: "BUY" | "SELL";
+  deliveryType: "DELIVERY" | "SELF_PICKUP";
+  materialType: string;
+  coefficient: number;
+  dumpTransport: Array<{ id: number; name: string }>;
+  measureIn: "VOLUME" | "WEIGHT";
+  amount: number;
+  fractions: Array<{ id: number; name: string }>;
 }
 
-interface IAdvertMap {
-  technic: {
-    general: ITechnicGeneral;
-    params: ITechnicParams;
-    price: ITechnicPrice;
-  };
-  material: {
-    general: IMaterialGeneral;
-    params: IMaterialParams;
-    price: IMaterialPrice;
-  };
-  dump: {
-    general: IDumpGeneral;
-    params: IDumpParams;
-    price: IDumpPrice;
-  };
+export interface ITechnicAdvert extends BaseAdvert, TechnicAdvertDto {
+  secondAddressLat: number;
+  secondAddressLon: number;
+  distance: number;
+  weight: number;
+  height: number;
+  volume: number;
+  passengersCount: number;
+  pipeLength: number;
+  boomLength: number;
+  liftingCapacity: number;
+  performance: number;
+  cargoType: string;
+  rollerType: "SMOOTH" | "MIXED" | NOT_SPECIFIED;
+  rollersCount: number;
+  sizeType: "OVERSIZE" | "OVERALL" | NOT_SPECIFIED;
+  OSSIG: boolean;
+  axesCount: number;
+  bodyLength: number;
+  trailerType:
+    | "FLAT_TRAILER"
+    | "LOWBOY"
+    | "SEMI_TRAILER"
+    | "TRAILER"
+    | NOT_SPECIFIED;
+  loadingType: "FRONT" | "REAR" | NOT_SPECIFIED;
 }
+
+export interface IDumpAdvert extends BaseAdvert, DumpAdvertDto {}
+
+export interface IMaterialAdvert extends BaseAdvert, MaterialAdvertDto {}
+
+export type IAdvert = IMaterialAdvert | ITechnicAdvert | IDumpAdvert;

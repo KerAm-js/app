@@ -6,7 +6,7 @@ export const usePhoneValidator: TPhoneInputValidator = (props) => {
   const { initValue, required } = props || {};
   const [value, setValue] = useState(toPhoneFormat(initValue || ""));
   const [number, setNumber] = useState(initValue || "");
-  const [isValid, setIsValid] = useState(initValue?.length === 11 || false);
+  const [isValid, setIsValid] = useState(!!initValue?.length || false);
 
   const [error, setError] = useState(
     !initValue?.length && required ? "Заполните данное поле" : ""

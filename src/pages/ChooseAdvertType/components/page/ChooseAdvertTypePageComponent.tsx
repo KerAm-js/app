@@ -4,9 +4,9 @@ import CardButton from "../../../../UI/buttons/Card/CardButton";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { TAdvertType } from "../../../../types/Advert";
 import { FC } from "react";
 import { IChooseAdvertTypePageProps } from "./types";
+import { IAdvert } from "../../../../types/Advert";
 
 const ChooseAdvertTypePageComponent: FC<IChooseAdvertTypePageProps> = ({
   navigateTo,
@@ -14,32 +14,32 @@ const ChooseAdvertTypePageComponent: FC<IChooseAdvertTypePageProps> = ({
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const onPress = (type: TAdvertType) => {
+  const onPress = (advertType: IAdvert['advertType']) => {
     if (navigateTo === "adverts") {
-      navigation.navigate("AdvertsList", { type });
+      navigation.navigate("AdvertsList", { advertType });
     } else if (navigateTo === "filter") {
-      navigation.navigate("Filter", { type });
+      navigation.navigate("Filter", { advertType });
     } else if (navigateTo === "form") {
-      navigation.navigate("NewAdvert", { type });
+      navigation.navigate("NewAdvert", { advertType });
     }
   };
 
   return (
     <View style={chooseAdvertTypePageStyles.container}>
       <CardButton
-        type="technic"
+        type="TECHNIC"
         title="Техника"
-        onPress={() => onPress("technic")}
+        onPress={() => onPress("TECHNIC")}
       />
       <CardButton
-        type="dump"
+        type="DUMP"
         title="Свалки"
-        onPress={() => onPress("dump")}
+        onPress={() => onPress("DUMP")}
       />
       <CardButton
-        type="material"
+        type="NON_MATERIAL"
         title="Нерудные материалы"
-        onPress={() => onPress("material")}
+        onPress={() => onPress("NON_MATERIAL")}
       />
     </View>
   );

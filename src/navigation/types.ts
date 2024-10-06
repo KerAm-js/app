@@ -3,7 +3,7 @@ import { IAwaitingCommentPageProps } from "../pages/AwaitingComment/components/p
 import { IChooseAdvertTypePageProps } from "../pages/ChooseAdvertType/components/page/types";
 import { ICommentPageProps } from "../pages/Comment/components/page/types";
 import { IMyCommentsPageProps } from "../pages/MyComments/components/MyCommentsPage/types";
-import { TAdvert } from "../types/Advert";
+import { IAdvert } from "../types/Advert";
 import { IComment } from "../types/Comment";
 import { IUser } from "../types/User";
 
@@ -33,14 +33,14 @@ export type RootStackParamList = {
   DeletedAdverts: undefined;
   CommentsToMe: IMyCommentsPageProps;
   Comment: ICommentPageProps;
-  Modal: TAdvert;
-  Advert: TAdvert;
+  Modal: IAdvert;
+  Advert: IAdvert;
   AwaitingComment: IAwaitingCommentPageProps;
   UserComments: ICommentsModuleProps;
   NewComment: Pick<IComment, "addresseeId" | "addresseeName">;
   ChooseAdvertType: IChooseAdvertTypePageProps;
-  AdvertsList: Pick<TAdvert, "type">;
-  NewAdvert: Pick<TAdvert, "type">;
-  AdvertImages: Pick<TAdvert, "id"> & { isPhotosRequired: boolean };
-  Filter: Pick<TAdvert, "type">;
+  AdvertsList: Pick<IAdvert, "advertType">;
+  NewAdvert: Pick<IAdvert, "advertType">;
+  AdvertImages: Pick<IAdvert, "id" | "advertType"> & { isPhotosRequired: boolean };
+  Filter: Pick<IAdvert, "advertType">;
 };

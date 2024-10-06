@@ -1,4 +1,5 @@
-import { ITechnicParams } from "../types/Technic";
+import { IAdvert } from "../types/Advert";
+import { TechnicParams } from "../types/Technic";
 
 export const EQUIPMENTS = {
   leveller: "3D нивелир",
@@ -31,24 +32,38 @@ export const FRACTIONS = {
   concreteScreening: "Отсев бетонный",
 };
 
-export const TRANSACTION_TYPES = {
-  "Сдать в аренду": "Аренда",
-  "Взять в аренду": "Нужна аренда",
-  "Отвал": "Отвал",
-  "Нужен отвал": "Нужен отвал",
-  "Вывоз": "Вывоз",
-  "Нужен вывоз": "Нужен вывоз",
-  "Купить": "Купля",
-  "Продать": "Продажа",
-}
+export const WASTE_TYPES = [
+  "Бетонный бой",
+  "Глина",
+  "Грунт",
+  "Грунт жикдий",
+  "Грунт замусоренный",
+  "Суглинок"
+];
+
+export const TRANSACTION_TYPE_TITLE: {
+  [key in IAdvert["transactionType"]]: string;
+} = {
+  BUY: "Купля",
+  SELL: "Продажа",
+  GIVE_A_RENT: "Аренда",
+  TAKE_A_RENT: "Нужна аренда",
+  NEED_SOIL_DUMP: "Нужен отвал",
+  NEED_SOIL_REMOVAL: "Нужен вывоз",
+  SOIL_DUMP: "Отвал",
+  SOIL_REMOVAL: "Вывоз",
+};
 
 export const TECHNIC_PARAMS: {
-  [key in keyof ITechnicParams]: {
+  [key in keyof TechnicParams]: {
     title: string;
     measurement?: string;
   };
 } = {
   technicType: { title: "Вид техники" },
+  technicMark: { title: "Марка" },
+  technicModel: { title: "Модель" },
+  productionYear: { title: "Год производства" },
   weight: { title: "Вес", measurement: "тонн" },
   height: { title: "Высота", measurement: "м" },
   volume: { title: "Объём", measurement: "м3" },
@@ -71,7 +86,10 @@ export const TECHNIC_PARAMS: {
 export const TECHNICS: {
   [key: string]: {
     params: {
-      [key in keyof Omit<ITechnicParams, "technicType">]: boolean | undefined;
+      [key in keyof Omit<
+        TechnicParams,
+        "technicType" | "technicMark" | "technicModel" | "productionYear"
+      >]: boolean | undefined;
     };
     equipments: Array<string>;
     isTransport?: boolean;

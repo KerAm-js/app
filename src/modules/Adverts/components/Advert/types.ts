@@ -1,6 +1,6 @@
-import { TAdvert } from "../../../../types/Advert";
+import { IAdvert } from "../../../../types/Advert";
 
-export interface IAdvertSliderProps extends Pick<TAdvert, "type" | "photos"> {}
+export interface IAdvertSliderProps extends Pick<IAdvert, "advertType" | "photos"> {}
 
 export interface IParamProps {
   param: string;

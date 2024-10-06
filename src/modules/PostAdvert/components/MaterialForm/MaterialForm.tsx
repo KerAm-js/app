@@ -1,21 +1,37 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
-import { TMaterialForm } from "./types";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import {
   IMaterialType,
   ITransportType,
+  TFraction,
+  useAddMaterialAdvertMutation,
   useGetMaterialTypeByLetterQuery,
   useGetTransportByLetterQuery,
 } from "../../api/postAdvert.api";
+import {
+  DELIVERY,
+  ENUM_TITLES,
+  ENUMS,
+  MATERIAL_TRANSACTION_TYPES,
+  MEASURE_IN,
+  PAYMENT_TYPES,
+  SHIFT_TYPES,
+} from "../../../../consts/enums";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
+import { Alert } from "react-native";
 
-const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
-  const { user } = useAuth();
+const MaterialForm = () => {
+  const { token } = useAuth();
+  const [addAdvert, addAdvertResult] = useAddMaterialAdvertMutation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [typeI, setTypeI] = useState(0);
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
@@ -60,7 +76,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
     clearFractions,
     isFractionsValid,
     fractionsError,
-  ] = useSelectionValidator({ required: true });
+  ] = useSelectionValidator<TFraction>({ required: true });
   const [workModeIndex, setWorkModeIndex] = useState(0);
   const [deliveryI, setDeliveryI] = useState(0);
   const [comment, setComment] = useState("");
@@ -83,13 +99,6 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
     minValue: 0,
   });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
-  const [username, onUsernameChange, isUsernameValid, usernameError] =
-    useInputValidator({ required: true, initValue: user?.username });
-  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] =
-    usePhoneValidator({
-      required: true,
-      initValue: user?.phone,
-    });
 
   const { data: materialTypes, isFetching: isMaterialTypesLoading } =
     useGetMaterialTypeByLetterQuery(materialTypeSearch, {
@@ -108,7 +117,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
         {
           id: "type",
           type: "segment",
-          values: INPUT_VALUES.materialAdvertType,
+          values: ENUMS.materialTransactionTypes,
           selectedIndex: typeI,
           onChange: (evt) => setTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Тип объявления",
@@ -175,7 +184,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
         {
           id: "measure",
           type: "segment",
-          values: INPUT_VALUES.measure,
+          values: ENUMS.measureIn,
           selectedIndex: measureI,
           onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
           label: "Измерять",
@@ -187,7 +196,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
           error: amountError,
           value: amount,
           label:
-            INPUT_VALUES.measure[measureI] === "Объём"
+            ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
               ? "Объём (м3)"
               : "Вес (т)",
           keyboardType: "decimal-pad",
@@ -209,7 +218,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
         {
           id: "workMode",
           type: "segment",
-          values: INPUT_VALUES.workMode,
+          values: ENUMS.shiftTypes,
           selectedIndex: workModeIndex,
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
@@ -218,7 +227,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
         {
           id: "delivery",
           type: "segment",
-          values: INPUT_VALUES.delivery,
+          values: ENUMS.delivery,
           selectedIndex: deliveryI,
           onChange: (evt) => setDeliveryI(evt.nativeEvent.selectedSegmentIndex),
           label: "Доставка",
@@ -243,7 +252,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
           error: priceForWeightError,
           label: "Цена (руб/т)",
           keyboardType: "decimal-pad",
-          editable: INPUT_VALUES.measure[measureI] === "Вес",
+          editable: ENUMS.measureIn[measureI] === ENUM_TITLES.WEIGHT,
         },
         {
           id: "priceVolume",
@@ -253,40 +262,16 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
           error: priceForVolumeError,
           label: "Цена (руб/м3)",
           keyboardType: "decimal-pad",
-          editable: INPUT_VALUES.measure[measureI] === "Объём",
+          editable: ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME,
         },
         {
           id: "paymentType",
           type: "segment",
-          values: INPUT_VALUES.paymentType,
+          values: ENUMS.paymentTypes,
           selectedIndex: paymentTypeI,
           onChange: (evt) =>
             setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Способ оплаты",
-        },
-      ],
-    },
-    {
-      title: "Данные пользователя",
-      inputs: [
-        {
-          id: "username",
-          type: "input",
-          value: username,
-          onChangeText: onUsernameChange,
-          error: usernameError,
-          label: "Имя пользователя",
-        },
-        {
-          id: "phone",
-          type: "input",
-          value: phoneText,
-          onChangeText: onPhoneChange,
-          error: phoneError,
-          label: "Имя пользователя",
-          keyboardType: "phone-pad",
-          textContentType: "telephoneNumber",
-          maxLength: 16,
         },
       ],
     },
@@ -300,65 +285,41 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
     isCoefficientValid &&
     (isFractionsValid || materialType[0]?.fractions.length === 0) &&
     isPriceForWeightValid &&
-    isPriceForVolumeValid &&
-    isUsernameValid &&
-    isPhoneValid;
+    isPriceForVolumeValid;
 
-  const transactionType = INPUT_VALUES.materialAdvertType[typeI];
-  const isPhotosAllowed = transactionType === "Продать";
+  const transactionType = MATERIAL_TRANSACTION_TYPES[typeI];
+  const isPhotosAllowed = transactionType === "SELL";
 
   const onSubmit = () => {
-    submit(
-      {
+    addAdvert({
+      advert: {
         transactionType,
+        advertType: "NON_MATERIAL",
+        addressLat: 45,
+        addressLon: 45,
+        fractions,
         title,
-        photos: [],
-        general: {
-          delivery: INPUT_VALUES.delivery[deliveryI],
-          address: "Москва, Лефортово",
-          workMode: INPUT_VALUES.workMode[workModeIndex],
-          comment,
-        },
-        params: {
-          materialType,
-          transport,
-          measure: INPUT_VALUES.measure[measureI],
-          amount,
-          coefficient,
-        },
-        price: {
-          price: Number(priceForWeight),
-          paymentType: INPUT_VALUES.paymentType[paymentTypeI],
-        },
-        username,
-        phone,
+        deliveryType: DELIVERY[deliveryI],
+        shiftType: SHIFT_TYPES[workModeIndex],
+        materialType: materialType[0].name,
+        dumpTransport: transport,
+        measureIn: MEASURE_IN[measureI],
+        amount: Number(amount),
+        coefficient: Number(coefficient),
+        price: Number(priceForWeight),
+        paymentType: PAYMENT_TYPES[paymentTypeI],
+        description: comment,
+        advertStatus: "STOPPER",
       },
-      isPhotosAllowed
-    );
-  };
-
-  const clearForm = () => {
-    setTypeI(0);
-    onTitleChange("");
-    clearMaterialType();
-    clearTransport();
-    setMeasureI(0);
-    onAmountCange("");
-    onCoefficientChange("");
-    clearFractions();
-    setWorkModeIndex(0);
-    setDeliveryI(0);
-    setComment("");
-    onPriceForVolumeChange("");
-    onPriceForWeightChange("");
-    setPaymentTypeI(0);
+      token: token || "",
+    });
   };
 
   useEffect(() => {
     if (
       priceForWeight &&
       coefficient &&
-      INPUT_VALUES.measure[measureI] === "Вес"
+      ENUMS.measureIn[measureI] === ENUM_TITLES.WEIGHT
     ) {
       const priceVolume = Number(priceForWeight) * Number(coefficient);
       onPriceForVolumeChange(Math.floor(priceVolume).toString());
@@ -369,12 +330,31 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
     if (
       priceForVolume &&
       coefficient &&
-      INPUT_VALUES.measure[measureI] === "Объём"
+      ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
     ) {
       const priceWeight = Number(priceForVolume) / Number(coefficient);
       onPriceForWeightChange(Math.floor(priceWeight).toString());
     }
   }, [priceForVolume]);
+
+  useEffect(() => {
+    console.log("isLoading", addAdvertResult.isLoading);
+    console.log("data", addAdvertResult.data);
+    console.log("error", addAdvertResult.error);
+    if (addAdvertResult.isSuccess) {
+      if (isPhotosAllowed) {
+        navigation.navigate("AdvertImages", {
+          id: addAdvertResult.data.id,
+          isPhotosRequired: false,
+          advertType: "NON_MATERIAL",
+        });
+      } else {
+        navigation.navigate("Profile");
+      }
+    } else if (addAdvertResult.error) {
+      Alert.alert("Ошибка", "Что-то пошло не так");
+    }
+  }, [addAdvertResult]);
 
   return (
     <Form
@@ -382,6 +362,7 @@ const MaterialForm: FC<TMaterialForm> = ({ submit }) => {
       isFormValid={isFormValid}
       onSubmit={onSubmit}
       submitTitle={isPhotosAllowed ? "Далее" : "Опубликовать"}
+      isLoading={addAdvertResult.isLoading}
     />
   );
 };

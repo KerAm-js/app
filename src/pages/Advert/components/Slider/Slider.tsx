@@ -28,7 +28,7 @@ const Slider: FC<ISliderProps> = ({
   // userId,
   likes,
   photos,
-  type,
+  advertType,
   scrollY,
   onLike,
 }) => {
@@ -118,7 +118,7 @@ const Slider: FC<ISliderProps> = ({
         ListEmptyComponent={
           <View style={sliderStyles.sliderEmptyContainer}>
             <SvgXml
-              xml={getAdvertTypeIconFunc(type)(GREY_DARK)}
+              xml={getAdvertTypeIconFunc(advertType)(GREY_DARK)}
               width={60}
               height={60}
             />

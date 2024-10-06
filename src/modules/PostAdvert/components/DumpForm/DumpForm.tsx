@@ -5,16 +5,52 @@ import { useInputValidator } from "../../../../hooks/inputValidators/useInputVal
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
-import { TDumpForm } from "./types";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import { ITransportType, useGetTransportByLetterQuery } from "../../api/postAdvert.api";
+import {
+  ITransportType,
+  useAddDumpAdvertMutation,
+  useGetTransportByLetterQuery,
+} from "../../api/postAdvert.api";
+import {
+  DANGER_CLASSES,
+  DUMP_TRANSACTION_TYPES,
+  ENUM_TITLES,
+  ENUMS,
+  MEASURE_IN,
+  PAYMENT_TYPES,
+  SHIFT_TYPES,
+} from "../../../../consts/enums";
+import { WASTE_TYPES } from "../../../../consts/data";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
+import { Alert } from "react-native";
 
-const DumpForm: FC<TDumpForm> = ({ submit }) => {
-  const { user } = useAuth();
+const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
+  id: index,
+  value: type,
+  name: ENUM_TITLES[type],
+}));
+
+const wasteTypes = WASTE_TYPES.map((type, index) => ({
+  id: index,
+  name: type,
+}));
+
+const dangerClasses = DANGER_CLASSES.map((item, index) => ({
+  id: index,
+  name: item,
+}));
+
+const DumpForm = () => {
+  const { token } = useAuth();
+  const [addAdvert, addAdvertResult] = useAddDumpAdvertMutation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [type, selectType, unselectType, clearType, isTypeValid, typeError] =
     useSelectionValidator({
       required: true,
-      initValue: [INPUT_VALUES.dumpAdvertType[0]],
+      initValue: [dumpTransactionTypes[0]],
     });
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
@@ -27,7 +63,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
     clearWasteType,
     isWasteTypeValid,
     wasteTypeError,
-  ] = useSelectionValidator({ required: true });
+  ] = useSelectionValidator<typeof wasteTypes[0]>({ required: true });
   const [
     dangerClass,
     selectDangerClass,
@@ -35,7 +71,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
     clearDangerClass,
     isDangerClassValid,
     dangerClassError,
-  ] = useSelectionValidator({ required: true });
+  ] = useSelectionValidator<typeof dangerClasses[0]>({ required: true });
   const [
     transport,
     selectTransport,
@@ -78,15 +114,8 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
     minValue: 0,
   });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
-  const [username, onUsernameChange, isUsernameValid, usernameError] =
-    useInputValidator({ required: true, initValue: user?.username });
-  const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] =
-    usePhoneValidator({
-      required: true,
-      initValue: user?.phone,
-    });
 
-  const { data: transports, isFetching: isTransportLoading } =
+  const { data: transports, isFetching: isTransportsFetching } =
     useGetTransportByLetterQuery(transportSearch);
 
   const inputs: TFormInputsArray = [
@@ -99,7 +128,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           value: type,
           selectItem: selectType,
           unselectItem: unselectType,
-          itemsList: INPUT_VALUES.dumpAdvertType,
+          itemsList: dumpTransactionTypes,
           error: typeError,
           label: "Тип объявления",
           usesDataFromApi: false,
@@ -125,7 +154,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           value: wasteType,
           selectItem: selectWasteType,
           unselectItem: unselectWasteType,
-          itemsList: INPUT_VALUES.wasteTypes,
+          itemsList: wasteTypes,
           error: wasteTypeError,
           label: "Вид отходов",
           usesDataFromApi: false,
@@ -136,7 +165,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           value: dangerClass,
           selectItem: selectDangerClass,
           unselectItem: unselectDangerClass,
-          itemsList: INPUT_VALUES.dangerClasses,
+          itemsList: dangerClasses,
           error: dangerClassError,
           label: "Класс опасности",
           usesDataFromApi: false,
@@ -147,18 +176,19 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList: !!transportSearch && !isTransportLoading ? transports : [],
+          itemsList:
+            !!transportSearch && !isTransportsFetching ? transports : [],
           error: transportError,
           label: "Вид транспорта",
           usesDataFromApi: true,
           search: transportSearch,
           setSearch: setTransportSearch,
-          isLoading: isTransportLoading,
+          isLoading: isTransportsFetching,
         },
         {
           id: "measure",
           type: "segment",
-          values: INPUT_VALUES.measure,
+          values: ENUMS.measureIn,
           selectedIndex: measureI,
           onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
           label: "Измерять",
@@ -170,7 +200,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
           error: amountError,
           value: amount,
           label:
-            INPUT_VALUES.measure[measureI] === "Объём"
+            ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
               ? "Объём (м3)"
               : "Вес (т)",
           keyboardType: "decimal-pad",
@@ -192,7 +222,7 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
         {
           id: "workMode",
           type: "segment",
-          values: INPUT_VALUES.workMode,
+          values: ENUMS.shiftTypes,
           selectedIndex: workModeIndex,
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
@@ -241,30 +271,6 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
         },
       ],
     },
-    {
-      title: "Данные пользователя",
-      inputs: [
-        {
-          id: "username",
-          type: "input",
-          value: username,
-          onChangeText: onUsernameChange,
-          error: usernameError,
-          label: "Имя пользователя",
-        },
-        {
-          id: "phone",
-          type: "input",
-          value: phoneText,
-          onChangeText: onPhoneChange,
-          error: phoneError,
-          label: "Имя пользователя",
-          keyboardType: "phone-pad",
-          textContentType: "telephoneNumber",
-          maxLength: 16,
-        },
-      ],
-    },
   ];
 
   const isFormValid =
@@ -276,60 +282,35 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
     isAmountValid &&
     isPriceForWeightValid &&
     isPriceForVolumeValid &&
-    isCoefficientValid &&
-    isUsernameValid &&
-    isPhoneValid;
+    isCoefficientValid;
 
   const transactionType = type[0];
   const isPhotosAllowed =
-    transactionType === INPUT_VALUES.dumpAdvertType[0] ||
-    transactionType === INPUT_VALUES.dumpAdvertType[2];
+    transactionType.value === "SOIL_DUMP" ||
+    transactionType.value === "SOIL_REMOVAL";
 
   const onSubmit = () => {
-    submit(
-      {
-        type: "dump",
-        transactionType: type,
+    addAdvert({
+      token: token || "",
+      advert: {
+        advertStatus: "STOPPER",
+        transactionType: transactionType.value,
+        advertType: "DUMP",
+        addressLat: 45,
+        addressLon: 45,
         title,
-        photos: [],
-        general: {
-          address: "Москва, Лефортово",
-          workMode: INPUT_VALUES.workMode[workModeIndex],
-          comment,
-        },
-        params: {
-          wasteType,
-          dangerClass,
-          transport,
-          measure: INPUT_VALUES.measure[measureI],
-          amount,
-          coefficient,
-        },
-        price: {
-          price: Number(priceForWeight),
-          paymentType: INPUT_VALUES.paymentType[paymentTypeI],
-        },
-        username,
-        phone,
+        shiftType: SHIFT_TYPES[workModeIndex],
+        dumpTransport: transport,
+        measureIn: MEASURE_IN[measureI],
+        amount: Number(amount),
+        coefficient: Number(coefficient),
+        price: Number(priceForWeight),
+        paymentType: PAYMENT_TYPES[paymentTypeI],
+        wasteType: wasteType[0].name,
+        dangerClass: dangerClass[0].name,
+        description: comment,
       },
-      isPhotosAllowed
-    );
-  };
-
-  const clearForm = () => {
-    clearType();
-    onTitleChange("");
-    clearWasteType();
-    clearDangerClass();
-    clearTransport();
-    setMeasureI(0);
-    onAmountCange("");
-    setWorkModeIndex(0);
-    setComment("");
-    onPriceForVolumeChange("");
-    onPriceForWeightChange("");
-    onCoefficientChange("");
-    setPaymentTypeI(0);
+    });
   };
 
   useEffect(() => {
@@ -353,10 +334,31 @@ const DumpForm: FC<TDumpForm> = ({ submit }) => {
       onPriceForWeightChange(Math.floor(priceWeight).toString());
     }
   }, [priceForVolume]);
+
+  useEffect(() => {
+    console.log("isLoading", addAdvertResult.isLoading);
+    console.log("data", addAdvertResult.data);
+    console.log("error", addAdvertResult.error);
+    if (addAdvertResult.isSuccess) {
+      if (isPhotosAllowed) {
+        navigation.navigate("AdvertImages", {
+          id: addAdvertResult.data.id,
+          isPhotosRequired: false,
+          advertType: "DUMP",
+        });
+      } else {
+        navigation.navigate("Profile");
+      }
+    } else if (addAdvertResult.error) {
+      Alert.alert("Ошибка", "Что-то пошло не так");
+    }
+  }, [addAdvertResult]);
+
   return (
     <Form
       inputs={inputs}
       isFormValid={isFormValid}
+      isLoading={addAdvertResult.isLoading}
       onSubmit={onSubmit}
       submitTitle={isPhotosAllowed ? "Далее" : "Опубликовать"}
     />

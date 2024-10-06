@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Avatar from "../../../../UI/Avatar/Avatar";
 import Rating from "../../../../UI/Rating/Rating";
@@ -14,36 +14,36 @@ import { eyeSvg } from "../../../../assets/svg/eye";
 import { likeFillSvg } from "../../../../assets/svg/likeFill";
 import { getRelevanceObj } from "../../helpers/getRelevance";
 import { circlesSvg } from "../../../../assets/svg/circles";
-import { TAdvert } from "../../../../types/Advert";
+import { IAdvert } from "../../../../types/Advert";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { TRANSACTION_TYPES } from "../../../../consts/data";
+import { TRANSACTION_TYPE_TITLE } from "../../../../consts/data";
 import { getPriceString } from "../../helpers/getPaymentFor";
 import { useAuth } from "../../../../hooks/store/useAuth";
+import { useGetUserByIdQuery } from "../../../SearchUsers/api/users.api";
 
-const Advert: FC<TAdvert> = (props) => {
+const Advert: FC<IAdvert> = (props) => {
   const {
     id,
-    type,
-    userId,
-    username,
-    userRating,
+    advertType,
+    advertStatus,
+    ownerId,
     updatedAt,
     likes,
     views,
     title,
     photos,
-    general,
-    params,
     price,
     transactionType,
-    status,
+    addressLat,
+    addressLon,
   } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const { user } = useAuth();
+  const { data: owner, isFetching } = useGetUserByIdQuery({ id: ownerId });
   const openModal = () => {
     navigation.navigate("Modal", props);
   };
@@ -55,7 +55,7 @@ const Advert: FC<TAdvert> = (props) => {
 
   const onLike = (value: boolean) => {
     console.log(
-      `Post ${id} is ${value ? "liked by" : "disliked by"} ${username}`
+      `Post ${id} is ${value ? "liked by" : "disliked by"} ${owner?.id}`
     );
   };
 
@@ -67,31 +67,35 @@ const Advert: FC<TAdvert> = (props) => {
 
   return (
     <View style={advertStyles.container}>
-      <Pressable style={advertStyles.topContainer} onPress={goToAdvertPage}>
-        <Avatar size={36} userId={userId} />
-        <View style={advertStyles.userInfo}>
-          <Text style={advertStyles.username}>{username}</Text>
-          <Rating
-            backgroundColor={WHITE}
-            rating={userRating}
-            type="presentation"
-            size={12}
-          />
-        </View>
-        {user?.id === userId ? (
-          <Pressable onPress={openModal} style={advertStyles.editButton}>
-            <SvgXml xml={circlesSvg()} />
-          </Pressable>
-        ) : (
-          <LikeButton onPress={onLike} isLiked={isLiked} />
-        )}
-      </Pressable>
+      {isFetching || !owner ? (
+        <ActivityIndicator />
+      ) : (
+        <Pressable style={advertStyles.topContainer} onPress={goToAdvertPage}>
+          <Avatar size={36} userId={ownerId} />
+          <View style={advertStyles.userInfo}>
+            <Text style={advertStyles.username}>{owner.username}</Text>
+            <Rating
+              backgroundColor={WHITE}
+              rating={owner.rating}
+              type="presentation"
+              size={12}
+            />
+          </View>
+          {user?.id === ownerId ? (
+            <Pressable onPress={openModal} style={advertStyles.editButton}>
+              <SvgXml xml={circlesSvg()} />
+            </Pressable>
+          ) : (
+            <LikeButton onPress={onLike} isLiked={isLiked} />
+          )}
+        </Pressable>
+      )}
       <View style={advertStyles.sliderContainer}>
         <View style={advertStyles.addressContainer}>
           <SvgXml xml={pointSvg(WHITE)} width={10} height={14} />
-          <Text style={advertStyles.address}>{general.address}</Text>
+          {/* <Text style={advertStyles.address}>{address}</Text> */}
         </View>
-        <Slider type={type} photos={photos} />
+        <Slider advertType={advertType} photos={photos} />
         <LinearGradient
           colors={
             !!photos.length
@@ -115,11 +119,6 @@ const Advert: FC<TAdvert> = (props) => {
         </LinearGradient>
       </View>
       <Pressable onPress={goToAdvertPage}>
-        {/* <View style={advertStyles.paramsContainer}>
-          {paramsArr.map((entry) => (
-            <Param key={entry[0]} param={entry[0]} content={String(entry[1])} />
-          ))}
-        </View> */}
         <View style={advertStyles.priceContainer}>
           <View>
             <Text style={advertStyles.price}>
@@ -138,12 +137,12 @@ const Advert: FC<TAdvert> = (props) => {
             )}
           </View>
           <Text style={advertStyles.paymentFor}>
-            {TRANSACTION_TYPES[transactionType]}
+            {TRANSACTION_TYPE_TITLE[transactionType]}
           </Text>
         </View>
-        {status !== "deleted" && (
+        {advertStatus !== "DELETED" && (
           <View style={advertStyles.bottomContainer}>
-            {status === "stopped" ? (
+            {advertStatus === "STOPPER" ? (
               <Text style={[advertStyles.paymentFor, { color: RED }]}>
                 Снято с публикации
               </Text>

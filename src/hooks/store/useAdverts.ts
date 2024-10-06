@@ -8,7 +8,7 @@ export const useAdverts = (type: TAdvertType) => {
   const adverts = useSelector((state: RootState) => state.adverts);
   const filtered = useMemo(
     // () => adverts.filter((ad) => ad.type === type && ad.userId !== USER.id),
-    () => adverts.filter((ad) => ad.type === type),
+    () => adverts.filter((ad) => ad.advertType === type),
     [adverts, type]
   );
   return filtered;
@@ -19,7 +19,7 @@ export const useFilteredAdverts = (type: TAdvertType) => {
   const { user } = useAuth();
   const filtered = useMemo(
     () =>
-      adverts.filter((ad) => ad.type === type && ad.userId !== user?.id),
+      adverts.filter((ad) => ad.advertType === type && ad.ownerId !== user?.id),
     [adverts, type]
   );
   return filtered;
@@ -28,7 +28,7 @@ export const useFilteredAdverts = (type: TAdvertType) => {
 export const useUserAdverts = (userId: number) => {
   const adverts = useSelector((state: RootState) => state.adverts);
   const filtered = useMemo(
-    () => adverts.filter((ad) => ad.userId === userId),
+    () => adverts.filter((ad) => ad.ownerId === userId),
     [adverts]
   );
   return filtered;
