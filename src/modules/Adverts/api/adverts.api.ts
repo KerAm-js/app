@@ -1,10 +1,6 @@
 import { api } from "../../../api/api";
-import {
-  DumpAdvertDto,
-  IAdvert,
-  MaterialAdvertDto,
-  TechnicAdvertDto,
-} from "../../../types/Advert";
+import { IAdvert } from "../../../types/Advert";
+import { IUser } from "../../../types/User";
 
 export type TEquipment = { id: number; name: string };
 export type TParameter = { id: number; name: string };
@@ -49,69 +45,93 @@ interface GetImageResponse {
 
 export const postAdvertApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    addTechnicAdvert: builder.mutation<
-      IAdvert,
-      {
-        advert: TechnicAdvertDto;
-        token: string;
-      }
+    getLikesByAdvertId: builder.query<
+      Array<IUser>,
+      Pick<IAdvert, "advertType" | "id">
     >({
-      query: ({ advert, token }) => ({
-        url: "/secured/advert-technic/new",
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: advert,
-      }),
-    }),
-    addMaterialAdvert: builder.mutation<
-      IAdvert,
-      { advert: MaterialAdvertDto; token: string }
-    >({
-      query: ({ advert, token }) => ({
-        url: "/secured/advert-material/new",
-        method: "POST",
-        body: advert,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      query: ({ id, advertType }) => ({
+        url: `/likes/all-by-advert`,
+        params: {
+          advertType,
+          advertId: id,
         },
       }),
     }),
-    getTechnicAdvertsByUser: builder.query<string, Array<IAdvert>>({
+    getTechnicAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
       query: (userId) => ({
         url: `/advert-technic/all/${userId}`,
       }),
     }),
-    getTechnicTypesByLetter: builder.query<Array<ITechnicType>, string>({
-      query: (text) => ({
-        url: `/technic-type-lib/${text}`,
+    getTechnicAdvertsPageable: builder.query<
+      Array<IAdvert>,
+      { from: number; size: number }
+    >({
+      query: ({ from, size }) => ({
+        url: `/advert-technic/all/pageable`,
+        params: {
+          from,
+          size,
+        },
+      }),
+      // Only have one cache entry because the arg always maps to one string
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      // Always merge incoming data to the cache entry
+      merge: (currentCache, newItems) => {
+        currentCache.push(...newItems);
+      },
+    }),
+    getMaterialAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
+      query: (userId) => ({
+        url: `/advert-material/all/${userId}`,
       }),
     }),
-    getTransportByLetter: builder.query<Array<ITransportType>, string>({
-      query: (text) => ({
-        url: `/transport-lib/${text}`,
+    getMaterialAdvertsPageable: builder.query<
+      Array<IAdvert>,
+      { from: number; size: number }
+    >({
+      query: ({ from, size }) => ({
+        url: `/advert-material/all/pageable`,
+        params: {
+          from,
+          size,
+        },
+      }),
+      // Only have one cache entry because the arg always maps to one string
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      // Always merge incoming data to the cache entry
+      merge: (currentCache, newItems) => {
+        currentCache.push(...newItems);
+      },
+    }),
+    getDumpAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
+      query: (userId) => ({
+        url: `/advert-dump/all/${userId}`,
       }),
     }),
-    getMaterialTypeByLetter: builder.query<Array<IMaterialType>, string>({
-      query: (text) => ({
-        url: `/material-type/by-letter/${text}`,
+    getDumpAdvertsPageable: builder.query<
+      Array<IAdvert>,
+      { from: number; size: number }
+    >({
+      query: ({ from, size }) => ({
+        url: `/advert-dump/all/pageable`,
+        params: {
+          from,
+          size,
+        },
       }),
+      // Only have one cache entry because the arg always maps to one string
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName;
+      },
+      // Always merge incoming data to the cache entry
+      merge: (currentCache, newItems) => {
+        currentCache.push(...newItems);
+      },
     }),
-    uploadImageToAdvert: builder.mutation<void, FormData>(
-      {
-        query: (formData) => ({
-          url: "/secured/upload-image/advert",
-          method: "POST",
-          body: formData,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }),
-      }
-    ),
     getImageNamesByOrderId: builder.query<
       string[],
       GetImageNamesByOrderIdParams
@@ -138,13 +158,13 @@ export const postAdvertApi = api.injectEndpoints({
 });
 
 export const {
-  useAddTechnicAdvertMutation,
-  useAddMaterialAdvertMutation,
+  useGetLikesByAdvertIdQuery,
   useGetTechnicAdvertsByUserQuery,
-  useGetTechnicTypesByLetterQuery,
-  useGetTransportByLetterQuery,
-  useGetMaterialTypeByLetterQuery,
-  useUploadImageToAdvertMutation,
+  useGetTechnicAdvertsPageableQuery,
+  useGetDumpAdvertsByUserQuery,
+  useGetDumpAdvertsPageableQuery,
+  useGetMaterialAdvertsByUserQuery,
+  useGetMaterialAdvertsPageableQuery,
   useGetImageNamesByOrderIdQuery,
   useGetImageQuery,
 } = postAdvertApi;

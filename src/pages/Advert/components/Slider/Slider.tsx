@@ -20,6 +20,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { API_URL } from "../../../../api/api";
+import { useAuth } from "../../../../hooks/store/useAuth";
 // import { USER } from "../../../../consts/devData";
 // import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 
@@ -33,6 +35,7 @@ const Slider: FC<ISliderProps> = ({
   onLike,
 }) => {
   const [currentSlide, setCurrentSlider] = useState(1);
+  const { token } = useAuth();
   const insets = useSafeAreaInsets();
   // const isLiked = useMemo(() => !!likes.find((item) => item === USER.id), []);
 
@@ -106,11 +109,14 @@ const Slider: FC<ISliderProps> = ({
         renderItem={({ item }) => {
           return (
             <Animated.Image
-              loadingIndicatorSource={{
-                uri: "https://static.wixstatic.com/media/83c6c9_3137595c76c84dc5bb7a65884cb67432~mv2.gif",
-              }}
               style={[sliderStyles.image, rStyle]}
-              source={{ uri: item }}
+              source={{
+                uri: `${API_URL}/fileSystem/${item}`,
+                cache: "force-cache",
+                headers: {
+                  Authorization: token || "",
+                },
+              }}
               resizeMode="cover"
             />
           );
@@ -134,7 +140,7 @@ const Slider: FC<ISliderProps> = ({
 
   return (
     <Animated.View style={[sliderStyles.container, rContainerStyle]}>
-      {!!photos.length && (
+      {!!photos?.length && (
         <View style={sliderStyles.currentIndexContainer}>
           <Text style={sliderStyles.currentIndex}>
             {currentSlide}/{photos.length}
@@ -148,7 +154,7 @@ const Slider: FC<ISliderProps> = ({
           onPress={onLike}
         />
       </View> */}
-      {!!photos.length && Platform.OS === 'ios' && (
+      {!!photos?.length && Platform.OS === 'ios' && (
         <LinearGradient
           colors={["rgba(0, 0, 0, 0.65)", "rgba(0, 0, 0, 0)"]}
           style={[sliderStyles.shadow, { height: insets.top + 20 }]}

@@ -50,7 +50,6 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
-
     builder.addCase(logInThunk.pending, (state) => {
       state.isLoading = true;
       state.autoAuthPending = false;
@@ -103,14 +102,14 @@ export const authSlice = createSlice({
       state.user = { ...user };
       state.token = token;
     });
-    builder.addCase(autoLoginThunk.rejected, (state, action) => {
+    builder.addCase(autoLoginThunk.rejected, (state) => {
       state.autoAuthPending = false;
       state.token = undefined;
       state.user = undefined;
       state.isLoading = false;
       state.error = undefined;
     });
-    builder.addCase(logoutThunk.fulfilled, (state, action) => {
+    builder.addCase(logoutThunk.fulfilled, (state) => {
       state.token = undefined;
       state.isLoading = false;
       state.error = undefined;

@@ -22,6 +22,10 @@ import { TRANSACTION_TYPE_TITLE } from "../../../../consts/data";
 import { getPriceString } from "../../helpers/getPaymentFor";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useGetUserByIdQuery } from "../../../SearchUsers/api/users.api";
+import {
+  useGetImageNamesByOrderIdQuery,
+  useGetLikesByAdvertIdQuery,
+} from "../../api/adverts.api";
 
 const Advert: FC<IAdvert> = (props) => {
   const {
@@ -30,10 +34,8 @@ const Advert: FC<IAdvert> = (props) => {
     advertStatus,
     ownerId,
     updatedAt,
-    likes,
     views,
     title,
-    photos,
     price,
     transactionType,
     addressLat,
@@ -43,11 +45,21 @@ const Advert: FC<IAdvert> = (props) => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const { user } = useAuth();
+  const { data: likes, isLoading: isLikesLoading } = useGetLikesByAdvertIdQuery(
+    { advertType, id }
+  );
   const { data: owner, isFetching } = useGetUserByIdQuery({ id: ownerId });
+  const { data: photos } = useGetImageNamesByOrderIdQuery({
+    order_id: id.toString(),
+    advert_type: advertType,
+  });
   const openModal = () => {
     navigation.navigate("Modal", props);
   };
-  const isLiked = useMemo(() => !!likes.find((item) => item === user?.id), []);
+  const isLiked = useMemo(
+    () => (likes ? !!likes.find((item) => item.id === user?.id) : false),
+    [likes]
+  );
   // const paramsArr = useMemo(() => {
   //   const result: Array<[string, string]> = Object.entries(params);
   //   return result;
@@ -61,7 +73,7 @@ const Advert: FC<IAdvert> = (props) => {
 
   const relevance = getRelevanceObj(updatedAt);
 
-  const goToAdvertPage = () => navigation.navigate("Advert", props);
+  const goToAdvertPage = () => navigation.navigate("Advert", {...props, photos});
 
   const priceString = getPriceString(props);
 
@@ -95,10 +107,10 @@ const Advert: FC<IAdvert> = (props) => {
           <SvgXml xml={pointSvg(WHITE)} width={10} height={14} />
           {/* <Text style={advertStyles.address}>{address}</Text> */}
         </View>
-        <Slider advertType={advertType} photos={photos} />
+        <Slider advertType={advertType} photos={photos || []} />
         <LinearGradient
           colors={
-            !!photos.length
+            Boolean(photos?.length)
               ? [
                   "rgba(0, 0, 0, 0)",
                   "rgba(0, 0, 0, 0.6)",
@@ -111,7 +123,7 @@ const Advert: FC<IAdvert> = (props) => {
           <Text
             style={[
               advertStyles.title,
-              !photos.length && { color: BLACK_DARK },
+              !photos?.length && { color: BLACK_DARK },
             ]}
           >
             {title}
@@ -142,7 +154,7 @@ const Advert: FC<IAdvert> = (props) => {
         </View>
         {advertStatus !== "DELETED" && (
           <View style={advertStyles.bottomContainer}>
-            {advertStatus === "STOPPER" ? (
+            {advertStatus !== "STOPPER" ? (
               <Text style={[advertStyles.paymentFor, { color: RED }]}>
                 Снято с публикации
               </Text>
@@ -162,9 +174,13 @@ const Advert: FC<IAdvert> = (props) => {
                   {relevance.string}
                 </Text>
                 <SvgXml xml={eyeSvg(GREY_DARK)} width={12} height={12} />
-                <Text style={advertStyles.advertInfoText}>{views.length}</Text>
+                <Text style={advertStyles.advertInfoText}>{views?.length}</Text>
                 <SvgXml xml={likeFillSvg(GREY_DARK)} width={12} height={12} />
-                <Text style={advertStyles.advertInfoText}>{likes.length}</Text>
+                {!!likes && (
+                  <Text style={advertStyles.advertInfoText}>
+                    {likes.length}
+                  </Text>
+                )}
               </View>
             )}
           </View>

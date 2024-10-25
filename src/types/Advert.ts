@@ -18,10 +18,10 @@ interface BaseAdvert {
   id: number;
   advertStatus: "DELETED" | "STOPPER" | "PUBLISHED";
   ownerId: number;
-  updatedAt: number;
+  updatedAt: string;
   views: Array<number>;
   likes: Array<number>;
-  photos: Array<string>;
+  photos?: Array<string>;
 }
 
 export interface TechnicAdvertDto extends AdvertDto, TechnicParams {

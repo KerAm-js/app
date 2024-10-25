@@ -1,3 +1,4 @@
+import { ENUM_TITLES } from './../../../consts/enums';
 import { IAdvert } from "../../../types/Advert";
 
 export const getPriceString = (advert: IAdvert) => {
@@ -6,7 +7,7 @@ export const getPriceString = (advert: IAdvert) => {
       advert.price,
       " руб/" +
         (advert.advertType === "TECHNIC"
-          ? advert?.paymentUnit?.toLowerCase()
+          ? ENUM_TITLES[advert?.paymentUnit]?.toLowerCase()
           : "т"),
     ],
     second:

@@ -5,8 +5,9 @@ const getRelevance = (updatedAt: number) => {
   return Math.floor(diff / 1000);
 };
 
-export const getRelevanceObj = (updatedAt: number) => {
-  const relevance = getRelevance(updatedAt);
+export const getRelevanceObj = (updatedAt: string) => {
+  const date = new Date(updatedAt);
+  const relevance = getRelevance(date.valueOf());
   if (relevance < 60) {
     return {
       string: relevance + " сек",

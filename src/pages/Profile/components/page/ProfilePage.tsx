@@ -6,6 +6,7 @@ import { profilePageStyles } from "./styles";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useEffect, useState } from "react";
 import { useActions } from "../../../../hooks/store/useActions";
+import React from "react";
 
 const ProfilePageComponent = () => {
   const { user, isLoading, error, token } = useAuth();

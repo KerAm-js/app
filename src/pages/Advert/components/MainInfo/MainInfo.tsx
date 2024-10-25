@@ -8,12 +8,13 @@ import { likeFillSvg } from "../../../../assets/svg/likeFill";
 import { GREY_DARK } from "../../../../consts/colors";
 import { TRANSACTION_TYPE_TITLE } from "../../../../consts/data";
 import { getPriceString } from "../../../../modules/Adverts/helpers/getPaymentFor";
-import { Advert } from "../../../../types/Advert";
+import { IAdvert } from "../../../../types/Advert";
+import { ENUM_TITLES } from "../../../../consts/enums";
 
-const MainInfo: FC<Advert> = (props) => {
-  const { title, paymentType, likes, views, updatedAt, transactionType } = props;
+const MainInfo: FC<IAdvert> = (props) => {
+  const { title, paymentType, likes = [], views, updatedAt, transactionType } = props;
   const payment =
-    paymentType === "ANY" ? "нал/безнал" : paymentType;
+    paymentType === "ANY" ? "нал/безнал" : ENUM_TITLES[paymentType];
 
   const relevance = getRelevanceObj(updatedAt);
 

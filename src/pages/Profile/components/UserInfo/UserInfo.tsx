@@ -12,6 +12,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { USER } from "../../../../consts/devData";
 import { toPhoneFormat } from "../../../../helpers/toPhoneFormat";
+import React from "react";
 
 const UserInfo: FC<
   Pick<

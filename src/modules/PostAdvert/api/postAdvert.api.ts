@@ -131,11 +131,6 @@ export const postAdvertApi = api.injectEndpoints({
         },
       }),
     }),
-    getTechnicAdvertsByUser: builder.query<string, Array<IAdvert>>({
-      query: (userId) => ({
-        url: `/advert-technic/all/${userId}`,
-      }),
-    }),
     getTechnicTypesByLetter: builder.query<Array<ITechnicType>, string>({
       query: (text) => ({
         url: `/technic-type-lib/${text}`,
@@ -178,28 +173,6 @@ export const postAdvertApi = api.injectEndpoints({
         };
       },
     }),
-    getImageNamesByOrderId: builder.query<
-      string[],
-      GetImageNamesByOrderIdParams
-    >({
-      query: ({ order_id, advert_type }) => ({
-        url: "/adverts/images/get",
-        method: "GET",
-        params: {
-          order_id,
-          advert_type,
-        },
-      }),
-    }),
-    getImage: builder.query<GetImageResponse, string>({
-      query: (imageId) => ({
-        url: `/fileSystem/${imageId}`,
-        method: "GET",
-        headers: {
-          Authorization: "Bearer YOUR_TOKEN_HERE", // Замените на ваш токен
-        },
-      }),
-    }),
   }),
 });
 
@@ -207,11 +180,8 @@ export const {
   useAddTechnicAdvertMutation,
   useAddMaterialAdvertMutation,
   useAddDumpAdvertMutation,
-  useGetTechnicAdvertsByUserQuery,
   useGetTechnicTypesByLetterQuery,
   useGetTransportByLetterQuery,
   useGetMaterialTypeByLetterQuery,
   useUploadImageToAdvertMutation,
-  useGetImageNamesByOrderIdQuery,
-  useGetImageQuery,
 } = postAdvertApi;

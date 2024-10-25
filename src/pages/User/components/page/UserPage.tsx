@@ -7,6 +7,11 @@ import AdvertsModule from "../../../../modules/Adverts";
 import ProfilePage from "../../../Profile";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useGetUserByIdQuery } from "../../../../modules/SearchUsers/api/users.api";
+import {
+  useGetDumpAdvertsByUserQuery,
+  useGetMaterialAdvertsByUserQuery,
+  useGetTechnicAdvertsByUserQuery,
+} from "../../../../modules/Adverts/api/adverts.api";
 
 const UserPageComponent: FC<
   Pick<
@@ -24,12 +29,23 @@ const UserPageComponent: FC<
   const { data, error } = useGetUserByIdQuery({
     id: user.id,
   });
+  const { data: technicAdverts, isLoading: isTechnicAdvertsLoading } =
+    useGetTechnicAdvertsByUserQuery(user?.id || 0);
+  const { data: materialAdverts, isLoading: isMaterialAdvertsLoading } =
+    useGetMaterialAdvertsByUserQuery(user?.id || 0);
+  const { data: dumpAdverts, isLoading: isDumpAdvertsLoading } =
+    useGetDumpAdvertsByUserQuery(user?.id || 0);
 
   useEffect(() => {
     if (error) Alert.alert("Что-то пошло не так");
   }, [error]);
 
-  const userData = data ? { ...data } : { ...user };
+  const userData = data || user ;
+
+  const adverts =
+    technicAdverts && materialAdverts && dumpAdverts
+      ? [...technicAdverts, ...materialAdverts, ...dumpAdverts]
+      : [];
 
   return (
     <AdvertsModule.Component
@@ -42,7 +58,7 @@ const UserPageComponent: FC<
           {/* <AdvertsModule.Header dataLength={user.adverts.length} /> */}
         </View>
       }
-      data={[]}
+      data={adverts}
     />
   );
 };

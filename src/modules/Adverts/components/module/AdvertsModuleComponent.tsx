@@ -9,7 +9,7 @@ const AdvertsModuleComponent: FC<IAdvertsModuleProps> = (props) => {
   return (
     <FlatList
       renderItem={({ item }) => <Advert {...item} />}
-      keyExtractor={(item) => item.id.toString()}
+      keyExtractor={(item) => item?.id.toString() + "_" + item.advertType}
       contentContainerStyle={advertsModuleStyles.contentContainer}
       ListHeaderComponent={() => (
         <AdvertsListHeader dataLength={props.data?.length || 0} />

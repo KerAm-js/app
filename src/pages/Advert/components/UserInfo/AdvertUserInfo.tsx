@@ -10,19 +10,26 @@ import BigButton from "../../../../UI/buttons/Big/BigButton";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { useUserComments } from "../../../../hooks/store/useComments";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { toPhoneFormat } from "../../../../helpers/toPhoneFormat";
+import React from "react";
 
-const AdvertUserInfo: FC<IUser> = (props) => {
-  const { id, rating, username, phone } = props;
+const AdvertUserInfo: FC<
+  Pick<
+    IUser,
+    | "id"
+    | "username"
+    | "phone"
+    | "email"
+    | "description"
+    | "rating"
+    | "ratesCount"
+  >
+> = (props) => {
+  const { id, rating, username, phone, ratesCount } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const {user} = useAuth();
-  const rates = useUserComments({
-    role: "addressee",
-    id,
-  });
+  const { user } = useAuth();
 
   const call = () => {
     Linking.openURL(`tel:+${phone}`);
@@ -45,7 +52,7 @@ const AdvertUserInfo: FC<IUser> = (props) => {
             backgroundColor={GREY_LIGHT}
           />
           <Text style={advertUserInfoStyles.ratingText}>
-            Рейтинг {rating} (количество оценок {rates.length})
+            Рейтинг {rating} (количество оценок {ratesCount})
           </Text>
         </View>
         <Text style={advertUserInfoStyles.phone}>{toPhoneFormat(phone)}</Text>

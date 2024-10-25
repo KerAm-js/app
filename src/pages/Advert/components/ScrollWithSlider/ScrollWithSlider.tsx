@@ -19,13 +19,14 @@ import { sliderStyles } from "../Slider/styles";
 import { IScrollWithSliderProps } from "./types";
 import AnimatedStatusBar from "../AnimatedStatusBar/AnimatedStatusBar";
 import { scrollWithSliderStyles } from "./styles";
+import React from "react";
 
 const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
   id,
   likes,
   photos,
-  userId,
-  type,
+  ownerId,
+  advertType,
   children,
 }) => {
   const navigation =
@@ -39,11 +40,11 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
   const context = useSharedValue({ y: 0 });
 
   const scrollToTop = () => {
-    if (scrollRef.current)
+    if (scrollRef?.current)
       scrollRef.current?.scrollTo({ y: 0, animated: true });
   };
   const scrollToMainInfo = () => {
-    if (scrollRef.current)
+    if (scrollRef?.current)
       scrollRef.current?.scrollTo({ y: 256, animated: true });
   };
 
@@ -56,7 +57,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
     },
     onEndDrag: (e) => {
       const { y } = e.contentOffset;
-      if (scrollRef.current && y > 0 && y < 256) {
+      if (y > 0 && y < 256) {
         if (y < context.value.y) {
           runOnJS(scrollToTop)();
         } else if (y > context.value.y) {
@@ -64,11 +65,11 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
         }
       }
     },
-  });
+  }, []);
 
   const onLike = (value: boolean) => {
     console.log(
-      `Post ${id} is ${value ? "liked by" : "disliked by"} user ${userId}`
+      `Post ${id} is ${value ? "liked by" : "disliked by"} user ${ownerId}`
     );
   };
 
@@ -88,18 +89,19 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
       headerBackVisible: false,
     });
   }, []);
+
   return (
-    <>
+    <View>
       {Platform.OS === "ios" && (
-        <AnimatedStatusBar photosLength={photos.length} scrollY={scrollY} />
+        <AnimatedStatusBar photosLength={photos?.length || 0} scrollY={scrollY} />
       )}
       <Slider
-        userId={userId}
+        ownerId={ownerId}
         id={id}
         likes={likes}
         scrollY={scrollY}
         photos={photos}
-        type={type}
+        advertType={advertType}
         onLike={onLike}
       />
       <Animated.ScrollView
@@ -123,7 +125,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
         </View>
         <View style={scrollWithSliderStyles.bottomView} />
       </Animated.ScrollView>
-    </>
+    </View>
   );
 };
 
