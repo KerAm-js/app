@@ -1,4 +1,4 @@
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Avatar from "../../../../UI/Avatar/Avatar";
 import Rating from "../../../../UI/Rating/Rating";
@@ -6,7 +6,6 @@ import { FC, useMemo } from "react";
 import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 import { advertStyles } from "./styles";
 import { BLACK_DARK, GREY_DARK, RED, WHITE } from "../../../../consts/colors";
-import Slider from "./Slider";
 import { pointSvg } from "../../../../assets/svg/point";
 import { SvgXml } from "react-native-svg";
 import { watchSvg } from "../../../../assets/svg/watch";
@@ -26,6 +25,8 @@ import {
   useGetImageNamesByOrderIdQuery,
   useGetLikesByAdvertIdQuery,
 } from "../../api/adverts.api";
+import { API_URL } from "../../../../api/api";
+import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeGetters";
 
 const Advert: FC<IAdvert> = (props) => {
   const {
@@ -44,7 +45,7 @@ const Advert: FC<IAdvert> = (props) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const { data: likes, isLoading: isLikesLoading } = useGetLikesByAdvertIdQuery(
     { advertType, id }
   );
@@ -73,16 +74,17 @@ const Advert: FC<IAdvert> = (props) => {
 
   const relevance = getRelevanceObj(updatedAt);
 
-  const goToAdvertPage = () => navigation.navigate("Advert", {...props, photos});
+  const goToAdvertPage = () =>
+    navigation.navigate("Advert", { ...props, photos });
 
   const priceString = getPriceString(props);
 
   return (
-    <View style={advertStyles.container}>
+    <Pressable style={advertStyles.container} onPress={goToAdvertPage}>
       {isFetching || !owner ? (
         <ActivityIndicator />
       ) : (
-        <Pressable style={advertStyles.topContainer} onPress={goToAdvertPage}>
+        <View style={advertStyles.topContainer}>
           <Avatar size={36} userId={ownerId} />
           <View style={advertStyles.userInfo}>
             <Text style={advertStyles.username}>{owner.username}</Text>
@@ -100,14 +102,34 @@ const Advert: FC<IAdvert> = (props) => {
           ) : (
             <LikeButton onPress={onLike} isLiked={isLiked} />
           )}
-        </Pressable>
+        </View>
       )}
       <View style={advertStyles.sliderContainer}>
         <View style={advertStyles.addressContainer}>
           <SvgXml xml={pointSvg(WHITE)} width={10} height={14} />
           {/* <Text style={advertStyles.address}>{address}</Text> */}
         </View>
-        <Slider advertType={advertType} photos={photos || []} />
+        {!!photos && !!photos.length ? (
+          <Image
+            style={advertStyles.image}
+            source={{
+              uri: `${API_URL}/fileSystem/${photos[0]}`,
+              cache: "force-cache",
+              headers: {
+                Authorization: token || "",
+              },
+            }}
+            resizeMode="cover"
+          />
+        ) : (
+          <View style={advertStyles.sliderEmptyContainer}>
+            <SvgXml
+              xml={getAdvertTypeIconFunc(advertType)(GREY_DARK)}
+              width={60}
+              height={60}
+            />
+          </View>
+        )}
         <LinearGradient
           colors={
             Boolean(photos?.length)
@@ -130,63 +152,53 @@ const Advert: FC<IAdvert> = (props) => {
           </Text>
         </LinearGradient>
       </View>
-      <Pressable onPress={goToAdvertPage}>
-        <View style={advertStyles.priceContainer}>
-          <View>
+      <View style={advertStyles.priceContainer}>
+        <View>
+          <Text style={advertStyles.price}>
+            {priceString.first[0]}
+            <Text style={advertStyles.paymentFor}>{priceString.first[1]}</Text>
+          </Text>
+          {priceString.second && (
             <Text style={advertStyles.price}>
-              {priceString.first[0]}
+              {priceString.second[0]}
               <Text style={advertStyles.paymentFor}>
-                {priceString.first[1]}
+                {priceString.second[1]}
               </Text>
             </Text>
-            {priceString.second && (
-              <Text style={advertStyles.price}>
-                {priceString.second[0]}
-                <Text style={advertStyles.paymentFor}>
-                  {priceString.second[1]}
-                </Text>
-              </Text>
-            )}
-          </View>
-          <Text style={advertStyles.paymentFor}>
-            {TRANSACTION_TYPE_TITLE[transactionType]}
-          </Text>
+          )}
         </View>
-        {advertStatus !== "DELETED" && (
-          <View style={advertStyles.bottomContainer}>
-            {advertStatus !== "STOPPER" ? (
-              <Text style={[advertStyles.paymentFor, { color: RED }]}>
-                Снято с публикации
+        <Text style={advertStyles.paymentFor}>
+          {TRANSACTION_TYPE_TITLE[transactionType]}
+        </Text>
+      </View>
+      {advertStatus !== "DELETED" && (
+        <View style={advertStyles.bottomContainer}>
+          {advertStatus !== "STOPPER" ? (
+            <Text style={[advertStyles.paymentFor, { color: RED }]}>
+              Снято с публикации
+            </Text>
+          ) : (
+            <View style={advertStyles.advertInfo}>
+              <SvgXml xml={watchSvg(relevance.color)} width={12} height={12} />
+              <Text
+                style={[
+                  advertStyles.advertInfoText,
+                  { color: relevance.color },
+                ]}
+              >
+                {relevance.string}
               </Text>
-            ) : (
-              <View style={advertStyles.advertInfo}>
-                <SvgXml
-                  xml={watchSvg(relevance.color)}
-                  width={12}
-                  height={12}
-                />
-                <Text
-                  style={[
-                    advertStyles.advertInfoText,
-                    { color: relevance.color },
-                  ]}
-                >
-                  {relevance.string}
-                </Text>
-                <SvgXml xml={eyeSvg(GREY_DARK)} width={12} height={12} />
-                <Text style={advertStyles.advertInfoText}>{views?.length}</Text>
-                <SvgXml xml={likeFillSvg(GREY_DARK)} width={12} height={12} />
-                {!!likes && (
-                  <Text style={advertStyles.advertInfoText}>
-                    {likes.length}
-                  </Text>
-                )}
-              </View>
-            )}
-          </View>
-        )}
-      </Pressable>
-    </View>
+              <SvgXml xml={eyeSvg(GREY_DARK)} width={12} height={12} />
+              <Text style={advertStyles.advertInfoText}>{views?.length}</Text>
+              <SvgXml xml={likeFillSvg(GREY_DARK)} width={12} height={12} />
+              {!!likes && (
+                <Text style={advertStyles.advertInfoText}>{likes.length}</Text>
+              )}
+            </View>
+          )}
+        </View>
+      )}
+    </Pressable>
   );
 };
 

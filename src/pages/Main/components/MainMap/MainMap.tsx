@@ -24,11 +24,11 @@ const MainMap: FC<TMainMapProps> = ({ adverts }) => {
       loadingEnabled
       loadingIndicatorColor={BLUE}
     >
-      {adverts.map((advertisement) => (
+      {adverts?.map((advertisement) => (
         <CustomMarker
           key={advertisement.id}
-          coordinate={advertisement.coordinates}
-          type={advertisement.type}
+          coordinate={{latitude: advertisement.addressLat, longitude: advertisement.addressLon}}
+          type={advertisement.advertType}
         />
       ))}
     </MapView>

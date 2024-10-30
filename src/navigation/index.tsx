@@ -60,8 +60,7 @@ const RootNavigator: FC = () => {
           >
             <Stack.Screen
               options={{
-                headerLeft: MainPage.HeaderLeft,
-                headerRight: MainPage.HeaderRight,
+                headerShown: false
               }}
               name="Main"
               component={MainPage.Component}

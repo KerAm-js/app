@@ -4,8 +4,16 @@ import NavBar from "../NavBar/NavBar";
 import { WebView } from "react-native-webview";
 import { mainMapStyles } from "../MainMap/styles";
 import { YA_MAP_JS_API_KEY } from "../../../../api/yamap";
+import { useEffect, useState } from "react";
+import { TAdvertType } from "../../../../types/Advert";
+import * as SplashScreen from "expo-splash-screen";
 
 const YaMap2 = () => {
+  const [advertType, setAdvertType] = useState<TAdvertType>("TECHNIC");
+  const onChangeAdvertType = (type: TAdvertType) => {
+    setAdvertType(type);
+  };
+
   const html = `
       <html>
       <head>
@@ -51,11 +59,15 @@ function init() {
       </body>
       </html>
     `;
+
+  useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
   return (
     <View style={{ flex: 1 }}>
       <NavBar />
       <WebView style={mainMapStyles.map} source={{ html }} />
-      <MenuBar  />
+      <MenuBar advertType={advertType} setAdvertType={onChangeAdvertType} />
     </View>
   );
 };

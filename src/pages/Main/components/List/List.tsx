@@ -2,7 +2,7 @@ import { ActivityIndicator, View } from "react-native";
 import MenuBar from "../MenuBar/MenuBar";
 import AdvertsModule from "../../../../modules/Adverts";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { IAdvert, TAdvertType } from "../../../../types/Advert";
+import { TAdvertType } from "../../../../types/Advert";
 import { listStyles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
