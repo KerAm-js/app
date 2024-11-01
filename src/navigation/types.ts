@@ -1,4 +1,5 @@
 import { ICommentsModuleProps } from "../modules/Comments/components/module/types";
+import { TAdvertPagePropTypes } from "../pages/Advert/components/page/types";
 import { IAwaitingCommentPageProps } from "../pages/AwaitingComment/components/page/types";
 import { IChooseAdvertTypePageProps } from "../pages/ChooseAdvertType/components/page/types";
 import { ICommentPageProps } from "../pages/Comment/components/page/types";
@@ -34,7 +35,7 @@ export type RootStackParamList = {
   CommentsToMe: IMyCommentsPageProps;
   Comment: ICommentPageProps;
   Modal: IAdvert;
-  Advert: IAdvert;
+  Advert: TAdvertPagePropTypes;
   AwaitingComment: IAwaitingCommentPageProps;
   UserComments: ICommentsModuleProps;
   NewComment: Pick<IComment, "addresseeId" | "addresseeName">;

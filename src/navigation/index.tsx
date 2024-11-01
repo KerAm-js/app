@@ -47,7 +47,7 @@ const RootNavigator: FC = () => {
 
   return (
     <Stack.Navigator initialRouteName="Main">
-      {(token && user) ? (
+      {token && user ? (
         <>
           <Stack.Group
             screenOptions={{
@@ -60,7 +60,7 @@ const RootNavigator: FC = () => {
           >
             <Stack.Screen
               options={{
-                headerShown: false
+                headerShown: false,
               }}
               name="Main"
               component={MainPage.Component}
@@ -191,12 +191,9 @@ const RootNavigator: FC = () => {
               {({ route }) => <FilterPage.Component {...route.params} />}
             </Stack.Screen>
             <Stack.Screen
-              options={({ route }) => {
-                const priceString = AdvertsModule.getPriceString(route.params);
-                return {
-                  title: priceString.first[0].toString() + priceString.first[1],
-                  headerTransparent: true,
-                };
+              options={{
+                title: "Объявление",
+                headerTransparent: true,
               }}
               name="Advert"
             >

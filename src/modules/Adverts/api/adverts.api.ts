@@ -1,5 +1,5 @@
 import { api } from "../../../api/api";
-import { IAdvert } from "../../../types/Advert";
+import { IAdvert, IMiniAdvert } from "../../../types/Advert";
 import { IUser } from "../../../types/User";
 
 export type TEquipment = { id: number; name: string };
@@ -57,9 +57,31 @@ export const postAdvertApi = api.injectEndpoints({
         },
       }),
     }),
+    getTechnicAdvertById: builder.query<IAdvert, IAdvert["id"]>({
+      query: (id) => ({
+        url: `/advert-technic/${id}`,
+      }),
+    }),
+    getMaterialAdvertById: builder.query<IAdvert, IAdvert["id"]>({
+      query: (id) => ({
+        url: `/advert-material/${id}`,
+      }),
+    }),
+    getDumpAdvertById: builder.query<IAdvert, IAdvert["id"]>({
+      query: (id) => ({
+        url: `/advert-dump/${id}`,
+      }),
+    }),
     getTechnicAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
       query: (userId) => ({
         url: `/advert-technic/all/${userId}`,
+      }),
+    }),
+    getTechnicAdvertsMiniFiltered: builder.query<Array<IMiniAdvert>, {}>({
+      query: () => ({
+        url: "/advert-technic/mini/all/filtered",
+        method: "POST",
+        body: {},
       }),
     }),
     getTechnicAdvertsPageable: builder.query<
@@ -87,6 +109,13 @@ export const postAdvertApi = api.injectEndpoints({
         url: `/advert-material/all/${userId}`,
       }),
     }),
+    getMaterialAdvertsMiniFiltered: builder.query<Array<IMiniAdvert>, {}>({
+      query: () => ({
+        url: "/advert-material/mini/all/filtered",
+        method: "POST",
+        body: {},
+      }),
+    }),
     getMaterialAdvertsPageable: builder.query<
       Array<IAdvert>,
       { from: number; size: number }
@@ -110,6 +139,13 @@ export const postAdvertApi = api.injectEndpoints({
     getDumpAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
       query: (userId) => ({
         url: `/advert-dump/all/${userId}`,
+      }),
+    }),
+    getDumpAdvertsMiniFiltered: builder.query<Array<IMiniAdvert>, {}>({
+      query: () => ({
+        url: "/advert-dump/mini/all/filtered",
+        method: "POST",
+        body: {},
       }),
     }),
     getDumpAdvertsPageable: builder.query<
@@ -167,4 +203,10 @@ export const {
   useGetMaterialAdvertsPageableQuery,
   useGetImageNamesByOrderIdQuery,
   useGetImageQuery,
+  useGetDumpAdvertsMiniFilteredQuery,
+  useGetMaterialAdvertsMiniFilteredQuery,
+  useGetTechnicAdvertsMiniFilteredQuery,
+  useGetDumpAdvertByIdQuery,
+  useGetMaterialAdvertByIdQuery,
+  useGetTechnicAdvertByIdQuery,
 } = postAdvertApi;

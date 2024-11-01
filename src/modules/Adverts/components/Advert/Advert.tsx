@@ -75,7 +75,10 @@ const Advert: FC<IAdvert> = (props) => {
   const relevance = getRelevanceObj(updatedAt);
 
   const goToAdvertPage = () =>
-    navigation.navigate("Advert", { ...props, photos });
+    navigation.navigate("Advert", {
+      isMini: false,
+      advert: { ...props, photos },
+    });
 
   const priceString = getPriceString(props);
 

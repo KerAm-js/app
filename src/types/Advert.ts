@@ -101,3 +101,5 @@ export interface IDumpAdvert extends BaseAdvert, DumpAdvertDto {}
 export interface IMaterialAdvert extends BaseAdvert, MaterialAdvertDto {}
 
 export type IAdvert = IMaterialAdvert | ITechnicAdvert | IDumpAdvert;
+
+export type IMiniAdvert = Pick<IAdvert, "id" | "addressLat" | "addressLon" | "advertType">

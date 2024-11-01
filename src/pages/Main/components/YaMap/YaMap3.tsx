@@ -1,26 +1,43 @@
-import { NativeSyntheticEvent, StyleSheet, Text, View } from "react-native";
+import { NativeSyntheticEvent, View } from "react-native";
 import MenuBar from "../MenuBar/MenuBar";
 import NavBar from "../NavBar/NavBar";
-import YaMap, {
-  DrivingInfo,
-  Marker,
-  Point,
-  Polyline,
-  RoutesFoundEvent,
-} from "react-native-yamap";
+import YaMap, { Circle, Marker, Point, Polyline } from "react-native-yamap";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { TAdvertType } from "../../../../types/Advert";
 import * as SplashScreen from "expo-splash-screen";
 import { YA_MAP_API_KEY } from "../../../../api/yamap";
-import { SvgXml } from "react-native-svg";
-import { mapMarkSvg } from "../../../../assets/svg/mapMark";
-import { RED } from "../../../../consts/colors";
 import { RouteMarker } from "./RouteMarker";
+import {
+  useGetDumpAdvertsMiniFilteredQuery,
+  useGetMaterialAdvertsMiniFilteredQuery,
+  useGetTechnicAdvertsMiniFilteredQuery,
+} from "../../../../modules/Adverts/api/adverts.api";
+import { CustomYamapMarker } from "../CustomMarker/CustomYamapMarker";
 
 YaMap.init(YA_MAP_API_KEY);
 
 const YaMap3 = () => {
   const [advertType, setAdvertType] = useState<TAdvertType>("TECHNIC");
+
+  const { data: technicAdverts } = useGetTechnicAdvertsMiniFilteredQuery(
+    {},
+    { skip: advertType !== "TECHNIC" }
+  );
+  const { data: materialAdverts } = useGetMaterialAdvertsMiniFilteredQuery(
+    {},
+    { skip: advertType !== "NON_MATERIAL" }
+  );
+  const { data: dumpAdverts } = useGetDumpAdvertsMiniFilteredQuery(
+    {},
+    { skip: advertType !== "DUMP" }
+  );
+
+  const data =
+    (advertType === "TECHNIC" && technicAdverts) ||
+    (advertType === "NON_MATERIAL" && materialAdverts) ||
+    (advertType === "DUMP" && dumpAdverts) ||
+    [];
+
   const onChangeAdvertType = (type: TAdvertType) => {
     setAdvertType(type);
   };
@@ -61,7 +78,7 @@ const YaMap3 = () => {
   useEffect(() => {
     if (!mapRef.current) return;
     if (startPoint && !endPoint) {
-      mapRef.current.setCenter(startPoint, 15, 0, 0, 1);
+      //mapRef.current.setCenter(startPoint, undefined, 0, 0, 1);
     } else if (startPoint && endPoint) {
       if (isMapLoaded) {
         mapRef.current.findDrivingRoutes([startPoint, endPoint], (result) => {
@@ -79,13 +96,19 @@ const YaMap3 = () => {
           );
         });
       }
-      mapRef.current.fitMarkers([startPoint, endPoint]);
+      // mapRef.current.fitMarkers([startPoint, endPoint]);
     }
   }, [startPoint, endPoint, isMapLoaded]);
 
   useEffect(() => {
     SplashScreen.hideAsync();
   }, []);
+
+  // useEffect(() => {
+  //   if (mapRef.current) {
+  //     mapRef.current.fitMarkers();
+  //   }
+  // }, [data])
 
   return (
     <View style={{ flex: 1 }}>
@@ -95,13 +118,13 @@ const YaMap3 = () => {
         followUser
         onMapLoaded={onMapLoaded}
         onMapLongPress={onMapPress}
-        // userLocationIcon={{
-        //   uri: "https://www.clipartmax.com/png/middle/180-1801760_pin-png.png",
-        // }}
+        userLocationIcon={{
+          uri: "https://www.clipartmax.com/png/middle/180-1801760_pin-png.png",
+        }}
         initialRegion={{
           lat: 55.753215,
           lon: 37.622504,
-          zoom: 10,
+          zoom: 8,
           azimuth: 80,
           tilt: 100,
         }}
@@ -111,6 +134,7 @@ const YaMap3 = () => {
           <RouteMarker
             routeStart
             point={startPoint}
+            distance={distance}
             onPress={onStartMarkPress}
           />
         )}
@@ -119,9 +143,12 @@ const YaMap3 = () => {
           <RouteMarker
             point={endPoint}
             distance={distance}
-            onPress={onStartMarkPress}
+            onPress={onEndMarkPress}
           />
         )}
+        {data?.map((advertMini) => {
+          return <CustomYamapMarker key={advertMini.id} {...advertMini} />;
+        })}
       </YaMap>
       <MenuBar advertType={advertType} setAdvertType={onChangeAdvertType} />
     </View>

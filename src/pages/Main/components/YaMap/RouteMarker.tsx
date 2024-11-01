@@ -11,59 +11,49 @@ export const RouteMarker: FC<{
   distance?: number;
   onPress: () => void;
 }> = ({ routeStart, point, distance, onPress }) => {
-  if (routeStart) {
-    return (
-      <Marker
-        point={point}
-        scale={3}
-        children={
-          <View style={styles.startPointMarker}>
-            <SvgXml width={8.8} height={12} xml={mapMarkSvg(RED)} />
-          </View>
-        }
-        onPress={onPress}
-      />
-    );
-  } else {
-    return (
-      <Marker
-        point={point}
-        scale={3}
-        children={
-          <View style={styles.endPointMarker}>
-            <SvgXml width={8.8} height={12} xml={mapMarkSvg(RED)} />
+  return (
+    <Marker
+      point={point}
+      scale={1}
+      children={
+        <View
+          style={routeStart ? styles.startPointMarker : styles.endPointMarker}
+        >
+          <SvgXml width={22} height={30} xml={mapMarkSvg(RED)} />
+          {!routeStart && (
             <View style={styles.routeDistanceContainer}>
               <Text style={styles.routeDistance}>{distance} км</Text>
             </View>
-          </View>
-        }
-        onPress={onPress}
-      />
-    );
-  }
+          )}
+        </View>
+      }
+      onPress={onPress}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
   startPointMarker: {
-    maxWidth: 40,
+    maxWidth: 100,
     alignItems: "center",
-    paddingBottom: 12,
+    paddingBottom: 34,
   },
   endPointMarker: {
-    maxWidth: 40,
+    paddingTop: 6,
+    maxWidth: 100,
     alignItems: "center",
   },
   routeDistanceContainer: {
     borderColor: "red",
-    borderWidth: 1,
+    borderWidth: 2,
     backgroundColor: "#fff",
-    marginTop: 2,
-    paddingVertical: 1,
-    paddingHorizontal: 4,
-    borderRadius: 2,
+    marginTop: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 7,
     borderCurve: "continuous",
   },
   routeDistance: {
-    fontSize: 5,
+    fontSize: 15,
   },
 });
