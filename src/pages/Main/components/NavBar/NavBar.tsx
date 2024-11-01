@@ -11,15 +11,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import NavText from "../NavText/NavText";
 import { RU_LANG } from "../../../../consts/rulang";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../store/store";
 
 const NavBar: FC = () => {
   const { top } = useSafeAreaInsets();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const adverts = useSelector((state: RootState) => state.adverts)
+  const adverts = []
 
   return (
     <View style={[navBarStyles.container, { paddingTop: top < 15 ? 15 : top }]}>

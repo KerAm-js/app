@@ -8,10 +8,14 @@ import YaMap, {
   Polyline,
   RoutesFoundEvent,
 } from "react-native-yamap";
-import { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { TAdvertType } from "../../../../types/Advert";
 import * as SplashScreen from "expo-splash-screen";
 import { YA_MAP_API_KEY } from "../../../../api/yamap";
+import { SvgXml } from "react-native-svg";
+import { mapMarkSvg } from "../../../../assets/svg/mapMark";
+import { RED } from "../../../../consts/colors";
+import { RouteMarker } from "./RouteMarker";
 
 YaMap.init(YA_MAP_API_KEY);
 
@@ -39,6 +43,17 @@ const YaMap3 = () => {
 
   const onMapLoaded = () => setIsMapLoaded(true);
 
+  const onStartMarkPress = useCallback(() => {
+    setStartPoint(endPoint || null);
+    setEndPoint(null);
+    setRoute(null);
+  }, []);
+
+  const onEndMarkPress = useCallback(() => {
+    setEndPoint(endPoint || null);
+    setRoute(null);
+  }, []);
+
   useEffect(() => {
     console.log(isMapLoaded);
   }, [isMapLoaded]);
@@ -46,7 +61,7 @@ const YaMap3 = () => {
   useEffect(() => {
     if (!mapRef.current) return;
     if (startPoint && !endPoint) {
-      mapRef.current.setCenter(startPoint, 12, 0, 0, 1);
+      mapRef.current.setCenter(startPoint, 15, 0, 0, 1);
     } else if (startPoint && endPoint) {
       if (isMapLoaded) {
         mapRef.current.findDrivingRoutes([startPoint, endPoint], (result) => {
@@ -59,7 +74,9 @@ const YaMap3 = () => {
             });
           }
           setRoute(points);
-          setDistance(Math.round(result.routes[0].sections[0].routeInfo.distance / 1000));
+          setDistance(
+            Math.round(result.routes[0].sections[0].routeInfo.distance / 1000)
+          );
         });
       }
       mapRef.current.fitMarkers([startPoint, endPoint]);
@@ -77,7 +94,7 @@ const YaMap3 = () => {
         ref={mapRef}
         followUser
         onMapLoaded={onMapLoaded}
-        onMapPress={onMapPress}
+        onMapLongPress={onMapPress}
         // userLocationIcon={{
         //   uri: "https://www.clipartmax.com/png/middle/180-1801760_pin-png.png",
         // }}
@@ -91,27 +108,18 @@ const YaMap3 = () => {
         style={{ flex: 1 }}
       >
         {startPoint && (
-          <Marker
+          <RouteMarker
+            routeStart
             point={startPoint}
-            scale={3}
-            children={<View style={styles.marker} />}
-            onPress={() => {
-              setStartPoint(endPoint || null);
-              setEndPoint(null);
-            }}
+            onPress={onStartMarkPress}
           />
         )}
         {route && <Polyline strokeWidth={3} strokeColor="red" points={route} />}
         {endPoint && (
-          <Marker
+          <RouteMarker
             point={endPoint}
-            scale={3}
-            children={
-              <View style={styles.marker}>
-                <Text style={{ fontSize: 5 }}>{distance}</Text>
-              </View>
-            }
-            onPress={() => setEndPoint(null)}
+            distance={distance}
+            onPress={onStartMarkPress}
           />
         )}
       </YaMap>
@@ -119,18 +127,5 @@ const YaMap3 = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  marker: {
-    width: 10,
-    height: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 20,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "red",
-  },
-});
 
 export default YaMap3;
