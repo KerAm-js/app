@@ -1,36 +1,37 @@
 import { NativeSyntheticEvent, View } from "react-native";
 import MenuBar from "../MenuBar/MenuBar";
 import NavBar from "../NavBar/NavBar";
-import YaMap, { Circle, Marker, Point, Polyline } from "react-native-yamap";
+import YaMap, { Point, Polyline } from "react-native-yamap";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { TAdvertType } from "../../../../types/Advert";
 import * as SplashScreen from "expo-splash-screen";
 import { YA_MAP_API_KEY } from "../../../../api/yamap";
-import { RouteMarker } from "./RouteMarker";
 import {
   useGetDumpAdvertsMiniFilteredQuery,
   useGetMaterialAdvertsMiniFilteredQuery,
   useGetTechnicAdvertsMiniFilteredQuery,
 } from "../../../../modules/Adverts/api/adverts.api";
 import { CustomYamapMarker } from "../CustomMarker/CustomYamapMarker";
+import { RouteStartMarker } from "../../../../modules/ChooseAddressMap/components/RouteStartMarker";
+import { RouteEndMarker } from "../../../../modules/ChooseAddressMap/components/RouteEndMarker";
 
 YaMap.init(YA_MAP_API_KEY);
 
 const YaMap3 = () => {
   const [advertType, setAdvertType] = useState<TAdvertType>("TECHNIC");
 
-  const { data: technicAdverts } = useGetTechnicAdvertsMiniFilteredQuery(
-    {},
-    { skip: advertType !== "TECHNIC" }
-  );
-  const { data: materialAdverts } = useGetMaterialAdvertsMiniFilteredQuery(
-    {},
-    { skip: advertType !== "NON_MATERIAL" }
-  );
-  const { data: dumpAdverts } = useGetDumpAdvertsMiniFilteredQuery(
-    {},
-    { skip: advertType !== "DUMP" }
-  );
+  const { data: technicAdverts, refetch: refetchTechnicAdverts } =
+    useGetTechnicAdvertsMiniFilteredQuery(
+      {},
+      { skip: advertType !== "TECHNIC" }
+    );
+  const { data: materialAdverts, refetch: refetchMaterialAdverts } =
+    useGetMaterialAdvertsMiniFilteredQuery(
+      {},
+      { skip: advertType !== "NON_MATERIAL" }
+    );
+  const { data: dumpAdverts, refetch: refetchDumpAdverts } =
+    useGetDumpAdvertsMiniFilteredQuery({}, { skip: advertType !== "DUMP" });
 
   const data =
     (advertType === "TECHNIC" && technicAdverts) ||
@@ -51,10 +52,28 @@ const YaMap3 = () => {
   const [distance, setDistance] = useState(0);
 
   const onMapPress = (evt: NativeSyntheticEvent<Point>) => {
+    const newPoint = evt.nativeEvent;
     if (!startPoint) {
-      setStartPoint(evt.nativeEvent);
+      setStartPoint(newPoint);
     } else {
-      setEndPoint(evt.nativeEvent);
+      setEndPoint(newPoint);
+      if (isMapLoaded && mapRef.current) {
+        mapRef.current.findDrivingRoutes([startPoint, newPoint], (result) => {
+          const points: Point[] = [];
+          if (result && result.routes && result.routes.length >= 1) {
+            result.routes[0].sections.forEach((section) => {
+              section.points.forEach((point) => {
+                points.push(point);
+              });
+            });
+          }
+          setRoute(points);
+          setDistance(
+            Math.round(result.routes[0].sections[0].routeInfo.distance / 1000)
+          );
+        });
+        mapRef.current.fitMarkers([startPoint, newPoint]);
+      }
     }
   };
 
@@ -72,47 +91,12 @@ const YaMap3 = () => {
   }, []);
 
   useEffect(() => {
-    console.log(isMapLoaded);
-  }, [isMapLoaded]);
-
-  useEffect(() => {
-    if (!mapRef.current) return;
-    if (startPoint && !endPoint) {
-      //mapRef.current.setCenter(startPoint, undefined, 0, 0, 1);
-    } else if (startPoint && endPoint) {
-      if (isMapLoaded) {
-        mapRef.current.findDrivingRoutes([startPoint, endPoint], (result) => {
-          const points: Point[] = [];
-          if (result && result.routes && result.routes.length >= 1) {
-            result.routes[0].sections.forEach((section) => {
-              section.points.forEach((point) => {
-                points.push(point);
-              });
-            });
-          }
-          setRoute(points);
-          setDistance(
-            Math.round(result.routes[0].sections[0].routeInfo.distance / 1000)
-          );
-        });
-      }
-      // mapRef.current.fitMarkers([startPoint, endPoint]);
-    }
-  }, [startPoint, endPoint, isMapLoaded]);
-
-  useEffect(() => {
     SplashScreen.hideAsync();
   }, []);
 
-  // useEffect(() => {
-  //   if (mapRef.current) {
-  //     mapRef.current.fitMarkers();
-  //   }
-  // }, [data])
-
   return (
     <View style={{ flex: 1 }}>
-      <NavBar />
+      <NavBar advertsCount={data.length} />
       <YaMap
         ref={mapRef}
         followUser
@@ -131,7 +115,7 @@ const YaMap3 = () => {
         style={{ flex: 1 }}
       >
         {startPoint && (
-          <RouteMarker
+          <RouteStartMarker
             routeStart
             point={startPoint}
             distance={distance}
@@ -140,13 +124,21 @@ const YaMap3 = () => {
         )}
         {route && <Polyline strokeWidth={3} strokeColor="red" points={route} />}
         {endPoint && (
-          <RouteMarker
+          <RouteEndMarker
             point={endPoint}
             distance={distance}
             onPress={onEndMarkPress}
           />
         )}
         {data?.map((advertMini) => {
+          console.log(
+            advertMini.id,
+            advertMini.addressLat,
+            advertMini.addressLon
+          );
+          if (advertMini.id === 1 && advertMini.advertType === "NON_MATERIAL") {
+            return;
+          }
           return <CustomYamapMarker key={advertMini.id} {...advertMini} />;
         })}
       </YaMap>

@@ -1,0 +1,1 @@
+export { ChooseAddressPage } from "./components/page/ChooseAddressPage";

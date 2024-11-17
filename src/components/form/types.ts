@@ -5,8 +5,7 @@ import { TTextAreaProps } from "../../UI/inputs/TextArea/types";
 import { TWithLabelAndErrorProps } from "../HOC/WithLabelAndError/types";
 import { SegmentedControlProps } from "@react-native-segmented-control/segmented-control";
 import { IPhotoInputProps } from "../../UI/inputs/Photo/types";
-
-export type TAddressInputProps = {};
+import { TAddressInputProps } from "../../UI/inputs/Address/types";
 
 export type TFormInput =
   | (IInputProps &

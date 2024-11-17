@@ -3,12 +3,14 @@ import { usersSlice } from "../modules/SearchUsers/store/usersSlice";
 import { filterSlice } from "../modules/FilterAdverts/store/filterSlice";
 import { authSlice } from "../modules/Auth/store/authSlice";
 import { api } from "../api/api";
+import { addressByMapSlice } from "../modules/ChooseAddressMap/store/addressByMapSlice";
 
 export const store = configureStore({
   reducer: {
     users: usersSlice.reducer,
     filter: filterSlice.reducer,
     auth: authSlice.reducer,
+    addressByMap: addressByMapSlice.reducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>

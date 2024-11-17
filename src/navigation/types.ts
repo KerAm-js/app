@@ -14,6 +14,7 @@ export interface IAnimatedHeaderComponentProps {
 
 export type RootStackParamList = {
   Main: undefined;
+  ChooseAddress: undefined;
   Profile: undefined;
   EditProfile: undefined;
   Auth: undefined;

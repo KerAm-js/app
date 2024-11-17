@@ -24,10 +24,10 @@ import UserPage from "../pages/User";
 import FilterPage from "../pages/Filter";
 import DeletedAdvertsPage from "../pages/DeletedAdverts";
 import AdvertImagesPage from "../pages/AdvertImages";
-import AdvertsModule from "../modules/Adverts";
 import { useAuth } from "../hooks/store/useAuth";
 import { FC, useLayoutEffect } from "react";
 import { useActions } from "../hooks/store/useActions";
+import { ChooseAddressPage } from "../pages/ChooseAddressPage";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -64,6 +64,13 @@ const RootNavigator: FC = () => {
               }}
               name="Main"
               component={MainPage.Component}
+            />
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="ChooseAddress"
+              component={ChooseAddressPage}
             />
             <Stack.Screen
               options={({ route }) => ({

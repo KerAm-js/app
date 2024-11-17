@@ -1,11 +1,11 @@
 import { FC } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Point, Marker } from "react-native-yamap";
-import { mapMarkSvg } from "../../../../assets/svg/mapMark";
-import { RED } from "../../../../consts/colors";
 import { SvgXml } from "react-native-svg";
+import { RED } from "../../../consts/colors";
+import { mapMarkSvg } from "../../../assets/svg/mapMark";
 
-export const RouteMarker: FC<{
+export const RouteEndMarker: FC<{
   routeStart?: boolean;
   point: Point;
   distance?: number;

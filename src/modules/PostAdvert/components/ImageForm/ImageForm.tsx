@@ -42,29 +42,12 @@ const ImageForm: FC<IImageFormProps> = ({
   ];
 
   const onSubmit = async () => {
-    images.forEach(async (image, index) => {
+    images.forEach(async (image) => {
       uploadImageToAdvert({ image, advertType, advertId, token: token || "" });
-      //  console.log(formData)
-      // const response = await axios.post(
-      //   `${API_URL}/secured//upload-image/advert`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //       "Content-Type": "multipart/form-data",
-      //       Accept: '*/*',
-      //     },
-      //     transformRequest: () => formData,
-      //   }
-      // );
-      // console.log(response);
     });
   };
 
   useEffect(() => {
-    console.log("isLoading", isLoading);
-    console.log("data", data);
-    console.log("error", error);
     if (data) {
       Alert.alert("Успешно", "Ваше объявление опубликовано", [
         {

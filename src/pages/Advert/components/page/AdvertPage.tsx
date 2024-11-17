@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { IAdvert } from "../../../../types/Advert";
 import ScrollWithSlider from "../ScrollWithSlider/ScrollWithSlider";
 import MainInfo from "../MainInfo/MainInfo";
 import InfoTables from "../InfoTables/InfoTables";
@@ -21,13 +20,13 @@ const AdvertPageComponent: FC<TAdvertPagePropTypes> = ({ isMini, advert }) => {
     useGetTechnicAdvertByIdQuery(advert.id, {
       skip: advert.advertType !== "TECHNIC" || !isMini,
     });
-  const { data: dumpAdvert, isFetching: isMaterialAdvertFetching } =
+  const { data: dumpAdvert, isFetching: isDumpAdvertFetching } =
     useGetDumpAdvertByIdQuery(advert.id, {
-      skip: advert.advertType !== "NON_MATERIAL" || !isMini,
-    });
-  const { data: materialAdvert, isFetching: isDumpAdvertFetching } =
-    useGetMaterialAdvertByIdQuery(advert.id, {
       skip: advert.advertType !== "DUMP" || !isMini,
+    });
+  const { data: materialAdvert, isFetching: isMaterialAdvertFetching } =
+    useGetMaterialAdvertByIdQuery(advert.id, {
+      skip: advert.advertType !== "NON_MATERIAL" || !isMini,
     });
 
   const { data: photos } = useGetImageNamesByOrderIdQuery(

@@ -336,9 +336,6 @@ const DumpForm = () => {
   }, [priceForVolume]);
 
   useEffect(() => {
-    console.log("isLoading", addAdvertResult.isLoading);
-    console.log("data", addAdvertResult.data);
-    console.log("error", addAdvertResult.error);
     if (addAdvertResult.isSuccess) {
       if (isPhotosAllowed) {
         navigation.navigate("AdvertImages", {

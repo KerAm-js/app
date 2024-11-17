@@ -5,12 +5,14 @@ import { usersSlice } from "../../modules/SearchUsers/store/usersSlice";
 import { filterSlice } from "../../modules/FilterAdverts/store/filterSlice";
 import * as authActions from "../../modules/Auth/store/authActions";
 import { authSlice } from "../../modules/Auth/store/authSlice";
+import { addressByMapSlice } from "../../modules/ChooseAddressMap/store/addressByMapSlice";
 
 const actions = {
   ...usersSlice.actions,
   ...filterSlice.actions,
   ...authActions,
   ...authSlice.actions,
+  ...addressByMapSlice.actions
 };
 
 export const useActions = () => {

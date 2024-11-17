@@ -12,22 +12,20 @@ import { RootStackParamList } from "../../../../navigation/types";
 import NavText from "../NavText/NavText";
 import { RU_LANG } from "../../../../consts/rulang";
 
-const NavBar: FC = () => {
+const NavBar: FC<{advertsCount: number}> = ({ advertsCount }) => {
   const { top } = useSafeAreaInsets();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  const adverts = []
 
   return (
     <View style={[navBarStyles.container, { paddingTop: top < 15 ? 15 : top }]}>
       <NavText
         text={
-          adverts.length === 0
+          advertsCount === 0
             ? "Нет объявлений"
-            : adverts.length +
+            : advertsCount +
               " " +
-              (RU_LANG.adverts[adverts.length] || RU_LANG.adverts[0])
+              (RU_LANG.adverts[advertsCount] || RU_LANG.adverts[0])
         }
       />
       <View style={navBarStyles.rightButtonsContainer}>

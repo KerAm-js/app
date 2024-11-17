@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { FC } from "react";
 import { View } from "react-native";
 import { TFormProps } from "./types";
 import Input from "../../UI/inputs/Input/Input";
@@ -11,6 +11,7 @@ import { formStyles } from "./styles";
 import SegmentedControlWithLabel from "../../UI/inputs/SegmentedControl/SegmentedControl";
 import Title from "../../UI/Title/Title";
 import PhotoInput from "../../UI/inputs/Photo/PhotoInput";
+import { AddressInput } from "../../UI/inputs/Address/AddressInput";
 
 const Form: FC<TFormProps> = ({
   inputs,
@@ -49,8 +50,8 @@ const Form: FC<TFormProps> = ({
                         <SegmentedControl {...input} />
                       </View>
                     );
-                  // case "address":
-                  // case "photo":
+                  case "address":
+                    return <AddressInput key={input.id} {...input} />;
                 }
               }
             })}

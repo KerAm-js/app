@@ -4,7 +4,6 @@ import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { DATE_REGEX } from "../../../../consts/regex";
-import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import {
@@ -31,9 +30,12 @@ import {
 } from "../../../../consts/enums";
 import { ITechnicAdvert, TechnicAdvertDto } from "../../../../types/Advert";
 import { Alert } from "react-native";
+import { useAddressByMap } from "../../../ChooseAddressMap";
+import { useActions } from "../../../../hooks/store/useActions";
 
 const TechnicForm = () => {
   const { user, token } = useAuth();
+  const { setAddressByMapDefaults } = useActions();
   const [addAdvert, addAdvertResult] = useAddTechnicAdvertMutation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -194,6 +196,9 @@ const TechnicForm = () => {
     skip: !techTypeSearch,
   });
 
+  const { point, secondPoint, distance, pointAddress, secondPointAddress } =
+    useAddressByMap();
+
   const hasWeight = !!technicType[0]?.parameters.find(
     (param) => param.name === "weight"
   );
@@ -244,6 +249,9 @@ const TechnicForm = () => {
   );
   const hasLoadingType = !!technicType[0]?.parameters.find(
     (param) => param.name === "loading_type"
+  );
+  const isTransport = !!technicType[0]?.parameters.find(
+    (p) => p.name === "transport"
   );
 
   const inputs: TFormInputsArray = [
@@ -517,6 +525,34 @@ const TechnicForm = () => {
           label: "Режим работы",
         },
         {
+          id: "address",
+          type: "address",
+          label: isTransport ? "Плечо (точка А)" : "Адрес",
+          address: pointAddress,
+          isSecondPointRequired: isTransport,
+          error: point ? undefined : "Заполните данное поле",
+        },
+        {
+          id: "secondAddress",
+          type: "address",
+          label: "Плечо (точка Б)",
+          address: secondPointAddress,
+          isSecondPointRequired: true,
+          isSecondInput: true,
+          error: secondPoint ? undefined : "Заполните данное поле",
+          hidden: !isTransport,
+        },
+        {
+          id: "distance",
+          type: "input",
+          error: countError,
+          onChangeText: () => {},
+          value: distance ? distance + " км" : "",
+          label: "Плечо (км)",
+          editable: false,
+          hidden: !isTransport,
+        },
+        {
           id: "rentalPeriod",
           type: "interval",
           firstPlaceholder: "ГГГГ.ММ.ДД",
@@ -626,9 +662,7 @@ const TechnicForm = () => {
         rentalFrom: new Date(firstDate.replaceAll(".", "-")).toISOString(),
         rentalTo: new Date(secondDate.replaceAll(".", "-")).toISOString(),
         rentalDaysCount: Number(rentalDaysCount),
-        isTransport: !!technicType[0].parameters.find(
-          (p) => p.name === "transport"
-        ),
+        isTransport,
         addressLat: 45,
         addressLon: 45,
         description: comment,
@@ -664,7 +698,6 @@ const TechnicForm = () => {
         paymentUnit: PAYMENT_UNITS[paymentForI],
         paymentType: PAYMENT_TYPES[paymentTypeI],
       };
-      console.log(advert);
       addAdvert({
         advert,
         token: token || "",
@@ -692,9 +725,6 @@ const TechnicForm = () => {
   };
 
   useEffect(() => {
-    console.log("isLoading", addAdvertResult.isLoading);
-    console.log("data", addAdvertResult.data);
-    console.log("error", addAdvertResult.error);
     if (addAdvertResult.isSuccess) {
       if (isPhotosAllowed) {
         navigation.navigate("AdvertImages", {
@@ -726,6 +756,10 @@ const TechnicForm = () => {
       onRentalDaysCountChange(daysCount.toString());
     }
   }, [firstDate, secondDate]);
+
+  useEffect(() => {
+    setAddressByMapDefaults();
+  }, []);
 
   return (
     <Form

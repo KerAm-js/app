@@ -44,9 +44,8 @@ const Slider: FC<ISliderProps> = ({
   const flatListOptimizationProps = {
     initialNumToRender: 3,
     maxToRenderPerBatch: 1,
-    removeClippedSubviews: true,
     scrollEventThrottle: 16,
-    windowSize: 2,
+    windowSize: 5,
     keyExtractor: useCallback((item: string) => item, []),
     getItemLayout: useCallback(
       (_: any, index: number) => ({

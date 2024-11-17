@@ -5,11 +5,6 @@ import { IAdvert } from "../../../../types/Advert";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import {
-  useGetDumpAdvertByIdQuery,
-  useGetMaterialAdvertByIdQuery,
-  useGetTechnicAdvertByIdQuery,
-} from "../../../../modules/Adverts/api/adverts.api";
 import { ImageSourcePropType } from "react-native";
 
 const images: {
@@ -20,10 +15,10 @@ const images: {
   TECHNIC: {
     image: require("../../../../assets/images/TechnicMarkerGreen.png"),
   },
-  DUMP: {
+  NON_MATERIAL: {
     image: require("../../../../assets/images/MaterialMarkerGreen.png"),
   },
-  NON_MATERIAL: {
+  DUMP: {
     image: require("../../../../assets/images/DumpMarkerGreen.png"),
   },
 };
