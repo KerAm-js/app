@@ -28,6 +28,7 @@ import { useAuth } from "../hooks/store/useAuth";
 import { FC, useLayoutEffect } from "react";
 import { useActions } from "../hooks/store/useActions";
 import { ChooseAddressPage } from "../pages/ChooseAddressPage";
+import { AdvertLocationMap } from "../pages/AdvertLocationMap";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -72,6 +73,14 @@ const RootNavigator: FC = () => {
               name="ChooseAddress"
               component={ChooseAddressPage}
             />
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="AdvertLocationMap"
+            >
+              {({ route }) => <AdvertLocationMap {...route.params} />}
+            </Stack.Screen>
             <Stack.Screen
               options={({ route }) => ({
                 title: route.params.title,

@@ -9,6 +9,7 @@ export const advertCommentStyles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: SCREEN_PADDING,
     paddingBottom: 15,
+    marginTop: 15,
   },
   commentCorner: {
     marginTop: 13,

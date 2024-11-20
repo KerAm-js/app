@@ -166,13 +166,15 @@ const TechnicForm = () => {
   const [workModeIndex, setWorkModeIndex] = useState(0);
   const [firstDate, onFirstDateChange, isFirstDateValid, firstDateError] =
     useInputValidator({
+      required: true,
       pattern: DATE_REGEX,
-      patternErrorMessage: "Введите дату по шаблону ГГГГ.ММ.ДД",
+      patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
     });
   const [secondDate, onSecondDateChange, isSecondDateValid, secondDateError] =
     useInputValidator({
+      required: true,
       pattern: DATE_REGEX,
-      patternErrorMessage: "Введите дату по шаблону ГГГГ.ММ.ДД",
+      patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
     });
   const [
     rentalDaysCount,
@@ -196,8 +198,14 @@ const TechnicForm = () => {
     skip: !techTypeSearch,
   });
 
-  const { point, secondPoint, distance, pointAddress, secondPointAddress } =
-    useAddressByMap();
+  const {
+    point,
+    secondPoint,
+    distance,
+    pointAddress,
+    isSecondPointRequired,
+    secondPointAddress,
+  } = useAddressByMap();
 
   const hasWeight = !!technicType[0]?.parameters.find(
     (param) => param.name === "weight"
@@ -274,7 +282,7 @@ const TechnicForm = () => {
           value: title,
           error: titleError,
           label: "Заголовок",
-          placeholder: "Сдаётся в аренду самосвал",
+          placeholder: "Например, сдаётся в аренду самосвал",
           maxLength: 100,
         },
       ],
@@ -555,8 +563,8 @@ const TechnicForm = () => {
         {
           id: "rentalPeriod",
           type: "interval",
-          firstPlaceholder: "ГГГГ.ММ.ДД",
-          secondPlaceholder: "ГГГГ.ММ.ДД",
+          firstPlaceholder: "ДД.ММ.ГГГГ",
+          secondPlaceholder: "ДД.ММ.ГГГГ",
           firstValue: firstDate,
           secondValue: secondDate,
           onFirstValueChange: onFirstDateChange,
@@ -631,6 +639,8 @@ const TechnicForm = () => {
     isSecondDateValid &&
     isRentalDaysCountValid &&
     isPriceValid &&
+    !!point &&
+    (secondPoint || !isSecondPointRequired) &&
     (isWeightValid || !hasWeight) &&
     (isHeightValid || !hasHeight) &&
     (isVolumeValid || !hasVolume) &&
@@ -659,12 +669,18 @@ const TechnicForm = () => {
         equipment: equipment || [],
         unitAmount: Number(count),
         shiftType: SHIFT_TYPES[workModeIndex],
-        rentalFrom: new Date(firstDate.replaceAll(".", "-")).toISOString(),
-        rentalTo: new Date(secondDate.replaceAll(".", "-")).toISOString(),
+        rentalFrom: new Date(
+          firstDate.split(".").reverse().join("-")
+        ).toISOString(),
+        rentalTo: new Date(
+          secondDate.split(".").reverse().join("-")
+        ).toISOString(),
         rentalDaysCount: Number(rentalDaysCount),
         isTransport,
-        addressLat: 45,
-        addressLon: 45,
+        addressLat: point?.lat || 57,
+        addressLon: point?.lon || 36,
+        secondAddressLat: secondPoint?.lat,
+        secondAddressLon: secondPoint?.lon,
         description: comment,
         technicType: technicType[0].name,
         technicMark: mark,
@@ -747,8 +763,8 @@ const TechnicForm = () => {
 
   useEffect(() => {
     if (firstDate && isFirstDateValid && secondDate && isSecondDateValid) {
-      const first = new Date(firstDate.replaceAll(".", "-"));
-      const second = new Date(secondDate.replaceAll(".", "-"));
+      const first = new Date(firstDate.split(".").reverse().join("-"));
+      const second = new Date(secondDate.split(".").reverse().join("-"));
       const daysCount =
         Math.round(
           (second.valueOf() - first.valueOf()) / (1000 * 60 * 60 * 24)

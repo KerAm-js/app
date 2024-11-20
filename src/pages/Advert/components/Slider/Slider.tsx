@@ -25,6 +25,9 @@ import { useAuth } from "../../../../hooks/store/useAuth";
 // import { USER } from "../../../../consts/devData";
 // import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 
+const keyExtractor = (item: string) => item;
+
+
 const Slider: FC<ISliderProps> = ({
   // id,
   // userId,
@@ -46,7 +49,7 @@ const Slider: FC<ISliderProps> = ({
     maxToRenderPerBatch: 1,
     scrollEventThrottle: 16,
     windowSize: 5,
-    keyExtractor: useCallback((item: string) => item, []),
+    keyExtractor,
     getItemLayout: useCallback(
       (_: any, index: number) => ({
         index,
@@ -135,7 +138,7 @@ const Slider: FC<ISliderProps> = ({
         {...flatListOptimizationProps}
       />
     );
-  }, []);
+  }, [photos]);
 
   return (
     <Animated.View style={[sliderStyles.container, rContainerStyle]}>

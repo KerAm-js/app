@@ -7,6 +7,7 @@ import { IMyCommentsPageProps } from "../pages/MyComments/components/MyCommentsP
 import { IAdvert } from "../types/Advert";
 import { IComment } from "../types/Comment";
 import { IUser } from "../types/User";
+import { TAdvertLocationMapProps } from "../pages/AdvertLocationMap/components/AdvertLocationMap";
 
 export interface IAnimatedHeaderComponentProps {
   scrollY?: { value: number };
@@ -15,6 +16,7 @@ export interface IAnimatedHeaderComponentProps {
 export type RootStackParamList = {
   Main: undefined;
   ChooseAddress: undefined;
+  AdvertLocationMap: TAdvertLocationMapProps;
   Profile: undefined;
   EditProfile: undefined;
   Auth: undefined;

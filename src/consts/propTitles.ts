@@ -1,6 +1,6 @@
 export const propTitles = {
   unitAmount: "Количество единиц техники",
-  shiftType: 'Режим работы',
+  shiftType: "Режим работы",
   rentalPeriod: "Период аренды",
   rentalDaysCount: "Срок аренды (в днях)",
   delivery: "Доставка",
@@ -9,4 +9,7 @@ export const propTitles = {
   dumpTransport: "Вид транспорта",
   amount: "Количество",
   fractions: "Фракции",
+  coefficient: "Коэффициент",
+  materialType: "Виж материала",
+  distance: 'Плечо'
 };

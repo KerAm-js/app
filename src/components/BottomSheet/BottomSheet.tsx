@@ -5,6 +5,7 @@ import { bottomSheetStyles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Animated, {
+  Easing,
   interpolate,
   runOnJS,
   useAnimatedStyle,
@@ -37,7 +38,7 @@ const BottomSheet: FC<IBottomSheetProps> = ({ actions, title }) => {
   const closeModal = () => {
     translateY.value = withTiming(
       0,
-      undefined,
+      {duration: 150},
       (isFinished: boolean | undefined) => {
         if (isFinished) {
           runOnJS(navigation.goBack)();
@@ -87,7 +88,7 @@ const BottomSheet: FC<IBottomSheetProps> = ({ actions, title }) => {
 
   const onLayout = (evt: LayoutChangeEvent) => {
     const height = evt.nativeEvent.layout.height;
-    translateY.value = withTiming(-height + OVERDRAG);
+    translateY.value = withTiming(-height + OVERDRAG, {duration: 200});
     context.value.height = height;
   };
 

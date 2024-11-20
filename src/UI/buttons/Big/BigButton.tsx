@@ -5,6 +5,7 @@ import { SvgXml } from "react-native-svg";
 import { BLACK_DARK, WHITE } from "../../../consts/colors";
 import { FC } from "react";
 import { DISABLED_BUTTON_OPACITY } from "../../../consts/views";
+import React from "react";
 
 const BigButton: FC<TBigButtonProps> = ({
   backgroundColor,

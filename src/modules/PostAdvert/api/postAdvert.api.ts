@@ -102,6 +102,7 @@ export const postAdvertApi = api.injectEndpoints({
         },
         body: advert,
       }),
+      invalidatesTags: ['User', 'TechnicAdverts']
     }),
     addMaterialAdvert: builder.mutation<
       IAdvert,
@@ -116,6 +117,7 @@ export const postAdvertApi = api.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
+      invalidatesTags: ['User', 'MaterialAdverts']
     }),
     addDumpAdvert: builder.mutation<
       IAdvert,
@@ -130,6 +132,7 @@ export const postAdvertApi = api.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
+      invalidatesTags: ['User', 'DumpAdverts']
     }),
     getTechnicTypesByLetter: builder.query<Array<ITechnicType>, string>({
       query: (text) => ({

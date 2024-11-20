@@ -1,30 +1,36 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useAddressByMap } from "../../../modules/ChooseAddressMap";
-import { SCREEN_PADDING } from "../../../consts/views";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BLACK_DARK, GREY_DARK, WHITE } from "../../../consts/colors";
 import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
 import { LABEL_F_SIZE } from "../../../consts/texts";
-import { useEffect, useState } from "react";
-import { Geocoder, ObjectKind } from "react-native-yamap";
+import { Dispatch, FC, SetStateAction, useEffect } from "react";
+import { Geocoder, Point } from "react-native-yamap";
 import { YA_MAP_JS_API_KEY } from "../../../api/yamap";
-import { useActions } from "../../../hooks/store/useActions";
+import { TAddressByMapState } from "../store/types";
+import { SCREEN_PADDING } from "../../../consts/views";
 
 Geocoder.init(YA_MAP_JS_API_KEY);
 
-type T = ObjectKind;
+type TPropTypes = Pick<
+  TAddressByMapState,
+  | "point"
+  | "pointAddress"
+  | "secondPoint"
+  | "secondPointAddress"
+  | "isSecondPointRequired"
+> & {
+  setPointAddress: Dispatch<SetStateAction<string>>;
+  setSecondPointAddress: Dispatch<SetStateAction<string>>;
+};
 
-export const AddressInfo = () => {
-  const { bottom } = useSafeAreaInsets();
-  const {
-    point,
-    pointAddress,
-    secondPoint,
-    secondPointAddress,
-    isSecondPointRequired,
-  } = useAddressByMap();
-  const { setPointAddress, setSecondPointAddress } = useActions();
-
+export const AddressInfo: FC<TPropTypes> = ({
+  point,
+  pointAddress,
+  secondPoint,
+  secondPointAddress,
+  isSecondPointRequired,
+  setPointAddress,
+  setSecondPointAddress,
+}) => {
   useEffect(() => {
     if (point) {
       Geocoder.geocode(point)
@@ -50,16 +56,21 @@ export const AddressInfo = () => {
   }, [secondPoint]);
 
   return (
-    <View style={[styles.container, { bottom: bottom < 15 ? 15 : bottom }]}>
+    <View style={styles.container}>
       <View style={styles.row}>
-        <Text style={[styles.address, !point && styles.addressPlaceholder]}>
+        <Text
+          style={[styles.address, !pointAddress && styles.addressPlaceholder]}
+        >
           {pointAddress || "Точка А"}
         </Text>
       </View>
       {isSecondPointRequired && (
         <View style={styles.row}>
           <Text
-            style={[styles.address, !secondPoint && styles.addressPlaceholder]}
+            style={[
+              styles.address,
+              !secondPointAddress && styles.addressPlaceholder,
+            ]}
           >
             {secondPointAddress || "Точка Б"}
           </Text>
@@ -71,14 +82,13 @@ export const AddressInfo = () => {
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
-    right: SCREEN_PADDING,
-    left: SCREEN_PADDING,
     backgroundColor: WHITE,
     borderRadius: BORDER_RADIUS_SMALL,
     shadowColor: BLACK_DARK,
     shadowOpacity: 0.3,
     minHeight: 40,
+    marginHorizontal: SCREEN_PADDING,
+    marginBottom: 15,
     shadowOffset: {
       height: 2,
       width: 0,

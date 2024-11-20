@@ -99,7 +99,6 @@ const YaMap3 = () => {
       <NavBar advertsCount={data.length} />
       <YaMap
         ref={mapRef}
-        followUser
         onMapLoaded={onMapLoaded}
         onMapLongPress={onMapPress}
         userLocationIcon={{
@@ -108,19 +107,14 @@ const YaMap3 = () => {
         initialRegion={{
           lat: 55.753215,
           lon: 37.622504,
-          zoom: 8,
+          zoom: 7,
           azimuth: 80,
           tilt: 100,
         }}
         style={{ flex: 1 }}
       >
         {startPoint && (
-          <RouteStartMarker
-            routeStart
-            point={startPoint}
-            distance={distance}
-            onPress={onStartMarkPress}
-          />
+          <RouteStartMarker point={startPoint} onPress={onStartMarkPress} />
         )}
         {route && <Polyline strokeWidth={3} strokeColor="red" points={route} />}
         {endPoint && (
@@ -131,11 +125,6 @@ const YaMap3 = () => {
           />
         )}
         {data?.map((advertMini) => {
-          console.log(
-            advertMini.id,
-            advertMini.addressLat,
-            advertMini.addressLon
-          );
           if (advertMini.id === 1 && advertMini.advertType === "NON_MATERIAL") {
             return;
           }

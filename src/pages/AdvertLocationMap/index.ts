@@ -1,0 +1,1 @@
+export { AdvertLocationMap } from './components/AdvertLocationMap';

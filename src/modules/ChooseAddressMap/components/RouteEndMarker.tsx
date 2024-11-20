@@ -6,25 +6,21 @@ import { RED } from "../../../consts/colors";
 import { mapMarkSvg } from "../../../assets/svg/mapMark";
 
 export const RouteEndMarker: FC<{
-  routeStart?: boolean;
   point: Point;
   distance?: number;
   onPress: () => void;
-}> = ({ routeStart, point, distance, onPress }) => {
+}> = ({ point, distance, onPress }) => {
   return (
     <Marker
       point={point}
       scale={1}
       children={
-        <View
-          style={routeStart ? styles.startPointMarker : styles.endPointMarker}
-        >
+        <View style={styles.endPointMarker}>
           <SvgXml width={22} height={30} xml={mapMarkSvg(RED)} />
-          {!routeStart && (
-            <View style={styles.routeDistanceContainer}>
-              <Text style={styles.routeDistance}>{distance} км</Text>
-            </View>
-          )}
+
+          <View style={styles.routeDistanceContainer}>
+            <Text style={styles.routeDistance}>{distance} км</Text>
+          </View>
         </View>
       }
       onPress={onPress}
@@ -33,11 +29,6 @@ export const RouteEndMarker: FC<{
 };
 
 const styles = StyleSheet.create({
-  startPointMarker: {
-    maxWidth: 100,
-    alignItems: "center",
-    paddingBottom: 34,
-  },
   endPointMarker: {
     paddingTop: 6,
     maxWidth: 100,

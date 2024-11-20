@@ -83,6 +83,7 @@ export const postAdvertApi = api.injectEndpoints({
         method: "POST",
         body: {},
       }),
+      providesTags: ["TechnicAdverts"],
     }),
     getTechnicAdvertsPageable: builder.query<
       Array<IAdvert>,
@@ -95,6 +96,7 @@ export const postAdvertApi = api.injectEndpoints({
           size,
         },
       }),
+      providesTags: ["TechnicAdverts"],
       // Only have one cache entry because the arg always maps to one string
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
@@ -115,6 +117,7 @@ export const postAdvertApi = api.injectEndpoints({
         method: "POST",
         body: {},
       }),
+      providesTags: ["MaterialAdverts"],
     }),
     getMaterialAdvertsPageable: builder.query<
       Array<IAdvert>,
@@ -127,6 +130,7 @@ export const postAdvertApi = api.injectEndpoints({
           size,
         },
       }),
+      providesTags: ["MaterialAdverts"],
       // Only have one cache entry because the arg always maps to one string
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
@@ -147,6 +151,7 @@ export const postAdvertApi = api.injectEndpoints({
         method: "POST",
         body: {},
       }),
+      providesTags: ["DumpAdverts"],
     }),
     getDumpAdvertsPageable: builder.query<
       Array<IAdvert>,
@@ -159,6 +164,7 @@ export const postAdvertApi = api.injectEndpoints({
           size,
         },
       }),
+      providesTags: ["DumpAdverts"],
       // Only have one cache entry because the arg always maps to one string
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;

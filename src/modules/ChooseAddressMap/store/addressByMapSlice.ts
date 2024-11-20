@@ -20,7 +20,6 @@ export const addressByMapSlice = createSlice({
       state.pointAddress = action.payload;
     },
     changePointToSecondPoint: (state) => {
-      console.log(state.secondPoint);
       state.point = state.secondPoint ? { ...state.secondPoint } : undefined;
       state.pointAddress = undefined;
       state.secondPoint = undefined;
@@ -42,6 +41,27 @@ export const addressByMapSlice = createSlice({
     },
     setAddressByMapDefaults: () => {
       return initialState;
+    },
+    submitAddressByMapData: (
+      state,
+      action: PayloadAction<
+        Pick<
+          TAddressByMapState,
+          | "point"
+          | "secondPoint"
+          | "distance"
+          | "pointAddress"
+          | "secondPointAddress"
+        >
+      >
+    ) => {
+      const { point, pointAddress, secondPoint, secondPointAddress, distance } =
+        action.payload;
+      state.point = point;
+      state.pointAddress = pointAddress;
+      state.secondPoint = secondPoint;
+      state.secondPointAddress = secondPointAddress;
+      state.distance = distance;
     },
   },
 });

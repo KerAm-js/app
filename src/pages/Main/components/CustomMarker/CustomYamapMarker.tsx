@@ -1,25 +1,29 @@
 import { FC } from "react";
 import { Marker } from "react-native-yamap";
 import { ICustomYamapMarkerProps } from "./types";
-import { IAdvert } from "../../../../types/Advert";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { ImageSourcePropType } from "react-native";
+import { View } from "react-native";
+import { customMarkerStyles } from "./styles";
+import { excavatorSvg } from "../../../../assets/svg/excavator";
+import { dumpSvg } from "../../../../assets/svg/dump";
+import { shovelSvg } from "../../../../assets/svg/shovel";
+import { SvgXml } from "react-native-svg";
+import { WHITE, GREEN } from "../../../../consts/colors";
 
-const images: {
-  [key in IAdvert["advertType"]]: {
-    image: ImageSourcePropType;
-  };
-} = {
+const data = {
   TECHNIC: {
-    image: require("../../../../assets/images/TechnicMarkerGreen.png"),
-  },
-  NON_MATERIAL: {
-    image: require("../../../../assets/images/MaterialMarkerGreen.png"),
+    iconXml: excavatorSvg(WHITE),
+    color: GREEN,
   },
   DUMP: {
-    image: require("../../../../assets/images/DumpMarkerGreen.png"),
+    iconXml: dumpSvg(WHITE),
+    color: GREEN,
+  },
+  NON_MATERIAL: {
+    iconXml: shovelSvg(WHITE),
+    color: GREEN,
   },
 };
 
@@ -29,20 +33,31 @@ export const CustomYamapMarker: FC<ICustomYamapMarkerProps> = ({
   addressLon,
   advertType,
 }) => {
-  const { image } = images[advertType];
+  const { iconXml, color } = data[advertType];
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const onPress = () => {
-    navigation.navigate("Advert", { isMini: true, advert: { id, advertType } });
+    navigation.navigate("Advert", {
+      isMini: true,
+      advert: { id, advertType, addressLat, addressLon },
+    });
   };
 
   return (
     <Marker
       point={{ lat: addressLat, lon: addressLon }}
       scale={1}
-      source={image}
       onPress={onPress}
-    />
+    >
+      <View
+        style={[
+          customMarkerStyles.circle,
+          { backgroundColor: color, shadowColor: color },
+        ]}
+      >
+        <SvgXml xml={iconXml} width={32} height={32} />
+      </View>
+    </Marker>
   );
 };

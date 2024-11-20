@@ -2,13 +2,11 @@ import { Pressable, StyleSheet } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { useNavigation } from "@react-navigation/native";
 import { BLACK_DARK, WHITE } from "../../../consts/colors";
-import WithMapShadow from "../../../components/HOC/WithMapShadow/WithMapShadow";
 import { arrowLeftSvg } from "../../../assets/svg/arrowLeft";
-import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SCREEN_PADDING } from "../../../consts/views";
 
-export const CloseButton = () => {
+export const CloseMapButton = () => {
   const navigation = useNavigation();
   const { top } = useSafeAreaInsets();
   return (
@@ -32,6 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE,
     shadowColor: BLACK_DARK,
     position: "absolute",
+    zIndex: 100,
     left: SCREEN_PADDING,
     shadowOpacity: 0.3,
     shadowOffset: {

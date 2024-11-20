@@ -3,37 +3,33 @@ import { View } from "react-native";
 import { modalStyles } from "./styles";
 import BottomSheet from "../../../../components/BottomSheet/BottomSheet";
 import { TSheetButtonProps } from "../../../../components/BottomSheet/types";
-import { useActions } from "../../../../hooks/store/useActions";
 import { IAdvert } from "../../../../types/Advert";
 
-const MyModal: FC<IAdvert> = ({ id }) => {
-  const { deleteAdvert, stopAdvert, republishAdvert } = useActions();
+const MyModal: FC<IAdvert> = ({ id, advertStatus }) => {
   const actions: Array<TSheetButtonProps> = [
     {
       id: "1",
       title: "Редактировать",
-      onPress: () => console.log("1"),
+      onPress: () => {},
       type: "default",
     },
     {
       id: "2",
       title: "Обновить актуальность",
-      onPress: () => console.log("2"),
+      onPress: () => {},
       type: "default",
     },
     {
       id: "3",
-      title: status === "published" ? "Снять с публикации" : "Опубликовать",
-      onPress: () =>
-        status === "published" ? stopAdvert(id) : republishAdvert(id),
+      title:
+        advertStatus === "PUBLISHED" ? "Снять с публикации" : "Опубликовать",
+      onPress: () => {},
       type: "default",
     },
     {
       id: "4",
       title: "Удалить объявление",
-      onPress: () => {
-        deleteAdvert(id);
-      },
+      onPress: () => {},
       type: "destructive",
       confirmMessage: "Вы уверены, что хотите удалить объявление?",
     },
@@ -43,15 +39,13 @@ const MyModal: FC<IAdvert> = ({ id }) => {
     {
       id: "1",
       title: "Восстановить объявление",
-      onPress: () => {
-        republishAdvert(id);
-      },
+      onPress: () => {},
       type: "default",
     },
     {
       id: "2",
       title: "Редактировать",
-      onPress: () => console.log("1"),
+      onPress: () => {},
       type: "default",
     },
   ];
@@ -60,7 +54,7 @@ const MyModal: FC<IAdvert> = ({ id }) => {
     <View style={modalStyles.container}>
       <BottomSheet
         title="Выберите действие"
-        actions={status === "deleted" ? actionsForDeletedAdvert : actions}
+        actions={advertStatus === "DELETED" ? actionsForDeletedAdvert : actions}
       />
     </View>
   );
