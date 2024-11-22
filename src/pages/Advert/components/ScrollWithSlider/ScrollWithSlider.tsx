@@ -20,6 +20,7 @@ import { IScrollWithSliderProps } from "./types";
 import AnimatedStatusBar from "../AnimatedStatusBar/AnimatedStatusBar";
 import { scrollWithSliderStyles } from "./styles";
 import React from "react";
+import { SetLike } from "../../../../modules/Like/components/SetLike";
 
 const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
   id,
@@ -73,6 +74,8 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
     );
   };
 
+
+
   useEffect(() => {
     navigation.setOptions({
       headerBackground: () => <AnimatedHeaderBackground scrollY={scrollY} />,
@@ -82,7 +85,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
       ),
       headerRight: () => (
         <AnimatedHeaderRightButton>
-          <LikeButton size={32} onPress={onLike} />
+          <SetLike advertId={id} advertType={advertType} id={id}/>
         </AnimatedHeaderRightButton>
       ),
       headerStyle: {},

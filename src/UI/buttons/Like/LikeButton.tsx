@@ -28,7 +28,7 @@ const LikeButton: FC<TLikeButtonProps> = ({
           width: size,
           height: size,
           marginLeft: 20,
-          backgroundColor: isActive ? RED : GREY_DARK,
+          backgroundColor: isLiked ? RED : GREY_DARK,
         },
       ]}
       onPress={onPressHandler}
