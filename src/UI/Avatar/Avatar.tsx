@@ -130,9 +130,6 @@ const Avatar: FC<TAvatarProps> = ({
               transformRequest: () => formData,
             }
           );
-          if (response.status === 200) {
-            console.log(response.data);
-          }
         }
       }
     } catch (error) {

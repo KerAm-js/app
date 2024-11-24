@@ -14,8 +14,6 @@ import { IUser } from "../../../types/User";
 const getUserByToken = async (token: string) => {
   await SecureStore.setItemAsync(TOKEN, token);
   const userRes = await authApi.getUserByToken(token);
-  // const likesRes = await authApi.getUserLikesByToken(token);
-  // const commentsRes = await authApi.getUserCommentsByToken(token);
   return {
     ...userRes.data,
     likes: [],

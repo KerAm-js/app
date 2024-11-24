@@ -1,16 +1,90 @@
-import { useState } from "react";
+import { FC, useMemo, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import { INPUT_VALUES, INPUT_VALUES_WITH_ALL } from "../../../../consts/inputValues";
-import { ITransportType, useGetTransportByLetterQuery } from "../../../PostAdvert/api/postAdvert.api";
+import { INPUT_VALUES } from "../../../../consts/inputValues";
+import {
+  ITransportType,
+  useGetTransportByLetterQuery,
+} from "../../../PostAdvert/api/postAdvert.api";
+import {
+  DANGER_CLASSES,
+  DUMP_TRANSACTION_TYPES,
+  ENUM_TITLES,
+  ENUMS,
+  MEASURE_IN,
+  PAYMENT_TYPES,
+  SHIFT_TYPES,
+} from "../../../../consts/enums";
+import { WASTE_TYPES } from "../../../../consts/data";
+import { useActions } from "../../../../hooks/store/useActions";
+import { TDumpFilter } from "../../store/types";
+import { View } from "react-native";
+import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
+import { useNavigation } from "@react-navigation/native";
 
-const DumpForm = () => {
+const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
+  id: index,
+  value: type,
+  name: ENUM_TITLES[type],
+}));
+
+const wasteTypes = WASTE_TYPES.map((type, index) => ({
+  id: index,
+  name: type,
+}));
+
+const dangerClasses = DANGER_CLASSES.map((item, index) => ({
+  id: index,
+  value: item,
+  name: ENUM_TITLES[item],
+}));
+
+const DumpForm: FC<TDumpFilter> = (currentFilter) => {
+  const navigation = useNavigation();
+  const initTransactionType = useMemo(
+    () =>
+      dumpTransactionTypes.find(
+        (item) => item.name === currentFilter?.transactionType
+      ) || undefined,
+    []
+  );
+  const initWasteType = useMemo(
+    () =>
+      wasteTypes.find((item) => item.name === currentFilter?.wasteType) ||
+      undefined,
+    []
+  );
+  const initDangerClass = useMemo(
+    () =>
+      dangerClasses.find((item) => item.value === currentFilter?.dangerClass) ||
+      undefined,
+    []
+  );
+  const initMeasureI = MEASURE_IN.findIndex(
+    (item) => item === currentFilter?.measureIn
+  );
+  const initAmountFrom = currentFilter?.amountFrom?.toString() || undefined;
+  const initAmountTo = currentFilter?.amountTo?.toString() || undefined;
+  const initCoefficientFrom =
+    currentFilter?.coefficientFrom?.toString() || undefined;
+  const initCoefficientTo =
+    currentFilter?.coefficientTo?.toString() || undefined;
+  const initWorkModeI = SHIFT_TYPES.findIndex(
+    (item) => item === currentFilter?.shiftType
+  );
+  const initPriceFrom = currentFilter?.priceFrom?.toString() || undefined;
+  const initPriceTo = currentFilter?.priceTo?.toString() || undefined;
+  const initPaymentTypeI = PAYMENT_TYPES.findIndex(
+    (item) => item === currentFilter?.paymentType
+  );
+
+  const { setDumpFilter } = useActions();
   const [type, selectType, unselectType, _, isTypeValid, typeError] =
     useSelectionValidator({
       required: true,
-      initValue: [INPUT_VALUES.dumpAdvertType[0]],
+      initValue: [initTransactionType || dumpTransactionTypes[0]],
     });
   const [
     wasteType,
@@ -19,7 +93,10 @@ const DumpForm = () => {
     __,
     isWasteTypeValid,
     wasteTypeError,
-  ] = useSelectionValidator({ multySelection: true });
+  ] = useSelectionValidator<(typeof wasteTypes)[0]>({
+    required: false,
+    initValue: initWasteType ? [initWasteType] : undefined,
+  });
   const [
     dangerClass,
     selectDangerClass,
@@ -27,7 +104,11 @@ const DumpForm = () => {
     ___,
     isDangerClassValid,
     dangerClassError,
-  ] = useSelectionValidator({ multySelection: true });
+  ] = useSelectionValidator<(typeof dangerClasses)[0]>({
+    required: false,
+    initValue: initDangerClass ? [initDangerClass] : undefined,
+  });
+  // TODO - default transport value
   const [
     transport,
     selectTransport,
@@ -38,39 +119,35 @@ const DumpForm = () => {
     setTransportInitial,
     transportSearch,
     setTransportSearch,
-  ] = useSelectionValidator<ITransportType>({ multySelection: true });
-  const [measureI, setMeasureI] = useState(0);
+  ] = useSelectionValidator<ITransportType>({ multySelection: false });
+  const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
+  const [amountFrom, onAmountFromChange, isAmountFromValid, amountFromError] =
+    useInputValidator({ minValue: 1, initValue: initAmountFrom });
+  const [amountTo, onAmountToChange, isAmountToValid, amountToError] =
+    useInputValidator({ minValue: 1, initValue: initAmountTo });
   const [
-    amountInWeight1,
-    onAmountInWeight1Change,
-    isAmountInWeight1Valid,
-    amountInWeight1Error,
-  ] = useInputValidator({ minValue: 1 });
+    coefficientFrom,
+    onCoefficientFromChange,
+    isCoefficientFromValid,
+    coefficientFromError,
+  ] = useInputValidator({ minValue: 1, initValue: initCoefficientFrom });
   const [
-    amountInWeight2,
-    onAmountInWeight2Change,
-    isAmountInWeight2Valid,
-    amountInWeight2Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    amountInVolume1,
-    onAmountInVolume1Change,
-    isAmountInVolume1Valid,
-    amountInVolume1Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    amountInVolume2,
-    onAmountInVolume2Change,
-    isAmountInVolume2Valid,
-    amountInVolume2Error,
-  ] = useInputValidator({ minValue: 1 });
+    coefficientTo,
+    onCoefficientToChange,
+    isCoefficientToValid,
+    coefficientToError,
+  ] = useInputValidator({ minValue: 1, initValue: initCoefficientTo });
 
-  const [workModeIndex, setWorkModeIndex] = useState(0);
-  const [price1, onPrice1Change, isPrice1Valid, price1Error] =
-    useInputValidator({ minValue: 1 });
-  const [price2, onPrice2Change, isPrice2Valid, price2Error] =
-    useInputValidator({ minValue: 1 });
-  const [paymentTypeI, setPaymentTypeI] = useState(0);
+  const [workModeIndex, setWorkModeIndex] = useState(
+    initWorkModeI < 0 ? 0 : initWorkModeI
+  );
+  const [priceFrom, onPriceFromChange, isPriceFromValid, priceFromError] =
+    useInputValidator({ minValue: 1, initValue: initPriceFrom });
+  const [priceTo, onPriceToChange, isPriceToValid, priceToError] =
+    useInputValidator({ minValue: 1, initValue: initPriceTo });
+  const [paymentTypeI, setPaymentTypeI] = useState(
+    initPaymentTypeI < 0 ? 0 : initPaymentTypeI
+  );
 
   const { data: transports, isFetching: isTransportLoading } =
     useGetTransportByLetterQuery(transportSearch);
@@ -85,7 +162,7 @@ const DumpForm = () => {
           value: type,
           selectItem: selectType,
           unselectItem: unselectType,
-          itemsList: INPUT_VALUES.dumpAdvertType,
+          itemsList: dumpTransactionTypes,
           error: typeError,
           placeholder: "",
           label: "Тип объявления",
@@ -102,10 +179,10 @@ const DumpForm = () => {
           value: wasteType,
           selectItem: selectWasteType,
           unselectItem: unselectWasteType,
-          itemsList: INPUT_VALUES.wasteTypes,
+          itemsList: wasteTypes,
           error: wasteTypeError,
           placeholder: "",
-          label: "Виды отходов",
+          label: "Вид отходов",
           usesDataFromApi: false,
         },
         {
@@ -114,10 +191,10 @@ const DumpForm = () => {
           value: dangerClass,
           selectItem: selectDangerClass,
           unselectItem: unselectDangerClass,
-          itemsList: INPUT_VALUES.dangerClasses,
+          itemsList: dangerClasses,
           error: dangerClassError,
           placeholder: "",
-          label: "Классы опасности",
+          label: "Класс опасности",
           usesDataFromApi: false,
         },
         {
@@ -137,33 +214,35 @@ const DumpForm = () => {
         {
           id: "measure",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.measure,
+          values: ENUMS.measureIn,
           selectedIndex: measureI,
-          onChange: (evt) =>
-            setMeasureI(evt.nativeEvent.selectedSegmentIndex),
+          onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
           label: "Измерять",
         },
         {
-          id: "amountInWeight",
+          id: "amount",
           type: "interval",
-          hidden: INPUT_VALUES_WITH_ALL.measure[measureI] === 'Объём',
-          firstValue: amountInWeight1,
-          secondValue: amountInWeight2,
-          onFirstValueChange: onAmountInWeight1Change,
-          onSecondValueChange: onAmountInWeight2Change,
-          error: amountInWeight1Error || amountInWeight2Error,
-          label: "Вес (т)",
+          firstValue: amountFrom,
+          secondValue: amountTo,
+          onFirstValueChange: onAmountFromChange,
+          onSecondValueChange: onAmountToChange,
+          error: amountFromError || amountToError,
+          label:
+            ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
+              ? "Объём (м3)"
+              : "Вес (т)",
+          keyboardType: "decimal-pad",
         },
         {
-          id: "amountInVolume",
+          id: "coefficient",
           type: "interval",
-          hidden: INPUT_VALUES_WITH_ALL.measure[measureI] === 'Вес',
-          firstValue: amountInVolume1,
-          secondValue: amountInVolume2,
-          onFirstValueChange: onAmountInVolume1Change,
-          onSecondValueChange: onAmountInVolume2Change,
-          error: amountInVolume1Error || amountInVolume2Error,
-          label: "Объём (м3)",
+          firstValue: coefficientFrom,
+          secondValue: coefficientTo,
+          onFirstValueChange: onCoefficientFromChange,
+          onSecondValueChange: onCoefficientToChange,
+          error: coefficientFromError || coefficientToError,
+          label: "Коэффициент (вес/объём)",
+          keyboardType: "decimal-pad",
         },
       ],
     },
@@ -173,7 +252,7 @@ const DumpForm = () => {
         {
           id: "workMode",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.workMode,
+          values: ENUMS.shiftTypes,
           selectedIndex: workModeIndex,
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
@@ -187,11 +266,11 @@ const DumpForm = () => {
         {
           id: "price",
           type: "interval",
-          firstValue: price1,
-          secondValue: price2,
-          onFirstValueChange: onPrice1Change,
-          onSecondValueChange: onPrice2Change,
-          error: price1Error || price2Error,
+          firstValue: priceFrom,
+          secondValue: priceTo,
+          onFirstValueChange: onPriceFromChange,
+          onSecondValueChange: onPriceToChange,
+          error: priceFromError || priceToError,
           label:
             INPUT_VALUES.measure[measureI] === "Вес"
               ? "Цена (руб/тонн)"
@@ -200,7 +279,7 @@ const DumpForm = () => {
         {
           id: "paymentType",
           type: "segment",
-          values: INPUT_VALUES.paymentType,
+          values: ENUMS.paymentTypes,
           selectedIndex: paymentTypeI,
           onChange: (evt) =>
             setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -211,39 +290,50 @@ const DumpForm = () => {
   ];
 
   const isFormValid =
-    isAmountInVolume1Valid &&
-    isAmountInVolume2Valid &&
-    isAmountInWeight1Valid && 
-    isAmountInWeight2Valid &&
-    isDangerClassValid &&
-    isPrice1Valid &&
-    isPrice2Valid &&
     isTransportValid &&
-    isTypeValid &&
-    isWasteTypeValid;
+    ((isAmountFromValid && isAmountToValid) ||
+      (isPriceFromValid && isPriceToValid) ||
+      (isCoefficientFromValid && isCoefficientToValid) ||
+      isTypeValid ||
+      isWasteTypeValid ||
+      isDangerClassValid);
 
   const onSubmit = () => {
-    console.log({
-      type,
-      wasteType,
-      transport,
-      dangerClass,
-      amountInVolume1,
-      amountInVolume2,
-      amountInWeight1,
-      amountInWeight2,
-      price1,
-      price2
-    });
+    const result: TDumpFilter = {
+      transactionType: type[0].value,
+      measureIn: MEASURE_IN[measureI],
+      paymentType: PAYMENT_TYPES[paymentTypeI],
+      shiftType: SHIFT_TYPES[workModeIndex],
+    };
+    if (transport) result.dumpTransport = transport;
+    if (wasteType[0]) result.wasteType = wasteType[0].name;
+    if (dangerClass[0]) result.dangerClass = dangerClass[0].value;
+    if (amountFrom && amountTo) {
+      result.amountFrom = Number(amountFrom);
+      result.amountTo = Number(amountTo);
+    }
+    if (priceFrom && priceTo) {
+      result.priceFrom = Number(priceFrom);
+      result.priceTo = Number(priceTo);
+    }
+    if (coefficientFrom && coefficientTo) {
+      result.coefficientFrom = Number(coefficientFrom);
+      result.coefficientTo = Number(coefficientTo);
+    }
+    setDumpFilter(result);
+    navigation.goBack();
   };
 
   return (
-    <Form
-      inputs={inputs}
-      isFormValid={isFormValid}
-      onSubmit={onSubmit}
-      submitTitle="Сохранить"
-    />
+    <View>
+      <Form
+        inputs={inputs}
+        isFormValid={isFormValid}
+        onSubmit={onSubmit}
+        submitTitle="Сохранить"
+      />
+      <ResetFilterButton advertType="DUMP" />
+    </View>
   );
 };
 

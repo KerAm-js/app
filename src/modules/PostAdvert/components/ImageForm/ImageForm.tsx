@@ -9,8 +9,6 @@ import { useUploadImageToAdvertMutation } from "../../api/postAdvert.api";
 import { Alert } from "react-native";
 import { IImage } from "../../../../UI/inputs/Photo/types";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import axios, { isAxiosError } from "axios";
-import { API_URL } from "../../../../api/api";
 
 const ImageForm: FC<IImageFormProps> = ({
   advertId,
@@ -59,6 +57,7 @@ const ImageForm: FC<IImageFormProps> = ({
         },
       ]);
     } else if (error) {
+      console.log(error)
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
   }, [data, error]);

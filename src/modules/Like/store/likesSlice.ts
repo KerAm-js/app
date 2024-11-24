@@ -49,7 +49,6 @@ export const likesSlice = createSlice({
       })
       builder.addCase(deleteLikeThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log(action.payload)
         state.likes = state.likes.filter(item => {
             return item.advertId === action.payload.advertId && item.advertType === action.payload.advertType ? null : item
         })

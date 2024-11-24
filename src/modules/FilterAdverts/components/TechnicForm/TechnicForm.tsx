@@ -10,8 +10,12 @@ import {
 } from "../../../../consts/inputValues";
 import { DATE_REGEX } from "../../../../consts/regex";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
-import { ITechnicType, useGetTechnicTypesByLetterQuery } from "../../../PostAdvert/api/postAdvert.api";
+import {
+  ITechnicType,
+  useGetTechnicTypesByLetterQuery,
+} from "../../../PostAdvert/api/postAdvert.api";
 import { handleError } from "../../../Auth/helpers/getErrorMessage";
+import { View } from "react-native";
 
 const TechnicForm = () => {
   const [typeI, setTypeI] = useState(0);
@@ -354,7 +358,8 @@ const TechnicForm = () => {
         {
           id: "technicType",
           type: "selection",
-          itemsList: !!technicTypeSearch && !isTechnicTypeLoading ? techTypes : [],
+          itemsList:
+            !!technicTypeSearch && !isTechnicTypeLoading ? techTypes : [],
           isLoading: isTechnicTypeLoading,
           value: technicType,
           selectItem: selectTechnicType,
@@ -368,9 +373,7 @@ const TechnicForm = () => {
         {
           id: "equipment",
           type: "selection",
-          hidden:
-            !technicType[0] ||
-            technicType[0]?.equipments.length === 0,
+          hidden: !technicType[0] || technicType[0]?.equipments.length === 0,
           itemsList: technicType[0]?.equipments || [],
           value: equipment,
           selectItem: selectEquipment,
@@ -701,12 +704,14 @@ const TechnicForm = () => {
   const onSubmit = () => {};
 
   return (
-    <Form
-      inputs={inputs}
-      isFormValid={isFormValid}
-      onSubmit={onSubmit}
-      submitTitle="Сохранить"
-    />
+    <View>
+      <Form
+        inputs={inputs}
+        isFormValid={isFormValid}
+        onSubmit={onSubmit}
+        submitTitle="Сохранить"
+      />
+    </View>
   );
 };
 

@@ -21,8 +21,6 @@ export const SetLike = ({advertId, advertType, size=26}) => {
     const isLiked = array?.length > 0 ? true : false
     const [isLikedState, setIsLikedState] = useState(isLiked)
 
-    console.log(state.likes)
-
 
 
     const onSubmit = () => {

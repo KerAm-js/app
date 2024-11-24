@@ -65,10 +65,6 @@ const Advert: FC<IAdvert> = (props) => {
     () => (likes ? !!likes.find((item) => item.id === user?.id) : false),
     [likes]
   );
-  // const paramsArr = useMemo(() => {
-  //   const result: Array<[string, string]> = Object.entries(params);
-  //   return result;
-  // }, []);
 
 
   const relevance = getRelevanceObj(updatedAt);

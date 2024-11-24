@@ -62,28 +62,10 @@ export const postAdvertApi = api.injectEndpoints({
         url: `/advert-technic/${id}`,
       }),
     }),
-    getMaterialAdvertById: builder.query<IAdvert, IAdvert["id"]>({
-      query: (id) => ({
-        url: `/advert-material/${id}`,
-      }),
-    }),
-    getDumpAdvertById: builder.query<IAdvert, IAdvert["id"]>({
-      query: (id) => ({
-        url: `/advert-dump/${id}`,
-      }),
-    }),
     getTechnicAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
       query: (userId) => ({
         url: `/advert-technic/all/${userId}`,
       }),
-    }),
-    getTechnicAdvertsMiniFiltered: builder.query<Array<IMiniAdvert>, {}>({
-      query: () => ({
-        url: "/advert-technic/mini/all/filtered",
-        method: "POST",
-        body: {},
-      }),
-      providesTags: ["TechnicAdverts"],
     }),
     getTechnicAdvertsPageable: builder.query<
       Array<IAdvert>,
@@ -106,18 +88,15 @@ export const postAdvertApi = api.injectEndpoints({
         currentCache.push(...newItems);
       },
     }),
+    getMaterialAdvertById: builder.query<IAdvert, IAdvert["id"]>({
+      query: (id) => ({
+        url: `/advert-material/${id}`,
+      }),
+    }),
     getMaterialAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
       query: (userId) => ({
         url: `/advert-material/all/${userId}`,
       }),
-    }),
-    getMaterialAdvertsMiniFiltered: builder.query<Array<IMiniAdvert>, {}>({
-      query: () => ({
-        url: "/advert-material/mini/all/filtered",
-        method: "POST",
-        body: {},
-      }),
-      providesTags: ["MaterialAdverts"],
     }),
     getMaterialAdvertsPageable: builder.query<
       Array<IAdvert>,
@@ -140,18 +119,15 @@ export const postAdvertApi = api.injectEndpoints({
         currentCache.push(...newItems);
       },
     }),
+    getDumpAdvertById: builder.query<IAdvert, IAdvert["id"]>({
+      query: (id) => ({
+        url: `/advert-dump/${id}`,
+      }),
+    }),
     getDumpAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
       query: (userId) => ({
         url: `/advert-dump/all/${userId}`,
       }),
-    }),
-    getDumpAdvertsMiniFiltered: builder.query<Array<IMiniAdvert>, {}>({
-      query: () => ({
-        url: "/advert-dump/mini/all/filtered",
-        method: "POST",
-        body: {},
-      }),
-      providesTags: ["DumpAdverts"],
     }),
     getDumpAdvertsPageable: builder.query<
       Array<IAdvert>,
@@ -204,16 +180,13 @@ export const {
   useGetLikesByAdvertIdQuery,
   useGetTechnicAdvertsByUserQuery,
   useGetTechnicAdvertsPageableQuery,
+  useGetTechnicAdvertByIdQuery,
   useGetDumpAdvertsByUserQuery,
   useGetDumpAdvertsPageableQuery,
+  useGetDumpAdvertByIdQuery,
   useGetMaterialAdvertsByUserQuery,
   useGetMaterialAdvertsPageableQuery,
+  useGetMaterialAdvertByIdQuery,
   useGetImageNamesByOrderIdQuery,
   useGetImageQuery,
-  useGetDumpAdvertsMiniFilteredQuery,
-  useGetMaterialAdvertsMiniFilteredQuery,
-  useGetTechnicAdvertsMiniFilteredQuery,
-  useGetDumpAdvertByIdQuery,
-  useGetMaterialAdvertByIdQuery,
-  useGetTechnicAdvertByIdQuery,
 } = postAdvertApi;

@@ -611,7 +611,7 @@ const TechnicForm = () => {
         {
           id: "paymentFor",
           type: "segment",
-          values: ENUMS.paymentTypes,
+          values: ENUMS.paymentUnits,
           selectedIndex: paymentForI,
           onChange: (evt) =>
             setPaymentForI(evt.nativeEvent.selectedSegmentIndex),
@@ -620,7 +620,7 @@ const TechnicForm = () => {
         {
           id: "paymentType",
           type: "segment",
-          values: ENUMS.paymentUnits,
+          values: ENUMS.paymentTypes,
           selectedIndex: paymentTypeI,
           onChange: (evt) =>
             setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),

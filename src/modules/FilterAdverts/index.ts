@@ -1,7 +1,8 @@
-import FilterAdvertsModuleComponent from "./components/module/FilterAdvertsModule";
-
-const FilterAdvertsModule = {
-  Component: FilterAdvertsModuleComponent,
-}
-
-export default FilterAdvertsModule;
+import { postAdvertApi } from "./api/filterAdverts.api";
+export { FilterAdvertsModule } from "./components/module/FilterAdvertsModule";
+export { useDumpAdvertFilter } from "./store/hooks";
+export const {
+  useGetTechnicAdvertsMiniFilteredQuery,
+  useGetDumpAdvertsMiniFilteredQuery,
+  useGetMaterialAdvertsMiniFilteredQuery,
+} = postAdvertApi;

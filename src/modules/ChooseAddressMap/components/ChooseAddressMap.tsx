@@ -9,13 +9,10 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { YA_MAP_API_KEY } from "../../../api/yamap";
 import { RouteEndMarker } from "./RouteEndMarker";
 import { RouteStartMarker } from "./RouteStartMarker";
 import { TAddressByMapState } from "../store/types";
 import { MapLoader } from "./MapLoader";
-
-YaMap.init(YA_MAP_API_KEY);
 
 type TPropTypes = Pick<
   TAddressByMapState,

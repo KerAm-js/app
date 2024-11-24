@@ -7,10 +7,11 @@ import { TAdvertType } from "../../../../types/Advert";
 import * as SplashScreen from "expo-splash-screen";
 import { YA_MAP_API_KEY } from "../../../../api/yamap";
 import {
+  useDumpAdvertFilter,
   useGetDumpAdvertsMiniFilteredQuery,
   useGetMaterialAdvertsMiniFilteredQuery,
   useGetTechnicAdvertsMiniFilteredQuery,
-} from "../../../../modules/Adverts/api/adverts.api";
+} from "../../../../modules/FilterAdverts";
 import { CustomYamapMarker } from "../CustomMarker/CustomYamapMarker";
 import { RouteStartMarker } from "../../../../modules/ChooseAddressMap/components/RouteStartMarker";
 import { RouteEndMarker } from "../../../../modules/ChooseAddressMap/components/RouteEndMarker";
@@ -19,7 +20,7 @@ YaMap.init(YA_MAP_API_KEY);
 
 const YaMap3 = () => {
   const [advertType, setAdvertType] = useState<TAdvertType>("TECHNIC");
-
+  const dumpAdvertFilter = useDumpAdvertFilter();
   const { data: technicAdverts, refetch: refetchTechnicAdverts } =
     useGetTechnicAdvertsMiniFilteredQuery(
       {},
@@ -31,7 +32,7 @@ const YaMap3 = () => {
       { skip: advertType !== "NON_MATERIAL" }
     );
   const { data: dumpAdverts, refetch: refetchDumpAdverts } =
-    useGetDumpAdvertsMiniFilteredQuery({}, { skip: advertType !== "DUMP" });
+    useGetDumpAdvertsMiniFilteredQuery(dumpAdvertFilter || {}, { skip: advertType !== "DUMP" });
 
   const data =
     (advertType === "TECHNIC" && technicAdverts) ||
