@@ -9,7 +9,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { FC, useEffect, useRef } from "react";
-import { Dimensions, Platform, View } from "react-native";
+import { Dimensions, Platform, Pressable, View } from "react-native";
 import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 import AnimatedHeaderBackButton from "../HeaderBack/HeaderBack";
 import AnimatedHeaderBackground from "../HeaderBackground/HeaderBackground";
@@ -21,15 +21,20 @@ import AnimatedStatusBar from "../AnimatedStatusBar/AnimatedStatusBar";
 import { scrollWithSliderStyles } from "./styles";
 import React from "react";
 import { SetLike } from "../../../../modules/Like/components/SetLike";
+import { useAuth } from "../../../../hooks/store/useAuth";
+import { SvgXml } from "react-native-svg";
+import { circlesSvg } from "../../../../assets/svg/circles";
+import { advertStyles } from "../../../../modules/Adverts/components/Advert/styles";
 
-const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
-  id,
-  likes,
-  photos,
-  ownerId,
-  advertType,
-  children,
-}) => {
+const ScrollWithSlider: FC<IScrollWithSliderProps> = (propsWithChildren) => {
+  const {
+    id,
+    likes,
+    photos,
+    ownerId,
+    advertType,
+    children,
+  } = propsWithChildren
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -39,7 +44,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
 
   const scrollY = useSharedValue(0);
   const context = useSharedValue({ y: 0 });
-
+  const {user} = useAuth()
   const scrollToTop = () => {
     if (scrollRef?.current)
       scrollRef.current?.scrollTo({ y: 0, animated: true });
@@ -73,8 +78,11 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
       `Post ${id} is ${value ? "liked by" : "disliked by"} user ${ownerId}`
     );
   };
-
-
+  const props = propsWithChildren
+  delete props.children
+  const openModal = () => {
+    navigation.navigate('Modal', props)
+  };
 
   useEffect(() => {
     navigation.setOptions({
@@ -85,7 +93,13 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = ({
       ),
       headerRight: () => (
         <AnimatedHeaderRightButton>
-          <SetLike advertId={id} advertType={advertType} id={id}/>
+          {String(user?.id) === String(ownerId) ? (
+            <Pressable onPress={openModal} style={advertStyles.editButton}>
+              <SvgXml xml={circlesSvg()} />
+            </Pressable>
+          ) : (
+            <SetLike advertId={id} advertType={advertType} size={31}/>
+          )}
         </AnimatedHeaderRightButton>
       ),
       headerStyle: {},

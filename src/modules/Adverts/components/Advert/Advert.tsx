@@ -27,6 +27,7 @@ import {
 } from "../../api/adverts.api";
 import { API_URL } from "../../../../api/api";
 import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeGetters";
+import { SetLike } from "../../../Like/components/SetLike";
 
 const Advert: FC<IAdvert> = (props) => {
   const {
@@ -55,6 +56,8 @@ const Advert: FC<IAdvert> = (props) => {
     advert_type: advertType,
   });
   const openModal = () => {
+    const props1 = props
+
     navigation.navigate("Modal", props);
   };
   const isLiked = useMemo(
@@ -66,11 +69,6 @@ const Advert: FC<IAdvert> = (props) => {
   //   return result;
   // }, []);
 
-  const onLike = (value: boolean) => {
-    console.log(
-      `Post ${id} is ${value ? "liked by" : "disliked by"} ${owner?.id}`
-    );
-  };
 
   const relevance = getRelevanceObj(updatedAt);
 
@@ -98,12 +96,12 @@ const Advert: FC<IAdvert> = (props) => {
               size={12}
             />
           </View>
-          {user?.id === ownerId ? (
+          {String(user?.id) === String(ownerId) ? (
             <Pressable onPress={openModal} style={advertStyles.editButton}>
               <SvgXml xml={circlesSvg()} />
             </Pressable>
           ) : (
-            <LikeButton onPress={onLike} isLiked={isLiked} />
+            <SetLike advertId={id} advertType={advertType}/>
           )}
         </View>
       )}

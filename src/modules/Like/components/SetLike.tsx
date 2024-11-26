@@ -4,9 +4,9 @@ import { useActions } from "../../../hooks/store/useActions";
 import { RootState } from "../../../store/store";
 import { useEffect, useState } from "react";
 
-export const SetLike = ({advertId, advertType, id}) => {
+export const SetLike = ({advertId, advertType, size=26}) => {
     const { addLikeThunk, deleteLikeThunk, currentUserLikesThunk } = useActions();
-
+    
     const state = useSelector((state: RootState) => state.likes);
     useEffect(() => {
         if(state.likes.length === 0){
@@ -35,6 +35,6 @@ export const SetLike = ({advertId, advertType, id}) => {
         setIsLikedState(!isLikedState)
         
     }
-    return <LikeButton onPress={onSubmit} isLiked={isLiked ? true : false} />
+    return <LikeButton onPress={onSubmit} isLiked={isLikedState ? true : false} size={size} />
 }
 

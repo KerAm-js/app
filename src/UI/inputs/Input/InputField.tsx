@@ -19,6 +19,7 @@ const InputField: FC<IInputProps & TWithLabelAndErrorChildrenProps> = ({
   secureTextEntry,
   ...props
 }) => {
+  // console.log(value, props.placeholder)
   const clearInput = () => onChangeText("");
   const [isTextSecure, setIsTextSecure] = useState(secureTextEntry);
 

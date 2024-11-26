@@ -4,13 +4,22 @@ import { modalStyles } from "./styles";
 import BottomSheet from "../../../../components/BottomSheet/BottomSheet";
 import { TSheetButtonProps } from "../../../../components/BottomSheet/types";
 import { IAdvert } from "../../../../types/Advert";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
 
-const MyModal: FC<IAdvert> = ({ id, advertStatus }) => {
+const MyModal: FC<IAdvert> = (props) => {
+  const navigation =
+  useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const actions: Array<TSheetButtonProps> = [
     {
       id: "1",
       title: "Редактировать",
-      onPress: () => {},
+      onPress: () => {
+        navigation.goBack()
+        navigation.navigate('EditAdvert', props)
+      },
       type: "default",
     },
     {
@@ -22,7 +31,7 @@ const MyModal: FC<IAdvert> = ({ id, advertStatus }) => {
     {
       id: "3",
       title:
-        advertStatus === "PUBLISHED" ? "Снять с публикации" : "Опубликовать",
+        props.advertStatus === "PUBLISHED" ? "Снять с публикации" : "Опубликовать",
       onPress: () => {},
       type: "default",
     },
@@ -54,7 +63,7 @@ const MyModal: FC<IAdvert> = ({ id, advertStatus }) => {
     <View style={modalStyles.container}>
       <BottomSheet
         title="Выберите действие"
-        actions={advertStatus === "DELETED" ? actionsForDeletedAdvert : actions}
+        actions={props.advertStatus === "DELETED" ? actionsForDeletedAdvert : actions}
       />
     </View>
   );

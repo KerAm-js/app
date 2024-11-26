@@ -29,6 +29,7 @@ import { FC, useLayoutEffect } from "react";
 import { useActions } from "../hooks/store/useActions";
 import { ChooseAddressPage } from "../pages/ChooseAddressPage";
 import { AdvertLocationMap } from "../pages/AdvertLocationMap";
+import EditAdvertPage from "../pages/EditAdvert";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -113,6 +114,13 @@ const RootNavigator: FC = () => {
               }}
               name="EditProfile"
               component={EditProfilePage.Component}
+            />
+            <Stack.Screen
+              options={{
+                title: "Редактирование",
+              }}
+              name="EditAdvert"
+              component={EditAdvertPage.Component}
             />
             <Stack.Screen
               options={{

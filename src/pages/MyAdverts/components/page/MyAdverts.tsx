@@ -7,15 +7,26 @@ import {
   useGetTechnicAdvertsByUserQuery,
 } from "../../../../modules/Adverts/api/adverts.api";
 import { useAuth } from "../../../../hooks/store/useAuth";
+import { useEffect } from "react";
 
 const MyAdvertsPageComponent = () => {
   const { user } = useAuth();
-  const { data: technicAdverts, isLoading: isTechnicAdvertsLoading } =
+    const { data: technicAdverts, isLoading: isTechnicAdvertsLoading, refetch: refetchTechnicAdverts } =
     useGetTechnicAdvertsByUserQuery(user?.id || 0);
-  const { data: materialAdverts, isLoading: isMaterialAdvertsLoading } =
+  const { data: materialAdverts, isLoading: isMaterialAdvertsLoading, refetch: refetchMaterialAdverts } =
     useGetMaterialAdvertsByUserQuery(user?.id || 0);
-  const { data: dumpAdverts, isLoading: isDumpAdvertsLoading } =
+  const { data: dumpAdverts, isLoading: isDumpAdvertsLoading, refetch: refetchDumpAdverts } =
     useGetDumpAdvertsByUserQuery(user?.id || 0);
+
+  useEffect(() => {
+    // Перезапрашиваем данные, если компонент был загружен
+    refetchTechnicAdverts();
+    refetchMaterialAdverts();
+    refetchDumpAdverts();
+  }, [refetchTechnicAdverts, refetchMaterialAdverts, refetchDumpAdverts]);
+
+
+
 
   return (
     <View style={myAdvertsPageStyles.container}>

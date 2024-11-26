@@ -20,6 +20,7 @@ const Form: FC<TFormProps> = ({
   isFormValid,
   isLoading,
 }) => {
+
   return (
     <View>
       {inputs.map((item, index) => (
@@ -30,6 +31,7 @@ const Form: FC<TFormProps> = ({
               if (!input.hidden) {
                 switch (input.type) {
                   case "input":
+
                     return <Input key={input.id} {...input} />;
                   case "interval":
                     return <IntervalInput key={input.id} {...input} />;

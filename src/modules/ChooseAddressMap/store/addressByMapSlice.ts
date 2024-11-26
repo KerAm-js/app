@@ -39,8 +39,15 @@ export const addressByMapSlice = createSlice({
     setSecondPointAddress: (state, action: PayloadAction<string>) => {
       state.secondPointAddress = action.payload;
     },
-    setAddressByMapDefaults: () => {
-      return initialState;
+    setAddressByMapDefaults: (state, action: PayloadAction<Pick<TAddressByMapState, "distance" | "point" | "secondPoint"> | undefined>) => {
+      if(!action.payload){
+        return initialState;
+      }
+      state.point = action.payload.point
+      state.distance = action.payload.distance
+      state.secondPoint = action.payload.secondPoint
+      
+
     },
     submitAddressByMapData: (
       state,

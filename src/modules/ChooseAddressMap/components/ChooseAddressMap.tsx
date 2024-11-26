@@ -97,9 +97,9 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
         setIsVisible(true);
       }, 10);
     }, []);
-
+console.log(point)
     return (
-      <View>
+      <View style={{flex: 1}}>
         {!isMapLoaded && <MapLoader />}
         {isVisible && (
           <YaMap
@@ -111,8 +111,8 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
               uri: "https://www.clipartmax.com/png/middle/180-1801760_pin-png.png",
             }}
             initialRegion={{
-              lat: 55.753215,
-              lon: 37.622504,
+              lat: point?.lat || 55.753215,
+              lon: point?.lon || 37.622504,
               zoom: 8,
               azimuth: 80,
               tilt: 100,

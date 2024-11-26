@@ -10,16 +10,20 @@ import { Point } from "react-native-yamap";
 import { FooterContainer } from "../FooterContainer";
 import { useNavigation } from "@react-navigation/native";
 import { CloseMapButton } from "../../../../UI/buttons/CloseMapButton/CloseMapButton";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/store";
 
 export const ChooseAddressPage = () => {
+  const {point: point1, secondPoint: secondPoint1, distance: distance1} = useSelector((state: RootState) => state.addressByMap)
+  console.log(point1, 'dlm')
   const navigation = useNavigation();
   const isSecondPointRequired = useAddressByMapIsSecondPointRequired();
 
-  const [point, setPoint] = useState<Point | undefined>();
-  const [secondPoint, setSecondPoint] = useState<Point | undefined>();
+  const [point, setPoint] = useState<Point | undefined>(point1);
+  const [secondPoint, setSecondPoint] = useState<Point | undefined>(secondPoint1);
   const [pointAddress, setPointAddress] = useState("");
   const [secondPointAddress, setSecondPointAddress] = useState("");
-  const [distance, setDistance] = useState<number | undefined>();
+  const [distance, setDistance] = useState<number | undefined>(distance1);
 
   return (
     <View style={{ flex: 1 }}>
