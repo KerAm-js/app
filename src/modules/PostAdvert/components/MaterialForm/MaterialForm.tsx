@@ -26,6 +26,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
+import { useAddressByMap } from "../../../ChooseAddressMap";
 
 const MaterialForm = () => {
   const { token } = useAuth();
@@ -109,6 +110,8 @@ const MaterialForm = () => {
     useGetTransportByLetterQuery(transportSearch, {
       skip: !transportSearch,
     });
+
+  const { point, pointAddress } = useAddressByMap();
 
   const inputs: TFormInputsArray = [
     {
@@ -225,6 +228,14 @@ const MaterialForm = () => {
           label: "Режим работы",
         },
         {
+          id: "address",
+          type: "address",
+          label: "Адрес",
+          address: pointAddress,
+          isSecondPointRequired: false,
+          error: point ? undefined : "Заполните данное поле",
+        },
+        {
           id: "delivery",
           type: "segment",
           values: ENUMS.delivery,
@@ -280,6 +291,7 @@ const MaterialForm = () => {
   const isFormValid =
     isTitleValid &&
     isMaterialTypeValid &&
+    !!point &&
     isTransportValid &&
     isAmountValid &&
     isCoefficientValid &&
@@ -295,8 +307,8 @@ const MaterialForm = () => {
       advert: {
         transactionType,
         advertType: "NON_MATERIAL",
-        addressLat: 45,
-        addressLon: 45,
+        addressLat: point?.lat || 57,
+        addressLon: point?.lon || 36,
         fractions,
         title,
         deliveryType: DELIVERY[deliveryI],

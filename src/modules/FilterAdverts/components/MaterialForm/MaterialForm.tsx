@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
@@ -7,10 +7,56 @@ import {
   INPUT_VALUES,
   INPUT_VALUES_WITH_ALL,
 } from "../../../../consts/inputValues";
-import { IMaterialType, useGetMaterialTypeByLetterQuery, useGetTransportByLetterQuery } from "../../../PostAdvert/api/postAdvert.api";
+import {
+  IMaterialType,
+  useGetMaterialTypeByLetterQuery,
+  useGetTransportByLetterQuery,
+} from "../../../PostAdvert/api/postAdvert.api";
+import { TMaterialFilter } from "../../store/types";
+import { useActions } from "../../../../hooks/store/useActions";
+import { useNavigation } from "@react-navigation/native";
+import {
+  DELIVERY,
+  ENUM_TITLES,
+  ENUMS,
+  MATERIAL_TRANSACTION_TYPES,
+  MEASURE_IN,
+  PAYMENT_TYPES,
+  SHIFT_TYPES,
+} from "../../../../consts/enums";
+import { ITransportType } from "../../api/filterAdverts.api";
 
-const MaterialForm = () => {
-  const [typeI, setTypeI] = useState(0);
+const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
+  const { setMaterialFilter } = useActions();
+  const navigation = useNavigation();
+
+  const initTransactionTypeI = MATERIAL_TRANSACTION_TYPES.findIndex(
+    (item) => item === currentFilter?.transactionType
+  );
+  const initMeasureI = MEASURE_IN.findIndex(
+    (item) => item === currentFilter?.measureIn
+  );
+  const initAmountFrom = currentFilter?.amountFrom?.toString() || undefined;
+  const initAmountTo = currentFilter?.amountTo?.toString() || undefined;
+  const initCoefficientFrom =
+    currentFilter?.coefficientFrom?.toString() || undefined;
+  const initCoefficientTo =
+    currentFilter?.coefficientTo?.toString() || undefined;
+  const initWorkModeI = SHIFT_TYPES.findIndex(
+    (item) => item === currentFilter?.shiftType
+  );
+  const initDeliveryI = DELIVERY.findIndex(
+    (item) => item === currentFilter.deliveryType
+  );
+  const initPriceFrom = currentFilter?.priceFrom?.toString() || undefined;
+  const initPriceTo = currentFilter?.priceTo?.toString() || undefined;
+  const initPaymentTypeI = PAYMENT_TYPES.findIndex(
+    (item) => item === currentFilter?.paymentType
+  );
+  // TODO - add init values for fractions, materialType, transports
+  const [typeI, setTypeI] = useState(
+    initTransactionTypeI < 0 ? 0 : initTransactionTypeI
+  );
   const [
     materialType,
     selectMaterialType,
@@ -32,7 +78,7 @@ const MaterialForm = () => {
     setTransportInitial,
     transportSearch,
     setTransportSearch,
-  ] = useSelectionValidator({ multySelection: true });
+  ] = useSelectionValidator<ITransportType>({ multySelection: false });
   const [
     fractions,
     selectFractions,
@@ -41,59 +87,33 @@ const MaterialForm = () => {
     isFractionsValid,
     fractionsError,
   ] = useSelectionValidator({ multySelection: true });
-  const [measureI, setMeasureI] = useState(0);
+  const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
+  const [amountFrom, onAmountFromChange, isAmountFromValid, amountFromError] =
+    useInputValidator({ minValue: 1, initValue: initAmountFrom });
+  const [amountTo, onAmountToChange, isAmountToValid, amountToError] =
+    useInputValidator({ minValue: 1, initValue: initAmountTo });
   const [
-    amountInWeight1,
-    onAmountInWeight1Change,
-    isAmountInWeight1Valid,
-    amountInWeight1Error,
-  ] = useInputValidator({ minValue: 1 });
+    coefficientFrom,
+    onCoefficientFromChange,
+    isCoefficientFromValid,
+    coefficientFromError,
+  ] = useInputValidator({ minValue: 1, initValue: initCoefficientFrom });
   const [
-    amountInWeight2,
-    onAmountInWeight2Change,
-    isAmountInWeight2Valid,
-    amountInWeight2Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    amountInVolume1,
-    onAmountInVolume1Change,
-    isAmountInVolume1Valid,
-    amountInVolume1Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    amountInVolume2,
-    onAmountInVolume2Change,
-    isAmountInVolume2Valid,
-    amountInVolume2Error,
-  ] = useInputValidator({ minValue: 1 });
+    coefficientTo,
+    onCoefficientToChange,
+    isCoefficientToValid,
+    coefficientToError,
+  ] = useInputValidator({ minValue: 1, initValue: initCoefficientTo });
 
-  const [workModeIndex, setWorkModeIndex] = useState(0);
-  const [deliveryI, setDeliveryI] = useState(0);
-  const [
-    priceForWeight1,
-    onPriceForWeight1Change,
-    isPriceForWeight1Valid,
-    priceForWeight1Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    priceForWeight2,
-    onPriceForWeight2Change,
-    isPriceForWeight2Valid,
-    priceForWeight2Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    priceForVolume1,
-    onPriceForVolume1Change,
-    isPriceForVolume1Valid,
-    priceForVolume1Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    priceForVolume2,
-    onPriceForVolume2Change,
-    isPriceForVolume2Valid,
-    priceForVolume2Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [paymentTypeI, setPaymentTypeI] = useState(0);
+  const [workModeIndex, setWorkModeIndex] = useState(
+    initWorkModeI < 0 ? 0 : initWorkModeI
+  );
+  const [deliveryI, setDeliveryI] = useState(
+    initDeliveryI < 0 ? 0 : initDeliveryI
+  );
+  const [paymentTypeI, setPaymentTypeI] = useState(
+    initPaymentTypeI < 0 ? 0 : initPaymentTypeI
+  );
 
   const { data: materialTypes, isFetching: isMaterialTypesLoading } =
     useGetMaterialTypeByLetterQuery(materialTypeSearch, {
@@ -162,41 +182,42 @@ const MaterialForm = () => {
           unselectItem: unselectFractions,
           itemsList: materialType[0]?.fractions || [],
           error: fractionsError,
-          hidden:
-            !materialType[0] ||
-            materialType[0]?.fractions.length === 0,
+          hidden: !materialType[0] || materialType[0]?.fractions.length === 0,
           label: "Фракции",
           usesDataFromApi: false,
         },
         {
           id: "measure",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.measure,
+          values: ENUMS.measureIn,
           selectedIndex: measureI,
           onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
           label: "Измерять",
         },
         {
-          id: "amountInWeight",
+          id: "amount",
           type: "interval",
-          hidden: INPUT_VALUES_WITH_ALL.measure[measureI] === "Объём",
-          firstValue: amountInWeight1,
-          secondValue: amountInWeight2,
-          onFirstValueChange: onAmountInWeight1Change,
-          onSecondValueChange: onAmountInWeight2Change,
-          error: amountInWeight1Error || amountInWeight2Error,
-          label: "Вес (т)",
+          firstValue: amountFrom,
+          secondValue: amountTo,
+          onFirstValueChange: onAmountFromChange,
+          onSecondValueChange: onAmountToChange,
+          error: amountFromError || amountToError,
+          label:
+            ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
+              ? "Объём (м3)"
+              : "Вес (т)",
+          keyboardType: "decimal-pad",
         },
         {
-          id: "amountInVolume",
+          id: "coefficient",
           type: "interval",
-          hidden: INPUT_VALUES_WITH_ALL.measure[measureI] === "Вес",
-          firstValue: amountInVolume1,
-          secondValue: amountInVolume2,
-          onFirstValueChange: onAmountInVolume1Change,
-          onSecondValueChange: onAmountInVolume2Change,
-          error: amountInVolume1Error || amountInVolume2Error,
-          label: "Объём (м3)",
+          firstValue: coefficientFrom,
+          secondValue: coefficientTo,
+          onFirstValueChange: onCoefficientFromChange,
+          onSecondValueChange: onCoefficientToChange,
+          error: coefficientFromError || coefficientToError,
+          label: "Коэффициент (вес/объём)",
+          keyboardType: "decimal-pad",
         },
       ],
     },
@@ -206,7 +227,7 @@ const MaterialForm = () => {
         {
           id: "workMode",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.workMode,
+          values: ENUMS.shiftTypes,
           selectedIndex: workModeIndex,
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
@@ -226,33 +247,9 @@ const MaterialForm = () => {
       title: "Информация о цене",
       inputs: [
         {
-          id: "priceForWeight",
-          type: "interval",
-          hidden:
-            INPUT_VALUES_WITH_ALL.measure[measureI] === "Объём",
-          firstValue: priceForWeight1,
-          secondValue: priceForWeight2,
-          onFirstValueChange: onPriceForWeight1Change,
-          onSecondValueChange: onPriceForWeight2Change,
-          error: priceForWeight1Error || priceForWeight2Error,
-          label: "Цена (руб/(т/км))",
-        },
-        {
-          id: "priceForVolume",
-          type: "interval",
-          hidden:
-            INPUT_VALUES_WITH_ALL.measure[measureI] === "Вес",
-          firstValue: priceForVolume1,
-          secondValue: priceForVolume2,
-          onFirstValueChange: onPriceForVolume1Change,
-          onSecondValueChange: onPriceForVolume2Change,
-          error: priceForVolume1Error || priceForVolume2Error,
-          label: "Цена (руб/(м3/км))",
-        },
-        {
           id: "paymentType",
           type: "segment",
-          values: INPUT_VALUES.paymentType,
+          values: ENUMS.paymentTypes,
           selectedIndex: paymentTypeI,
           onChange: (evt) =>
             setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -263,29 +260,30 @@ const MaterialForm = () => {
   ];
 
   const isFormValid =
-    isAmountInWeight1Valid &&
-    isAmountInWeight2Valid &&
-    isAmountInVolume1Valid &&
-    isAmountInVolume2Valid &&
-    isPriceForVolume1Valid &&
-    isPriceForVolume2Valid &&
-    isPriceForWeight1Valid &&
-    isPriceForWeight2Valid;
+    isTransportValid &&
+    ((isAmountFromValid && isAmountToValid) ||
+      (isCoefficientFromValid && isCoefficientToValid));
 
   const onSubmit = () => {
-    console.log({
-      type: INPUT_VALUES.materialAdvertType[typeI],
-      materialType,
-      transport,
-      amountInWeight1,
-      amountInWeight2,
-      amountInVolume1,
-      amountInVolume2,
-      priceForVolume1,
-      priceForVolume2,
-      priceForWeight1,
-      priceForWeight2
-    });
+    const result: TMaterialFilter = {
+      transactionType: MATERIAL_TRANSACTION_TYPES[typeI],
+      measureIn: MEASURE_IN[measureI],
+      paymentType: PAYMENT_TYPES[paymentTypeI],
+      shiftType: SHIFT_TYPES[workModeIndex],
+      deliveryType: DELIVERY[deliveryI],
+    };
+    if (transport) result.transports = transport;
+    if (amountFrom && amountTo) {
+      result.amountFrom = Number(amountFrom);
+      result.amountTo = Number(amountTo);
+    }
+    if (coefficientFrom && coefficientTo) {
+      result.coefficientFrom = Number(coefficientFrom);
+      result.coefficientTo = Number(coefficientTo);
+    }
+    // TODO - add fractions, materialType, transports
+    setMaterialFilter(result);
+    navigation.goBack();
   };
 
   return (

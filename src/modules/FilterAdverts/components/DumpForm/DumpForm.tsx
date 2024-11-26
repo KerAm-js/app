@@ -141,10 +141,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
   const [workModeIndex, setWorkModeIndex] = useState(
     initWorkModeI < 0 ? 0 : initWorkModeI
   );
-  const [priceFrom, onPriceFromChange, isPriceFromValid, priceFromError] =
-    useInputValidator({ minValue: 1, initValue: initPriceFrom });
-  const [priceTo, onPriceToChange, isPriceToValid, priceToError] =
-    useInputValidator({ minValue: 1, initValue: initPriceTo });
   const [paymentTypeI, setPaymentTypeI] = useState(
     initPaymentTypeI < 0 ? 0 : initPaymentTypeI
   );
@@ -264,19 +260,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       title: "Информация о цене",
       inputs: [
         {
-          id: "price",
-          type: "interval",
-          firstValue: priceFrom,
-          secondValue: priceTo,
-          onFirstValueChange: onPriceFromChange,
-          onSecondValueChange: onPriceToChange,
-          error: priceFromError || priceToError,
-          label:
-            INPUT_VALUES.measure[measureI] === "Вес"
-              ? "Цена (руб/тонн)"
-              : "Цена (руб/м3)",
-        },
-        {
           id: "paymentType",
           type: "segment",
           values: ENUMS.paymentTypes,
@@ -290,11 +273,10 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
   ];
 
   const isFormValid =
-    isTransportValid &&
+    isTypeValid &&
     ((isAmountFromValid && isAmountToValid) ||
-      (isPriceFromValid && isPriceToValid) ||
       (isCoefficientFromValid && isCoefficientToValid) ||
-      isTypeValid ||
+      isTransportValid ||
       isWasteTypeValid ||
       isDangerClassValid);
 
@@ -305,21 +287,18 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       paymentType: PAYMENT_TYPES[paymentTypeI],
       shiftType: SHIFT_TYPES[workModeIndex],
     };
-    if (transport) result.dumpTransport = transport;
+    if (transport.length > 0) result.transports = transport;
     if (wasteType[0]) result.wasteType = wasteType[0].name;
     if (dangerClass[0]) result.dangerClass = dangerClass[0].value;
     if (amountFrom && amountTo) {
       result.amountFrom = Number(amountFrom);
       result.amountTo = Number(amountTo);
     }
-    if (priceFrom && priceTo) {
-      result.priceFrom = Number(priceFrom);
-      result.priceTo = Number(priceTo);
-    }
     if (coefficientFrom && coefficientTo) {
       result.coefficientFrom = Number(coefficientFrom);
       result.coefficientTo = Number(coefficientTo);
     }
+    // TODO - add transports
     setDumpFilter(result);
     navigation.goBack();
   };

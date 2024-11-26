@@ -7,7 +7,6 @@ import { TAdvertType } from "../../../../types/Advert";
 import * as SplashScreen from "expo-splash-screen";
 import { YA_MAP_API_KEY } from "../../../../api/yamap";
 import {
-  useDumpAdvertFilter,
   useGetDumpAdvertsMiniFilteredQuery,
   useGetMaterialAdvertsMiniFilteredQuery,
   useGetTechnicAdvertsMiniFilteredQuery,
@@ -15,24 +14,28 @@ import {
 import { CustomYamapMarker } from "../CustomMarker/CustomYamapMarker";
 import { RouteStartMarker } from "../../../../modules/ChooseAddressMap/components/RouteStartMarker";
 import { RouteEndMarker } from "../../../../modules/ChooseAddressMap/components/RouteEndMarker";
+import { useAdvertFilters } from "../../../../modules/FilterAdverts/store/hooks";
 
 YaMap.init(YA_MAP_API_KEY);
 
 const YaMap3 = () => {
   const [advertType, setAdvertType] = useState<TAdvertType>("TECHNIC");
-  const dumpAdvertFilter = useDumpAdvertFilter();
+  const { dump: dumpAdvertFilter, material: materialAdvertFilter } =
+    useAdvertFilters();
   const { data: technicAdverts, refetch: refetchTechnicAdverts } =
     useGetTechnicAdvertsMiniFilteredQuery(
       {},
       { skip: advertType !== "TECHNIC" }
     );
   const { data: materialAdverts, refetch: refetchMaterialAdverts } =
-    useGetMaterialAdvertsMiniFilteredQuery(
-      {},
-      { skip: advertType !== "NON_MATERIAL" }
-    );
+    useGetMaterialAdvertsMiniFilteredQuery(materialAdvertFilter || {}, {
+      skip: advertType !== "NON_MATERIAL",
+    });
+    console.log(materialAdvertFilter)
   const { data: dumpAdverts, refetch: refetchDumpAdverts } =
-    useGetDumpAdvertsMiniFilteredQuery(dumpAdvertFilter || {}, { skip: advertType !== "DUMP" });
+    useGetDumpAdvertsMiniFilteredQuery(dumpAdvertFilter || {}, {
+      skip: advertType !== "DUMP",
+    });
 
   const data =
     (advertType === "TECHNIC" && technicAdverts) ||
@@ -108,7 +111,7 @@ const YaMap3 = () => {
         initialRegion={{
           lat: 55.753215,
           lon: 37.622504,
-          zoom: 7,
+          zoom: 9,
           azimuth: 80,
           tilt: 100,
         }}

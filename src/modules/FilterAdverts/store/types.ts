@@ -1,4 +1,8 @@
-import { DumpAdvertDto, ITechnicAdvert } from "../../../types/Advert";
+import {
+  DumpAdvertDto,
+  ITechnicAdvert,
+  MaterialAdvertDto,
+} from "../../../types/Advert";
 
 type TTechnicParamsFilter = {
   [key in keyof Pick<
@@ -54,21 +58,38 @@ export type TDumpFilter = {
   coefficientTo?: number;
   priceFrom?: number;
   priceTo?: number;
+  transports?: DumpAdvertDto['dumpTransport']
 } & Partial<
   Pick<
     DumpAdvertDto,
-    | "advertStatus"
     | "dangerClass"
     | "measureIn"
     | "paymentType"
     | "shiftType"
     | "transactionType"
-    | "dumpTransport"
     | "wasteType"
   >
 >;
 
-export type TMaterialFilter = {};
+export type TMaterialFilter = {
+  amountFrom?: number;
+  amountTo?: number;
+  coefficientFrom?: number;
+  coefficientTo?: number;
+  priceFrom?: number;
+  priceTo?: number;
+  transports?: MaterialAdvertDto['dumpTransport']
+} & Partial<
+  Pick<
+    MaterialAdvertDto,
+    | "measureIn"
+    | "paymentType"
+    | "shiftType"
+    | "transactionType"
+    | "deliveryType"
+    | "fractions"
+  >
+>;
 
 export type TFilterState = {
   technic?: TTechnicFilter;

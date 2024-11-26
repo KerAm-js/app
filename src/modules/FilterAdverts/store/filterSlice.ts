@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TDumpFilter, TFilterState, TTechnicFilter } from "./types";
+import { TDumpFilter, TFilterState, TMaterialFilter, TTechnicFilter } from "./types";
 
 const initialState: TFilterState = {
   technic: undefined,
@@ -17,7 +17,7 @@ export const filterSlice = createSlice({
     setDumpFilter: (state, action: PayloadAction<TDumpFilter>) => {
       state.dump = action.payload;
     },
-    setMaterialFilter: (state, action: PayloadAction<TDumpFilter>) => {
+    setMaterialFilter: (state, action: PayloadAction<TMaterialFilter>) => {
       state.material = action.payload;
     },
     resetDumpFilter: (state) => {

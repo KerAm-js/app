@@ -234,54 +234,6 @@ const TechnicForm = () => {
     multySelection: true,
     initValue: [INPUT_VALUES.paymentForTechnic[0]],
   });
-  const [
-    priceForShift1,
-    onPriceForShift1Change,
-    isPriceForShift1Valid,
-    priceForShift1Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    priceForShift2,
-    onPriceForShift2Change,
-    isPriceForShift2Valid,
-    priceForShift2Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    priceForHour1,
-    onPriceForHour1Change,
-    isPriceForHour1Valid,
-    priceForHour1Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    priceForHour2,
-    onPriceForHour2Change,
-    isPriceForHour2Valid,
-    priceForHour2Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    priceForWeightDistance1,
-    onPriceForWeightDistance1Change,
-    isPriceForWeightDistance1Valid,
-    priceForWeightDistance1Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    priceForWeightDistance2,
-    onPriceForWeightDistance2Change,
-    isPriceForWeightDistance2Valid,
-    priceForWeightDistance2Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    priceForVolumeDistance1,
-    onPriceForVolumeDistance1Change,
-    isPriceForVolumeDistance1Valid,
-    priceForVolumeDistance1Error,
-  ] = useInputValidator({ minValue: 1 });
-  const [
-    priceForVolumeDistance2,
-    onPriceForVolumeDistance2Change,
-    isPriceForVolumeDistance2Valid,
-    priceForVolumeDistance2Error,
-  ] = useInputValidator({ minValue: 1 });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
 
   const {
@@ -627,50 +579,6 @@ const TechnicForm = () => {
           usesDataFromApi: false,
         },
         {
-          id: "priceForShift",
-          type: "interval",
-          hidden: !paymentFor.includes(INPUT_VALUES.paymentForTechnic[0]),
-          firstValue: priceForShift1,
-          secondValue: priceForShift2,
-          onFirstValueChange: onPriceForShift1Change,
-          onSecondValueChange: onPriceForShift2Change,
-          error: priceForShift1Error || priceForShift2Error,
-          label: "Цена (руб/смена)",
-        },
-        {
-          id: "priceForHour",
-          type: "interval",
-          hidden: !paymentFor.includes(INPUT_VALUES.paymentForTechnic[1]),
-          firstValue: priceForHour1,
-          secondValue: priceForHour2,
-          onFirstValueChange: onPriceForHour1Change,
-          onSecondValueChange: onPriceForHour2Change,
-          error: priceForHour1Error || priceForHour2Error,
-          label: "Цена (руб/час)",
-        },
-        {
-          id: "priceForVolumeDistance",
-          type: "interval",
-          hidden: !paymentFor.includes(INPUT_VALUES.paymentForTechnic[2]),
-          firstValue: priceForVolumeDistance1,
-          secondValue: priceForVolumeDistance2,
-          onFirstValueChange: onPriceForVolumeDistance1Change,
-          onSecondValueChange: onPriceForVolumeDistance2Change,
-          error: priceForVolumeDistance1Error || priceForVolumeDistance2Error,
-          label: "Цена (руб/(м3/км))",
-        },
-        {
-          id: "priceForWeightDistance",
-          type: "interval",
-          hidden: !paymentFor.includes(INPUT_VALUES.paymentForTechnic[3]),
-          firstValue: priceForWeightDistance1,
-          secondValue: priceForWeightDistance2,
-          onFirstValueChange: onPriceForWeightDistance1Change,
-          onSecondValueChange: onPriceForWeightDistance2Change,
-          error: priceForWeightDistance1Error || priceForWeightDistance2Error,
-          label: "Цена (руб/(т/км))",
-        },
-        {
           id: "paymentType",
           type: "segment",
           values: INPUT_VALUES.paymentType,
@@ -691,15 +599,7 @@ const TechnicForm = () => {
     isSecondDateValid &&
     isRentalDaysCount1Valid &&
     isRentalDaysCount2Valid &&
-    isPaymentForValid &&
-    isPriceForHour1Valid &&
-    isPriceForHour2Valid &&
-    isPriceForShift1Valid &&
-    isPriceForShift2Valid &&
-    isPriceForVolumeDistance1Valid &&
-    isPriceForVolumeDistance2Valid &&
-    isPriceForWeightDistance1Valid &&
-    isPriceForWeightDistance2Valid;
+    isPaymentForValid;
 
   const onSubmit = () => {};
 

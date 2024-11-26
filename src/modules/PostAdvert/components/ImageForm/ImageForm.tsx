@@ -40,24 +40,37 @@ const ImageForm: FC<IImageFormProps> = ({
     },
   ];
 
+  const showSuccessAlert = () => {
+    Alert.alert("Успешно", "Ваше объявление опубликовано", [
+      {
+        text: "Продолжить",
+        onPress: () => {
+          navigation.navigate("Profile");
+        },
+      },
+    ]);
+  };
+
   const onSubmit = async () => {
-    images.forEach(async (image) => {
-      uploadImageToAdvert({ image, advertType, advertId, token: token || "" });
-    });
+    if (!isPhotosRequired && images.length === 0) {
+      showSuccessAlert();
+    } else {
+      images.forEach(async (image) => {
+        uploadImageToAdvert({
+          image,
+          advertType,
+          advertId,
+          token: token || "",
+        });
+      });
+    }
   };
 
   useEffect(() => {
     if (data) {
-      Alert.alert("Успешно", "Ваше объявление опубликовано", [
-        {
-          text: "Продолжить",
-          onPress: () => {
-            navigation.navigate("Profile");
-          },
-        },
-      ]);
+      showSuccessAlert();
     } else if (error) {
-      console.log(error)
+      console.log(error);
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
   }, [data, error]);

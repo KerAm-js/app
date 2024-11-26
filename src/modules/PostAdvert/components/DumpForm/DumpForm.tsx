@@ -25,6 +25,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
+import { useAddressByMap } from "../../../ChooseAddressMap";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -39,7 +40,8 @@ const wasteTypes = WASTE_TYPES.map((type, index) => ({
 
 const dangerClasses = DANGER_CLASSES.map((item, index) => ({
   id: index,
-  name: item,
+  value: item,
+  name: ENUM_TITLES[item],
 }));
 
 const DumpForm = () => {
@@ -63,7 +65,7 @@ const DumpForm = () => {
     clearWasteType,
     isWasteTypeValid,
     wasteTypeError,
-  ] = useSelectionValidator<typeof wasteTypes[0]>({ required: true });
+  ] = useSelectionValidator<(typeof wasteTypes)[0]>({ required: true });
   const [
     dangerClass,
     selectDangerClass,
@@ -71,7 +73,7 @@ const DumpForm = () => {
     clearDangerClass,
     isDangerClassValid,
     dangerClassError,
-  ] = useSelectionValidator<typeof dangerClasses[0]>({ required: true });
+  ] = useSelectionValidator<(typeof dangerClasses)[0]>({ required: true });
   const [
     transport,
     selectTransport,
@@ -117,6 +119,8 @@ const DumpForm = () => {
 
   const { data: transports, isFetching: isTransportsFetching } =
     useGetTransportByLetterQuery(transportSearch);
+
+  const { point, pointAddress } = useAddressByMap();
 
   const inputs: TFormInputsArray = [
     {
@@ -229,6 +233,14 @@ const DumpForm = () => {
           label: "Режим работы",
         },
         {
+          id: "address",
+          type: "address",
+          label: "Адрес",
+          address: pointAddress,
+          isSecondPointRequired: false,
+          error: point ? undefined : "Заполните данное поле",
+        },
+        {
           id: "comment",
           type: "textArea",
           onChangeText: (text: string) => setComment(text),
@@ -276,6 +288,7 @@ const DumpForm = () => {
   const isFormValid =
     isTypeValid &&
     isTitleValid &&
+    !!point &&
     isWasteTypeValid &&
     isDangerClassValid &&
     isTransportValid &&
@@ -296,8 +309,8 @@ const DumpForm = () => {
         advertStatus: "STOPPER",
         transactionType: transactionType.value,
         advertType: "DUMP",
-        addressLat: 45,
-        addressLon: 45,
+        addressLat: point?.lat || 57,
+        addressLon: point?.lon || 36,
         title,
         shiftType: SHIFT_TYPES[workModeIndex],
         dumpTransport: transport,
@@ -307,7 +320,7 @@ const DumpForm = () => {
         price: Number(priceForWeight),
         paymentType: PAYMENT_TYPES[paymentTypeI],
         wasteType: wasteType[0].name,
-        dangerClass: dangerClass[0].name,
+        dangerClass: dangerClass[0].value,
         description: comment,
       },
     });
