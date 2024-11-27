@@ -301,7 +301,7 @@ const MaterialForm = ({props}) => {
   }, [])
   let flag = useRef(false)
   useEffect(() => {
-    console.log(materialTypes)
+
     if(!!materialTypes?.length && !flag.current){
       selectMaterialType(materialTypes[0])
       flag.current = true
@@ -359,7 +359,7 @@ const MaterialForm = ({props}) => {
 
   useEffect(() => {
     if (editAdvertResult.isSuccess) {
-      console.log(editAdvertResult.data, '190912834')
+
       if (isPhotosAllowed) {
         navigation.navigate("AdvertImages", {
           id: editAdvertResult.data.id,
@@ -367,7 +367,7 @@ const MaterialForm = ({props}) => {
           advertType: "NON_MATERIAL",
         });
       } else {
-        Alert.alert("Успех", "Публикаия обновлена");
+        Alert.alert("Успешно", "Публикаия обновлена");
         navigation.navigate("Profile");
       }
     } else if (editAdvertResult.error) {

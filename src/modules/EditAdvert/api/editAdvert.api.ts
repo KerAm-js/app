@@ -95,7 +95,7 @@ export const postAdvertApi = api.injectEndpoints({
   }
 >({
   query: ({ advert, token }) => {
-    console.log('jhb')
+
     return ({
     url: "/secured/advert-technic/upd",
     method: "POST",
@@ -140,7 +140,7 @@ editDumpAdvert: builder.mutation<
     body: advert,
   })},
   onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
-    console.log(arg)
+
     try {
       const { data } = await queryFulfilled; // ожидаем выполнение запроса
       console.log('Response data:', data); // выводим данные из ответа
@@ -177,7 +177,7 @@ editMaterialAdvert: builder.mutation<
     body: advert,
   })},
   onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
-    console.log(arg)
+
     try {
       const { data } = await queryFulfilled; // ожидаем выполнение запроса
       console.log('Response data:', data); // выводим данные из ответа

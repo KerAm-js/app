@@ -44,10 +44,10 @@ const Register = () => {
     });
 
   const { data: isUsernameAvailable } = useIsUsernameAvailableQuery(username, {
-    skip: username.length < 2,
+    skip: username?.length < 2,
   });
   const { data: isEmailAvailable } = useIsEmailAvailableQuery(email, {
-    skip: email.length < 5,
+    skip: email?.length < 5,
   });
   const { registerThunk, clearError } = useActions();
   const { isLoading, error } = useAuth();

@@ -795,7 +795,7 @@ const TechnicForm = ({props}) => {
           advertType: "TECHNIC",
         });
       } else {
-      Alert.alert("Успех", "Публикаия обновлена");
+      Alert.alert("Успешно", "Публикаия обновлена");
 
         navigation.navigate("Profile");
       }

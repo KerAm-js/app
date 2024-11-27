@@ -351,7 +351,7 @@ const DumpForm = ({props}) => {
           advertType: "DUMP",
         });
       } else {
-        Alert.alert("Успех", "Публикаия обновлена");
+        Alert.alert("Успешно", "Публикаия обновлена");
         navigation.navigate("Profile");
       }
     } else if (editAdvertResult.error) {

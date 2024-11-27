@@ -8,8 +8,10 @@ import {
 } from "../../../../modules/Adverts/api/adverts.api";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 const MyAdvertsPageComponent = () => {
+  const navigation = useNavigation();
   const { user } = useAuth();
     const { data: technicAdverts, isLoading: isTechnicAdvertsLoading, refetch: refetchTechnicAdverts } =
     useGetTechnicAdvertsByUserQuery(user?.id || 0);
@@ -18,12 +20,15 @@ const MyAdvertsPageComponent = () => {
   const { data: dumpAdverts, isLoading: isDumpAdvertsLoading, refetch: refetchDumpAdverts } =
     useGetDumpAdvertsByUserQuery(user?.id || 0);
 
-  useEffect(() => {
-    // Перезапрашиваем данные, если компонент был загружен
-    refetchTechnicAdverts();
-    refetchMaterialAdverts();
-    refetchDumpAdverts();
-  }, [refetchTechnicAdverts, refetchMaterialAdverts, refetchDumpAdverts]);
+    useEffect(() => {
+      const unsubscribe = navigation.addListener("focus", () => {
+        refetchTechnicAdverts();
+        refetchMaterialAdverts();
+        refetchDumpAdverts();
+      });
+  
+      return unsubscribe; // Отписываемся, чтобы не утекала память
+    }, [navigation, refetchTechnicAdverts, refetchMaterialAdverts, refetchDumpAdverts]);
 
 
 

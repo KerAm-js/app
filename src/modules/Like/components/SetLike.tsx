@@ -3,16 +3,18 @@ import LikeButton from "../../../UI/buttons/Like/LikeButton"
 import { useActions } from "../../../hooks/store/useActions";
 import { RootState } from "../../../store/store";
 import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 export const SetLike = ({advertId, advertType, size=26}) => {
+    const navigation = useNavigation();
     const { addLikeThunk, deleteLikeThunk, currentUserLikesThunk } = useActions();
     
     const state = useSelector((state: RootState) => state.likes);
     useEffect(() => {
-        if(state.likes.length === 0){
-            currentUserLikesThunk()
-        }
-    }, [])
+        const unsubscribe = navigation.addListener("focus", () => {
+        currentUserLikesThunk()
+        })
+    }, [navigation])
     const array = state?.likes?.filter((item) => {
         return advertId === item.advertId && advertType === item.advertType ? item : null
     })
