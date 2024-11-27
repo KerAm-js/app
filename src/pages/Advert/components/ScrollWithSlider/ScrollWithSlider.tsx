@@ -26,7 +26,7 @@ import { SvgXml } from "react-native-svg";
 import { circlesSvg } from "../../../../assets/svg/circles";
 import { advertStyles } from "../../../../modules/Adverts/components/Advert/styles";
 
-const ScrollWithSlider: FC<IScrollWithSliderProps> = (propsWithChildren) => {
+const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
   const {
     id,
     likes,
@@ -34,7 +34,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (propsWithChildren) => {
     ownerId,
     advertType,
     children,
-  } = propsWithChildren
+  } = props
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -78,10 +78,10 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (propsWithChildren) => {
       `Post ${id} is ${value ? "liked by" : "disliked by"} user ${ownerId}`
     );
   };
-  const props = propsWithChildren
-  delete props.children
+
   const openModal = () => {
-    navigation.navigate('Modal', props)
+    const{children, ...args} = props
+    navigation.navigate('Modal', args)
   };
 
   useEffect(() => {

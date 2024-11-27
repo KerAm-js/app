@@ -233,7 +233,9 @@ getAdvertImages: builder.mutation<
     },
     body: formData,
     formData: true
-  })}
+  })},
+  invalidatesTags: ['Images']
+
 }),
   }),
 });

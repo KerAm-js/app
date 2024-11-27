@@ -186,6 +186,7 @@ export const postAdvertApi = api.injectEndpoints({
           advert_type,
         },
       }),
+      providesTags: ["Images"],
     }),
     getImage: builder.query<GetImageResponse, string>({
       query: (imageId) => ({

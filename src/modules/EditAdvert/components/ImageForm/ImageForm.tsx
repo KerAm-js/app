@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { IImageFormProps } from "./types";
@@ -49,21 +49,28 @@ const ImageForm: FC<IImageFormProps> = ({
 
   }, [])
 
-  let imagesGotArray = []
+  let imagesGotArray = useRef([])
 
   useEffect(() => {
     if(getAdvertImagesResult.data !== undefined){
       for(let i = 0; i < getAdvertImagesResult.data.length; i++){
-        imagesGotArray.push({name: getAdvertImagesResult.data[i], uri: `http://188.0.167.98:9636/demo/fileSystem/${getAdvertImagesResult.data[i]}`})
+        imagesGotArray.current.push({name: getAdvertImagesResult.data[i], uri: `http://188.0.167.98:9636/demo/fileSystem/${getAdvertImagesResult.data[i]}`})
       }
-      setImages([...images, ...imagesGotArray ])
+      setImages([...images, ...imagesGotArray.current ])
     }
   }, [getAdvertImagesResult] )
 
 
   const onSubmit = async () => {
     images.forEach(async (image) => {
-      uploadImageToAdvert({ image, advertType, advertId, token: token || "" });
+      console.log(imagesGotArray.current.length)
+      const isAdded = imagesGotArray.current.filter(item => {
+        console.log(item.name, image.name)
+        return item.name === image.name ? item : null
+      }).length > 0 ? true : false
+      if(!isAdded){
+        uploadImageToAdvert({ image, advertType, advertId, token: token || "" });
+      }
     });
   };
 

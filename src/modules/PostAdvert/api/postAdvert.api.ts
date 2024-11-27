@@ -175,6 +175,7 @@ export const postAdvertApi = api.injectEndpoints({
           responseHandler: "text",
         };
       },
+      invalidatesTags: ['Images']
     }),
   }),
 });
