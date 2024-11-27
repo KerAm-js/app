@@ -17,6 +17,7 @@ const ImageForm: FC<IImageFormProps> = ({
   advertType,
   isPhotosRequired,
 }) => {
+  console.log(advertId)
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 

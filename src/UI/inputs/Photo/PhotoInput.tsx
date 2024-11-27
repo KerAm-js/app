@@ -1,13 +1,15 @@
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
+import { Alert, Image, Pressable, ScrollView, Text, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { cameraSvg } from "../../../assets/svg/camera";
 import { GREY_DARK, WHITE } from "../../../consts/colors";
 import { photoInputStyles } from "./styles";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { IImage, IPhotoInputProps } from "./types";
 import { cancelSvg } from "../../../assets/svg/cancel";
+import { useDeleteAdvertImageMutation } from "../../../modules/EditAdvert/api/editAdvert.api";
+import { useAuth } from "../../../hooks/store/useAuth";
 
 function roundBottom(num: number, precision: number) {
   precision = Math.pow(10, precision);
@@ -15,10 +17,15 @@ function roundBottom(num: number, precision: number) {
 }
 
 const PhotoInput: FC<IPhotoInputProps> = ({
+  advertType,
+  advertId,
   photosCount,
   images,
+  token,
   setImages,
 }) => {
+
+  const [deleteAdvertImage, deleteAdvertImageResults] = useDeleteAdvertImageMutation()
   const compressImage = async (uri: string) => {
     const fileSize = await getSize(uri);
     const megaBytes = fileSize ? fileSize / 1048576 : null;
@@ -32,6 +39,7 @@ const PhotoInput: FC<IPhotoInputProps> = ({
     });
     return manipResult.uri;
   };
+
 
   const getSize = async (uri: string) => {
     const response = await fetch(uri);
@@ -63,8 +71,28 @@ const PhotoInput: FC<IPhotoInputProps> = ({
   };
 
   const deleteImage = (index: number) => {
+    Alert.alert("Удаление", "Удалить фотографию объявления?", [
+      {
+        text: 'Отмена'
+      },
+      {
+        text: "Продолжить",
+        onPress: () => {
+          deleteAdvertImage({fileName: images[index].name, advertId, advertType, token})
     setImages(images.filter((_, i) => i !== index));
+        },
+
+      },
+    ]);
+    
   };
+  console.log(deleteAdvertImageResults.error)
+  useEffect(() => {
+    if(deleteAdvertImageResults.isSuccess){
+      Alert.alert("Успешно", "Изображение удалено");
+
+    }
+  }, [deleteAdvertImageResults])
 
   return (
     <ScrollView

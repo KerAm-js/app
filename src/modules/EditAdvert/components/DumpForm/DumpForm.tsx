@@ -345,8 +345,8 @@ const DumpForm = ({props}) => {
   useEffect(() => {
     if (editAdvertResult.isSuccess) {
       if (isPhotosAllowed) {
-        navigation.navigate("AdvertImages", {
-          id: editAdvertResult.data.id,
+        navigation.navigate("EditImages", {
+          id: editAdvertResult.originalArgs?.advert.id,
           isPhotosRequired: false,
           advertType: "DUMP",
         });

@@ -8,4 +8,8 @@ export interface IPhotoInputProps {
   photosCount: number;
   images: IImage[];
   setImages: (images: IImage[]) => void;
+  advertId: any,
+  advertType: any,
+  token: string,
+  
 }

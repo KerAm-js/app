@@ -192,12 +192,57 @@ editMaterialAdvert: builder.mutation<
   },
   invalidatesTags: ['User', 'MaterialAdverts'],
 }),
+getAdvertImages: builder.mutation<
+      string,
+      {
+        advertType: TAdvertType;
+        advertId: IAdvert["id"];
+        token: string;
+      }
+    >({
+      query: ({ advertId, advertType }) => ({
+        url: "/adverts/images/get",
+        method: "GET",
+        params: {
+          order_id: advertId,
+          advert_type: advertType,
+        },
+      }),
+    }),
+  deleteAdvertImage: builder.mutation<
+  string,
+  {
+    fileName: any;
+    advertType: any;
+    advertId: any;
+    token: string;
+  }
+>({
+  query: ({ fileName, advertType, advertId, token }) => {
+    const formData = new FormData();
+    formData.append("file_name", fileName);
+    formData.append("advert_type", advertType);
+    formData.append("advert_id", String(advertId));
+
+    return ({
+    url: "/secured/delete-image",
+    method: "DELETE",
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+    formData: true
+  })}
+}),
   }),
 });
 
 export const {
   useEditTechnicAdvertMutation,
   useEditDumpAdvertMutation,
-  useEditMaterialAdvertMutation
+  useEditMaterialAdvertMutation,
+  useGetAdvertImagesMutation,
+  useDeleteAdvertImageMutation
 
 } = postAdvertApi;

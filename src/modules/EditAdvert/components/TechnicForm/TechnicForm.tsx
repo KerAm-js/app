@@ -787,11 +787,12 @@ const TechnicForm = ({props}) => {
 
   useEffect(() => {
     if (editAdvertResult.isSuccess) {
+      console.log(editAdvertResult.originalArgs?.advert.id, '0001')
       if (isPhotosAllowed) {
-        navigation.navigate("AdvertImages", {
-          id: editAdvertResult.data.id,
+        navigation.navigate("EditImages", {
+          id: editAdvertResult.originalArgs?.advert.id,
           isPhotosRequired:
-            editAdvertResult.data.transactionType === "GIVE_A_RENT",
+          editAdvertResult.originalArgs?.advert.transactionType === "GIVE_A_RENT",
           advertType: "TECHNIC",
         });
       } else {

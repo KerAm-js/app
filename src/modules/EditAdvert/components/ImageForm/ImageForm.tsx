@@ -5,12 +5,12 @@ import { IImageFormProps } from "./types";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { useUploadImageToAdvertMutation } from "../../api/editAdvert.api";
+import { useGetAdvertImagesMutation } from "../../api/editAdvert.api";
 import { Alert } from "react-native";
 import { IImage } from "../../../../UI/inputs/Photo/types";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import axios, { isAxiosError } from "axios";
-import { API_URL } from "../../../../api/api";
+import { useUploadImageToAdvertMutation } from "../../../PostAdvert/api/postAdvert.api";
+
 
 const ImageForm: FC<IImageFormProps> = ({
   advertId,
@@ -22,8 +22,9 @@ const ImageForm: FC<IImageFormProps> = ({
 
   const [images, setImages] = useState<IImage[]>([]);
   const { token } = useAuth();
-  const [uploadImageToAdvert, { isLoading, error, data }] =
-    useUploadImageToAdvertMutation();
+  const [getAdvertImages, getAdvertImagesResult] =
+    useGetAdvertImagesMutation();
+  const [uploadImageToAdvert, uploadImageToAdvertResult] = useUploadImageToAdvertMutation()
   const inputs: TFormInputsArray = [
     {
       title: isPhotosRequired
@@ -36,10 +37,29 @@ const ImageForm: FC<IImageFormProps> = ({
           photosCount: 9,
           images,
           setImages,
+          advertType,
+          advertId,
+          token
         },
       ],
     },
   ];
+  useEffect(() => {
+    getAdvertImages({advertType, advertId, token: token || ""})
+
+  }, [])
+
+  let imagesGotArray = []
+
+  useEffect(() => {
+    if(getAdvertImagesResult.data !== undefined){
+      for(let i = 0; i < getAdvertImagesResult.data.length; i++){
+        imagesGotArray.push({name: getAdvertImagesResult.data[i], uri: `http://188.0.167.98:9636/demo/fileSystem/${getAdvertImagesResult.data[i]}`})
+      }
+      setImages([...images, ...imagesGotArray ])
+    }
+  }, [getAdvertImagesResult] )
+
 
   const onSubmit = async () => {
     images.forEach(async (image) => {
@@ -47,8 +67,9 @@ const ImageForm: FC<IImageFormProps> = ({
     });
   };
 
+
   useEffect(() => {
-    if (data) {
+    if (uploadImageToAdvertResult.data) {
       Alert.alert("Успешно", "Ваше объявление опубликовано", [
         {
           text: "Продолжить",
@@ -57,18 +78,19 @@ const ImageForm: FC<IImageFormProps> = ({
           },
         },
       ]);
-    } else if (error) {
+    } else if (uploadImageToAdvertResult.error) {
+
       Alert.alert("Ошибка", "Что-то пошло не так");
-    }
-  }, [data, error]);
+  }
+  }, [uploadImageToAdvertResult.data, uploadImageToAdvertResult.error]);
 
   return (
     <Form
       isFormValid={images.length > 0 || !isPhotosRequired}
       inputs={inputs}
-      submitTitle="Опубликовать"
+      submitTitle="Сохранить"
       onSubmit={onSubmit}
-      isLoading={isLoading}
+      isLoading={getAdvertImagesResult.isLoading}
     />
   );
 };

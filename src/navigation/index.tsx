@@ -30,6 +30,7 @@ import { useActions } from "../hooks/store/useActions";
 import { ChooseAddressPage } from "../pages/ChooseAddressPage";
 import { AdvertLocationMap } from "../pages/AdvertLocationMap";
 import EditAdvertPage from "../pages/EditAdvert";
+import EditImagesPage from "../pages/EditImages";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -205,6 +206,9 @@ const RootNavigator: FC = () => {
             </Stack.Screen>
             <Stack.Screen options={{ title: "Фото" }} name="AdvertImages">
               {({ route }) => <AdvertImagesPage.Component {...route.params} />}
+            </Stack.Screen>
+            <Stack.Screen options={{ title: "Фото" }} name="EditImages">
+              {({ route }) => <EditImagesPage.Component {...route.params} />}
             </Stack.Screen>
             <Stack.Screen
               options={({ route }) => ({
