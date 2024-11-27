@@ -1,14 +1,8 @@
-import { useState } from "react";
+import { FC, useMemo, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
-import { TECHNICS } from "../../../../consts/data";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import {
-  INPUT_VALUES,
-  INPUT_VALUES_WITH_ALL,
-} from "../../../../consts/inputValues";
-import { DATE_REGEX } from "../../../../consts/regex";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
 import {
   ITechnicType,
@@ -16,9 +10,120 @@ import {
 } from "../../../PostAdvert/api/postAdvert.api";
 import { handleError } from "../../../Auth/helpers/getErrorMessage";
 import { View } from "react-native";
+import { TTechnicFilter } from "../../store/types";
+import {
+  ALL,
+  AXES_COUNTS,
+  ENUM_TITLES,
+  ENUMS,
+  FILTER_ENUMS_WITH_ALL,
+  LOADING_TYPES,
+  PAYMENT_TYPES,
+  PAYMENT_UNITS,
+  ROLLER_TYPES,
+  SHIFT_TYPES,
+  SIZE_TYPES,
+  TECHNIC_TRANSACTION_TYPES,
+  TRAILER_TYPES,
+} from "../../../../consts/enums";
+import { useNavigation } from "@react-navigation/native";
+import { useActions } from "../../../../hooks/store/useActions";
+import { TEquipment } from "../../api/filterAdverts.api";
 
-const TechnicForm = () => {
-  const [typeI, setTypeI] = useState(0);
+const trailerTypes = TRAILER_TYPES.map((item, index) => ({
+  id: index,
+  name: ENUM_TITLES[item],
+  value: item,
+}));
+
+const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
+  const navigation = useNavigation();
+  const { setTechnicFilter } = useActions();
+
+  const initTypeI = useMemo(
+    () =>
+      TECHNIC_TRANSACTION_TYPES.findIndex(
+        (item) => item === currentFilter.transactionType
+      ),
+    []
+  );
+  const initRollersTypeI = useMemo(
+    () => ROLLER_TYPES.findIndex((item) => item === currentFilter.rollerType),
+    []
+  );
+  const initSizeTypeI = useMemo(
+    () => SIZE_TYPES.findIndex((item) => item === currentFilter.sizeType),
+    []
+  );
+  const initOssigI = currentFilter.OSSIG ? 1 : 0;
+  const initAxesCountI = useMemo(
+    () =>
+      AXES_COUNTS.findIndex(
+        (item) => item === currentFilter.axesCountFrom?.toString()
+      ),
+    []
+  );
+  const initLoadingTypeI = useMemo(
+    () => LOADING_TYPES.findIndex((item) => item === currentFilter.loadingType),
+    []
+  );
+  const initShiftTypeI = useMemo(
+    () => SHIFT_TYPES.findIndex((item) => item === currentFilter.shiftType),
+    []
+  );
+  const initPaymentUnitI = useMemo(
+    () => PAYMENT_UNITS.findIndex((item) => item === currentFilter.paymentUnit),
+    []
+  );
+  const initPaymentTypeI = useMemo(
+    () => PAYMENT_TYPES.findIndex((item) => item === currentFilter.paymentType),
+    []
+  );
+  const initTrailerType = trailerTypes.find(
+    (item) => item.value === currentFilter.trailerType
+  );
+  const initTechnicType = null; // TODO - default technicType
+  const initEquipment = null; // TODO - default initEquipment
+  const initWeightFrom = currentFilter?.weightFrom?.toString() || undefined;
+  const initWeightTo = currentFilter?.weightTo?.toString() || undefined;
+  const initHeightFrom = currentFilter?.heightFrom?.toString() || undefined;
+  const initHeightTo = currentFilter?.heightTo?.toString() || undefined;
+  const initVolumeFrom = currentFilter?.volumeFrom?.toString() || undefined;
+  const initVolumeTo = currentFilter?.volumeTo?.toString() || undefined;
+  const initPassengersCountFrom =
+    currentFilter?.passengersCountFrom?.toString() || undefined;
+  const initPassengersCountTo =
+    currentFilter?.passengersCountTo?.toString() || undefined;
+  const initPipeLengthFrom =
+    currentFilter?.pipeLengthFrom?.toString() || undefined;
+  const initPipeLengthTo = currentFilter?.pipeLengthTo?.toString() || undefined;
+  const initBoomLengthFrom =
+    currentFilter?.boomLengthFrom?.toString() || undefined;
+  const initBoomLengthTo = currentFilter?.boomLengthTo?.toString() || undefined;
+  const initLiftingCapacityFrom =
+    currentFilter?.liftingCapacityFrom?.toString() || undefined;
+  const initLiftingCapacityTo =
+    currentFilter?.liftingCapacityTo?.toString() || undefined;
+  const initPerformanceFrom =
+    currentFilter?.performanceFrom?.toString() || undefined;
+  const initPerformanceTo =
+    currentFilter?.performanceTo?.toString() || undefined;
+  const initRollersCountFrom =
+    currentFilter?.rollersCountFrom?.toString() || undefined;
+  const initRollersCountTo =
+    currentFilter?.rollersCountTo?.toString() || undefined;
+  const initBodyLengthFrom =
+    currentFilter?.bodyLengthFrom?.toString() || undefined;
+  const initBodyLengthTo = currentFilter?.bodyLengthTo?.toString() || undefined;
+  const initUnitAmountFrom =
+    currentFilter?.unitAmountFrom?.toString() || undefined;
+  const initUnitAmountTo = currentFilter?.unitAmountTo?.toString() || undefined;
+  const initRentalDaysCountFrom =
+    currentFilter?.rentalDaysCountFrom?.toString() || undefined;
+  const initRentalDaysCountTo =
+    currentFilter?.rentalDaysCountTo?.toString() || undefined;
+
+  const [typeI, setTypeI] = useState(initTypeI < 0 ? 0 : initTypeI);
   const [
     technicType,
     selectTechnicType,
@@ -26,7 +131,7 @@ const TechnicForm = () => {
     _,
     isTechnicTypeValid,
     technicTypeError,
-    setTechnicTypeInitial,
+    _____,
     technicTypeSearch,
     setTechnicTypeSearch,
   ] = useSelectionValidator<ITechnicType>({ required: true });
@@ -34,207 +139,246 @@ const TechnicForm = () => {
     equipment,
     selectEquipment,
     unselectEquipment,
-    unselectAllEquipments,
+    ______,
     __,
     equipmentError,
-  ] = useSelectionValidator({ multySelection: true });
-  const [weight1, onWeight1Change, isWeight1Valid, weight1Error] =
+  ] = useSelectionValidator<TEquipment>({ multySelection: true });
+  const [
+    weightFrom,
+    onWeightFromChange,
+    ______________________,
+    weightFromError,
+  ] = useInputValidator({
+    minValue: 0,
+    initValue: initWeightFrom,
+  });
+  const [weightTo, onWeightToChange, _______________________, weightToError] =
     useInputValidator({
       minValue: 0,
+      initValue: initWeightTo,
     });
-  const [weight2, onWeight2Change, isWeight2Valid, weight2Error] =
+  const [
+    heightFrom,
+    onHeightFromChange,
+    ________________________,
+    heightFromError,
+  ] = useInputValidator({
+    minValue: 0,
+    initValue: initHeightFrom,
+  });
+  const [heightTo, onHeightToChange, _________________________, heightToError] =
     useInputValidator({
       minValue: 0,
+      initValue: initHeightTo,
     });
-  const [height1, onHeight1Change, isHeight1Valid, height1Error] =
+  const [
+    volumeFrom,
+    onVolumeFromChange,
+    __________________________,
+    volumeFromError,
+  ] = useInputValidator({
+    minValue: 0,
+    initValue: initVolumeFrom,
+  });
+  const [
+    volumeTo,
+    onVolumeToChange,
+    ___________________________,
+    volumeToError,
+  ] = useInputValidator({
+    minValue: 0,
+    initValue: initVolumeTo,
+  });
+  const [
+    passengersCountFrom,
+    onPassengersCountFromChange,
+    _________,
+    passengersCountFromError,
+  ] = useInputValidator({
+    minValue: 0,
+    initValue: initPassengersCountFrom,
+  });
+  const [
+    passengersCountTo,
+    onPassengersCountToChange,
+    _______,
+    passengersCountToError,
+  ] = useInputValidator({
+    minValue: 0,
+    initValue: initPassengersCountTo,
+  });
+  const [
+    pipeLengthFrom,
+    onPipeLengthFromChange,
+    ________,
+    pipeLengthFromError,
+  ] = useInputValidator({
+    minValue: 0,
+    initValue: initPipeLengthFrom,
+  });
+  const [
+    pipeLengthTo,
+    onPipeLengthToChange,
+    ________________,
+    pipeLengthToError,
+  ] = useInputValidator({
+    minValue: 0,
+    initValue: initPipeLengthTo,
+  });
+  const [
+    boomLengthFrom,
+    onBoomLengthFromChange,
+    ______________,
+    boomLengthFromError,
+  ] = useInputValidator({
+    minValue: 0,
+    initValue: initBoomLengthFrom,
+  });
+  const [boomLengthTo, onBoomLengthToChange, ___________, boomLengthToError] =
     useInputValidator({
       minValue: 0,
-    });
-  const [height2, onHeight2Change, isHeight2Valid, height2Error] =
-    useInputValidator({
-      minValue: 0,
-    });
-  const [volume1, onVolume1Change, isVolume1Valid, volume1Error] =
-    useInputValidator({
-      minValue: 0,
-    });
-  const [volume2, onVolume2Change, isVolume2Valid, volume2Error] =
-    useInputValidator({
-      minValue: 0,
+      initValue: initBoomLengthTo,
     });
   const [
-    passengersCount1,
-    onPassengersCount1Change,
-    isPassengersCount1Valid,
-    passengersCount1Error,
+    liftingCapacityFrom,
+    onLiftingCapacityFromChange,
+    __________,
+    liftingCapacityFromError,
   ] = useInputValidator({
     minValue: 0,
+    initValue: initLiftingCapacityFrom,
   });
   const [
-    passengersCount2,
-    onPassengersCount2Change,
-    isPassengersCount2Valid,
-    passengersCount2Error,
+    liftingCapacityTo,
+    onLiftingCapacityToChange,
+    ____________,
+    liftingCapacityToError,
   ] = useInputValidator({
     minValue: 0,
+    initValue: initLiftingCapacityTo,
   });
   const [
-    pipeLength1,
-    onPipeLength1Change,
-    isPipeLength1Valid,
-    pipeLength1Error,
+    performanceFrom,
+    onPerformanceFromChange,
+    _____________,
+    performanceFromError,
   ] = useInputValidator({
     minValue: 0,
+    initValue: initPerformanceFrom,
   });
   const [
-    pipeLength2,
-    onPipeLength2Change,
-    isPipeLength2Valid,
-    pipeLength2Error,
+    performanceTo,
+    onPerformanceToChange,
+    ___________________,
+    performanceToError,
   ] = useInputValidator({
     minValue: 0,
+    initValue: initPerformanceTo,
   });
+  const [rollersTypeI, setRollersTypeI] = useState(
+    initRollersTypeI < 0 ? 0 : initRollersTypeI
+  );
   const [
-    boomLength1,
-    onBoomLength1Change,
-    isBoomLength1Valid,
-    boomLength1Error,
-  ] = useInputValidator({
-    minValue: 0,
-  });
-  const [
-    boomLength2,
-    onBoomLength2Change,
-    isBoomLength2Valid,
-    boomLength2Error,
-  ] = useInputValidator({
-    minValue: 0,
-  });
-  const [
-    liftingCapacity1,
-    onLiftingCapacity1Change,
-    isLiftingCapacity1Valid,
-    liftingCapacity1Error,
-  ] = useInputValidator({
-    minValue: 0,
-  });
-  const [
-    liftingCapacity2,
-    onLiftingCapacity2Change,
-    isLiftingCapacity2Valid,
-    liftingCapacity2Error,
-  ] = useInputValidator({
-    minValue: 0,
-  });
-  const [
-    performance1,
-    onPerformance1Change,
-    isPerformance1Valid,
-    performance1Error,
-  ] = useInputValidator({
-    minValue: 0,
-  });
-  const [
-    performance2,
-    onPerformance2Change,
-    isPerformance2Valid,
-    performance2Error,
-  ] = useInputValidator({
-    minValue: 0,
-  });
-  const [rollersTypeI, setRollersTypeI] = useState(0);
-  const [
-    rollersCount1,
-    onRollersCount1Change,
-    isRollersCount1Valid,
-    rollersCount1Error,
+    rollersCountFrom,
+    onRollersCountFromChange,
+    _________________,
+    rollersCountFromError,
   ] = useInputValidator({
     minValue: 1,
+    initValue: initRollersCountFrom,
   });
   const [
-    rollersCount2,
-    onRollersCount2Change,
-    isRollersCount2Valid,
-    rollersCount2Error,
+    rollersCountTo,
+    onRollersCountToChange,
+    _______________,
+    rollersCountToError,
   ] = useInputValidator({
     minValue: 1,
+    initValue: initRollersCountTo,
   });
-  const [sizeTypeI, setSizeTypeI] = useState(0);
-  const [ossigI, setOssigI] = useState(0);
-  const [axesCountI, setAxesCountI] = useState(0);
+  const [sizeTypeI, setSizeTypeI] = useState(
+    initSizeTypeI < 0 ? 0 : initSizeTypeI
+  );
+  const [ossigI, setOssigI] = useState(initOssigI < 0 ? 0 : initOssigI);
+  const [axesCountI, setAxesCountI] = useState(
+    initAxesCountI < 0 ? 0 : initAxesCountI
+  );
   const [
-    bodyLength1,
-    onBodyLength1Change,
-    isBodyLength1Valid,
-    bodyLength1Error,
+    bodyLengthFrom,
+    onBodyLengthFromChange,
+    __________________,
+    bodyLengthFromError,
   ] = useInputValidator({
     minValue: 0,
+    initValue: initBodyLengthFrom,
   });
   const [
-    bodyLength2,
-    onBodyLength2Change,
-    isBodyLength2Valid,
-    bodyLength2Error,
+    bodyLengthTo,
+    onBodyLengthToChange,
+    ____________________,
+    bodyLengthToError,
   ] = useInputValidator({
     minValue: 0,
+    initValue: initBodyLengthTo,
   });
   const [
     trailerType,
     selectTrailerType,
     unselectTrailerType,
     ____,
-    isTrailerTypeValid,
+    _____________________,
     trailerTypeError,
-  ] = useSelectionValidator({});
-  const [loadingTypeI, setLoadingTypeI] = useState(0);
-  const [count1, onCount1Change, isCount1Valid, count1Error] =
-    useInputValidator({
-      minValue: 1,
-    });
-  const [count2, onCount2Change, isCount2Valid, count2Error] =
-    useInputValidator({
-      minValue: 1,
-    });
-  const [workModeIndex, setWorkModeIndex] = useState(0);
-  const [firstDate, onFirstDateChange, isFirstDateValid, firstDateError] =
-    useInputValidator({
-      pattern: DATE_REGEX,
-      patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
-    });
-  const [secondDate, onSecondDateChange, isSecondDateValid, secondDateError] =
-    useInputValidator({
-      pattern: DATE_REGEX,
-      patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
-    });
+  ] = useSelectionValidator<(typeof trailerTypes)[0]>({
+    initValue: initTrailerType ? [initTrailerType] : undefined,
+  });
+  const [loadingTypeI, setLoadingTypeI] = useState(
+    initLoadingTypeI < 0 ? 0 : initLoadingTypeI
+  );
   const [
-    rentalDaysCount1,
-    onRentalDaysCount1Change,
-    isRentalDaysCount1Valid,
-    rentalDaysCount1Error,
+    unitAmountFrom,
+    onUnitAmountFromChange,
+    isUnitAmountFromValid,
+    unitAmountFromError,
   ] = useInputValidator({
     minValue: 1,
+    initValue: initUnitAmountFrom,
   });
   const [
-    rentalDaysCount2,
-    onRentalDaysCount2Change,
-    isRentalDaysCount2Valid,
-    rentalDaysCount2Error,
+    unitAmountTo,
+    onUnitAmountToChange,
+    isUnitAmountToValid,
+    unitAmountToError,
   ] = useInputValidator({
     minValue: 1,
+    initValue: initUnitAmountTo,
+  });
+  const [shiftTypeI, setShiftTypeI] = useState(
+    initShiftTypeI < 0 ? 0 : initShiftTypeI
+  );
+  const [
+    rentalDaysCountFrom,
+    onRentalDaysCountFromChange,
+    isRentalDaysCountFromValid,
+    rentalDaysCountFromError,
+  ] = useInputValidator({
+    minValue: 1,
+    initValue: initRentalDaysCountFrom,
   });
   const [
-    paymentFor,
-    selectPaymentFor,
-    unselectPaymentFor,
-    ___,
-    isPaymentForValid,
-    paymentForError,
-  ] = useSelectionValidator({
-    required: true,
-    multySelection: true,
-    initValue: [INPUT_VALUES.paymentForTechnic[0]],
+    rentalDaysCountTo,
+    onRentalDaysCountToChange,
+    isRentalDaysCountToValid,
+    rentalDaysCountToError,
+  ] = useInputValidator({
+    minValue: 1,
+    initValue: initRentalDaysCountTo,
   });
-  const [paymentTypeI, setPaymentTypeI] = useState(0);
+  const [paymentUnitI, setPaymentUnitI] = useState(
+    initPaymentUnitI < 0 ? 0 : initPaymentUnitI
+  );
+  const [paymentTypeI, setPaymentTypeI] = useState(
+    initPaymentTypeI < 0 ? 0 : initPaymentTypeI
+  );
 
   const {
     data: techTypes,
@@ -253,7 +397,7 @@ const TechnicForm = () => {
   const hasVolume = !!technicType[0]?.parameters.find(
     (param) => param.name === "volume"
   );
-  const hasPassengersCount = !!!technicType[0]?.parameters.find(
+  const hasPassengersCount = !!technicType[0]?.parameters.find(
     (param) => param.name === "passengers_count"
   );
   const hasPipeLength = !!technicType[0]?.parameters.find(
@@ -297,7 +441,7 @@ const TechnicForm = () => {
         {
           id: "type",
           type: "segment",
-          values: INPUT_VALUES.technicAdvertType,
+          values: ENUMS.technincTransactionTypes,
           selectedIndex: typeI,
           onChange: (evt) => setTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Тип объявления",
@@ -337,127 +481,127 @@ const TechnicForm = () => {
         {
           id: "weight",
           type: "interval",
-          firstValue: weight1,
-          secondValue: weight2,
-          onFirstValueChange: onWeight1Change,
-          onSecondValueChange: onWeight2Change,
+          firstValue: weightFrom,
+          secondValue: weightTo,
+          onFirstValueChange: onWeightFromChange,
+          onSecondValueChange: onWeightToChange,
           hidden: !technicType[0] || !hasWeight,
-          error: weight1Error || weight2Error,
+          error: weightFromError || weightToError,
           label: getLabelForTechnicParam("weight"),
           keyboardType: "decimal-pad",
         },
         {
           id: "height",
           type: "interval",
-          firstValue: height1,
-          secondValue: height2,
-          onFirstValueChange: onHeight1Change,
-          onSecondValueChange: onHeight2Change,
+          firstValue: heightFrom,
+          secondValue: heightTo,
+          onFirstValueChange: onHeightFromChange,
+          onSecondValueChange: onHeightToChange,
           hidden: !technicType[0] || !hasHeight,
-          error: height1Error || height2Error,
+          error: heightFromError || heightToError,
           label: getLabelForTechnicParam("height"),
           keyboardType: "decimal-pad",
         },
         {
           id: "volume",
           type: "interval",
-          firstValue: volume1,
-          secondValue: volume2,
-          onFirstValueChange: onVolume1Change,
-          onSecondValueChange: onVolume2Change,
+          firstValue: volumeFrom,
+          secondValue: volumeTo,
+          onFirstValueChange: onVolumeFromChange,
+          onSecondValueChange: onVolumeToChange,
           hidden: !technicType[0] || !hasVolume,
-          error: volume1Error || volume2Error,
+          error: volumeFromError || volumeToError,
           label: getLabelForTechnicParam("volume"),
           keyboardType: "decimal-pad",
         },
         {
           id: "passengersCount",
           type: "interval",
-          firstValue: passengersCount1,
-          secondValue: passengersCount2,
-          onFirstValueChange: onPassengersCount1Change,
-          onSecondValueChange: onPassengersCount2Change,
+          firstValue: passengersCountFrom,
+          secondValue: passengersCountTo,
+          onFirstValueChange: onPassengersCountFromChange,
+          onSecondValueChange: onPassengersCountToChange,
           hidden: !technicType[0] || !hasPassengersCount,
-          error: passengersCount1Error || passengersCount2Error,
+          error: passengersCountFromError || passengersCountToError,
           label: getLabelForTechnicParam("passengersCount"),
           keyboardType: "decimal-pad",
         },
         {
           id: "pipeLength",
           type: "interval",
-          firstValue: pipeLength1,
-          secondValue: pipeLength2,
-          onFirstValueChange: onPipeLength1Change,
-          onSecondValueChange: onPipeLength2Change,
+          firstValue: pipeLengthFrom,
+          secondValue: pipeLengthTo,
+          onFirstValueChange: onPipeLengthFromChange,
+          onSecondValueChange: onPipeLengthToChange,
           hidden: !technicType[0] || !hasPipeLength,
-          error: pipeLength1Error || pipeLength2Error,
+          error: pipeLengthFromError || pipeLengthToError,
           label: getLabelForTechnicParam("pipeLength"),
           keyboardType: "decimal-pad",
         },
         {
           id: "boomLength",
           type: "interval",
-          firstValue: boomLength1,
-          secondValue: boomLength2,
-          onFirstValueChange: onBoomLength1Change,
-          onSecondValueChange: onBoomLength2Change,
+          firstValue: boomLengthFrom,
+          secondValue: boomLengthTo,
+          onFirstValueChange: onBoomLengthFromChange,
+          onSecondValueChange: onBoomLengthToChange,
           hidden: !technicType[0] || !hasBoomLength,
-          error: boomLength1Error || boomLength2Error,
+          error: boomLengthFromError || boomLengthToError,
           label: getLabelForTechnicParam("boomLength"),
           keyboardType: "decimal-pad",
         },
         {
           id: "liftingCapacity",
           type: "interval",
-          firstValue: liftingCapacity1,
-          secondValue: liftingCapacity2,
-          onFirstValueChange: onLiftingCapacity1Change,
-          onSecondValueChange: onLiftingCapacity2Change,
+          firstValue: liftingCapacityFrom,
+          secondValue: liftingCapacityTo,
+          onFirstValueChange: onLiftingCapacityFromChange,
+          onSecondValueChange: onLiftingCapacityToChange,
           hidden: !technicType[0] || !hasLiftingCapacity,
-          error: liftingCapacity1Error || liftingCapacity2Error,
+          error: liftingCapacityFromError || liftingCapacityToError,
           label: getLabelForTechnicParam("liftingCapacity"),
           keyboardType: "decimal-pad",
         },
         {
           id: "performance",
           type: "interval",
-          firstValue: performance1,
-          secondValue: performance2,
-          onFirstValueChange: onPerformance1Change,
-          onSecondValueChange: onPerformance2Change,
+          firstValue: performanceFrom,
+          secondValue: performanceTo,
+          onFirstValueChange: onPerformanceFromChange,
+          onSecondValueChange: onPerformanceToChange,
           hidden: !technicType[0] || !hasPerformance,
-          error: performance1Error || performance2Error,
+          error: performanceFromError || performanceToError,
           label: getLabelForTechnicParam("performance"),
           keyboardType: "decimal-pad",
         },
         {
           id: "rollersCount",
           type: "interval",
-          firstValue: rollersCount1,
-          secondValue: rollersCount2,
-          onFirstValueChange: onRollersCount1Change,
-          onSecondValueChange: onRollersCount2Change,
+          firstValue: rollersCountFrom,
+          secondValue: rollersCountTo,
+          onFirstValueChange: onRollersCountFromChange,
+          onSecondValueChange: onRollersCountToChange,
           hidden: !technicType[0] || !hasRollerType,
-          error: rollersCount1Error || rollersCount2Error,
+          error: rollersCountFromError || rollersCountToError,
           label: getLabelForTechnicParam("rollersCount"),
           keyboardType: "decimal-pad",
         },
         {
           id: "bodyLength",
           type: "interval",
-          firstValue: bodyLength1,
-          secondValue: bodyLength2,
-          onFirstValueChange: onBodyLength1Change,
-          onSecondValueChange: onBodyLength2Change,
+          firstValue: bodyLengthFrom,
+          secondValue: bodyLengthTo,
+          onFirstValueChange: onBodyLengthFromChange,
+          onSecondValueChange: onBodyLengthToChange,
           hidden: !technicType[0] || !hasBodyLength,
-          error: bodyLength1Error || bodyLength2Error,
+          error: bodyLengthFromError || bodyLengthToError,
           label: getLabelForTechnicParam("bodyLength"),
           keyboardType: "decimal-pad",
         },
         {
           id: "rollersType",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.rollerType,
+          values: FILTER_ENUMS_WITH_ALL.rollerTypes,
           selectedIndex: rollersTypeI,
           onChange: (evt) =>
             setRollersTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -467,7 +611,7 @@ const TechnicForm = () => {
         {
           id: "sizeType",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.sizeType,
+          values: FILTER_ENUMS_WITH_ALL.sizeTypes,
           selectedIndex: sizeTypeI,
           onChange: (evt) => setSizeTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("sizeType"),
@@ -476,7 +620,7 @@ const TechnicForm = () => {
         {
           id: "ossig",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.OSSIG,
+          values: FILTER_ENUMS_WITH_ALL.ossig,
           selectedIndex: ossigI,
           onChange: (evt) => setOssigI(evt.nativeEvent.selectedSegmentIndex),
           label: getLabelForTechnicParam("OSSIG"),
@@ -485,7 +629,7 @@ const TechnicForm = () => {
         {
           id: "axesCount",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.axesCount,
+          values: FILTER_ENUMS_WITH_ALL.axesCount,
           selectedIndex: axesCountI,
           onChange: (evt) =>
             setAxesCountI(evt.nativeEvent.selectedSegmentIndex),
@@ -495,7 +639,7 @@ const TechnicForm = () => {
         {
           id: "trailerType",
           type: "selection",
-          itemsList: INPUT_VALUES_WITH_ALL.trailerType,
+          itemsList: trailerTypes,
           value: trailerType,
           selectItem: selectTrailerType,
           unselectItem: unselectTrailerType,
@@ -508,7 +652,7 @@ const TechnicForm = () => {
         {
           id: "loadingType",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.loadingType,
+          values: FILTER_ENUMS_WITH_ALL.loadingTypes,
           selectedIndex: loadingTypeI,
           onChange: (evt) =>
             setLoadingTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -523,42 +667,30 @@ const TechnicForm = () => {
         {
           id: "count",
           type: "interval",
-          firstValue: count1,
-          secondValue: count2,
-          onFirstValueChange: onCount1Change,
-          onSecondValueChange: onCount2Change,
-          error: count1Error || count2Error,
+          firstValue: unitAmountFrom,
+          secondValue: unitAmountTo,
+          onFirstValueChange: onUnitAmountFromChange,
+          onSecondValueChange: onUnitAmountToChange,
+          error: unitAmountFromError || unitAmountToError,
           label: "Количество единиц техники",
         },
         {
           id: "workMode",
           type: "segment",
-          values: INPUT_VALUES.workMode,
-          selectedIndex: workModeIndex,
+          values: FILTER_ENUMS_WITH_ALL.shiftTypes,
+          selectedIndex: shiftTypeI,
           onChange: (evt) =>
-            setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
+            setShiftTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Режим работы",
-        },
-        {
-          id: "rentalPeriod",
-          type: "interval",
-          firstPlaceholder: "ДД.ММ.ГГГГ",
-          secondPlaceholder: "ДД.ММ.ГГГГ",
-          firstValue: firstDate,
-          secondValue: secondDate,
-          onFirstValueChange: onFirstDateChange,
-          onSecondValueChange: onSecondDateChange,
-          error: firstDateError || secondDateError,
-          label: "Период аренды",
         },
         {
           id: "rentalDaysCount",
           type: "interval",
-          firstValue: rentalDaysCount1,
-          secondValue: rentalDaysCount2,
-          onFirstValueChange: onRentalDaysCount1Change,
-          onSecondValueChange: onRentalDaysCount2Change,
-          error: rentalDaysCount1Error || rentalDaysCount2Error,
+          firstValue: rentalDaysCountFrom,
+          secondValue: rentalDaysCountTo,
+          onFirstValueChange: onRentalDaysCountFromChange,
+          onSecondValueChange: onRentalDaysCountToChange,
+          error: rentalDaysCountFromError || rentalDaysCountToError,
           label: "Срок аренды (в днях)",
         },
       ],
@@ -568,20 +700,17 @@ const TechnicForm = () => {
       inputs: [
         {
           id: "paymentFor",
-          type: "selection",
-          itemsList: INPUT_VALUES.paymentForTechnic,
-          value: paymentFor,
-          selectItem: selectPaymentFor,
-          unselectItem: unselectPaymentFor,
-          placeholder: "",
+          type: "segment",
+          values: FILTER_ENUMS_WITH_ALL.paymentUnits,
+          selectedIndex: paymentUnitI,
+          onChange: (evt) =>
+            setPaymentUnitI(evt.nativeEvent.selectedSegmentIndex),
           label: "Оплата за",
-          error: paymentForError,
-          usesDataFromApi: false,
         },
         {
           id: "paymentType",
           type: "segment",
-          values: INPUT_VALUES.paymentType,
+          values: ENUMS.paymentTypes,
           selectedIndex: paymentTypeI,
           onChange: (evt) =>
             setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -593,15 +722,78 @@ const TechnicForm = () => {
 
   const isFormValid =
     isTechnicTypeValid &&
-    isCount1Valid &&
-    isCount2Valid &&
-    isFirstDateValid &&
-    isSecondDateValid &&
-    isRentalDaysCount1Valid &&
-    isRentalDaysCount2Valid &&
-    isPaymentForValid;
+    isUnitAmountFromValid &&
+    isUnitAmountToValid &&
+    isRentalDaysCountFromValid &&
+    isRentalDaysCountToValid;
 
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    const result: TTechnicFilter = {};
+    if (hasAxesCount && FILTER_ENUMS_WITH_ALL.axesCount[axesCountI] !== ALL) {
+      const axesCount = Number(FILTER_ENUMS_WITH_ALL.axesCount[axesCountI]);
+      result.axesCountFrom = axesCount;
+      result.axesCountTo = axesCount;
+    }
+    if (equipment.length > 0) {
+      result.equipment = equipment;
+    }
+    if (
+      hasLoadingType &&
+      FILTER_ENUMS_WITH_ALL.loadingTypes[loadingTypeI] !== ALL
+    ) {
+      result.loadingType = LOADING_TYPES[loadingTypeI];
+    }
+    if (hasOSSIG && FILTER_ENUMS_WITH_ALL.ossig[ossigI] !== ALL) {
+      result.OSSIG = !!ossigI;
+    }
+    if (
+      hasRollerType &&
+      FILTER_ENUMS_WITH_ALL.rollerTypes[rollersTypeI] !== ALL
+    ) {
+      result.rollerType = ROLLER_TYPES[rollersTypeI];
+    }
+    if (trailerType.length === 1) {
+      result.trailerType = trailerType[0].value;
+    }
+    result.bodyLengthFrom = Number(bodyLengthFrom) || undefined;
+    result.bodyLengthTo = Number(bodyLengthTo) || undefined;
+    result.boomLengthFrom = Number(boomLengthFrom) || undefined;
+    result.boomLengthTo = Number(boomLengthTo) || undefined;
+    result.heightFrom = Number(heightFrom) || undefined;
+    result.heightTo = Number(heightTo) || undefined;
+    result.liftingCapacityFrom = Number(liftingCapacityFrom) || undefined;
+    result.liftingCapacityTo = Number(liftingCapacityTo) || undefined;
+    result.passengersCountFrom = Number(passengersCountFrom) || undefined;
+    result.passengersCountTo = Number(passengersCountTo) || undefined;
+    result.performanceFrom = Number(performanceFrom) || undefined;
+    result.performanceTo = Number(performanceTo) || undefined;
+    result.pipeLengthFrom = Number(pipeLengthTo) || undefined;
+    result.pipeLengthTo = Number(pipeLengthTo) || undefined;
+    result.rentalDaysCountFrom = Number(rentalDaysCountFrom) || undefined;
+    result.rentalDaysCountTo = Number(rentalDaysCountTo) || undefined;
+    result.rollersCountFrom = Number(rollersCountFrom) || undefined;
+    result.rollersCountTo = Number(rollersCountTo) || undefined;
+    result.unitAmountFrom = Number(unitAmountFrom) || undefined;
+    result.unitAmountTo = Number(unitAmountTo) || undefined;
+    result.volumeFrom = Number(volumeFrom) || undefined;
+    result.volumeTo = Number(volumeTo) || undefined;
+    result.weightFrom = Number(weightFrom) || undefined;
+    result.weightTo = Number(weightTo) || undefined;
+    result.technicType = technicType[0].name;
+    result.transactionType = TECHNIC_TRANSACTION_TYPES[typeI];
+    if (FILTER_ENUMS_WITH_ALL.paymentTypes[paymentTypeI] !== ALL) {
+      result.paymentType = PAYMENT_TYPES[paymentTypeI];
+    }
+    if (FILTER_ENUMS_WITH_ALL.paymentUnits[paymentUnitI] !== ALL) {
+      result.paymentUnit = PAYMENT_UNITS[paymentUnitI];
+    }
+    if (FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL) {
+      result.shiftType = SHIFT_TYPES[shiftTypeI];
+    }
+    setTechnicFilter(result);
+    console.log('json', JSON.stringify(result))
+    navigation.goBack();
+  };
 
   return (
     <View>

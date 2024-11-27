@@ -20,18 +20,19 @@ YaMap.init(YA_MAP_API_KEY);
 
 const YaMap3 = () => {
   const [advertType, setAdvertType] = useState<TAdvertType>("TECHNIC");
-  const { dump: dumpAdvertFilter, material: materialAdvertFilter } =
-    useAdvertFilters();
+  const {
+    dump: dumpAdvertFilter,
+    material: materialAdvertFilter,
+    technic: technicAdvertFilter,
+  } = useAdvertFilters();
   const { data: technicAdverts, refetch: refetchTechnicAdverts } =
-    useGetTechnicAdvertsMiniFilteredQuery(
-      {},
-      { skip: advertType !== "TECHNIC" }
-    );
+    useGetTechnicAdvertsMiniFilteredQuery(technicAdvertFilter || {}, {
+      skip: advertType !== "TECHNIC",
+    });
   const { data: materialAdverts, refetch: refetchMaterialAdverts } =
     useGetMaterialAdvertsMiniFilteredQuery(materialAdvertFilter || {}, {
       skip: advertType !== "NON_MATERIAL",
     });
-    console.log(materialAdvertFilter)
   const { data: dumpAdverts, refetch: refetchDumpAdverts } =
     useGetDumpAdvertsMiniFilteredQuery(dumpAdvertFilter || {}, {
       skip: advertType !== "DUMP",
@@ -112,8 +113,6 @@ const YaMap3 = () => {
           lat: 55.753215,
           lon: 37.622504,
           zoom: 9,
-          azimuth: 80,
-          tilt: 100,
         }}
         style={{ flex: 1 }}
       >

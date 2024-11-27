@@ -1,55 +1,58 @@
 import {
   DumpAdvertDto,
-  ITechnicAdvert,
   MaterialAdvertDto,
+  TechnicAdvertDto,
 } from "../../../types/Advert";
 
-type TTechnicParamsFilter = {
-  [key in keyof Pick<
-    ITechnicAdvert,
-    | "axesCount"
-    | "bodyLength"
-    | "boomLength"
-    | "liftingCapacity"
-    | "height"
-    | "weight"
-    | "volume"
-    | "pipeLength"
-    | "performance"
-    | "passengersCount"
-    | "rollersCount"
-  >]: { from: number; to: number };
-} & {
-  [key in keyof Pick<ITechnicAdvert, "technicType" | "equipment">]: string[];
-} & {
-  [key in keyof Pick<
-    ITechnicAdvert,
-    "OSSIG" | "trailerType" | "sizeType" | "loadingType" | "rollerType"
-  >]: string;
-};
-
-type TTechnicGeneralFilter = {
-  [key in keyof Pick<
-    ITechnicAdvert,
-    "unitAmount" | "rentalFrom" | "rentalTo" | "rentalDaysCount"
-  >]: { from: number; to: number };
-} & {
-  [key in keyof Pick<ITechnicAdvert, "shiftType">]: string;
-};
-
-type TTechnicPriceFilter = {
-  [key in keyof Pick<ITechnicAdvert, "paymentUnit">]: string[];
-} & {
-  [key in keyof Pick<ITechnicAdvert, "paymentType">]: string;
-} & {
-  [key in keyof Pick<ITechnicAdvert, "price">]: { from: number; to: number };
-};
-
 export type TTechnicFilter = {
-  transactionType: ITechnicAdvert["transactionType"];
-} & TTechnicParamsFilter &
-  TTechnicGeneralFilter &
-  TTechnicPriceFilter;
+  axesCountFrom?: number;
+  axesCountTo?: number;
+  bodyLengthFrom?: number;
+  bodyLengthTo?: number;
+  boomLengthFrom?: number;
+  boomLengthTo?: number;
+  distanceFrom?: number;
+  distanceTo?: number;
+  heightFrom?: number;
+  heightTo?: number;
+  liftingCapacityFrom?: number;
+  liftingCapacityTo?: number;
+  passengersCountFrom?: number;
+  passengersCountTo?: number;
+  performanceFrom?: number;
+  performanceTo?: number;
+  pipeLengthFrom?: number;
+  pipeLengthTo?: number;
+  priceFrom?: number;
+  priceTo?: number;
+  productionYearFrom?: number;
+  productionYearTo?: number;
+  rentalDaysCountFrom?: number;
+  rentalDaysCountTo?: number;
+  rollersCountFrom?: number;
+  rollersCountTo?: number;
+  unitAmountFrom?: number;
+  unitAmountTo?: number;
+  volumeFrom?: number;
+  volumeTo?: number;
+  weightFrom?: number;
+  weightTo?: number;
+} & Partial<
+  Pick<
+    TechnicAdvertDto,
+    | "equipment"
+    | "loadingType"
+    | "OSSIG"
+    | "paymentType"
+    | "paymentUnit"
+    | "rollerType"
+    | "technicType"
+    | "trailerType"
+    | "transactionType"
+    | "shiftType"
+    | "sizeType"
+  >
+>;
 
 export type TDumpFilter = {
   amountFrom?: number;
@@ -58,7 +61,7 @@ export type TDumpFilter = {
   coefficientTo?: number;
   priceFrom?: number;
   priceTo?: number;
-  transports?: DumpAdvertDto['dumpTransport']
+  transports?: DumpAdvertDto["dumpTransport"];
 } & Partial<
   Pick<
     DumpAdvertDto,
@@ -78,7 +81,7 @@ export type TMaterialFilter = {
   coefficientTo?: number;
   priceFrom?: number;
   priceTo?: number;
-  transports?: MaterialAdvertDto['dumpTransport']
+  transports?: MaterialAdvertDto["dumpTransport"];
 } & Partial<
   Pick<
     MaterialAdvertDto,

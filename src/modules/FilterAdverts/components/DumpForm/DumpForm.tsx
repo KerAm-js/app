@@ -3,7 +3,6 @@ import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import { INPUT_VALUES } from "../../../../consts/inputValues";
 import {
   ITransportType,
   useGetTransportByLetterQuery,
@@ -62,8 +61,9 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       undefined,
     []
   );
-  const initMeasureI = MEASURE_IN.findIndex(
-    (item) => item === currentFilter?.measureIn
+  const initMeasureI = useMemo(
+    () => MEASURE_IN.findIndex((item) => item === currentFilter?.measureIn),
+    []
   );
   const initAmountFrom = currentFilter?.amountFrom?.toString() || undefined;
   const initAmountTo = currentFilter?.amountTo?.toString() || undefined;
@@ -71,13 +71,14 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     currentFilter?.coefficientFrom?.toString() || undefined;
   const initCoefficientTo =
     currentFilter?.coefficientTo?.toString() || undefined;
-  const initWorkModeI = SHIFT_TYPES.findIndex(
-    (item) => item === currentFilter?.shiftType
+  const initWorkModeI = useMemo(
+    () => SHIFT_TYPES.findIndex((item) => item === currentFilter?.shiftType),
+    []
   );
-  const initPriceFrom = currentFilter?.priceFrom?.toString() || undefined;
-  const initPriceTo = currentFilter?.priceTo?.toString() || undefined;
-  const initPaymentTypeI = PAYMENT_TYPES.findIndex(
-    (item) => item === currentFilter?.paymentType
+  const initPaymentTypeI = useMemo(
+    () =>
+      PAYMENT_TYPES.findIndex((item) => item === currentFilter?.paymentType),
+    []
   );
 
   const { setDumpFilter } = useActions();

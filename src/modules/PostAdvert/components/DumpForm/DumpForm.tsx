@@ -1,10 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES } from "../../../../consts/inputValues";
-import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import {
   ITransportType,

@@ -5,6 +5,8 @@ import {
   IMaterialAdvert,
 } from "../types/Advert";
 
+export const ALL = "Все";
+
 export const ENUM_TITLES: { [key in TEnum]: string } = {
   BUY: "Купля",
   SELL: "Продажа",
@@ -103,7 +105,10 @@ export const DANGER_CLASSES: IDumpAdvert["dangerClass"][] = [
   "CLASS_5",
 ];
 export const MEASURE_IN: IDumpAdvert["measureIn"][] = ["WEIGHT", "VOLUME"];
-export const DELIVERY: IMaterialAdvert["deliveryType"][] = ["DELIVERY", "SELF_PICKUP"];
+export const DELIVERY: IMaterialAdvert["deliveryType"][] = [
+  "DELIVERY",
+  "SELF_PICKUP",
+];
 export const AXES_COUNTS = ["3", "4"];
 
 type TEnum =
@@ -141,4 +146,22 @@ export const ENUMS = {
   dangerClasses: DANGER_CLASSES.map((i) => ENUM_TITLES[i]),
   measureIn: MEASURE_IN.map((i) => ENUM_TITLES[i]),
   delivery: DELIVERY.map((i) => ENUM_TITLES[i]),
+};
+
+export const OSSIG_TITLES = ['Подключён', 'Не подключён'];
+
+export const FILTER_ENUMS_WITH_ALL = {
+  advertStatuses: [...ENUMS.advertStatuses, ALL],
+  paymentTypes: [...ENUMS.paymentTypes, ALL],
+  loadingTypes: [...ENUMS.loadingTypes, ALL],
+  paymentUnits: [...ENUMS.paymentUnits, ALL],
+  rollerTypes: [...ENUMS.rollerTypes, ALL],
+  shiftTypes: [...ENUMS.shiftTypes, ALL],
+  sizeTypes: [...ENUMS.sizeTypes, ALL],
+  trailerTypes: [...ENUMS.trailerTypes, ALL],
+  dangerClasses: [...ENUMS.dangerClasses, ALL],
+  measureIn: [...ENUMS.measureIn, ALL],
+  delivery: [...ENUMS.delivery, ALL],
+  axesCount: [...AXES_COUNTS, ALL],
+  ossig: [...OSSIG_TITLES, ALL]
 };

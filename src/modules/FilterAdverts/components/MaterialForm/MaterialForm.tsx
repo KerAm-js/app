@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
@@ -30,11 +30,16 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
   const { setMaterialFilter } = useActions();
   const navigation = useNavigation();
 
-  const initTransactionTypeI = MATERIAL_TRANSACTION_TYPES.findIndex(
-    (item) => item === currentFilter?.transactionType
+  const initTransactionTypeI = useMemo(
+    () =>
+      MATERIAL_TRANSACTION_TYPES.findIndex(
+        (item) => item === currentFilter?.transactionType
+      ),
+    []
   );
-  const initMeasureI = MEASURE_IN.findIndex(
-    (item) => item === currentFilter?.measureIn
+  const initMeasureI = useMemo(
+    () => MEASURE_IN.findIndex((item) => item === currentFilter?.measureIn),
+    []
   );
   const initAmountFrom = currentFilter?.amountFrom?.toString() || undefined;
   const initAmountTo = currentFilter?.amountTo?.toString() || undefined;
@@ -42,16 +47,18 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     currentFilter?.coefficientFrom?.toString() || undefined;
   const initCoefficientTo =
     currentFilter?.coefficientTo?.toString() || undefined;
-  const initWorkModeI = SHIFT_TYPES.findIndex(
-    (item) => item === currentFilter?.shiftType
+  const initWorkModeI = useMemo(
+    () => SHIFT_TYPES.findIndex((item) => item === currentFilter?.shiftType),
+    []
   );
-  const initDeliveryI = DELIVERY.findIndex(
-    (item) => item === currentFilter.deliveryType
+  const initDeliveryI = useMemo(
+    () => DELIVERY.findIndex((item) => item === currentFilter.deliveryType),
+    []
   );
-  const initPriceFrom = currentFilter?.priceFrom?.toString() || undefined;
-  const initPriceTo = currentFilter?.priceTo?.toString() || undefined;
-  const initPaymentTypeI = PAYMENT_TYPES.findIndex(
-    (item) => item === currentFilter?.paymentType
+  const initPaymentTypeI = useMemo(
+    () =>
+      PAYMENT_TYPES.findIndex((item) => item === currentFilter?.paymentType),
+    []
   );
   // TODO - add init values for fractions, materialType, transports
   const [typeI, setTypeI] = useState(
@@ -62,9 +69,9 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     selectMaterialType,
     unselectMaterialType,
     __,
-    isMaterialTypeValid,
+    ___,
     materialTypeError,
-    setMaterialTypeInitial,
+    ______,
     materialTypeSearch,
     setMaterialTypeSearch,
   ] = useSelectionValidator<IMaterialType>({});
@@ -75,7 +82,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     ____,
     isTransportValid,
     transportError,
-    setTransportInitial,
+    _______,
     transportSearch,
     setTransportSearch,
   ] = useSelectionValidator<ITransportType>({ multySelection: false });
@@ -84,7 +91,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     selectFractions,
     unselectFractions,
     _____,
-    isFractionsValid,
+    ________,
     fractionsError,
   ] = useSelectionValidator({ multySelection: true });
   const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
