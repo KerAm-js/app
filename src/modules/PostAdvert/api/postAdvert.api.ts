@@ -44,28 +44,6 @@ interface FormData {
   [Symbol.iterator](): IterableIterator<string | File>;
 }
 
-export type TEquipment = { id: number; name: string };
-export type TParameter = { id: number; name: string };
-export type TFraction = { id: number; name: string };
-
-export interface ITechnicType {
-  id: number;
-  name: string;
-  equipments: Array<TEquipment>;
-  parameters: Array<TParameter>;
-}
-
-export interface ITransportType {
-  id: number;
-  name: string;
-}
-
-export interface IMaterialType {
-  id: number;
-  name: string;
-  fractions: Array<TFraction>;
-}
-
 export interface UploadImageToAdvertPayload {
   image: {
     uri: string;
@@ -134,21 +112,6 @@ export const postAdvertApi = api.injectEndpoints({
       }),
       invalidatesTags: ['User', 'DumpAdverts']
     }),
-    getTechnicTypesByLetter: builder.query<Array<ITechnicType>, string>({
-      query: (text) => ({
-        url: `/technic-type-lib/${text}`,
-      }),
-    }),
-    getTransportByLetter: builder.query<Array<ITransportType>, string>({
-      query: (text) => ({
-        url: `/transport-lib/${text}`,
-      }),
-    }),
-    getMaterialTypeByLetter: builder.query<Array<IMaterialType>, string>({
-      query: (text) => ({
-        url: `/material-type/by-letter/${text}`,
-      }),
-    }),
     uploadImageToAdvert: builder.mutation<
       string,
       {
@@ -184,8 +147,5 @@ export const {
   useAddTechnicAdvertMutation,
   useAddMaterialAdvertMutation,
   useAddDumpAdvertMutation,
-  useGetTechnicTypesByLetterQuery,
-  useGetTransportByLetterQuery,
-  useGetMaterialTypeByLetterQuery,
   useUploadImageToAdvertMutation,
 } = postAdvertApi;

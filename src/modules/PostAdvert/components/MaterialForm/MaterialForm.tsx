@@ -3,16 +3,8 @@ import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import {
-  IMaterialType,
-  ITransportType,
-  TFraction,
-  useAddMaterialAdvertMutation,
-  useGetMaterialTypeByLetterQuery,
-  useGetTransportByLetterQuery,
-} from "../../api/postAdvert.api";
+import { useAddMaterialAdvertMutation } from "../../api/postAdvert.api";
 import {
   DELIVERY,
   ENUM_TITLES,
@@ -27,6 +19,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
+import {
+  IDumpTransportType,
+  IMaterialType,
+  TFraction,
+  useDumpTransports,
+  useMaterialTypes,
+} from "../../../MiniEntities";
 
 const MaterialForm = () => {
   const { token } = useAuth();
@@ -46,8 +45,6 @@ const MaterialForm = () => {
     isMaterialTypeValid,
     materialTypeError,
     setMaterialTypeInitial,
-    materialTypeSearch,
-    setMaterialTypeSearch,
   ] = useSelectionValidator<IMaterialType>({ required: true });
   const [
     transport,
@@ -57,9 +54,7 @@ const MaterialForm = () => {
     isTransportValid,
     transportError,
     setTransportInitial,
-    transportSearch,
-    setTransportSearch,
-  ] = useSelectionValidator<ITransportType>({ required: true });
+  ] = useSelectionValidator<IDumpTransportType>({ required: true });
   const [measureI, setMeasureI] = useState(0);
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
     { required: true, minValue: 1 }
@@ -101,15 +96,9 @@ const MaterialForm = () => {
   });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
 
-  const { data: materialTypes, isFetching: isMaterialTypesLoading } =
-    useGetMaterialTypeByLetterQuery(materialTypeSearch, {
-      skip: !materialTypeSearch,
-    });
+  const materialTypes = useMaterialTypes();
 
-  const { data: transports, isFetching: isTransportsFetching } =
-    useGetTransportByLetterQuery(transportSearch, {
-      skip: !transportSearch,
-    });
+  const dumpTransports = useDumpTransports();
 
   const { point, pointAddress } = useAddressByMap();
 
@@ -146,16 +135,9 @@ const MaterialForm = () => {
           value: materialType,
           selectItem: selectMaterialType,
           unselectItem: unselectMaterialType,
-          itemsList:
-            !!materialTypeSearch && !isMaterialTypesLoading
-              ? materialTypes
-              : [],
+          itemsList: materialTypes,
           error: materialTypeError,
           label: "Вид материала",
-          usesDataFromApi: true,
-          search: materialTypeSearch,
-          setSearch: setMaterialTypeSearch,
-          isLoading: isMaterialTypesLoading,
         },
         {
           id: "transport",
@@ -163,14 +145,9 @@ const MaterialForm = () => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList:
-            !!transportSearch && !isTransportsFetching ? transports : [],
+          itemsList: dumpTransports,
           error: transportError,
           label: "Вид транспорта",
-          usesDataFromApi: true,
-          search: transportSearch,
-          setSearch: setTransportSearch,
-          isLoading: isTransportsFetching,
         },
         {
           id: "fractions",
@@ -182,7 +159,6 @@ const MaterialForm = () => {
           hidden: !materialType[0] || materialType[0].fractions.length === 0,
           error: fractionsError,
           label: "Фракция",
-          usesDataFromApi: false,
         },
         {
           id: "measure",

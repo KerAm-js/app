@@ -4,14 +4,12 @@ import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import {
-  ITransportType,
-  useGetTransportByLetterQuery,
-} from "../../../PostAdvert/api/postAdvert.api";
-import {
+  ALL,
   DANGER_CLASSES,
   DUMP_TRANSACTION_TYPES,
   ENUM_TITLES,
   ENUMS,
+  FILTER_ENUMS_WITH_ALL,
   MEASURE_IN,
   PAYMENT_TYPES,
   SHIFT_TYPES,
@@ -22,6 +20,7 @@ import { TDumpFilter } from "../../store/types";
 import { View } from "react-native";
 import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
 import { useNavigation } from "@react-navigation/native";
+import { IDumpTransportType, useDumpTransports } from "../../../MiniEntities";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -71,7 +70,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     currentFilter?.coefficientFrom?.toString() || undefined;
   const initCoefficientTo =
     currentFilter?.coefficientTo?.toString() || undefined;
-  const initWorkModeI = useMemo(
+  const initShiftTypeI = useMemo(
     () => SHIFT_TYPES.findIndex((item) => item === currentFilter?.shiftType),
     []
   );
@@ -118,9 +117,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     isTransportValid,
     transportError,
     setTransportInitial,
-    transportSearch,
-    setTransportSearch,
-  ] = useSelectionValidator<ITransportType>({ multySelection: false });
+  ] = useSelectionValidator<IDumpTransportType>({ multySelection: false });
   const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
   const [amountFrom, onAmountFromChange, isAmountFromValid, amountFromError] =
     useInputValidator({ minValue: 1, initValue: initAmountFrom });
@@ -139,15 +136,14 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     coefficientToError,
   ] = useInputValidator({ minValue: 1, initValue: initCoefficientTo });
 
-  const [workModeIndex, setWorkModeIndex] = useState(
-    initWorkModeI < 0 ? 0 : initWorkModeI
+  const [shiftTypeI, setShiftTypeI] = useState(
+    initShiftTypeI < 0 ? 0 : initShiftTypeI
   );
   const [paymentTypeI, setPaymentTypeI] = useState(
     initPaymentTypeI < 0 ? 0 : initPaymentTypeI
   );
 
-  const { data: transports, isFetching: isTransportLoading } =
-    useGetTransportByLetterQuery(transportSearch);
+  const dumpTransports = useDumpTransports();
 
   const inputs: TFormInputsArray = [
     {
@@ -163,7 +159,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
           error: typeError,
           placeholder: "",
           label: "Тип объявления",
-          usesDataFromApi: false,
         },
       ],
     },
@@ -180,7 +175,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
           error: wasteTypeError,
           placeholder: "",
           label: "Вид отходов",
-          usesDataFromApi: false,
         },
         {
           id: "dangerClass",
@@ -192,7 +186,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
           error: dangerClassError,
           placeholder: "",
           label: "Класс опасности",
-          usesDataFromApi: false,
         },
         {
           id: "transport",
@@ -200,13 +193,9 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList: !!transportSearch && !isTransportLoading ? transports : [],
+          itemsList: dumpTransports,
           error: transportError,
           label: "Вид транспорта",
-          usesDataFromApi: true,
-          search: transportSearch,
-          setSearch: setTransportSearch,
-          isLoading: isTransportLoading,
         },
         {
           id: "measure",
@@ -249,10 +238,10 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
         {
           id: "workMode",
           type: "segment",
-          values: ENUMS.shiftTypes,
-          selectedIndex: workModeIndex,
+          values: FILTER_ENUMS_WITH_ALL.shiftTypes,
+          selectedIndex: shiftTypeI,
           onChange: (evt) =>
-            setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
+            setShiftTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Режим работы",
         },
       ],
@@ -285,9 +274,13 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     const result: TDumpFilter = {
       transactionType: type[0].value,
       measureIn: MEASURE_IN[measureI],
-      paymentType: PAYMENT_TYPES[paymentTypeI],
-      shiftType: SHIFT_TYPES[workModeIndex],
     };
+    if (FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL) {
+      result.shiftType = SHIFT_TYPES[shiftTypeI];
+    }
+    if (PAYMENT_TYPES[paymentTypeI] !== "ANY") {
+      result.paymentType = PAYMENT_TYPES[paymentTypeI];
+    }
     if (transport.length > 0) result.transports = transport;
     if (wasteType[0]) result.wasteType = wasteType[0].name;
     if (dangerClass[0]) result.dangerClass = dangerClass[0].value;

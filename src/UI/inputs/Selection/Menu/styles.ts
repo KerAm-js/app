@@ -5,6 +5,7 @@ export const selectionMenuStyles = StyleSheet.create({
   container: {
     borderBottomColor: GREY_LIGHT,
     flexDirection: "row",
+    borderBottomWidth: 1,
   },
   scrollViewContent: {
     alignItems: "center",

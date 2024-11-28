@@ -21,7 +21,6 @@ const SelectionSearchBar: FC<TSelectionSearchBarProps> = ({
   inputRef,
   inputValue,
   onInputChange,
-  isApi,
 }) => {
   const rotation = useSharedValue(0);
   const opacity = useSharedValue(0);
@@ -30,8 +29,7 @@ const SelectionSearchBar: FC<TSelectionSearchBarProps> = ({
     const width = interpolate(opacity.value, [0, 1], [0, 100]);
     return {
       transform: [{ translateX: withTiming(isOpened ? 0 : -15) }],
-      opacity: isApi ? opacity.value : 0,
-      width: `${isApi ? width : 0}%`,
+      opacity: opacity.value,
     };
   }, [isOpened]);
 
@@ -59,7 +57,7 @@ const SelectionSearchBar: FC<TSelectionSearchBarProps> = ({
   }, [isOpened]);
 
   useEffect(() => {
-    if (isOpened && isApi && inputRef.current) inputRef.current.focus();
+    if (isOpened && inputRef.current) inputRef.current.focus();
     rotation.value = withTiming(isOpened ? 0 : -90);
     opacity.value = withTiming(isOpened ? 1 : 0);
   }, [isOpened]);
@@ -98,7 +96,6 @@ const SelectionSearchBar: FC<TSelectionSearchBarProps> = ({
           selectionColor={BLUE}
           returnKeyType="done"
           returnKeyLabel="Готово"
-          editable={isApi}
         />
       </Animated.View>
       <Animated.View style={[selectionSearchBarStyles.line, lineStyle]} />

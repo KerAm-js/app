@@ -6,18 +6,13 @@ import { useSelectionValidator } from "../../../../hooks/inputValidators/useSele
 import { DATE_REGEX } from "../../../../consts/regex";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import {
-  ITechnicType,
-  TEquipment,
-  useAddTechnicAdvertMutation,
-  useGetTechnicTypesByLetterQuery,
-} from "../../api/postAdvert.api";
-import { handleError } from "../../../Auth/helpers/getErrorMessage";
+import { useAddTechnicAdvertMutation } from "../../api/postAdvert.api";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import {
   AXES_COUNTS,
+  ENUM_TITLES,
   ENUMS,
   LOADING_TYPES,
   PAYMENT_TYPES,
@@ -32,6 +27,17 @@ import { ITechnicAdvert, TechnicAdvertDto } from "../../../../types/Advert";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
 import { useActions } from "../../../../hooks/store/useActions";
+import {
+  ITechnicType,
+  TEquipment,
+  useTechnicTypes,
+} from "../../../MiniEntities";
+
+const trailerTypes = TRAILER_TYPES.map((item, index) => ({
+  id: index,
+  name: ENUM_TITLES[item],
+  value: item,
+}));
 
 const TechnicForm = () => {
   const { user, token } = useAuth();
@@ -52,8 +58,6 @@ const TechnicForm = () => {
     isTechnicTypeValid,
     technicTypeError,
     setTechnicTypeInitial,
-    techTypeSearch,
-    setTechTypeSearch,
   ] = useSelectionValidator<ITechnicType>({ required: true });
   const [mark, onChangeMark] = useInputValidator();
   const [model, onModelChange] = useInputValidator();
@@ -145,7 +149,7 @@ const TechnicForm = () => {
     ___,
     isTrailerTypeValid,
     trailerTypeError,
-  ] = useSelectionValidator<ITechnicAdvert["trailerType"]>({
+  ] = useSelectionValidator<(typeof trailerTypes)[0]>({
     required: true,
   });
   const [loadingTypeI, setLoadingTypeI] = useState(0);
@@ -190,13 +194,7 @@ const TechnicForm = () => {
   const [paymentForI, setPaymentForI] = useState(0);
   const [paymentTypeI, setPaymentTypeI] = useState(0);
 
-  const {
-    data: techTypes,
-    isFetching: isTechnicTypeLoading,
-    error,
-  } = useGetTechnicTypesByLetterQuery(techTypeSearch, {
-    skip: !techTypeSearch,
-  });
+  const techTypes = useTechnicTypes();
 
   const {
     point,
@@ -293,16 +291,12 @@ const TechnicForm = () => {
         {
           id: "technicType",
           type: "selection",
-          itemsList: !!techTypeSearch && !isTechnicTypeLoading ? techTypes : [],
-          isLoading: isTechnicTypeLoading,
+          itemsList: techTypes,
           value: technicType,
           selectItem: selectTechnicType,
           unselectItem: unselectTechnicType,
           label: "Вид техники",
-          error: technicTypeError || (error ? handleError(error) : ""),
-          usesDataFromApi: true,
-          search: techTypeSearch,
-          setSearch: setTechTypeSearch,
+          error: technicTypeError,
         },
         {
           id: "mark",
@@ -337,7 +331,6 @@ const TechnicForm = () => {
           unselectItem: unselectEquipment,
           label: "Дополнительное оборудование",
           error: equipmentError,
-          usesDataFromApi: false,
         },
         {
           id: "weight",
@@ -490,13 +483,12 @@ const TechnicForm = () => {
         {
           id: "trailerType",
           type: "selection",
-          itemsList: ENUMS.trailerTypes,
+          itemsList: trailerTypes,
           value: trailerType,
           selectItem: selectTrailerType,
           unselectItem: unselectTrailerType,
           label: getLabelForTechnicParam("trailerType"),
           error: trailerTypeError,
-          usesDataFromApi: false,
           hidden: !technicType[0] || !hasTrailerType,
         },
         {
@@ -659,9 +651,6 @@ const TechnicForm = () => {
 
   const onSubmit = () => {
     if (user) {
-      const trailerTypeI = ENUMS.trailerTypes.findIndex(
-        (item) => item === trailerType[0]
-      );
       const advert: TechnicAdvertDto = {
         advertType: "TECHNIC",
         transactionType,
@@ -703,10 +692,7 @@ const TechnicForm = () => {
         OSSIG: hasOSSIG ? !!ossigI : false,
         axesCount: hasAxesCount ? Number(AXES_COUNTS[axesCountI]) : 0,
         bodyLength: hasBodyLength ? Number(bodyLength) : 0,
-        trailerType:
-          hasTrailerType && trailerTypeI
-            ? TRAILER_TYPES[trailerTypeI]
-            : "NOT_SPECIFIED",
+        trailerType: hasTrailerType ? trailerType[0].value : "NOT_SPECIFIED",
         loadingType: hasLoadingType
           ? LOADING_TYPES[loadingTypeI]
           : "NOT_SPECIFIED",
@@ -752,7 +738,7 @@ const TechnicForm = () => {
       } else {
         navigation.navigate("Profile");
       }
-    } else if (error) {
+    } else if (addAdvertResult.error) {
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
   }, [addAdvertResult]);

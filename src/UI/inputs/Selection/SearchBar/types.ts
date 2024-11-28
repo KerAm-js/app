@@ -6,7 +6,6 @@ export type TSelectionSearchBarProps = {
   isOpened: boolean;
   selectedItemsArr: Array<TValue>;
   placeholder?: string;
-  isApi?: boolean;
   inputRef: {current: TextInput | null};
   inputValue: string;
   onInputChange: (text: string) => void;

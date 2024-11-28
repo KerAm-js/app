@@ -6,7 +6,6 @@ export function useSelectionValidator<T>({
   required,
   multySelection,
 }: TSelectionValidatorProps<T>): TSelectionValidatorReturn<T> {
-  const [search, setSearch] = useState("");
   const [value, setValue] = useState<T[]>(initValue || []);
   const [isValid, setIsValid] = useState(!(!initValue?.length && required));
   const [error, setError] = useState(
@@ -55,7 +54,5 @@ export function useSelectionValidator<T>({
     isValid,
     error,
     setInitial,
-    search,
-    setSearch,
   ];
 }

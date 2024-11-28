@@ -37,12 +37,20 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator: FC = () => {
   const { token, autoAuthPending, user } = useAuth();
-  const { autoLoginThunk } = useActions();
+  const {
+    autoLoginThunk,
+    getMaterialTypesThunk,
+    getTechnicTypesThunk,
+    getDumpTransportsThunk,
+  } = useActions();
 
   useLayoutEffect(() => {
     if (!token) {
       autoLoginThunk();
     }
+    getMaterialTypesThunk();
+    getTechnicTypesThunk();
+    getDumpTransportsThunk();
   }, []);
 
   if (autoAuthPending) {

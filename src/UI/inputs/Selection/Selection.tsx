@@ -1,11 +1,11 @@
-import {
-  ActivityIndicator,
-  Keyboard,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import { Keyboard, Text, TextInput, View } from "react-native";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { TSelectionProps } from "./types";
 import { selectionStyles } from "./styles";
 import SelectionItem from "./Item/Item";
@@ -22,27 +22,33 @@ import { INPUT_HEIGHT } from "../../../consts/views";
 
 const Selection = withLabelAndError<TSelectionProps>(
   ({
-    itemsList = [],
+    itemsList,
     value,
     selectItem,
     unselectItem,
     placeholder,
-    usesDataFromApi,
     errorShown,
     setErrorShown,
     setIsFocused,
-    isLoading,
-    setSearch,
-    search,
   }) => {
-    const [text, setText] = useState<string>("");
+    const [search, setSearch] = useState<string>("");
+    const [filteredItems, setFilteredItems] = useState<
+      TSelectionProps["value"]
+    >([]);
     const [isOpened, setIsOpened] = useState(false);
     const containerHeight = useSharedValue(INPUT_HEIGHT);
-    const selectedItemsObj = useRef<{ [key: string]: boolean }>({});
     const inputRef = useRef<TextInput | null>(null);
-    const menuHeight = !!value.length && usesDataFromApi ? 44 : 0;
+    const menuAnimatedHeight = useSharedValue(value.length ? 44 : 0);
     const baseHeight =
       itemsList.length > 7 ? 326 : INPUT_HEIGHT + 46 * itemsList.length;
+
+    const selectedItemsObj = useMemo(() => {
+      const result: { [key: string]: boolean } = {};
+      value.forEach((item) => {
+        result[item.id] = true;
+      });
+      return result;
+    }, [value]);
 
     const toggleHeight = () => {
       if (isOpened) {
@@ -51,42 +57,19 @@ const Selection = withLabelAndError<TSelectionProps>(
         setIsFocused && setIsFocused(false);
         setErrorShown && setErrorShown(true);
       } else {
-        if (inputRef.current && usesDataFromApi) inputRef.current.focus();
-        setText("");
-        containerHeight.value = withTiming(baseHeight + menuHeight);
+        if (inputRef.current) inputRef.current.focus();
+        setSearch("");
+        containerHeight.value = withTiming(
+          baseHeight + menuAnimatedHeight.value
+        );
         setIsFocused && setIsFocused(true);
         Keyboard.dismiss();
       }
       setIsOpened(!isOpened);
     };
 
-    const handleValueChange = () => {
-      selectedItemsObj.current = {};
-      value.forEach((item) => {
-        selectedItemsObj.current[item.id] = true;
-      });
-      if (isOpened) containerHeight.value = withTiming(baseHeight + menuHeight);
-    };
-
-    const handleItemsChange = () => {
-      const listLength = itemsList.length;
-
-      const isTooMuchItems = listLength > 7;
-      const newContainerHeight =
-        listLength === 0
-          ? 105 + menuHeight
-          : isTooMuchItems
-          ? baseHeight + menuHeight
-          : listLength * 46 + INPUT_HEIGHT + menuHeight;
-      if (isOpened) containerHeight.value = withTiming(newContainerHeight);
-    };
-
     const handleSearchTextChange = (text: string) => {
-      if (usesDataFromApi) {
-        setSearch(text);
-      } else {
-        setText(text);
-      }
+      setSearch(text);
     };
 
     const listContainerStyle = useAnimatedStyle(() => {
@@ -102,10 +85,23 @@ const Selection = withLabelAndError<TSelectionProps>(
     }, [isOpened]);
 
     useEffect(() => {
-      if (usesDataFromApi) handleItemsChange();
-    }, [itemsList]);
+      const trimmedSearch = search.trim();
+      if (trimmedSearch) {
+        setFilteredItems(
+          itemsList.filter((item) => item.name.includes(trimmedSearch))
+        );
+      } else {
+        setFilteredItems(itemsList);
+      }
+    }, [search]);
 
-    handleValueChange();
+    useEffect(() => {
+      if (isOpened) {
+        const newMenuAnimatedHeight = !!value.length ? 44 : 0;
+        menuAnimatedHeight.value = withTiming(newMenuAnimatedHeight);
+        containerHeight.value = withTiming(baseHeight + newMenuAnimatedHeight);
+      }
+    }, [value]);
 
     return (
       <View style={selectionStyles.container}>
@@ -119,44 +115,38 @@ const Selection = withLabelAndError<TSelectionProps>(
           <SelectionSearchBar
             isOpened={isOpened}
             onPress={toggleHeight}
-            inputValue={usesDataFromApi ? search : text}
+            inputValue={search}
             onInputChange={handleSearchTextChange}
             inputRef={inputRef}
             selectedItemsArr={value}
             placeholder={placeholder}
-            isApi={usesDataFromApi}
           />
-          {!!menuHeight && (
-            <SelectionMenu
-              selectedItemsArr={value}
-              isOpened={isOpened}
-              unselectItem={unselectItem}
-            />
-          )}
+          <SelectionMenu
+            animatedHeight={menuAnimatedHeight}
+            selectedItemsArr={value}
+            isOpened={isOpened}
+            unselectItem={unselectItem}
+          />
           <Animated.ScrollView
             style={[selectionStyles.scrollView, scrollViewStyle]}
             nestedScrollEnabled
           >
-            {isLoading ? (
-              <ActivityIndicator />
-            ) : itemsList.length ? (
-              itemsList.map((item, index) => {
+            {filteredItems.length ? (
+              filteredItems.map((item, index) => {
                 return (
                   <SelectionItem
                     key={index + Date.now()}
                     item={item}
-                    isChecked={selectedItemsObj.current[item.id]}
+                    isChecked={selectedItemsObj[item.id]}
                     select={selectItem}
                     unselect={unselectItem}
                   />
                 );
               })
             ) : (
-              (
-                <Text style={selectionStyles.notFoundMessage}>
-                  Совпадений не найдено
-                </Text>
-              )
+              <Text style={selectionStyles.notFoundMessage}>
+                Совпадений не найдено
+              </Text>
             )}
           </Animated.ScrollView>
         </Animated.View>

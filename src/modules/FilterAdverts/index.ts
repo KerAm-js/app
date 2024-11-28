@@ -1,7 +1,6 @@
-import { postAdvertApi } from "./api/filterAdverts.api";
-export { FilterAdvertsModule } from "./components/module/FilterAdvertsModule";
-export const {
+export {
   useGetTechnicAdvertsMiniFilteredQuery,
   useGetDumpAdvertsMiniFilteredQuery,
   useGetMaterialAdvertsMiniFilteredQuery,
-} = postAdvertApi;
+} from "./api/filterAdverts.api";
+export { FilterAdvertsModule } from "./components/module/FilterAdvertsModule";

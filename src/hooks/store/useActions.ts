@@ -8,6 +8,7 @@ import * as likesActions from "../../modules/Like/store/likesActions";
 import { authSlice } from "../../modules/Auth/store/authSlice";
 import { addressByMapSlice } from "../../modules/ChooseAddressMap/store/addressByMapSlice";
 import { likesSlice } from "../../modules/Like/store/likesSlice";
+import { miniEntitiesActions } from "../../modules/MiniEntities";
 
 const actions = {
   ...usersSlice.actions,
@@ -17,7 +18,7 @@ const actions = {
   ...addressByMapSlice.actions,
   ...likesSlice.actions,
   ...likesActions,
-
+  ...miniEntitiesActions
 };
 
 export const useActions = () => {

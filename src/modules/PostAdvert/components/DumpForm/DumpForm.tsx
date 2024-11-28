@@ -5,11 +5,7 @@ import { useInputValidator } from "../../../../hooks/inputValidators/useInputVal
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import {
-  ITransportType,
-  useAddDumpAdvertMutation,
-  useGetTransportByLetterQuery,
-} from "../../api/postAdvert.api";
+import { useAddDumpAdvertMutation } from "../../api/postAdvert.api";
 import {
   DANGER_CLASSES,
   DUMP_TRANSACTION_TYPES,
@@ -25,6 +21,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
+import { IDumpTransportType, useDumpTransports } from "../../../MiniEntities";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -81,9 +78,7 @@ const DumpForm = () => {
     isTransportValid,
     transportError,
     setTransportInitial,
-    transportSearch,
-    setTransportSearch,
-  ] = useSelectionValidator<ITransportType>({ required: true });
+  ] = useSelectionValidator<IDumpTransportType>({ required: true });
   const [measureI, setMeasureI] = useState(0);
   const [
     coefficient,
@@ -116,8 +111,7 @@ const DumpForm = () => {
   });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
 
-  const { data: transports, isFetching: isTransportsFetching } =
-    useGetTransportByLetterQuery(transportSearch);
+  const dumpTransports = useDumpTransports();
 
   const { point, pointAddress } = useAddressByMap();
 
@@ -134,7 +128,6 @@ const DumpForm = () => {
           itemsList: dumpTransactionTypes,
           error: typeError,
           label: "Тип объявления",
-          usesDataFromApi: false,
         },
         {
           id: "title",
@@ -160,7 +153,6 @@ const DumpForm = () => {
           itemsList: wasteTypes,
           error: wasteTypeError,
           label: "Вид отходов",
-          usesDataFromApi: false,
         },
         {
           id: "dangerClass",
@@ -171,7 +163,6 @@ const DumpForm = () => {
           itemsList: dangerClasses,
           error: dangerClassError,
           label: "Класс опасности",
-          usesDataFromApi: false,
         },
         {
           id: "transport",
@@ -179,14 +170,9 @@ const DumpForm = () => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList:
-            !!transportSearch && !isTransportsFetching ? transports : [],
+          itemsList: dumpTransports,
           error: transportError,
           label: "Вид транспорта",
-          usesDataFromApi: true,
-          search: transportSearch,
-          setSearch: setTransportSearch,
-          isLoading: isTransportsFetching,
         },
         {
           id: "measure",

@@ -1,28 +1,6 @@
 import { api } from "../../../api/api";
-import { IAdvert, IMiniAdvert } from "../../../types/Advert";
+import { IAdvert } from "../../../types/Advert";
 import { IUser } from "../../../types/User";
-
-export type TEquipment = { id: number; name: string };
-export type TParameter = { id: number; name: string };
-export type TFraction = { id: number; name: string };
-
-export interface ITechnicType {
-  id: number;
-  name: string;
-  equipments: Array<TEquipment>;
-  parameters: Array<TParameter>;
-}
-
-export interface ITransportType {
-  id: number;
-  name: string;
-}
-
-export interface IMaterialType {
-  id: number;
-  name: string;
-  fractions: Array<TFraction>;
-}
 
 export interface UploadImageToAdvertPayload {
   image: {

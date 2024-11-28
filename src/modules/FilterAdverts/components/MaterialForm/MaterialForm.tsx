@@ -3,28 +3,21 @@ import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import {
-  INPUT_VALUES,
-  INPUT_VALUES_WITH_ALL,
-} from "../../../../consts/inputValues";
-import {
-  IMaterialType,
-  useGetMaterialTypeByLetterQuery,
-  useGetTransportByLetterQuery,
-} from "../../../PostAdvert/api/postAdvert.api";
 import { TMaterialFilter } from "../../store/types";
 import { useActions } from "../../../../hooks/store/useActions";
 import { useNavigation } from "@react-navigation/native";
 import {
+  ALL,
   DELIVERY,
   ENUM_TITLES,
   ENUMS,
+  FILTER_ENUMS_WITH_ALL,
   MATERIAL_TRANSACTION_TYPES,
   MEASURE_IN,
   PAYMENT_TYPES,
   SHIFT_TYPES,
 } from "../../../../consts/enums";
-import { ITransportType } from "../../api/filterAdverts.api";
+import { IDumpTransportType, IMaterialType, TFraction, useDumpTransports, useMaterialTypes } from "../../../MiniEntities";
 
 const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
   const { setMaterialFilter } = useActions();
@@ -47,7 +40,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     currentFilter?.coefficientFrom?.toString() || undefined;
   const initCoefficientTo =
     currentFilter?.coefficientTo?.toString() || undefined;
-  const initWorkModeI = useMemo(
+  const initShiftTypeI = useMemo(
     () => SHIFT_TYPES.findIndex((item) => item === currentFilter?.shiftType),
     []
   );
@@ -72,8 +65,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     ___,
     materialTypeError,
     ______,
-    materialTypeSearch,
-    setMaterialTypeSearch,
   ] = useSelectionValidator<IMaterialType>({});
   const [
     transport,
@@ -83,9 +74,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     isTransportValid,
     transportError,
     _______,
-    transportSearch,
-    setTransportSearch,
-  ] = useSelectionValidator<ITransportType>({ multySelection: false });
+  ] = useSelectionValidator<IDumpTransportType>({ multySelection: false });
   const [
     fractions,
     selectFractions,
@@ -93,7 +82,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     _____,
     ________,
     fractionsError,
-  ] = useSelectionValidator({ multySelection: true });
+  ] = useSelectionValidator<TFraction>({ multySelection: true });
   const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
   const [amountFrom, onAmountFromChange, isAmountFromValid, amountFromError] =
     useInputValidator({ minValue: 1, initValue: initAmountFrom });
@@ -112,8 +101,8 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     coefficientToError,
   ] = useInputValidator({ minValue: 1, initValue: initCoefficientTo });
 
-  const [workModeIndex, setWorkModeIndex] = useState(
-    initWorkModeI < 0 ? 0 : initWorkModeI
+  const [shiftTypeI, setShiftTypeI] = useState(
+    initShiftTypeI < 0 ? 0 : initShiftTypeI
   );
   const [deliveryI, setDeliveryI] = useState(
     initDeliveryI < 0 ? 0 : initDeliveryI
@@ -122,15 +111,9 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     initPaymentTypeI < 0 ? 0 : initPaymentTypeI
   );
 
-  const { data: materialTypes, isFetching: isMaterialTypesLoading } =
-    useGetMaterialTypeByLetterQuery(materialTypeSearch, {
-      skip: !materialTypeSearch,
-    });
+  const materialTypes = useMaterialTypes();
 
-  const { data: transports, isFetching: isTransportsFetching } =
-    useGetTransportByLetterQuery(transportSearch, {
-      skip: !transportSearch,
-    });
+  const dumpTransports = useDumpTransports();
 
   const inputs: TFormInputsArray = [
     {
@@ -139,7 +122,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
         {
           id: "type",
           type: "segment",
-          values: INPUT_VALUES.materialAdvertType,
+          values: ENUMS.materialTransactionTypes,
           selectedIndex: typeI,
           onChange: (evt) => setTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Тип объявления",
@@ -155,16 +138,9 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
           value: materialType,
           selectItem: selectMaterialType,
           unselectItem: unselectMaterialType,
-          itemsList:
-            !!materialTypeSearch && !isMaterialTypesLoading
-              ? materialTypes
-              : [],
+          itemsList: materialTypes,
           error: materialTypeError,
           label: "Вид материала",
-          usesDataFromApi: true,
-          search: materialTypeSearch,
-          setSearch: setMaterialTypeSearch,
-          isLoading: isMaterialTypesLoading,
         },
         {
           id: "transport",
@@ -172,14 +148,9 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList:
-            !!transportSearch && !isTransportsFetching ? transports : [],
+          itemsList: dumpTransports,
           error: transportError,
           label: "Вид транспорта",
-          usesDataFromApi: true,
-          search: transportSearch,
-          setSearch: setTransportSearch,
-          isLoading: isTransportsFetching,
         },
         {
           id: "fractions",
@@ -191,7 +162,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
           error: fractionsError,
           hidden: !materialType[0] || materialType[0]?.fractions.length === 0,
           label: "Фракции",
-          usesDataFromApi: false,
         },
         {
           id: "measure",
@@ -234,16 +204,16 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
         {
           id: "workMode",
           type: "segment",
-          values: ENUMS.shiftTypes,
-          selectedIndex: workModeIndex,
+          values: FILTER_ENUMS_WITH_ALL.shiftTypes,
+          selectedIndex: shiftTypeI,
           onChange: (evt) =>
-            setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
+            setShiftTypeI(evt.nativeEvent.selectedSegmentIndex),
           label: "Режим работы",
         },
         {
           id: "delivery",
           type: "segment",
-          values: INPUT_VALUES_WITH_ALL.delivery,
+          values: FILTER_ENUMS_WITH_ALL.delivery,
           selectedIndex: deliveryI,
           onChange: (evt) => setDeliveryI(evt.nativeEvent.selectedSegmentIndex),
           label: "Доставка",
@@ -275,10 +245,16 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     const result: TMaterialFilter = {
       transactionType: MATERIAL_TRANSACTION_TYPES[typeI],
       measureIn: MEASURE_IN[measureI],
-      paymentType: PAYMENT_TYPES[paymentTypeI],
-      shiftType: SHIFT_TYPES[workModeIndex],
-      deliveryType: DELIVERY[deliveryI],
     };
+    if (FILTER_ENUMS_WITH_ALL.delivery[deliveryI] !== ALL) {
+      result.deliveryType = DELIVERY[deliveryI];
+    }
+    if (FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL) {
+      result.shiftType = SHIFT_TYPES[shiftTypeI];
+    }
+    if (PAYMENT_TYPES[paymentTypeI] !== "ANY") {
+      result.paymentType = PAYMENT_TYPES[paymentTypeI];
+    }
     if (transport) result.transports = transport;
     if (amountFrom && amountTo) {
       result.amountFrom = Number(amountFrom);

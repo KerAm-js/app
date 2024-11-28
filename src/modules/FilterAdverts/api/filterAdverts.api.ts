@@ -2,28 +2,6 @@ import { api } from "../../../api/api";
 import { IMiniAdvert } from "../../../types/Advert";
 import { TDumpFilter } from "../store/types";
 
-export type TEquipment = { id: number; name: string };
-export type TParameter = { id: number; name: string };
-export type TFraction = { id: number; name: string };
-
-export interface ITechnicType {
-  id: number;
-  name: string;
-  equipments: Array<TEquipment>;
-  parameters: Array<TParameter>;
-}
-
-export interface ITransportType {
-  id: number;
-  name: string;
-}
-
-export interface IMaterialType {
-  id: number;
-  name: string;
-  fractions: Array<TFraction>;
-}
-
 export interface UploadImageToAdvertPayload {
   image: {
     uri: string;
@@ -34,16 +12,7 @@ export interface UploadImageToAdvertPayload {
   order_id: string;
 }
 
-interface GetImageNamesByOrderIdParams {
-  order_id: string;
-  advert_type: string;
-}
-
-interface GetImageResponse {
-  url: string;
-}
-
-export const postAdvertApi = api.injectEndpoints({
+export const filterAdvertApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getTechnicAdvertsMiniFiltered: builder.query<Array<IMiniAdvert>, {}>({
       query: () => ({
@@ -71,3 +40,9 @@ export const postAdvertApi = api.injectEndpoints({
     }),
   }),
 });
+
+export const {
+  useGetTechnicAdvertsMiniFilteredQuery,
+  useGetDumpAdvertsMiniFilteredQuery,
+  useGetMaterialAdvertsMiniFilteredQuery,
+} = filterAdvertApi;

@@ -4,10 +4,6 @@ import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
-import {
-  ITechnicType,
-  useGetTechnicTypesByLetterQuery,
-} from "../../../PostAdvert/api/postAdvert.api";
 import { handleError } from "../../../Auth/helpers/getErrorMessage";
 import { View } from "react-native";
 import { TTechnicFilter } from "../../store/types";
@@ -28,7 +24,11 @@ import {
 } from "../../../../consts/enums";
 import { useNavigation } from "@react-navigation/native";
 import { useActions } from "../../../../hooks/store/useActions";
-import { TEquipment } from "../../api/filterAdverts.api";
+import {
+  ITechnicType,
+  TEquipment,
+  useTechnicTypes,
+} from "../../../MiniEntities";
 
 const trailerTypes = TRAILER_TYPES.map((item, index) => ({
   id: index,
@@ -132,8 +132,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     isTechnicTypeValid,
     technicTypeError,
     _____,
-    technicTypeSearch,
-    setTechnicTypeSearch,
   ] = useSelectionValidator<ITechnicType>({ required: true });
   const [
     equipment,
@@ -380,13 +378,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     initPaymentTypeI < 0 ? 0 : initPaymentTypeI
   );
 
-  const {
-    data: techTypes,
-    isFetching: isTechnicTypeLoading,
-    error,
-  } = useGetTechnicTypesByLetterQuery(technicTypeSearch, {
-    skip: !technicTypeSearch,
-  });
+  const techTypes = useTechnicTypes();
 
   const hasWeight = !!technicType[0]?.parameters.find(
     (param) => param.name === "weight"
@@ -454,17 +446,12 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
         {
           id: "technicType",
           type: "selection",
-          itemsList:
-            !!technicTypeSearch && !isTechnicTypeLoading ? techTypes : [],
-          isLoading: isTechnicTypeLoading,
+          itemsList: techTypes,
           value: technicType,
           selectItem: selectTechnicType,
           unselectItem: unselectTechnicType,
           label: "Вид техники",
-          error: technicTypeError || handleError(error),
-          usesDataFromApi: true,
-          search: technicTypeSearch,
-          setSearch: setTechnicTypeSearch,
+          error: technicTypeError,
         },
         {
           id: "equipment",
@@ -476,7 +463,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           unselectItem: unselectEquipment,
           label: "Дополнительное оборудование",
           error: equipmentError,
-          usesDataFromApi: false,
         },
         {
           id: "weight",
@@ -646,7 +632,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           placeholder: "",
           label: getLabelForTechnicParam("trailerType"),
           error: trailerTypeError,
-          usesDataFromApi: false,
           hidden: !technicType[0] || !hasTrailerType,
         },
         {
@@ -781,7 +766,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     result.weightTo = Number(weightTo) || undefined;
     result.technicType = technicType[0].name;
     result.transactionType = TECHNIC_TRANSACTION_TYPES[typeI];
-    if (FILTER_ENUMS_WITH_ALL.paymentTypes[paymentTypeI] !== ALL) {
+    if (PAYMENT_TYPES[paymentTypeI] !== "ANY") {
       result.paymentType = PAYMENT_TYPES[paymentTypeI];
     }
     if (FILTER_ENUMS_WITH_ALL.paymentUnits[paymentUnitI] !== ALL) {
@@ -791,7 +776,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
       result.shiftType = SHIFT_TYPES[shiftTypeI];
     }
     setTechnicFilter(result);
-    console.log('json', JSON.stringify(result))
     navigation.goBack();
   };
 

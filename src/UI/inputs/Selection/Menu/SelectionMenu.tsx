@@ -10,6 +10,7 @@ import { FC } from "react";
 
 const SelectionMenu: FC<TSelectionMenuProps> = ({
   unselectItem,
+  animatedHeight,
   selectedItemsArr,
   isOpened,
 }) => {
@@ -17,11 +18,10 @@ const SelectionMenu: FC<TSelectionMenuProps> = ({
 
   const selectedItemsContainerStyle = useAnimatedStyle(() => {
     return {
-      height: withTiming(isShown ? 44 : 0, { duration: 150 }),
-      opacity: withTiming(isOpened ? 1 : 0),
-      borderBottomWidth: withTiming(isShown ? 1 : 0),
+      height: animatedHeight.value,
+      opacity: withTiming(!isOpened || !isShown ? 0 : 1),
     };
-  }, [isOpened, selectedItemsArr.length]);
+  }, [isOpened, animatedHeight.value, isShown]);
 
   return (
     <Animated.View
@@ -32,7 +32,7 @@ const SelectionMenu: FC<TSelectionMenuProps> = ({
         contentContainerStyle={selectionMenuStyles.scrollViewContent}
         showsHorizontalScrollIndicator={false}
       >
-        {selectedItemsArr.map((item, index) => (
+        {selectedItemsArr.map((item) => (
           <SelectionMenuItem
             onPressX={() => unselectItem(item)}
             key={item.id}

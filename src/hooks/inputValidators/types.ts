@@ -45,6 +45,4 @@ export type TSelectionValidatorReturn<T> = [
   isValid: boolean,
   error: string,
   setInitial: () => void,
-  search: string,
-  setSearch: (value: string) => void
 ];
