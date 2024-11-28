@@ -47,7 +47,7 @@ export const ENUM_TITLES: { [key in TEnum]: string } = {
   VOLUME: "Объём",
   WEIGHT: "Вес",
   M3_KM: "м3/км",
-  Т_КМ: "т/км",
+  T_KM: "т/км",
   NOT_SPECIFIED: "",
   TECHNIC: "Техника",
 };
@@ -80,7 +80,7 @@ export const PAYMENT_UNITS: ITechnicAdvert["paymentUnit"][] = [
   "HOUR",
   "SHIFT",
   "M3_KM",
-  "Т_КМ",
+  "T_KM",
 ];
 export const ROLLER_TYPES: ITechnicAdvert["rollerType"][] = ["MIXED", "SMOOTH"];
 export const SHIFT_TYPES: ITechnicAdvert["shiftType"][] = [

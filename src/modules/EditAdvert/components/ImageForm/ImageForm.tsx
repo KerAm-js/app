@@ -11,7 +11,6 @@ import { IImage } from "../../../../UI/inputs/Photo/types";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useUploadImageToAdvertMutation } from "../../../PostAdvert/api/postAdvert.api";
 
-
 const ImageForm: FC<IImageFormProps> = ({
   advertId,
   advertType,
@@ -22,9 +21,9 @@ const ImageForm: FC<IImageFormProps> = ({
 
   const [images, setImages] = useState<IImage[]>([]);
   const { token } = useAuth();
-  const [getAdvertImages, getAdvertImagesResult] =
-    useGetAdvertImagesMutation();
-  const [uploadImageToAdvert, uploadImageToAdvertResult] = useUploadImageToAdvertMutation()
+  const [getAdvertImages, getAdvertImagesResult] = useGetAdvertImagesMutation();
+  const [uploadImageToAdvert, uploadImageToAdvertResult] =
+    useUploadImageToAdvertMutation();
   const inputs: TFormInputsArray = [
     {
       title: isPhotosRequired
@@ -39,45 +38,58 @@ const ImageForm: FC<IImageFormProps> = ({
           setImages,
           advertType,
           advertId,
-          token
+          token,
         },
       ],
     },
   ];
   useEffect(() => {
-    getAdvertImages({advertType, advertId, token: token || ""})
+    getAdvertImages({ advertType, advertId, token: token || "" });
+  }, []);
 
-  }, [])
-
-  let imagesGotArray = useRef([])
+  let imagesGotArray = useRef([]);
 
   useEffect(() => {
-    if(getAdvertImagesResult.data !== undefined){
-      for(let i = 0; i < getAdvertImagesResult.data.length; i++){
-        imagesGotArray.current.push({name: getAdvertImagesResult.data[i], uri: `http://188.0.167.98:9636/demo/fileSystem/${getAdvertImagesResult.data[i]}`})
+    if (getAdvertImagesResult.data !== undefined) {
+      for (let i = 0; i < getAdvertImagesResult.data.length; i++) {
+        imagesGotArray.current.push({
+          name: getAdvertImagesResult.data[i],
+          uri: `http://188.0.167.98:9636/demo/fileSystem/${getAdvertImagesResult.data[i]}`,
+        });
       }
-      setImages([...images, ...imagesGotArray.current ])
+      setImages([...images, ...imagesGotArray.current]);
     }
-  }, [getAdvertImagesResult] )
+  }, [getAdvertImagesResult]);
 
-
+  const [flag, setFlag] = useState(false);
   const onSubmit = async () => {
+    let addedArray = [];
     images.forEach(async (image) => {
-      console.log(imagesGotArray.current.length)
-      const isAdded = imagesGotArray.current.filter(item => {
-        console.log(item.name, image.name)
-        return item.name === image.name ? item : null
-      }).length > 0 ? true : false
-      if(!isAdded){
-        uploadImageToAdvert({ image, advertType, advertId, token: token || "" });
+      const isAdded = imagesGotArray.current.filter((item) => {
+        return item.name === image.name ? item : null;
+      });
+      if (!(isAdded.length > 0)) {
+        uploadImageToAdvert({
+          image,
+          advertType,
+          advertId,
+          token: token || "",
+        });
+      } else {
+        addedArray.push(isAdded[0]);
       }
     });
+    if (
+      addedArray.length === images.length &&
+      imagesGotArray.current.length >= images.length
+    ) {
+      setFlag(true);
+    }
   };
 
-
   useEffect(() => {
-    if (uploadImageToAdvertResult.data) {
-      Alert.alert("Успешно", "Ваше объявление опубликовано", [
+    if (uploadImageToAdvertResult.data || flag) {
+      Alert.alert("Успешно", "Ваше объявление обновлено", [
         {
           text: "Продолжить",
           onPress: () => {
@@ -86,10 +98,9 @@ const ImageForm: FC<IImageFormProps> = ({
         },
       ]);
     } else if (uploadImageToAdvertResult.error) {
-
       Alert.alert("Ошибка", "Что-то пошло не так");
-  }
-  }, [uploadImageToAdvertResult.data, uploadImageToAdvertResult.error]);
+    }
+  }, [uploadImageToAdvertResult.data, uploadImageToAdvertResult.error, flag]);
 
   return (
     <Form

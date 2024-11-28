@@ -36,7 +36,7 @@ export interface TechnicAdvertDto extends AdvertDto, TechnicParams {
   secondAddressLat?: number;
   secondAddressLon?: number;
   distance?: number;
-  paymentUnit: "HOUR" | "SHIFT" | "M3_KM" | "Т_КМ";
+  paymentUnit: "HOUR" | "SHIFT" | "M3_KM" | "T_KM";
 }
 
 export interface DumpAdvertDto extends AdvertDto {

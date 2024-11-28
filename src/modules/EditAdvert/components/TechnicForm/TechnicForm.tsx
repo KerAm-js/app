@@ -225,6 +225,7 @@ const TechnicForm = ({props}) => {
 
   const [paymentForI, setPaymentForI] = useState(PAYMENT_TYPES.indexOf(props.paymentType));
   const [paymentTypeI, setPaymentTypeI] = useState(PAYMENT_UNITS.indexOf(props.paymentUnit));
+  console.log(paymentTypeI, paymentForI)
 
   const {
     data: techTypes,
@@ -768,13 +769,13 @@ const TechnicForm = ({props}) => {
           ? LOADING_TYPES[loadingTypeI]
           : "NOT_SPECIFIED",
         price: Number(price),
-        paymentUnit: PAYMENT_UNITS[paymentForI],
-        paymentType: PAYMENT_TYPES[paymentTypeI],
+        paymentUnit: PAYMENT_UNITS[paymentTypeI],
+        paymentType: PAYMENT_TYPES[paymentForI],
       };
       delete advert.children
       delete advert.photos
 
-
+      console.log(advert)
 
       editAdvert({
         advert,
