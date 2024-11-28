@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { View } from "react-native";
 import { modalStyles } from "./styles";
 import BottomSheet from "../../../../components/BottomSheet/BottomSheet";
@@ -7,10 +7,30 @@ import { IAdvert } from "../../../../types/Advert";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
+import { useChangeDumpAdvertStatusMutation, useChangeMaterialAdvertStatusMutation, useChangeTechnicAdvertStatusMutation } from "../../../../modules/EditAdvert/api/editAdvert.api";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const MyModal: FC<IAdvert> = (props) => {
+  const {token} = useAuth()
   const navigation =
   useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [changeTechnicAdvertStatus, changeTechnicAdvertStatusResult] = useChangeTechnicAdvertStatusMutation()
+  const [changeMaterialAdvertStatus, changeMaterialAdvertStatusResult] = useChangeMaterialAdvertStatusMutation()
+  const [changeDumpAdvertStatus, changeDumpAdvertStatusResult] = useChangeDumpAdvertStatusMutation()
+
+console.log(props.advertStatus)
+  const updateRelevance = (status: string) => {
+    if(props.advertType === 'TECHNIC'){
+      changeTechnicAdvertStatus({advertStatus: status, advertId: props.id, token})
+    }else if( props.advertType === 'DUMP'){
+      changeDumpAdvertStatus({advertStatus: status, advertId: props.id, token})
+    }else{
+      changeMaterialAdvertStatus({advertStatus: status, advertId: props.id, token})
+
+    }
+  }
+
+
 
   const actions: Array<TSheetButtonProps> = [
     {
@@ -25,36 +45,41 @@ const MyModal: FC<IAdvert> = (props) => {
     {
       id: "2",
       title: "Обновить актуальность",
-      onPress: () => {},
+      onPress: () => {updateRelevance('PUBLISHED')},
       type: "default",
     },
     {
       id: "3",
       title:
         props.advertStatus === "PUBLISHED" ? "Снять с публикации" : "Опубликовать",
-      onPress: () => {},
+      onPress: () => {updateRelevance(props.advertStatus === "PUBLISHED" ? 'STOPPER' : 'PUBLISHED')},
       type: "default",
     },
     {
       id: "4",
       title: "Удалить объявление",
-      onPress: () => {},
+      onPress: () => {updateRelevance('DELETED')},
       type: "destructive",
       confirmMessage: "Вы уверены, что хотите удалить объявление?",
     },
   ];
 
+
+
   const actionsForDeletedAdvert: Array<TSheetButtonProps> = [
     {
       id: "1",
       title: "Восстановить объявление",
-      onPress: () => {},
+      onPress: () => {updateRelevance('PUBLISHED')},
       type: "default",
     },
     {
       id: "2",
       title: "Редактировать",
-      onPress: () => {},
+      onPress: () => {
+        navigation.goBack()
+        navigation.navigate('EditAdvert', props)
+      },
       type: "default",
     },
   ];

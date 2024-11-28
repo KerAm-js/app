@@ -237,6 +237,84 @@ getAdvertImages: builder.mutation<
   invalidatesTags: ['Images']
 
 }),
+changeTechnicAdvertStatus: builder.mutation<
+  string,
+  {
+    advertStatus: string,
+    advertId: any,
+    token?: string | undefined
+  }
+>({
+  query: ({ advertStatus, advertId, token }) => {
+   
+
+    return ({
+    url: "/secured/advert-technic/status-update",
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: {
+      advertId,
+      advertStatus
+    },
+
+  })},
+  invalidatesTags: ['User', 'TechnicAdverts']
+
+}),
+changeMaterialAdvertStatus: builder.mutation<
+  string,
+  {
+    advertStatus: string,
+    advertId: any,
+    token?: string | undefined
+  }
+>({
+  query: ({ advertStatus, advertId, token }) => {
+   
+
+    return ({
+    url: "/secured/advert-technic/status-update",
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: {
+      advertId,
+      advertStatus
+    },
+
+  })},
+  invalidatesTags: ['User', 'MaterialAdverts']
+
+}),
+changeDumpAdvertStatus: builder.mutation<
+  string,
+  {
+    advertStatus: string,
+    advertId: any,
+    token?: string | undefined
+  }
+>({
+  query: ({ advertStatus, advertId, token }) => {
+   
+
+    return ({
+    url: "/secured/advert-technic/status-update",
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: {
+      advertId,
+      advertStatus
+    },
+
+  })},
+  invalidatesTags: ['User', 'DumpAdverts']
+
+})
   }),
 });
 
@@ -245,6 +323,11 @@ export const {
   useEditDumpAdvertMutation,
   useEditMaterialAdvertMutation,
   useGetAdvertImagesMutation,
-  useDeleteAdvertImageMutation
+  useDeleteAdvertImageMutation,
+  useChangeTechnicAdvertStatusMutation,
+  useChangeMaterialAdvertStatusMutation,
+  useChangeDumpAdvertStatusMutation,
+
+  
 
 } = postAdvertApi;

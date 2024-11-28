@@ -45,6 +45,7 @@ const Advert: FC<IAdvert> = (props) => {
   } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    console.log(advertStatus, title)
 
   const { user, token } = useAuth();
   const { data: likes, isLoading: isLikesLoading } = useGetLikesByAdvertIdQuery(
@@ -174,7 +175,7 @@ const Advert: FC<IAdvert> = (props) => {
       </View>
       {advertStatus !== "DELETED" && (
         <View style={advertStyles.bottomContainer}>
-          {advertStatus !== "STOPPER" ? (
+          {advertStatus === "STOPPER" ? (
             <Text style={[advertStyles.paymentFor, { color: RED }]}>
               Снято с публикации
             </Text>
