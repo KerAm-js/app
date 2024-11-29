@@ -17,11 +17,27 @@ import {
   PAYMENT_TYPES,
   SHIFT_TYPES,
 } from "../../../../consts/enums";
-import { IDumpTransportType, IMaterialType, TFraction, useDumpTransports, useMaterialTypes } from "../../../MiniEntities";
+import {
+  IDumpTransportType,
+  IMaterialType,
+  TFraction,
+  useDumpTransports,
+  useMaterialTypes,
+} from "../../../MiniEntities";
+import { View } from "react-native";
+import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
 
 const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
   const { setMaterialFilter } = useActions();
+  const materialTypes = useMaterialTypes();
+  const dumpTransports = useDumpTransports();
   const navigation = useNavigation();
+
+  const initMaterialType = useMemo(
+    () =>
+      materialTypes.find((item) => item.name === currentFilter.materialType),
+    []
+  );
 
   const initTransactionTypeI = useMemo(
     () =>
@@ -40,20 +56,20 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     currentFilter?.coefficientFrom?.toString() || undefined;
   const initCoefficientTo =
     currentFilter?.coefficientTo?.toString() || undefined;
-  const initShiftTypeI = useMemo(
-    () => SHIFT_TYPES.findIndex((item) => item === currentFilter?.shiftType),
-    []
-  );
-  const initDeliveryI = useMemo(
-    () => DELIVERY.findIndex((item) => item === currentFilter.deliveryType),
-    []
-  );
-  const initPaymentTypeI = useMemo(
-    () =>
-      PAYMENT_TYPES.findIndex((item) => item === currentFilter?.paymentType),
-    []
-  );
-  // TODO - add init values for fractions, materialType, transports
+  const initShiftTypeI = useMemo(() => {
+    const i = SHIFT_TYPES.findIndex((item) => item === currentFilter.shiftType);
+    return i < 0 ? FILTER_ENUMS_WITH_ALL.shiftTypes.length - 1 : i;
+  }, []);
+  const initPaymentTypeI = useMemo(() => {
+    const i = PAYMENT_TYPES.findIndex(
+      (item) => item === currentFilter.paymentType
+    );
+    return i < 0 ? PAYMENT_TYPES.length - 1 : i;
+  }, []);
+  const initDeliveryI = useMemo(() => {
+    const i = DELIVERY.findIndex((item) => item === currentFilter.deliveryType);
+    return i < 0 ? FILTER_ENUMS_WITH_ALL.delivery.length - 1 : i;
+  }, []);
   const [typeI, setTypeI] = useState(
     initTransactionTypeI < 0 ? 0 : initTransactionTypeI
   );
@@ -65,7 +81,9 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     ___,
     materialTypeError,
     ______,
-  ] = useSelectionValidator<IMaterialType>({});
+  ] = useSelectionValidator<IMaterialType>({
+    initValue: initMaterialType ? [initMaterialType] : undefined,
+  });
   const [
     transport,
     selectTransport,
@@ -74,7 +92,10 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     isTransportValid,
     transportError,
     _______,
-  ] = useSelectionValidator<IDumpTransportType>({ multySelection: false });
+  ] = useSelectionValidator<IDumpTransportType>({
+    multySelection: false,
+    initValue: currentFilter.transports,
+  });
   const [
     fractions,
     selectFractions,
@@ -82,7 +103,10 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     _____,
     ________,
     fractionsError,
-  ] = useSelectionValidator<TFraction>({ multySelection: true });
+  ] = useSelectionValidator<TFraction>({
+    multySelection: true,
+    initValue: currentFilter.fractions,
+  });
   const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
   const [amountFrom, onAmountFromChange, isAmountFromValid, amountFromError] =
     useInputValidator({ minValue: 1, initValue: initAmountFrom });
@@ -101,19 +125,9 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     coefficientToError,
   ] = useInputValidator({ minValue: 1, initValue: initCoefficientTo });
 
-  const [shiftTypeI, setShiftTypeI] = useState(
-    initShiftTypeI < 0 ? 0 : initShiftTypeI
-  );
-  const [deliveryI, setDeliveryI] = useState(
-    initDeliveryI < 0 ? 0 : initDeliveryI
-  );
-  const [paymentTypeI, setPaymentTypeI] = useState(
-    initPaymentTypeI < 0 ? 0 : initPaymentTypeI
-  );
-
-  const materialTypes = useMaterialTypes();
-
-  const dumpTransports = useDumpTransports();
+  const [shiftTypeI, setShiftTypeI] = useState(initShiftTypeI);
+  const [deliveryI, setDeliveryI] = useState(initDeliveryI);
+  const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
 
   const inputs: TFormInputsArray = [
     {
@@ -246,6 +260,15 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
       transactionType: MATERIAL_TRANSACTION_TYPES[typeI],
       measureIn: MEASURE_IN[measureI],
     };
+    if (materialTypes.length > 0) {
+      result.materialType = materialType[0]?.name;
+    }
+    if (fractions.length > 0) {
+      result.fractions = fractions;
+    }
+    if (transport.length > 0) {
+      result.transports = transport;
+    }
     if (FILTER_ENUMS_WITH_ALL.delivery[deliveryI] !== ALL) {
       result.deliveryType = DELIVERY[deliveryI];
     }
@@ -255,7 +278,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     if (PAYMENT_TYPES[paymentTypeI] !== "ANY") {
       result.paymentType = PAYMENT_TYPES[paymentTypeI];
     }
-    if (transport) result.transports = transport;
     if (amountFrom && amountTo) {
       result.amountFrom = Number(amountFrom);
       result.amountTo = Number(amountTo);
@@ -264,18 +286,20 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
       result.coefficientFrom = Number(coefficientFrom);
       result.coefficientTo = Number(coefficientTo);
     }
-    // TODO - add fractions, materialType, transports
     setMaterialFilter(result);
     navigation.goBack();
   };
 
   return (
-    <Form
-      inputs={inputs}
-      isFormValid={isFormValid}
-      onSubmit={onSubmit}
-      submitTitle="Сохранить"
-    />
+    <View>
+      <Form
+        inputs={inputs}
+        isFormValid={isFormValid}
+        onSubmit={onSubmit}
+        submitTitle="Сохранить"
+      />
+      <ResetFilterButton advertType="NON_MATERIAL" />
+    </View>
   );
 };
 

@@ -15,18 +15,18 @@ export interface UploadImageToAdvertPayload {
 export const filterAdvertApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getTechnicAdvertsMiniFiltered: builder.query<Array<IMiniAdvert>, {}>({
-      query: () => ({
+      query: (filter) => ({
         url: "/advert-technic/mini/all/filtered",
         method: "POST",
-        body: {},
+        body: filter,
       }),
       providesTags: ["TechnicAdverts"],
     }),
     getMaterialAdvertsMiniFiltered: builder.query<Array<IMiniAdvert>, {}>({
-      query: () => ({
+      query: (filter) => ({
         url: "/advert-material/mini/all/filtered",
         method: "POST",
-        body: {},
+        body: filter,
       }),
       providesTags: ["MaterialAdverts"],
     }),

@@ -25,6 +25,7 @@ const YaMap3 = () => {
     material: materialAdvertFilter,
     technic: technicAdvertFilter,
   } = useAdvertFilters();
+  console.log(materialAdvertFilter)
   const { data: technicAdverts, refetch: refetchTechnicAdverts } =
     useGetTechnicAdvertsMiniFilteredQuery(technicAdvertFilter || {}, {
       skip: advertType !== "TECHNIC",

@@ -4,7 +4,6 @@ import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
-import { handleError } from "../../../Auth/helpers/getErrorMessage";
 import { View } from "react-native";
 import { TTechnicFilter } from "../../store/types";
 import {
@@ -29,6 +28,7 @@ import {
   TEquipment,
   useTechnicTypes,
 } from "../../../MiniEntities";
+import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
 
 const trailerTypes = TRAILER_TYPES.map((item, index) => ({
   id: index,
@@ -39,6 +39,7 @@ const trailerTypes = TRAILER_TYPES.map((item, index) => ({
 const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
   const navigation = useNavigation();
   const { setTechnicFilter } = useActions();
+  const techTypes = useTechnicTypes();
 
   const initTypeI = useMemo(
     () =>
@@ -47,43 +48,51 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
       ),
     []
   );
-  const initRollersTypeI = useMemo(
-    () => ROLLER_TYPES.findIndex((item) => item === currentFilter.rollerType),
-    []
-  );
-  const initSizeTypeI = useMemo(
-    () => SIZE_TYPES.findIndex((item) => item === currentFilter.sizeType),
-    []
-  );
+  const initRollersTypeI = useMemo(() => {
+    const i = ROLLER_TYPES.findIndex(
+      (item) => item === currentFilter.rollerType
+    );
+    return i < 0 ? FILTER_ENUMS_WITH_ALL.rollerTypes.length - 1 : i;
+  }, []);
+  const initSizeTypeI = useMemo(() => {
+    const i = SIZE_TYPES.findIndex((item) => item === currentFilter.sizeType);
+    return i < 0 ? FILTER_ENUMS_WITH_ALL.sizeTypes.length - 1 : i;
+  }, []);
   const initOssigI = currentFilter.OSSIG ? 1 : 0;
-  const initAxesCountI = useMemo(
-    () =>
-      AXES_COUNTS.findIndex(
-        (item) => item === currentFilter.axesCountFrom?.toString()
-      ),
-    []
-  );
-  const initLoadingTypeI = useMemo(
-    () => LOADING_TYPES.findIndex((item) => item === currentFilter.loadingType),
-    []
-  );
-  const initShiftTypeI = useMemo(
-    () => SHIFT_TYPES.findIndex((item) => item === currentFilter.shiftType),
-    []
-  );
-  const initPaymentUnitI = useMemo(
-    () => PAYMENT_UNITS.findIndex((item) => item === currentFilter.paymentUnit),
-    []
-  );
-  const initPaymentTypeI = useMemo(
-    () => PAYMENT_TYPES.findIndex((item) => item === currentFilter.paymentType),
-    []
-  );
+  const initAxesCountI = useMemo(() => {
+    const i = AXES_COUNTS.findIndex(
+      (item) => item === currentFilter.axesCountFrom?.toString()
+    );
+    return i < 0 ? FILTER_ENUMS_WITH_ALL.axesCount.length - 1 : i;
+  }, []);
+  const initLoadingTypeI = useMemo(() => {
+    const i = LOADING_TYPES.findIndex(
+      (item) => item === currentFilter.loadingType
+    );
+    return i < 0 ? FILTER_ENUMS_WITH_ALL.loadingTypes.length - 1 : i;
+  }, []);
+  const initShiftTypeI = useMemo(() => {
+    const i = SHIFT_TYPES.findIndex((item) => item === currentFilter.shiftType);
+    return i < 0 ? FILTER_ENUMS_WITH_ALL.shiftTypes.length - 1 : i;
+  }, []);
+  const initPaymentUnitI = useMemo(() => {
+    const i = PAYMENT_UNITS.findIndex(
+      (item) => item === currentFilter.paymentUnit
+    );
+    return i < 0 ? FILTER_ENUMS_WITH_ALL.paymentUnits.length - 1 : i;
+  }, []);
+  const initPaymentTypeI = useMemo(() => {
+    const i = PAYMENT_TYPES.findIndex(
+      (item) => item === currentFilter.paymentType
+    );
+    return i < 0 ? PAYMENT_TYPES.length - 1 : i;
+  }, []);
   const initTrailerType = trailerTypes.find(
     (item) => item.value === currentFilter.trailerType
   );
-  const initTechnicType = null; // TODO - default technicType
-  const initEquipment = null; // TODO - default initEquipment
+  const initTechnicType = techTypes.find(
+    (item) => item.name === currentFilter.technicType
+  );
   const initWeightFrom = currentFilter?.weightFrom?.toString() || undefined;
   const initWeightTo = currentFilter?.weightTo?.toString() || undefined;
   const initHeightFrom = currentFilter?.heightFrom?.toString() || undefined;
@@ -132,7 +141,9 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     isTechnicTypeValid,
     technicTypeError,
     _____,
-  ] = useSelectionValidator<ITechnicType>({ required: true });
+  ] = useSelectionValidator<ITechnicType>({
+    initValue: initTechnicType ? [initTechnicType] : undefined,
+  });
   const [
     equipment,
     selectEquipment,
@@ -140,7 +151,10 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     ______,
     __,
     equipmentError,
-  ] = useSelectionValidator<TEquipment>({ multySelection: true });
+  ] = useSelectionValidator<TEquipment>({
+    multySelection: true,
+    initValue: currentFilter.equipment,
+  });
   const [
     weightFrom,
     onWeightFromChange,
@@ -273,9 +287,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     minValue: 0,
     initValue: initPerformanceTo,
   });
-  const [rollersTypeI, setRollersTypeI] = useState(
-    initRollersTypeI < 0 ? 0 : initRollersTypeI
-  );
+  const [rollersTypeI, setRollersTypeI] = useState(initRollersTypeI);
   const [
     rollersCountFrom,
     onRollersCountFromChange,
@@ -294,13 +306,9 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     minValue: 1,
     initValue: initRollersCountTo,
   });
-  const [sizeTypeI, setSizeTypeI] = useState(
-    initSizeTypeI < 0 ? 0 : initSizeTypeI
-  );
-  const [ossigI, setOssigI] = useState(initOssigI < 0 ? 0 : initOssigI);
-  const [axesCountI, setAxesCountI] = useState(
-    initAxesCountI < 0 ? 0 : initAxesCountI
-  );
+  const [sizeTypeI, setSizeTypeI] = useState(initSizeTypeI);
+  const [ossigI, setOssigI] = useState(initOssigI);
+  const [axesCountI, setAxesCountI] = useState(initAxesCountI);
   const [
     bodyLengthFrom,
     onBodyLengthFromChange,
@@ -329,9 +337,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
   ] = useSelectionValidator<(typeof trailerTypes)[0]>({
     initValue: initTrailerType ? [initTrailerType] : undefined,
   });
-  const [loadingTypeI, setLoadingTypeI] = useState(
-    initLoadingTypeI < 0 ? 0 : initLoadingTypeI
-  );
+  const [loadingTypeI, setLoadingTypeI] = useState(initLoadingTypeI);
   const [
     unitAmountFrom,
     onUnitAmountFromChange,
@@ -350,9 +356,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     minValue: 1,
     initValue: initUnitAmountTo,
   });
-  const [shiftTypeI, setShiftTypeI] = useState(
-    initShiftTypeI < 0 ? 0 : initShiftTypeI
-  );
+  const [shiftTypeI, setShiftTypeI] = useState(initShiftTypeI);
   const [
     rentalDaysCountFrom,
     onRentalDaysCountFromChange,
@@ -371,14 +375,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     minValue: 1,
     initValue: initRentalDaysCountTo,
   });
-  const [paymentUnitI, setPaymentUnitI] = useState(
-    initPaymentUnitI < 0 ? 0 : initPaymentUnitI
-  );
-  const [paymentTypeI, setPaymentTypeI] = useState(
-    initPaymentTypeI < 0 ? 0 : initPaymentTypeI
-  );
-
-  const techTypes = useTechnicTypes();
+  const [paymentUnitI, setPaymentUnitI] = useState(initPaymentUnitI);
+  const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
 
   const hasWeight = !!technicType[0]?.parameters.find(
     (param) => param.name === "weight"
@@ -425,6 +423,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
   const hasLoadingType = !!technicType[0]?.parameters.find(
     (param) => param.name === "loading_type"
   );
+  const hasEquipment = technicType[0] && technicType[0]?.equipments.length > 0;
 
   const inputs: TFormInputsArray = [
     {
@@ -456,7 +455,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
         {
           id: "equipment",
           type: "selection",
-          hidden: !technicType[0] || technicType[0]?.equipments.length === 0,
+          hidden: !hasEquipment,
           itemsList: technicType[0]?.equipments || [],
           value: equipment,
           selectItem: selectEquipment,
@@ -719,7 +718,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
       result.axesCountFrom = axesCount;
       result.axesCountTo = axesCount;
     }
-    if (equipment.length > 0) {
+    if (hasEquipment && equipment.length > 0) {
       result.equipment = equipment;
     }
     if (
@@ -764,8 +763,10 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     result.volumeTo = Number(volumeTo) || undefined;
     result.weightFrom = Number(weightFrom) || undefined;
     result.weightTo = Number(weightTo) || undefined;
-    result.technicType = technicType[0].name;
     result.transactionType = TECHNIC_TRANSACTION_TYPES[typeI];
+    if (technicType.length > 0) {
+      result.technicType = technicType[0].name;
+    }
     if (PAYMENT_TYPES[paymentTypeI] !== "ANY") {
       result.paymentType = PAYMENT_TYPES[paymentTypeI];
     }
@@ -787,6 +788,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
         onSubmit={onSubmit}
         submitTitle="Сохранить"
       />
+      <ResetFilterButton advertType="TECHNIC" />
     </View>
   );
 };

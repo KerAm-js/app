@@ -1,6 +1,6 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import YaMap, { Point } from "react-native-yamap";
+import YaMap, { Point, Polyline } from "react-native-yamap";
 import { RouteStartMarker } from "../../../modules/ChooseAddressMap/components/RouteStartMarker";
 import { CloseMapButton } from "../../../UI/buttons/CloseMapButton/CloseMapButton";
 import { RouteEndMarker } from "../../../modules/ChooseAddressMap/components/RouteEndMarker";
@@ -19,6 +19,8 @@ export const AdvertLocationMap: FC<TAdvertLocationMapProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [route, setRoute] = useState<Point[] | null>(null);
+  const mapRef = useRef<YaMap | null>(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -26,15 +28,32 @@ export const AdvertLocationMap: FC<TAdvertLocationMapProps> = ({
     }, 10);
   }, []);
 
+  useEffect(() => {
+    if (secondPoint && isMapLoaded && mapRef.current) {
+      mapRef.current.findDrivingRoutes([point, secondPoint], (result) => {
+        const points: Point[] = [];
+        if (result && result.routes && result.routes.length >= 1) {
+          result.routes[0].sections.forEach((section) => {
+            section.points.forEach((point) => {
+              points.push(point);
+            });
+          });
+        }
+        setRoute(points);
+      });
+    }
+  }, [isMapLoaded]);
+
   return (
     <View style={styles.container}>
       <CloseMapButton />
-      {!isMapLoaded && (
-        <MapLoader />
-      )}
+      {!isMapLoaded && <MapLoader />}
       {isVisible && (
         <YaMap
-          onMapLoaded={() => setIsMapLoaded(true)}
+          ref={mapRef}
+          onMapLoaded={() => {
+            setIsMapLoaded(true);
+          }}
           followUser
           userLocationIcon={{
             uri: "https://www.clipartmax.com/png/middle/180-1801760_pin-png.png",
@@ -43,12 +62,13 @@ export const AdvertLocationMap: FC<TAdvertLocationMapProps> = ({
             lat: point.lat,
             lon: point.lon,
             zoom: 10,
-            azimuth: 80,
-            tilt: 100,
           }}
           style={styles.map}
         >
           <RouteStartMarker point={point} onPress={() => null} />
+          {route && (
+            <Polyline strokeWidth={3} strokeColor="red" points={route} />
+          )}
           {secondPoint && (
             <RouteEndMarker
               point={secondPoint}

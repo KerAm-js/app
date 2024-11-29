@@ -85,6 +85,7 @@ export type TMaterialFilter = {
 } & Partial<
   Pick<
     MaterialAdvertDto,
+    | "materialType"
     | "measureIn"
     | "paymentType"
     | "shiftType"

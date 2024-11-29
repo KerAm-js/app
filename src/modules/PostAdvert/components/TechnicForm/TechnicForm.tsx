@@ -670,6 +670,7 @@ const TechnicForm = () => {
         addressLon: point?.lon || 36,
         secondAddressLat: secondPoint?.lat,
         secondAddressLon: secondPoint?.lon,
+        distance: secondPoint ? distance : undefined,
         description: comment,
         technicType: technicType[0].name,
         technicMark: mark,

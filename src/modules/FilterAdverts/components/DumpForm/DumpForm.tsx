@@ -41,10 +41,11 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
 
 const DumpForm: FC<TDumpFilter> = (currentFilter) => {
   const navigation = useNavigation();
+  const dumpTransports = useDumpTransports();
   const initTransactionType = useMemo(
     () =>
       dumpTransactionTypes.find(
-        (item) => item.name === currentFilter?.transactionType
+        (item) => item.value === currentFilter?.transactionType
       ) || undefined,
     []
   );
@@ -70,15 +71,16 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     currentFilter?.coefficientFrom?.toString() || undefined;
   const initCoefficientTo =
     currentFilter?.coefficientTo?.toString() || undefined;
-  const initShiftTypeI = useMemo(
-    () => SHIFT_TYPES.findIndex((item) => item === currentFilter?.shiftType),
-    []
-  );
-  const initPaymentTypeI = useMemo(
-    () =>
-      PAYMENT_TYPES.findIndex((item) => item === currentFilter?.paymentType),
-    []
-  );
+  const initShiftTypeI = useMemo(() => {
+    const i = SHIFT_TYPES.findIndex((item) => item === currentFilter.shiftType);
+    return i < 0 ? FILTER_ENUMS_WITH_ALL.shiftTypes.length - 1 : i;
+  }, []);
+  const initPaymentTypeI = useMemo(() => {
+    const i = PAYMENT_TYPES.findIndex(
+      (item) => item === currentFilter.paymentType
+    );
+    return i < 0 ? PAYMENT_TYPES.length - 1 : i;
+  }, []);
 
   const { setDumpFilter } = useActions();
   const [type, selectType, unselectType, _, isTypeValid, typeError] =
@@ -108,7 +110,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     required: false,
     initValue: initDangerClass ? [initDangerClass] : undefined,
   });
-  // TODO - default transport value
   const [
     transport,
     selectTransport,
@@ -117,7 +118,10 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     isTransportValid,
     transportError,
     setTransportInitial,
-  ] = useSelectionValidator<IDumpTransportType>({ multySelection: false });
+  ] = useSelectionValidator<IDumpTransportType>({
+    multySelection: false,
+    initValue: currentFilter.transports || [],
+  });
   const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
   const [amountFrom, onAmountFromChange, isAmountFromValid, amountFromError] =
     useInputValidator({ minValue: 1, initValue: initAmountFrom });
@@ -136,14 +140,8 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     coefficientToError,
   ] = useInputValidator({ minValue: 1, initValue: initCoefficientTo });
 
-  const [shiftTypeI, setShiftTypeI] = useState(
-    initShiftTypeI < 0 ? 0 : initShiftTypeI
-  );
-  const [paymentTypeI, setPaymentTypeI] = useState(
-    initPaymentTypeI < 0 ? 0 : initPaymentTypeI
-  );
-
-  const dumpTransports = useDumpTransports();
+  const [shiftTypeI, setShiftTypeI] = useState(initShiftTypeI);
+  const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
 
   const inputs: TFormInputsArray = [
     {
@@ -292,7 +290,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       result.coefficientFrom = Number(coefficientFrom);
       result.coefficientTo = Number(coefficientTo);
     }
-    // TODO - add transports
     setDumpFilter(result);
     navigation.goBack();
   };
