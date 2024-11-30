@@ -23,7 +23,7 @@ import {
   TECHNIC_TRANSACTION_TYPES,
   TRAILER_TYPES,
 } from "../../../../consts/enums";
-import { ITechnicAdvert, TechnicAdvertDto } from "../../../../types/Advert";
+import { TechnicAdvertDto } from "../../../../types/Advert";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
 import { useActions } from "../../../../hooks/store/useActions";
@@ -762,6 +762,9 @@ const TechnicForm = () => {
 
   useEffect(() => {
     setAddressByMapDefaults();
+    return () => {
+      setAddressByMapDefaults();
+    }
   }, []);
 
   return (

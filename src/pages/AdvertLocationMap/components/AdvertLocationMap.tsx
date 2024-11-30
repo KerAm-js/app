@@ -5,6 +5,7 @@ import { RouteStartMarker } from "../../../modules/ChooseAddressMap/components/R
 import { CloseMapButton } from "../../../UI/buttons/CloseMapButton/CloseMapButton";
 import { RouteEndMarker } from "../../../modules/ChooseAddressMap/components/RouteEndMarker";
 import { MapLoader } from "../../../modules/ChooseAddressMap";
+import { PURPLE } from "../../../consts/colors";
 
 export type TAdvertLocationMapProps = {
   point: Point;
@@ -67,7 +68,7 @@ export const AdvertLocationMap: FC<TAdvertLocationMapProps> = ({
         >
           <RouteStartMarker point={point} onPress={() => null} />
           {route && (
-            <Polyline strokeWidth={3} strokeColor="red" points={route} />
+            <Polyline strokeWidth={3} strokeColor={PURPLE} points={route} />
           )}
           {secondPoint && (
             <RouteEndMarker

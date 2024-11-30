@@ -41,7 +41,7 @@ export interface TechnicAdvertDto extends AdvertDto, TechnicParams {
 
 export interface DumpAdvertDto extends AdvertDto {
   advertType: "DUMP";
-  advertStatus: BaseAdvert['advertStatus'];
+  advertStatus: BaseAdvert["advertStatus"];
   transactionType:
     | "NEED_SOIL_DUMP"
     | "NEED_SOIL_REMOVAL"
@@ -57,7 +57,7 @@ export interface DumpAdvertDto extends AdvertDto {
 
 export interface MaterialAdvertDto extends AdvertDto {
   advertType: "NON_MATERIAL";
-  advertStatus: BaseAdvert['advertStatus'];
+  advertStatus: BaseAdvert["advertStatus"];
   transactionType: "BUY" | "SELL";
   deliveryType: "DELIVERY" | "SELF_PICKUP";
   materialType: string;
@@ -102,4 +102,7 @@ export interface IMaterialAdvert extends BaseAdvert, MaterialAdvertDto {}
 
 export type IAdvert = IMaterialAdvert | ITechnicAdvert | IDumpAdvert;
 
-export type IMiniAdvert = Pick<IAdvert, "id" | "addressLat" | "addressLon" | "advertType">
+export type IMiniAdvert = Pick<
+  IAdvert,
+  "id" | "addressLat" | "addressLon" | "advertType" | "transactionType"
+>;

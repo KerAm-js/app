@@ -10,20 +10,18 @@ import { excavatorSvg } from "../../../../assets/svg/excavator";
 import { dumpSvg } from "../../../../assets/svg/dump";
 import { shovelSvg } from "../../../../assets/svg/shovel";
 import { SvgXml } from "react-native-svg";
-import { WHITE, GREEN } from "../../../../consts/colors";
+import { WHITE, GREEN, RED, BLUE, YELLOW } from "../../../../consts/colors";
+import { IAdvert } from "../../../../types/Advert";
 
 const data = {
   TECHNIC: {
-    iconXml: excavatorSvg(WHITE),
-    color: GREEN,
+    xmlGetter: excavatorSvg,
   },
   DUMP: {
-    iconXml: dumpSvg(WHITE),
-    color: GREEN,
+    xmlGetter: dumpSvg,
   },
   NON_MATERIAL: {
-    iconXml: shovelSvg(WHITE),
-    color: GREEN,
+    xmlGetter: shovelSvg,
   },
 };
 
@@ -32,8 +30,34 @@ export const CustomYamapMarker: FC<ICustomYamapMarkerProps> = ({
   addressLat,
   addressLon,
   advertType,
+  transactionType,
 }) => {
-  const { iconXml, color } = data[advertType];
+  const { xmlGetter } = data[advertType];
+  let color = "";
+  switch (transactionType) {
+    case "SELL":
+      color = RED;
+      break;
+    case "GIVE_A_RENT":
+      color = RED;
+      break;
+    case "NEED_SOIL_DUMP":
+      color = BLUE;
+      break;
+    case "NEED_SOIL_REMOVAL":
+      color = RED;
+      break;
+    case "SOIL_REMOVAL":
+      color = YELLOW;
+      break;
+    default:
+      color = GREEN;
+  }
+
+  if (advertType === "NON_MATERIAL") {
+    console.log(addressLat, addressLon, transactionType);
+  }
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -56,7 +80,7 @@ export const CustomYamapMarker: FC<ICustomYamapMarkerProps> = ({
           { backgroundColor: color, shadowColor: color },
         ]}
       >
-        <SvgXml xml={iconXml} width={32} height={32} />
+        <SvgXml xml={xmlGetter(WHITE)} width={32} height={32} />
       </View>
     </Marker>
   );

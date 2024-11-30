@@ -13,6 +13,7 @@ import { RouteEndMarker } from "./RouteEndMarker";
 import { RouteStartMarker } from "./RouteStartMarker";
 import { TAddressByMapState } from "../store/types";
 import { MapLoader } from "./MapLoader";
+import { PURPLE } from "../../../consts/colors";
 
 type TPropTypes = Pick<
   TAddressByMapState,
@@ -120,7 +121,7 @@ console.log(point)
               <RouteStartMarker point={point} onPress={onStartMarkPress} />
             )}
             {route && (
-              <Polyline strokeWidth={3} strokeColor="red" points={route} />
+              <Polyline strokeWidth={3} strokeColor={PURPLE} points={route} />
             )}
             {secondPoint && (
               <RouteEndMarker

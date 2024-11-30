@@ -15,6 +15,7 @@ import { CustomYamapMarker } from "../CustomMarker/CustomYamapMarker";
 import { RouteStartMarker } from "../../../../modules/ChooseAddressMap/components/RouteStartMarker";
 import { RouteEndMarker } from "../../../../modules/ChooseAddressMap/components/RouteEndMarker";
 import { useAdvertFilters } from "../../../../modules/FilterAdverts/store/hooks";
+import { PURPLE } from "../../../../consts/colors";
 
 YaMap.init(YA_MAP_API_KEY);
 
@@ -25,7 +26,6 @@ const YaMap3 = () => {
     material: materialAdvertFilter,
     technic: technicAdvertFilter,
   } = useAdvertFilters();
-  console.log(materialAdvertFilter)
   const { data: technicAdverts, refetch: refetchTechnicAdverts } =
     useGetTechnicAdvertsMiniFilteredQuery(technicAdvertFilter || {}, {
       skip: advertType !== "TECHNIC",
@@ -113,14 +113,14 @@ const YaMap3 = () => {
         initialRegion={{
           lat: 55.753215,
           lon: 37.622504,
-          zoom: 9,
+          zoom: 8,
         }}
         style={{ flex: 1 }}
       >
         {startPoint && (
           <RouteStartMarker point={startPoint} onPress={onStartMarkPress} />
         )}
-        {route && <Polyline strokeWidth={3} strokeColor="red" points={route} />}
+        {route && <Polyline strokeWidth={3} strokeColor={PURPLE} points={route} />}
         {endPoint && (
           <RouteEndMarker
             point={endPoint}
@@ -129,9 +129,6 @@ const YaMap3 = () => {
           />
         )}
         {data?.map((advertMini) => {
-          if (advertMini.id === 1 && advertMini.advertType === "NON_MATERIAL") {
-            return;
-          }
           return <CustomYamapMarker key={advertMini.id} {...advertMini} />;
         })}
       </YaMap>
