@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { WHITE } from "../../../../consts/colors";
 
 export const customMarkerStyles = StyleSheet.create({
   circle: {
@@ -7,5 +8,7 @@ export const customMarkerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 22,
+    borderWidth: 3,
+    borderColor: WHITE
   }
 })

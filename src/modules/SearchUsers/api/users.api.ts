@@ -38,9 +38,3 @@ const usersApi = api.injectEndpoints({
 });
 
 export const { useGetUserByIdQuery, useGetUsersQuery } = usersApi;
-
-// Usage example:
-// const { isLoading: isCreatingUser, mutate: createUser } = useNewUserMutation();
-// const { isLoading: isFetchingToken, mutate: getAdamToken } = useGetAdamTokenMutation();
-// const { data: userById, isLoading: isFetchingUser } = useGetUserByIdQuery(2);
-// const { isLoading: isFetchingAuthToken, mutate: getAuthToken } = useGetTokenMutation();

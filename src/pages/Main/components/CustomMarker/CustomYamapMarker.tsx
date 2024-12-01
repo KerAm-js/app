@@ -11,7 +11,6 @@ import { dumpSvg } from "../../../../assets/svg/dump";
 import { shovelSvg } from "../../../../assets/svg/shovel";
 import { SvgXml } from "react-native-svg";
 import { WHITE, GREEN, RED, BLUE, YELLOW } from "../../../../consts/colors";
-import { IAdvert } from "../../../../types/Advert";
 
 const data = {
   TECHNIC: {
@@ -80,7 +79,7 @@ export const CustomYamapMarker: FC<ICustomYamapMarkerProps> = ({
           { backgroundColor: color, shadowColor: color },
         ]}
       >
-        <SvgXml xml={xmlGetter(WHITE)} width={32} height={32} />
+        <SvgXml xml={xmlGetter(WHITE)} width={30} height={30} />
       </View>
     </Marker>
   );

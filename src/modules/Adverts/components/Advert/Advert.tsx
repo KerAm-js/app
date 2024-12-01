@@ -2,7 +2,7 @@ import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Avatar from "../../../../UI/Avatar/Avatar";
 import Rating from "../../../../UI/Rating/Rating";
-import { FC, useMemo } from "react";
+import { FC, memo, useMemo } from "react";
 import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 import { advertStyles } from "./styles";
 import { BLACK_DARK, GREY_DARK, RED, WHITE } from "../../../../consts/colors";
@@ -29,7 +29,7 @@ import { API_URL } from "../../../../api/api";
 import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeGetters";
 import { SetLike } from "../../../Like/components/SetLike";
 
-const Advert: FC<IAdvert> = (props) => {
+const Advert: FC<IAdvert> = memo((props) => {
   const {
     id,
     advertType,
@@ -198,6 +198,6 @@ const Advert: FC<IAdvert> = (props) => {
       )}
     </Pressable>
   );
-};
+});
 
 export default Advert;

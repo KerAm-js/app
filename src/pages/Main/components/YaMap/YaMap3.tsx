@@ -53,7 +53,7 @@ const YaMap3 = () => {
 
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [endPoint, setEndPoint] = useState<Point | null>(null);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const isMapLoaded = useRef(false);
   const [route, setRoute] = useState<Point[] | null>(null);
   const [distance, setDistance] = useState(0);
 
@@ -83,7 +83,7 @@ const YaMap3 = () => {
     }
   };
 
-  const onMapLoaded = () => setIsMapLoaded(true);
+  const onMapLoaded = () => (isMapLoaded.current = true);
 
   const onStartMarkPress = useCallback(() => {
     setStartPoint(endPoint || null);
@@ -120,7 +120,9 @@ const YaMap3 = () => {
         {startPoint && (
           <RouteStartMarker point={startPoint} onPress={onStartMarkPress} />
         )}
-        {route && <Polyline strokeWidth={3} strokeColor={PURPLE} points={route} />}
+        {route && (
+          <Polyline strokeWidth={3} strokeColor={PURPLE} points={route} />
+        )}
         {endPoint && (
           <RouteEndMarker
             point={endPoint}

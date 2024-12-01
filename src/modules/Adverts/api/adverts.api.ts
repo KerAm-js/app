@@ -1,6 +1,7 @@
 import { api } from "../../../api/api";
 import { IAdvert } from "../../../types/Advert";
 import { IUser } from "../../../types/User";
+import { PAGINATION_SIZE } from "./consts";
 
 export interface UploadImageToAdvertPayload {
   image: {
@@ -45,25 +46,23 @@ export const postAdvertApi = api.injectEndpoints({
         url: `/advert-technic/all/${userId}`,
       }),
     }),
-    getTechnicAdvertsPageable: builder.query<
-      Array<IAdvert>,
-      { from: number; size: number }
-    >({
-      query: ({ from, size }) => ({
+    getTechnicAdvertsPageable: builder.query<Array<IAdvert>, number>({
+      query: (from) => ({
         url: `/advert-technic/all/pageable`,
         params: {
           from,
-          size,
+          size: PAGINATION_SIZE,
         },
       }),
-      providesTags: ["TechnicAdverts"],
-      // Only have one cache entry because the arg always maps to one string
+      providesTags: ['TechnicAdverts'],
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName;
       },
-      // Always merge incoming data to the cache entry
       merge: (currentCache, newItems) => {
         currentCache.push(...newItems);
+      },
+      forceRefetch(params) {
+        return params.currentArg !== 0 && params.currentArg !== params.previousArg
       },
     }),
     getMaterialAdvertById: builder.query<IAdvert, IAdvert["id"]>({
@@ -76,15 +75,12 @@ export const postAdvertApi = api.injectEndpoints({
         url: `/advert-material/all/${userId}`,
       }),
     }),
-    getMaterialAdvertsPageable: builder.query<
-      Array<IAdvert>,
-      { from: number; size: number }
-    >({
-      query: ({ from, size }) => ({
+    getMaterialAdvertsPageable: builder.query<Array<IAdvert>, number>({
+      query: (from) => ({
         url: `/advert-material/all/pageable`,
         params: {
           from,
-          size,
+          size: PAGINATION_SIZE,
         },
       }),
       providesTags: ["MaterialAdverts"],
@@ -95,6 +91,9 @@ export const postAdvertApi = api.injectEndpoints({
       // Always merge incoming data to the cache entry
       merge: (currentCache, newItems) => {
         currentCache.push(...newItems);
+      },
+      forceRefetch(params) {
+        return params.currentArg !== 0 && params.currentArg !== params.previousArg
       },
     }),
     getDumpAdvertById: builder.query<IAdvert, IAdvert["id"]>({
@@ -107,15 +106,12 @@ export const postAdvertApi = api.injectEndpoints({
         url: `/advert-dump/all/${userId}`,
       }),
     }),
-    getDumpAdvertsPageable: builder.query<
-      Array<IAdvert>,
-      { from: number; size: number }
-    >({
-      query: ({ from, size }) => ({
+    getDumpAdvertsPageable: builder.query<Array<IAdvert>, number>({
+      query: (from) => ({
         url: `/advert-dump/all/pageable`,
         params: {
           from,
-          size,
+          size: PAGINATION_SIZE,
         },
       }),
       providesTags: ["DumpAdverts"],
@@ -126,6 +122,9 @@ export const postAdvertApi = api.injectEndpoints({
       // Always merge incoming data to the cache entry
       merge: (currentCache, newItems) => {
         currentCache.push(...newItems);
+      },
+      forceRefetch(params) {
+        return params.currentArg !== 0 && params.currentArg !== params.previousArg
       },
     }),
     getImageNamesByOrderId: builder.query<
