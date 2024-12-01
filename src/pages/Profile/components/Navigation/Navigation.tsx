@@ -86,7 +86,7 @@ const Navigation = () => {
           Выйти из аккаунта
         </Text>
       </Pressable>
-      <Pressable style={profileNavigationStyles.supportButton}>
+      <Pressable style={profileNavigationStyles.supportButton} onPress={() => navigation.navigate('Support', {id: token})}>
         <Text style={profileNavigationStyles.supportButtonTitle}>
           Служба поддержки
         </Text>

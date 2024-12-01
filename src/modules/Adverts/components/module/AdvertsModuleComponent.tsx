@@ -20,3 +20,4 @@ const AdvertsModuleComponent: FC<IAdvertsModuleProps> = (props) => {
 };
 
 export default AdvertsModuleComponent;
+

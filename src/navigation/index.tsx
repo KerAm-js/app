@@ -31,6 +31,7 @@ import { ChooseAddressPage } from "../pages/ChooseAddressPage";
 import { AdvertLocationMap } from "../pages/AdvertLocationMap";
 import EditAdvertPage from "../pages/EditAdvert";
 import EditImagesPage from "../pages/EditImages";
+import Support from "../pages/Support";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -166,6 +167,15 @@ const RootNavigator: FC = () => {
               name="CommentsToMe"
             >
               {({ route }) => <UserCommentsPage.Component {...route.params} />}
+            </Stack.Screen>
+            <Stack.Screen
+              options={{
+                title: "Поддержка",
+              }}
+              name="Support"
+              component={Support.Component}
+            >
+              
             </Stack.Screen>
             <Stack.Screen
               options={({

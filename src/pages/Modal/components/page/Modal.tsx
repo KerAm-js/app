@@ -18,7 +18,7 @@ const MyModal: FC<IAdvert> = (props) => {
   const [changeMaterialAdvertStatus, changeMaterialAdvertStatusResult] = useChangeMaterialAdvertStatusMutation()
   const [changeDumpAdvertStatus, changeDumpAdvertStatusResult] = useChangeDumpAdvertStatusMutation()
 
-console.log(props.advertStatus)
+
   const updateRelevance = (status: string) => {
     if(props.advertType === 'TECHNIC'){
       changeTechnicAdvertStatus({advertStatus: status, advertId: props.id, token})
@@ -26,7 +26,6 @@ console.log(props.advertStatus)
       changeDumpAdvertStatus({advertStatus: status, advertId: props.id, token})
     }else{
       changeMaterialAdvertStatus({advertStatus: status, advertId: props.id, token})
-
     }
   }
 
