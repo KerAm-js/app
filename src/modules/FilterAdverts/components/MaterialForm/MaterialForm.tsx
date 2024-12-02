@@ -26,12 +26,15 @@ import {
 } from "../../../MiniEntities";
 import { View } from "react-native";
 import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
 
 const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
   const { setMaterialFilter } = useActions();
   const materialTypes = useMaterialTypes();
   const dumpTransports = useDumpTransports();
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const initMaterialType = useMemo(
     () =>
@@ -260,6 +263,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
       priceFrom: null,
       priceTo: null,
       title: null,
+      description: null,
       // parameters below are not using for filtering
       amountFrom: Number(amountFrom) || null,
       amountTo: Number(amountTo) || null,
@@ -267,7 +271,8 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
       coefficientTo: Number(coefficientTo) || null,
       transactionType: MATERIAL_TRANSACTION_TYPES[typeI],
       measureIn: MEASURE_IN[measureI],
-      materialType: materialType.length > 0 ? materialType[0].name : null,
+      materialType:
+        materialType.length > 0 ? materialType[0].name.toLowerCase() : null,
       fractions: fractions.length > 0 ? fractions : null,
       transports: transport.length > 0 ? transport : null,
       deliveryType:
@@ -284,7 +289,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
           : null,
     };
     setMaterialFilter(result);
-    navigation.goBack();
+    navigation.navigate("Main");
   };
 
   return (

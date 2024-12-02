@@ -29,6 +29,8 @@ import {
   useTechnicTypes,
 } from "../../../MiniEntities";
 import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import { RootStackParamList } from "../../../../navigation/types";
 
 const trailerTypes = TRAILER_TYPES.map((item, index) => ({
   id: index,
@@ -37,7 +39,8 @@ const trailerTypes = TRAILER_TYPES.map((item, index) => ({
 }));
 
 const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { setTechnicFilter } = useActions();
   const techTypes = useTechnicTypes();
 
@@ -720,6 +723,20 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
         ? Number(FILTER_ENUMS_WITH_ALL.axesCount[axesCountI])
         : null;
     const result: TTechnicFilter = {
+      rentalFrom: null,
+      rentalTo: null,
+      title: null,
+      description: null,
+      productionYearFrom: null,
+      productionYearTo: null,
+      priceFrom: null,
+      priceTo: null,
+      technicMark: null,
+      technicModel: null,
+      distanceFrom: null,
+      distanceTo: null,
+      cargoType: null,
+      //parameters below aren't using for filtration
       axesCountFrom: axesCount,
       axesCountTo: axesCount,
       equipment: hasEquipment && equipment.length > 0 ? equipment : null,
@@ -755,19 +772,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
         FILTER_ENUMS_WITH_ALL.sizeTypes[sizeTypeI] !== ALL
           ? SIZE_TYPES[sizeTypeI]
           : null,
-      rentalFrom: null,
-      rentalTo: null,
-      title: null,
-      description: null,
-      productionYearFrom: null,
-      productionYearTo: null,
-      priceFrom: null,
-      priceTo: null,
-      technicMark: null,
-      technicModel: null,
-      distanceFrom: null,
-      distanceTo: null,
-      cargoType: null,
     };
     result.bodyLengthFrom = Number(bodyLengthFrom) || null;
     result.bodyLengthTo = Number(bodyLengthTo) || null;
@@ -794,9 +798,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     result.weightFrom = Number(weightFrom) || null;
     result.weightTo = Number(weightTo) || null;
     result.transactionType = TECHNIC_TRANSACTION_TYPES[typeI];
-    console.log(result);
-    // setTechnicFilter(result);
-    // navigation.goBack();
+    setTechnicFilter(result);
+    navigation.navigate("Main");
   };
 
   return (

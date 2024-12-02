@@ -60,6 +60,7 @@ export type TTechnicFilter = NullablePartial<
       | "technicModel"
       | "description"
       | "isTransport"
+      | "cargoType"
     >
   >
 >;
@@ -77,6 +78,7 @@ export type TDumpFilter = NullablePartial<
     Pick<
       DumpAdvertDto,
       | "title"
+      | "description"
       | "dangerClass"
       | "measureIn"
       | "paymentType"
@@ -106,6 +108,7 @@ export type TMaterialFilter = NullablePartial<
     | "deliveryType"
     | "fractions"
     | "title"
+    | "description"
   >
 >;
 

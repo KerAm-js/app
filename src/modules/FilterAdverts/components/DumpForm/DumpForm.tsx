@@ -21,6 +21,8 @@ import { View } from "react-native";
 import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
 import { useNavigation } from "@react-navigation/native";
 import { IDumpTransportType, useDumpTransports } from "../../../MiniEntities";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../../navigation/types";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -40,7 +42,8 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
 }));
 
 const DumpForm: FC<TDumpFilter> = (currentFilter) => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const dumpTransports = useDumpTransports();
   const initTransactionType = useMemo(
     () =>
@@ -271,6 +274,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
   const onSubmit = () => {
     const result: TDumpFilter = {
       title: null,
+      description: null,
       priceFrom: null,
       priceTo: null,
       //parameters below are not using for filter
@@ -293,7 +297,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       dangerClass: dangerClass[0]?.value || null,
     };
     setDumpFilter(result);
-    navigation.goBack();
+    navigation.navigate("Main");
   };
 
   return (

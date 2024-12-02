@@ -113,7 +113,7 @@ const YaMap3 = () => {
         initialRegion={{
           lat: 55.753215,
           lon: 37.622504,
-          zoom: 8,
+          zoom: 10,
         }}
         style={{ flex: 1 }}
       >
