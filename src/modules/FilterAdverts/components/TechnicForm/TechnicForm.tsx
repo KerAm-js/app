@@ -58,7 +58,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     const i = SIZE_TYPES.findIndex((item) => item === currentFilter.sizeType);
     return i < 0 ? FILTER_ENUMS_WITH_ALL.sizeTypes.length - 1 : i;
   }, []);
-  const initOssigI = currentFilter.OSSIG ? 1 : 0;
+  const initOssigI = currentFilter.ossig ? 1 : 0;
   const initAxesCountI = useMemo(() => {
     const i = AXES_COUNTS.findIndex(
       (item) => item === currentFilter.axesCountFrom?.toString()
@@ -153,7 +153,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     equipmentError,
   ] = useSelectionValidator<TEquipment>({
     multySelection: true,
-    initValue: currentFilter.equipment,
+    initValue: currentFilter.equipment || undefined,
   });
   const [
     weightFrom,
@@ -408,7 +408,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
   const hasSizeType = !!technicType[0]?.parameters.find(
     (param) => param.name === "size_type"
   );
-  const hasOSSIG = !!technicType[0]?.parameters.find(
+  const hasOssig = !!technicType[0]?.parameters.find(
     (param) => param.name === "ossig"
   );
   const hasAxesCount = !!technicType[0]?.parameters.find(
@@ -424,6 +424,9 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     (param) => param.name === "loading_type"
   );
   const hasEquipment = technicType[0] && technicType[0]?.equipments.length > 0;
+  const isTransport = !!technicType[0]?.parameters.find(
+    (p) => p.name === "transport"
+  );
 
   const inputs: TFormInputsArray = [
     {
@@ -608,8 +611,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           values: FILTER_ENUMS_WITH_ALL.ossig,
           selectedIndex: ossigI,
           onChange: (evt) => setOssigI(evt.nativeEvent.selectedSegmentIndex),
-          label: getLabelForTechnicParam("OSSIG"),
-          hidden: !technicType[0] || !hasOSSIG,
+          label: getLabelForTechnicParam("ossig"),
+          hidden: !technicType[0] || !hasOssig,
         },
         {
           id: "axesCount",
@@ -712,72 +715,88 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     isRentalDaysCountToValid;
 
   const onSubmit = () => {
-    const result: TTechnicFilter = {};
-    if (hasAxesCount && FILTER_ENUMS_WITH_ALL.axesCount[axesCountI] !== ALL) {
-      const axesCount = Number(FILTER_ENUMS_WITH_ALL.axesCount[axesCountI]);
-      result.axesCountFrom = axesCount;
-      result.axesCountTo = axesCount;
-    }
-    if (hasEquipment && equipment.length > 0) {
-      result.equipment = equipment;
-    }
-    if (
-      hasLoadingType &&
-      FILTER_ENUMS_WITH_ALL.loadingTypes[loadingTypeI] !== ALL
-    ) {
-      result.loadingType = LOADING_TYPES[loadingTypeI];
-    }
-    if (hasOSSIG && FILTER_ENUMS_WITH_ALL.ossig[ossigI] !== ALL) {
-      result.OSSIG = !!ossigI;
-    }
-    if (
-      hasRollerType &&
-      FILTER_ENUMS_WITH_ALL.rollerTypes[rollersTypeI] !== ALL
-    ) {
-      result.rollerType = ROLLER_TYPES[rollersTypeI];
-    }
-    if (trailerType.length === 1) {
-      result.trailerType = trailerType[0].value;
-    }
-    result.bodyLengthFrom = Number(bodyLengthFrom) || undefined;
-    result.bodyLengthTo = Number(bodyLengthTo) || undefined;
-    result.boomLengthFrom = Number(boomLengthFrom) || undefined;
-    result.boomLengthTo = Number(boomLengthTo) || undefined;
-    result.heightFrom = Number(heightFrom) || undefined;
-    result.heightTo = Number(heightTo) || undefined;
-    result.liftingCapacityFrom = Number(liftingCapacityFrom) || undefined;
-    result.liftingCapacityTo = Number(liftingCapacityTo) || undefined;
-    result.passengersCountFrom = Number(passengersCountFrom) || undefined;
-    result.passengersCountTo = Number(passengersCountTo) || undefined;
-    result.performanceFrom = Number(performanceFrom) || undefined;
-    result.performanceTo = Number(performanceTo) || undefined;
-    result.pipeLengthFrom = Number(pipeLengthTo) || undefined;
-    result.pipeLengthTo = Number(pipeLengthTo) || undefined;
-    result.rentalDaysCountFrom = Number(rentalDaysCountFrom) || undefined;
-    result.rentalDaysCountTo = Number(rentalDaysCountTo) || undefined;
-    result.rollersCountFrom = Number(rollersCountFrom) || undefined;
-    result.rollersCountTo = Number(rollersCountTo) || undefined;
-    result.unitAmountFrom = Number(unitAmountFrom) || undefined;
-    result.unitAmountTo = Number(unitAmountTo) || undefined;
-    result.volumeFrom = Number(volumeFrom) || undefined;
-    result.volumeTo = Number(volumeTo) || undefined;
-    result.weightFrom = Number(weightFrom) || undefined;
-    result.weightTo = Number(weightTo) || undefined;
+    const axesCount =
+      hasAxesCount && FILTER_ENUMS_WITH_ALL.axesCount[axesCountI] !== ALL
+        ? Number(FILTER_ENUMS_WITH_ALL.axesCount[axesCountI])
+        : null;
+    const result: TTechnicFilter = {
+      axesCountFrom: axesCount,
+      axesCountTo: axesCount,
+      equipment: hasEquipment && equipment.length > 0 ? equipment : null,
+      loadingType:
+        hasLoadingType &&
+        FILTER_ENUMS_WITH_ALL.loadingTypes[loadingTypeI] !== ALL
+          ? LOADING_TYPES[loadingTypeI]
+          : null,
+      ossig:
+        hasOssig && FILTER_ENUMS_WITH_ALL.ossig[ossigI] !== ALL
+          ? !!ossigI
+          : null,
+      rollerType:
+        hasRollerType && FILTER_ENUMS_WITH_ALL.rollerTypes[rollersTypeI] !== ALL
+          ? ROLLER_TYPES[rollersTypeI]
+          : null,
+      trailerType: trailerType.length === 1 ? trailerType[0].value : null,
+      technicType: technicType.length === 1 ? technicType[0].name : null,
+      isTransport: technicType.length === 1 ? isTransport : null,
+      paymentType:
+        PAYMENT_TYPES[paymentTypeI] !== "ANY"
+          ? PAYMENT_TYPES[paymentTypeI]
+          : null,
+      paymentUnit:
+        FILTER_ENUMS_WITH_ALL.paymentUnits[paymentUnitI] !== ALL
+          ? PAYMENT_UNITS[paymentUnitI]
+          : null,
+      shiftType:
+        FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL
+          ? SHIFT_TYPES[shiftTypeI]
+          : null,
+      sizeType:
+        FILTER_ENUMS_WITH_ALL.sizeTypes[sizeTypeI] !== ALL
+          ? SIZE_TYPES[sizeTypeI]
+          : null,
+      rentalFrom: null,
+      rentalTo: null,
+      title: null,
+      description: null,
+      productionYearFrom: null,
+      productionYearTo: null,
+      priceFrom: null,
+      priceTo: null,
+      technicMark: null,
+      technicModel: null,
+      distanceFrom: null,
+      distanceTo: null,
+      cargoType: null,
+    };
+    result.bodyLengthFrom = Number(bodyLengthFrom) || null;
+    result.bodyLengthTo = Number(bodyLengthTo) || null;
+    result.boomLengthFrom = Number(boomLengthFrom) || null;
+    result.boomLengthTo = Number(boomLengthTo) || null;
+    result.heightFrom = Number(heightFrom) || null;
+    result.heightTo = Number(heightTo) || null;
+    result.liftingCapacityFrom = Number(liftingCapacityFrom) || null;
+    result.liftingCapacityTo = Number(liftingCapacityTo) || null;
+    result.passengersCountFrom = Number(passengersCountFrom) || null;
+    result.passengersCountTo = Number(passengersCountTo) || null;
+    result.performanceFrom = Number(performanceFrom) || null;
+    result.performanceTo = Number(performanceTo) || null;
+    result.pipeLengthFrom = Number(pipeLengthTo) || null;
+    result.pipeLengthTo = Number(pipeLengthTo) || null;
+    result.rentalDaysCountFrom = Number(rentalDaysCountFrom) || null;
+    result.rentalDaysCountTo = Number(rentalDaysCountTo) || null;
+    result.rollersCountFrom = Number(rollersCountFrom) || null;
+    result.rollersCountTo = Number(rollersCountTo) || null;
+    result.unitAmountFrom = Number(unitAmountFrom) || null;
+    result.unitAmountTo = Number(unitAmountTo) || null;
+    result.volumeFrom = Number(volumeFrom) || null;
+    result.volumeTo = Number(volumeTo) || null;
+    result.weightFrom = Number(weightFrom) || null;
+    result.weightTo = Number(weightTo) || null;
     result.transactionType = TECHNIC_TRANSACTION_TYPES[typeI];
-    if (technicType.length > 0) {
-      result.technicType = technicType[0].name;
-    }
-    if (PAYMENT_TYPES[paymentTypeI] !== "ANY") {
-      result.paymentType = PAYMENT_TYPES[paymentTypeI];
-    }
-    if (FILTER_ENUMS_WITH_ALL.paymentUnits[paymentUnitI] !== ALL) {
-      result.paymentUnit = PAYMENT_UNITS[paymentUnitI];
-    }
-    if (FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL) {
-      result.shiftType = SHIFT_TYPES[shiftTypeI];
-    }
-    setTechnicFilter(result);
-    navigation.goBack();
+    console.log(result);
+    // setTechnicFilter(result);
+    // navigation.goBack();
   };
 
   return (

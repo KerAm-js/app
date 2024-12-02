@@ -17,7 +17,7 @@ export type TechnicParams = {
   rollerType?: "SMOOTH" | "MIXED" | NOT_SPECIFIED;
   rollersCount?: number;
   sizeType?: "OVERSIZE" | "OVERALL" | NOT_SPECIFIED;
-  OSSIG?: boolean;
+  ossig?: boolean;
   axesCount?: number;
   bodyLength?: number;
   trailerType?:

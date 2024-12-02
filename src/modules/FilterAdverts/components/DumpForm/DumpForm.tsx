@@ -270,26 +270,28 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
 
   const onSubmit = () => {
     const result: TDumpFilter = {
+      title: null,
+      priceFrom: null,
+      priceTo: null,
+      //parameters below are not using for filter
       transactionType: type[0].value,
       measureIn: MEASURE_IN[measureI],
+      amountFrom: Number(amountFrom) || null,
+      amountTo: Number(amountTo) || null,
+      coefficientFrom: Number(coefficientFrom) || null,
+      coefficientTo: Number(coefficientTo) || null,
+      shiftType:
+        FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL
+          ? SHIFT_TYPES[shiftTypeI]
+          : null,
+      paymentType:
+        PAYMENT_TYPES[paymentTypeI] !== "ANY"
+          ? PAYMENT_TYPES[paymentTypeI]
+          : null,
+      transports: transport.length > 0 ? transport : null,
+      wasteType: wasteType[0]?.name || null,
+      dangerClass: dangerClass[0]?.value || null,
     };
-    if (FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL) {
-      result.shiftType = SHIFT_TYPES[shiftTypeI];
-    }
-    if (PAYMENT_TYPES[paymentTypeI] !== "ANY") {
-      result.paymentType = PAYMENT_TYPES[paymentTypeI];
-    }
-    if (transport.length > 0) result.transports = transport;
-    if (wasteType[0]) result.wasteType = wasteType[0].name;
-    if (dangerClass[0]) result.dangerClass = dangerClass[0].value;
-    if (amountFrom && amountTo) {
-      result.amountFrom = Number(amountFrom);
-      result.amountTo = Number(amountTo);
-    }
-    if (coefficientFrom && coefficientTo) {
-      result.coefficientFrom = Number(coefficientFrom);
-      result.coefficientTo = Number(coefficientTo);
-    }
     setDumpFilter(result);
     navigation.goBack();
   };

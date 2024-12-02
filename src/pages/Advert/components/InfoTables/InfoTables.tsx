@@ -21,8 +21,8 @@ const InfoTables: FC<IAdvert> = (advert) => {
       const value = advert[param];
       if (title && value !== "NOT_SPECIFIED" && value !== 0 && !!value) {
         let data: TableRowData;
-        if (param === "OSSIG") {
-          //OSSIG
+        if (param === "ossig") {
+          //ossig
           data = {
             title,
             value: advert[param] ? "Подключён" : "Не подключён",

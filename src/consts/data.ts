@@ -76,7 +76,7 @@ export const TECHNIC_PARAMS: {
   rollerType: { title: "Тип вальцов" },
   rollersCount: { title: "Количество вальцов" },
   sizeType: { title: "Тип габаритности" },
-  OSSIG: { title: "ОССИГ" },
+  ossig: { title: "ОССИГ" },
   axesCount: { title: "Количество осей" },
   bodyLength: { title: "Длина кузова", measurement: "м" },
   trailerType: { title: "Тип прицепа" },
@@ -266,7 +266,7 @@ export const TECHNICS: {
     equipments: [],
   },
   Самосвал: {
-    params: { volume: true, OSSIG: true, axesCount: true },
+    params: { volume: true, ossig: true, axesCount: true },
     equipments: [],
     isTransport: true,
   },

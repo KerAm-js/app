@@ -9,10 +9,11 @@ export type TGeneral = {
   address: string;
 };
 
-export type TParams = {
-};
+export type TParams = {};
 
 export type TPrice = {
   price: number;
   paymentType: "Наличные" | "Безналичные" | "Все";
 };
+
+export type NullablePartial<T> = { [P in keyof T]?: T[P] | null };

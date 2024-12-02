@@ -27,7 +27,7 @@ export const INPUT_VALUES: {
   delivery: ["С доставкой", "Самовывоз"];
   rollerType: ["Гладкие", "Комбинированные"];
   sizeType: ["Габаритный", "Негабаритный"];
-  OSSIG: ["Подключён", "Не подключён"];
+  ossig: ["Подключён", "Не подключён"];
   trailerType: ["Прицеп", "Полуприцеп", "Корыто", "Прямая площадка"];
   loadingType: ["Задняя", "Передняя"];
   axesCount: ["3", "4"];
@@ -60,7 +60,7 @@ export const INPUT_VALUES: {
   delivery: ["С доставкой", "Самовывоз"],
   rollerType: ["Гладкие", "Комбинированные"],
   sizeType: ["Габаритный", "Негабаритный"],
-  OSSIG: ["Подключён", "Не подключён"],
+  ossig: ["Подключён", "Не подключён"],
   trailerType: ["Прицеп", "Полуприцеп", "Корыто", "Прямая площадка"],
   loadingType: ["Задняя", "Передняя"],
   axesCount: ["3", "4"],
@@ -71,7 +71,7 @@ export const INPUT_VALUES_WITH_ALL = {
   delivery: [...INPUT_VALUES.delivery, "Все"],
   rollerType: [...INPUT_VALUES.rollerType, "Все"],
   sizeType: [...INPUT_VALUES.sizeType, "Все"],
-  OSSIG: [...INPUT_VALUES.OSSIG, "Все"],
+  ossig: [...INPUT_VALUES.ossig, "Все"],
   trailerType: [...INPUT_VALUES.trailerType, "Все"],
   loadingType: [...INPUT_VALUES.loadingType, "Все"],
   axesCount: [...INPUT_VALUES.axesCount, "Все"],

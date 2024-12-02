@@ -241,7 +241,7 @@ const TechnicForm = () => {
   const hasSizeType = !!technicType[0]?.parameters.find(
     (param) => param.name === "size_type"
   );
-  const hasOSSIG = !!technicType[0]?.parameters.find(
+  const hasOssig = !!technicType[0]?.parameters.find(
     (param) => param.name === "ossig"
   );
   const hasAxesCount = !!technicType[0]?.parameters.find(
@@ -457,8 +457,8 @@ const TechnicForm = () => {
           values: ["Не подключён", "Подключён"],
           selectedIndex: ossigI,
           onChange: (evt) => setOssigI(evt.nativeEvent.selectedSegmentIndex),
-          label: getLabelForTechnicParam("OSSIG"),
-          hidden: !technicType[0] || !hasOSSIG,
+          label: getLabelForTechnicParam("ossig"),
+          hidden: !technicType[0] || !hasOssig,
         },
         {
           id: "axesCount",
@@ -690,7 +690,7 @@ const TechnicForm = () => {
           : "NOT_SPECIFIED",
         rollersCount: hasRollersCount ? Number(rollersCount) : 0,
         sizeType: hasSizeType ? SIZE_TYPES[sizeTypeI] : "NOT_SPECIFIED",
-        OSSIG: hasOSSIG ? !!ossigI : false,
+        ossig: hasOssig ? !!ossigI : false,
         axesCount: hasAxesCount ? Number(AXES_COUNTS[axesCountI]) : 0,
         bodyLength: hasBodyLength ? Number(bodyLength) : 0,
         trailerType: hasTrailerType ? trailerType[0].value : "NOT_SPECIFIED",

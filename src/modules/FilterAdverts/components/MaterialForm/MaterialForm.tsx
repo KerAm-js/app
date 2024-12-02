@@ -94,7 +94,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     _______,
   ] = useSelectionValidator<IDumpTransportType>({
     multySelection: false,
-    initValue: currentFilter.transports,
+    initValue: currentFilter.transports || undefined,
   });
   const [
     fractions,
@@ -105,7 +105,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     fractionsError,
   ] = useSelectionValidator<TFraction>({
     multySelection: true,
-    initValue: currentFilter.fractions,
+    initValue: currentFilter.fractions || undefined,
   });
   const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
   const [amountFrom, onAmountFromChange, isAmountFromValid, amountFromError] =
@@ -257,35 +257,32 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
 
   const onSubmit = () => {
     const result: TMaterialFilter = {
+      priceFrom: null,
+      priceTo: null,
+      title: null,
+      // parameters below are not using for filtering
+      amountFrom: Number(amountFrom) || null,
+      amountTo: Number(amountTo) || null,
+      coefficientFrom: Number(coefficientFrom) || null,
+      coefficientTo: Number(coefficientTo) || null,
       transactionType: MATERIAL_TRANSACTION_TYPES[typeI],
       measureIn: MEASURE_IN[measureI],
+      materialType: materialType.length > 0 ? materialType[0].name : null,
+      fractions: fractions.length > 0 ? fractions : null,
+      transports: transport.length > 0 ? transport : null,
+      deliveryType:
+        FILTER_ENUMS_WITH_ALL.delivery[deliveryI] !== ALL
+          ? DELIVERY[deliveryI]
+          : null,
+      shiftType:
+        FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL
+          ? SHIFT_TYPES[shiftTypeI]
+          : null,
+      paymentType:
+        PAYMENT_TYPES[paymentTypeI] !== "ANY"
+          ? PAYMENT_TYPES[paymentTypeI]
+          : null,
     };
-    if (materialTypes.length > 0) {
-      result.materialType = materialType[0]?.name;
-    }
-    if (fractions.length > 0) {
-      result.fractions = fractions;
-    }
-    if (transport.length > 0) {
-      result.transports = transport;
-    }
-    if (FILTER_ENUMS_WITH_ALL.delivery[deliveryI] !== ALL) {
-      result.deliveryType = DELIVERY[deliveryI];
-    }
-    if (FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL) {
-      result.shiftType = SHIFT_TYPES[shiftTypeI];
-    }
-    if (PAYMENT_TYPES[paymentTypeI] !== "ANY") {
-      result.paymentType = PAYMENT_TYPES[paymentTypeI];
-    }
-    if (amountFrom && amountTo) {
-      result.amountFrom = Number(amountFrom);
-      result.amountTo = Number(amountTo);
-    }
-    if (coefficientFrom && coefficientTo) {
-      result.coefficientFrom = Number(coefficientFrom);
-      result.coefficientTo = Number(coefficientTo);
-    }
     setMaterialFilter(result);
     navigation.goBack();
   };
