@@ -33,11 +33,12 @@ import { ITechnicAdvert, TechnicAdvertDto } from "../../../../types/Advert";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
 import { useActions } from "../../../../hooks/store/useActions";
-import { useGetTechnicTypesByLetterQuery } from "../../../PostAdvert/api/postAdvert.api";
+
+import { useTechnicTypes } from "../../../MiniEntities";
 
 const TechnicForm = ({props}) => {
 
-
+  const techTypes = useTechnicTypes();
   const { user, token } = useAuth();
   const { setAddressByMapDefaults, setPoint, setSecondPoint } = useActions();
 
@@ -59,9 +60,7 @@ const TechnicForm = ({props}) => {
     isTechnicTypeValid,
     technicTypeError,
     setTechnicTypeInitial,
-    techTypeSearch,
-    setTechTypeSearch,
-  ] = useSelectionValidator<ITechnicType>({ required: true });
+  ] = useSelectionValidator<ITechnicType>({ required: true, initValue: techTypes.filter(item => item.name === props.technicType)});
 
   const [mark, onChangeMark] = useInputValidator({initValue: String(props.technicMark)});
   const [model, onModelChange] = useInputValidator({initValue: String(props.technicModel)});
@@ -225,33 +224,11 @@ const TechnicForm = ({props}) => {
 
   const [paymentForI, setPaymentForI] = useState(PAYMENT_TYPES.indexOf(props.paymentType));
   const [paymentTypeI, setPaymentTypeI] = useState(PAYMENT_UNITS.indexOf(props.paymentUnit));
-  console.log(paymentTypeI, paymentForI)
 
-  const {
-    data: techTypes,
-    isFetching: isTechnicTypeLoading,
-    error,
-  } = useGetTechnicTypesByLetterQuery(techTypeSearch, {
-    skip: !techTypeSearch,
-  });
-  useEffect(() => {
-    setTechTypeSearch(String(props.technicType))
+
+
   
-  }, [])
-
-  let flag = useRef(false)
-  useEffect(() => {
-    if(!!techTypes?.length && !flag.current){
-      selectTechnicType(techTypes[0])
-      for(let i = 0; i < props.equipment.length; i++){
-        selectEquipment(props.equipment[i])
-      }
-
-      flag.current = true
-
-    }
-
-  }, [techTypes])
+ 
 
   const {
     point,
@@ -348,16 +325,12 @@ const TechnicForm = ({props}) => {
         {
           id: "technicType",
           type: "selection",
-          itemsList: !!techTypeSearch && !isTechnicTypeLoading ? techTypes : [],
-          isLoading: isTechnicTypeLoading,
+          itemsList: techTypes,
           value: technicType,
           selectItem: selectTechnicType,
           unselectItem: unselectTechnicType,
           label: "Вид техники",
-          error: technicTypeError || (error ? handleError(error) : ""),
-          usesDataFromApi: true,
-          search: techTypeSearch,
-          setSearch: setTechTypeSearch,
+          error: technicTypeError,
         },
         {
           id: "mark",
@@ -775,7 +748,7 @@ const TechnicForm = ({props}) => {
       delete advert.children
       delete advert.photos
 
-      console.log(advert)
+
 
       editAdvert({
         advert,
@@ -788,7 +761,7 @@ const TechnicForm = ({props}) => {
 
   useEffect(() => {
     if (editAdvertResult.isSuccess) {
-      console.log(editAdvertResult.originalArgs?.advert.id, '0001')
+
       if (isPhotosAllowed) {
         navigation.navigate("EditImages", {
           id: editAdvertResult.originalArgs?.advert.id,

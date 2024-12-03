@@ -1,61 +1,82 @@
 import { ActivityIndicator, FlatList, View } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { searchUsersStyles } from "./styles";
 import UserCard from "../../../../components/UserCard/UserCard";
 import SearchBar from "../../../../UI/inputs/SearchBar/SearchBar";
 import { useGetUsersQuery } from "../../api/users.api";
 import { BLACK_DARK } from "../../../../consts/colors";
+import { PAGINATION_SIZE } from "../../api/consts";
 
 const SearchUsersModuleComponent = () => {
-  const [search, setSearch] = useState("");
-  const [pagination, setPagination] = useState({ from: 0, to: 20 });
+  const [params, setParams] = useState({ from: 0, search: '' });
 
   const {
     isLoading,
     isFetching,
-    data: users,
-    error,
-    status,
+    data,
   } = useGetUsersQuery(
     {
-      username: search,
-      from: pagination.from,
-      to: pagination.to,
+      username: params.search,
+      from: params.from,
     },
-    { skip: !search }
+    { skip: !params.search }
   );
 
-  const onEndReached = () => {
-    setPagination((prev) => ({ from: prev.to + 1, to: prev.to + 3 }));
+  // Реализация функции debounce
+  const debounce = (func, delay) => {
+    let timeout;
+
+    return function (...args) {
+      const context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        func.apply(context, args);
+      }, delay);
+    };
   };
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setPagination((prev) => ({ from: 0, to: prev.to + 2 }));
-  //   }, 5000);
-  // }, [])
+  // Обернем setParams через debounce
+  const debouncedSetParams = useMemo(() => debounce((newParams) => setParams(newParams), 1000), []);
+
+  const handleSearchChange = useCallback(
+    (text) => {
+      debouncedSetParams({ from: 0, search: text });
+    },
+    [debouncedSetParams]
+  );
+
+  const incrementPage = useCallback(() => {
+    if (data && data.length > 0) {
+      setParams((prev) => ({
+        from: Math.floor(data?.length / PAGINATION_SIZE),
+        search: prev.search,
+      }));
+    }
+  }, [data]);
 
   return (
     <View style={searchUsersStyles.container}>
       <SearchBar
-        value={search}
-        onChangeText={setSearch}
+        onChangeText={handleSearchChange}
         placeholder="Имя пользователя"
       />
-      {isFetching || isLoading ? (
-        <ActivityIndicator
-          style={searchUsersStyles.loader}
-          size="small"
-          color={BLACK_DARK}
-        />
-      ) : (
-        <FlatList
-          data={search ? users : []}
-          style={searchUsersStyles.list}
-          contentContainerStyle={searchUsersStyles.flatlistContent}
-          renderItem={({ item }) => <UserCard key={item.email} {...item} />}
-        />
-      )}
+
+      <FlatList
+        onEndReached={incrementPage}
+        data={data}
+        style={searchUsersStyles.list}
+        contentContainerStyle={searchUsersStyles.flatlistContent}
+        ListFooterComponent={(isFetching || isLoading) && (
+          <ActivityIndicator
+            style={searchUsersStyles.loader}
+            size="small"
+            color={BLACK_DARK}
+          />
+        )}
+        ListFooterComponentStyle={{top: -40}}
+        renderItem={({ item }) => <UserCard key={item.email} {...item} />}
+      />
+      
     </View>
   );
 };

@@ -18,6 +18,8 @@ export const usePageableAdverts = ({
 }: TParams) => {
   const [from, setFrom] = useState(0);
 
+
+
   const {
     data: technicAdverts,
     isLoading: isTechnicAdvertsLoading,

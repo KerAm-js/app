@@ -24,9 +24,12 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
-import { useGetMaterialTypeByLetterQuery, useGetTransportByLetterQuery } from "../../../PostAdvert/api/postAdvert.api";
+import { useDumpTransports, useMaterialTypes } from "../../../MiniEntities";
+
 
 const MaterialForm = ({props}) => {
+  const materialTypes = useMaterialTypes()
+  const dumpTransports = useDumpTransports();
 
   const { token } = useAuth();
   const [editAdvert, editAdvertResult] = useEditMaterialAdvertMutation();
@@ -46,9 +49,7 @@ const MaterialForm = ({props}) => {
     isMaterialTypeValid,
     materialTypeError,
     setMaterialTypeInitial,
-    materialTypeSearch,
-    setMaterialTypeSearch,
-  ] = useSelectionValidator<IMaterialType>({ required: true });
+  ] = useSelectionValidator<IMaterialType>({ required: true, initValue: materialTypes.filter(item => item.name === props.materialType) });
 
   const [
     transport,
@@ -58,8 +59,6 @@ const MaterialForm = ({props}) => {
     isTransportValid,
     transportError,
     setTransportInitial,
-    transportSearch,
-    setTransportSearch,
   ] = useSelectionValidator<ITransportType>({ required: true, initValue: props.dumpTransport });
   const [measureI, setMeasureI] = useState(props.measureIn === 'WEIGHT' ? 0 : 1);
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
@@ -106,16 +105,6 @@ const MaterialForm = ({props}) => {
   });
   const [paymentTypeI, setPaymentTypeI] = useState(PAYMENT_TYPES.indexOf(props.paymentType));
 
-  const { data: materialTypes, isFetching: isMaterialTypesLoading } =
-    useGetMaterialTypeByLetterQuery(materialTypeSearch, {
-      skip: !materialTypeSearch,
-    });
-
-  const { data: transports, isFetching: isTransportsFetching } =
-    useGetTransportByLetterQuery(transportSearch, {
-      skip: !transportSearch,
-    });
-
   const inputs: TFormInputsArray = [
     {
       title: "Объявление",
@@ -149,16 +138,9 @@ const MaterialForm = ({props}) => {
           value: materialType,
           selectItem: selectMaterialType,
           unselectItem: unselectMaterialType,
-          itemsList:
-            !!materialTypeSearch && !isMaterialTypesLoading
-              ? materialTypes
-              : [],
+          itemsList: materialTypes,
           error: materialTypeError,
           label: "Вид материала",
-          usesDataFromApi: true,
-          search: materialTypeSearch,
-          setSearch: setMaterialTypeSearch,
-          isLoading: isMaterialTypesLoading,
         },
         {
           id: "transport",
@@ -166,14 +148,9 @@ const MaterialForm = ({props}) => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList:
-            !!transportSearch && !isTransportsFetching ? transports : [],
+          itemsList: dumpTransports,
           error: transportError,
           label: "Вид транспорта",
-          usesDataFromApi: true,
-          search: transportSearch,
-          setSearch: setTransportSearch,
-          isLoading: isTransportsFetching,
         },
         {
           id: "fractions",
@@ -296,18 +273,7 @@ const MaterialForm = ({props}) => {
   const transactionType = MATERIAL_TRANSACTION_TYPES[typeI];
   const isPhotosAllowed = transactionType === "SELL";
 
-  useEffect(() => {
-    setMaterialTypeSearch(props.materialType)
-  }, [])
-  let flag = useRef(false)
-  useEffect(() => {
 
-    if(!!materialTypes?.length && !flag.current){
-      selectMaterialType(materialTypes[0])
-      flag.current = true
-    }
-  
-  }, [materialTypes])
 
   const onSubmit = () => {
     editAdvert({

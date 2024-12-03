@@ -25,7 +25,8 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
-import { useGetTransportByLetterQuery } from "../../../PostAdvert/api/postAdvert.api";
+
+import { useDumpTransports } from "../../../MiniEntities";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -45,6 +46,9 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
 
 const DumpForm = ({props}) => {
   const { token } = useAuth();
+  const dumpTransports = useDumpTransports();
+
+
 
   const [editAdvert, editAdvertResult] = useEditDumpAdvertMutation()
   const navigation =
@@ -66,7 +70,8 @@ const DumpForm = ({props}) => {
     clearWasteType,
     isWasteTypeValid,
     wasteTypeError,
-  ] = useSelectionValidator<typeof wasteTypes[0]>({ required: true, initValue: [{id: WASTE_TYPES.indexOf(props.wasteType), name: props.wasteType}] });
+  ] = useSelectionValidator<typeof wasteTypes[0]>({ required: true, initValue: wasteTypes.filter(item => item.name === props.wasteType) });
+ 
   const [
     dangerClass,
     selectDangerClass,
@@ -74,7 +79,7 @@ const DumpForm = ({props}) => {
     clearDangerClass,
     isDangerClassValid,
     dangerClassError,
-  ] = useSelectionValidator<typeof dangerClasses[0]>({ required: true, initValue: [{id: DANGER_CLASSES.indexOf(props.dangerClass), name: props.dangerClass}]});
+  ] = useSelectionValidator<typeof dangerClasses[0]>({ required: true, initValue: dangerClasses.filter(item => item.name === props.dangerClass)});
   const [
     transport,
     selectTransport,
@@ -83,8 +88,6 @@ const DumpForm = ({props}) => {
     isTransportValid,
     transportError,
     setTransportInitial,
-    transportSearch,
-    setTransportSearch,
   ] = useSelectionValidator<ITransportType>({ required: true, initValue: props.dumpTransport });
   
   const [measureI, setMeasureI] = useState(props.measureIn === 'WEIGHT' ? 0 : 1);
@@ -121,8 +124,6 @@ const DumpForm = ({props}) => {
   });
   const [paymentTypeI, setPaymentTypeI] = useState(PAYMENT_TYPES.indexOf(props.paymentType));
 
-  const { data: transports, isFetching: isTransportsFetching } =
-    useGetTransportByLetterQuery(transportSearch);
 
   const inputs: TFormInputsArray = [
     {
@@ -137,7 +138,6 @@ const DumpForm = ({props}) => {
           itemsList: dumpTransactionTypes,
           error: typeError,
           label: "Тип объявления",
-          usesDataFromApi: false,
         },
         {
           id: "title",
@@ -163,7 +163,6 @@ const DumpForm = ({props}) => {
           itemsList: wasteTypes,
           error: wasteTypeError,
           label: "Вид отходов",
-          usesDataFromApi: false,
         },
         {
           id: "dangerClass",
@@ -174,7 +173,6 @@ const DumpForm = ({props}) => {
           itemsList: dangerClasses,
           error: dangerClassError,
           label: "Класс опасности",
-          usesDataFromApi: false,
         },
         {
           id: "transport",
@@ -182,14 +180,9 @@ const DumpForm = ({props}) => {
           value: transport,
           selectItem: selectTransport,
           unselectItem: unselectTransport,
-          itemsList:
-            !!transportSearch && !isTransportsFetching ? transports : [],
+          itemsList: dumpTransports,
           error: transportError,
           label: "Вид транспорта",
-          usesDataFromApi: true,
-          search: transportSearch,
-          setSearch: setTransportSearch,
-          isLoading: isTransportsFetching,
         },
         {
           id: "measure",
