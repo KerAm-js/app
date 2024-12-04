@@ -2,7 +2,7 @@ import { Pressable, TextInput, View } from "react-native";
 import { IInputProps } from "./types";
 import { inputStyles } from "./styles";
 import { BLUE, GREY_DARK, RED, WHITE } from "../../../consts/colors";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { TWithLabelAndErrorChildrenProps } from "../../../components/HOC/WithLabelAndError/types";
 import { SvgXml } from "react-native-svg";
 import { cancelSvg } from "../../../assets/svg/cancel";
@@ -19,13 +19,16 @@ const InputField: FC<IInputProps & TWithLabelAndErrorChildrenProps> = ({
   secureTextEntry,
   ...props
 }) => {
-  // console.log(value, props.placeholder)
   const clearInput = () => onChangeText("");
   const [isTextSecure, setIsTextSecure] = useState(secureTextEntry);
 
-  const onFocus = () => setIsFocused && setIsFocused(true);
+  const onFocus = () => {
+    console.log('focus')
+    setIsFocused && setIsFocused(true);
+  };
 
   const onBlur = () => {
+    console.log('blur')
     setIsFocused && setIsFocused(false);
     setErrorShown && setErrorShown(true);
   };

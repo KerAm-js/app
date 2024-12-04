@@ -23,6 +23,7 @@ import { useNavigation } from "@react-navigation/native";
 import { IDumpTransportType, useDumpTransports } from "../../../MiniEntities";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
+import { useIntervalValidator } from "../../../../hooks/inputValidators/useIntervalValidator";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -126,10 +127,21 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     initValue: currentFilter.transports || [],
   });
   const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
-  const [amountFrom, onAmountFromChange, isAmountFromValid, amountFromError] =
-    useInputValidator({ minValue: 1, initValue: initAmountFrom });
-  const [amountTo, onAmountToChange, isAmountToValid, amountToError] =
-    useInputValidator({ minValue: 1, initValue: initAmountTo });
+  const [
+    amountFrom,
+    amountTo,
+    onAmountFromChange,
+    onAmountToChange,
+    isAmountFromValid,
+    isAmountToValid,
+    amountFromError,
+    amountToError,
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initAmountFrom,
+    secondInitValue: initAmountTo,
+    requiredBothOrNone: true,
+  });
   const [
     coefficientFrom,
     onCoefficientFromChange,
@@ -214,6 +226,8 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
           onFirstValueChange: onAmountFromChange,
           onSecondValueChange: onAmountToChange,
           error: amountFromError || amountToError,
+          isFirstFieldInvalid: !isAmountFromValid,
+          isSecondFieldInvalid: !isAmountToValid,
           label:
             ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
               ? "Объём (м3)"
@@ -230,6 +244,8 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
           error: coefficientFromError || coefficientToError,
           label: "Коэффициент (вес/объём)",
           keyboardType: "decimal-pad",
+          isFirstFieldInvalid: !isCoefficientFromValid,
+          isSecondFieldInvalid: !isCoefficientToValid,
         },
       ],
     },
@@ -297,7 +313,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       dangerClass: dangerClass[0]?.value || null,
     };
     setDumpFilter(result);
-    navigation.navigate("Main");
+    // navigation.navigate("Main");
   };
 
   return (

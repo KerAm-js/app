@@ -1,14 +1,39 @@
-type TInputValidatorProps = {
-  initValue?: string;
+export interface IValidationParams {
   minLength?: number;
   pattern?: RegExp;
   patternErrorMessage?: string;
   required?: boolean;
-  confirmedValue?: string;
-  confirmingErrorMessage?: string;
+  valueToConfirm?: string;
+  confirmationErrorMessage?: string;
   minValue?: number;
   maxValue?: number;
 };
+
+export interface IIntervalValidationParams extends IValidationParams {
+  requiredBothOrNone?: boolean;
+}
+
+type TInputValidatorProps = IValidationParams & {
+  initValue?: string;
+};
+
+export type IIntervalValidatorProps = IIntervalValidationParams & {
+  firstInitValue?: string;
+  secondInitValue?: string;
+};
+
+export type TIntervalValidator = (
+  props?: IIntervalValidatorProps
+) => [
+  firstValue: string,
+  secondValue: string,
+  onChangeFirstValue: (value: string) => void,
+  onChangeSecondValue: (value: string) => void,
+  isFirstValueChange: boolean,
+  isSecondValueChange: boolean,
+  firstError: string,
+  secondError: string,
+];
 
 export type TInputValidator = (
   props?: TInputValidatorProps
@@ -44,5 +69,5 @@ export type TSelectionValidatorReturn<T> = [
   unselectAll: () => void,
   isValid: boolean,
   error: string,
-  setInitial: () => void,
+  setInitial: () => void
 ];

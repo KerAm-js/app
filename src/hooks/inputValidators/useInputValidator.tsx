@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { TInputValidator } from "./types";
 import { RU_LANG } from "../../consts/rulang";
-import { DATE_REGEX } from "../../consts/regex";
 
 export const useInputValidator: TInputValidator = (props) => {
   const {
@@ -9,22 +8,20 @@ export const useInputValidator: TInputValidator = (props) => {
     pattern,
     patternErrorMessage,
     minLength = 0,
-    confirmedValue,
-    confirmingErrorMessage,
+    valueToConfirm,
+    confirmationErrorMessage,
     required,
     minValue,
     maxValue,
   } = props || {};
 
-
-  const [value, setValue] = useState();
+  const [value, setValue] = useState("");
   const [isValid, setIsValid] = useState(required ? !!initValue : true);
   const [error, setError] = useState(
     !initValue && required ? "Заполните данное поле" : ""
   );
 
   const onChangeValue = (text: string) => {
-
     setValue(text);
     const number = Number(text);
     if (text.length < minLength) {
@@ -38,15 +35,14 @@ export const useInputValidator: TInputValidator = (props) => {
       setIsValid(false);
       setError("Заполните данное поле");
     } else if (text.length > 0 && pattern && !text.match(pattern)) {
-
       setError(patternErrorMessage || "Некорректные данные");
       setIsValid(false);
-    } else if (confirmedValue && text === confirmedValue) {
+    } else if (valueToConfirm && text === valueToConfirm) {
       setIsValid(true);
       setError("");
-    } else if (confirmingErrorMessage) {
+    } else if (confirmationErrorMessage) {
       setIsValid(false);
-      setError(confirmingErrorMessage);
+      setError(confirmationErrorMessage);
     } else if (!isNaN(number) && minValue && number < minValue) {
       setIsValid(false);
       setError("Минимальное значение " + minValue);
@@ -62,21 +58,16 @@ export const useInputValidator: TInputValidator = (props) => {
   const setInitial = () => {
     if (initValue) {
       onChangeValue(initValue);
-    }else {
+    } else {
       setValue("");
       setIsValid(required ? !!initValue : true);
       setError(!initValue && required ? "Заполните данное поле" : "");
     }
-
   };
 
   useEffect(() => {
-
     if (initValue) onChangeValue(initValue);
   }, []);
-
-
-
 
   return [value, onChangeValue, isValid, error, setInitial];
 };

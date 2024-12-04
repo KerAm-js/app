@@ -39,8 +39,8 @@ const Register = () => {
     useInputValidator({
       initValue: "",
       minLength: 3,
-      confirmedValue: password,
-      confirmingErrorMessage: "Пароли не совпадают",
+      valueToConfirm: password,
+      confirmationErrorMessage: "Пароли не совпадают",
     });
 
   const { data: isUsernameAvailable } = useIsUsernameAvailableQuery(username, {
