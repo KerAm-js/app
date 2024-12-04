@@ -275,7 +275,7 @@ changeMaterialAdvertStatus: builder.mutation<
    
 
     return ({
-    url: "/secured/advert-technic/status-update",
+    url: "/secured/advert-material/status-update",
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -301,7 +301,7 @@ changeDumpAdvertStatus: builder.mutation<
    
 
     return ({
-    url: "/secured/advert-technic/status-update",
+    url: "/secured/advert-dump/status-update",
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
