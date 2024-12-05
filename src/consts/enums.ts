@@ -148,7 +148,7 @@ export const ENUMS = {
   delivery: DELIVERY.map((i) => ENUM_TITLES[i]),
 };
 
-export const OSSIG_TITLES = ['Подключён', 'Не подключён'];
+export const OSSIG_TITLES = ["Подключён", "Не подключён"];
 
 export const FILTER_ENUMS_WITH_ALL = {
   advertStatuses: [...ENUMS.advertStatuses, ALL],
@@ -163,5 +163,5 @@ export const FILTER_ENUMS_WITH_ALL = {
   measureIn: [...ENUMS.measureIn, ALL],
   delivery: [...ENUMS.delivery, ALL],
   axesCount: [...AXES_COUNTS, ALL],
-  ossig: [...OSSIG_TITLES, ALL]
+  ossig: [...OSSIG_TITLES, ALL],
 };

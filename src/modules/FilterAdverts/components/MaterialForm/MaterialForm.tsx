@@ -1,7 +1,6 @@
 import { FC, useMemo, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
-import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { TMaterialFilter } from "../../store/types";
 import { useActions } from "../../../../hooks/store/useActions";
@@ -28,6 +27,7 @@ import { View } from "react-native";
 import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
+import { useIntervalValidator } from "../../../../hooks/inputValidators/useIntervalValidator";
 
 const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
   const { setMaterialFilter } = useActions();
@@ -83,7 +83,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     __,
     ___,
     materialTypeError,
-    ______,
   ] = useSelectionValidator<IMaterialType>({
     initValue: initMaterialType ? [initMaterialType] : undefined,
   });
@@ -94,7 +93,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     ____,
     isTransportValid,
     transportError,
-    _______,
   ] = useSelectionValidator<IDumpTransportType>({
     multySelection: false,
     initValue: currentFilter.transports || undefined,
@@ -111,23 +109,36 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     initValue: currentFilter.fractions || undefined,
   });
   const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
-  const [amountFrom, onAmountFromChange, isAmountFromValid, amountFromError] =
-    useInputValidator({ minValue: 1, initValue: initAmountFrom });
-  const [amountTo, onAmountToChange, isAmountToValid, amountToError] =
-    useInputValidator({ minValue: 1, initValue: initAmountTo });
+  const [
+    amountFrom,
+    amountTo,
+    onAmountFromChange,
+    onAmountToChange,
+    isAmountFromValid,
+    isAmountToValid,
+    amountFromError,
+    amountToError,
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initAmountFrom,
+    secondInitValue: initAmountTo,
+    requiredBothOrNone: true,
+  });
   const [
     coefficientFrom,
-    onCoefficientFromChange,
-    isCoefficientFromValid,
-    coefficientFromError,
-  ] = useInputValidator({ minValue: 1, initValue: initCoefficientFrom });
-  const [
     coefficientTo,
+    onCoefficientFromChange,
     onCoefficientToChange,
+    isCoefficientFromValid,
     isCoefficientToValid,
+    coefficientFromError,
     coefficientToError,
-  ] = useInputValidator({ minValue: 1, initValue: initCoefficientTo });
-
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initCoefficientFrom,
+    secondInitValue: initCoefficientTo,
+    requiredBothOrNone: true,
+  });
   const [shiftTypeI, setShiftTypeI] = useState(initShiftTypeI);
   const [deliveryI, setDeliveryI] = useState(initDeliveryI);
   const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
@@ -196,6 +207,8 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
           onFirstValueChange: onAmountFromChange,
           onSecondValueChange: onAmountToChange,
           error: amountFromError || amountToError,
+          isFirstFieldInvalid: !isAmountFromValid,
+          isSecondFieldInvalid: !isAmountToValid,
           label:
             ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
               ? "Объём (м3)"
@@ -212,6 +225,8 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
           error: coefficientFromError || coefficientToError,
           label: "Коэффициент (вес/объём)",
           keyboardType: "decimal-pad",
+          isFirstFieldInvalid: !isCoefficientFromValid,
+          isSecondFieldInvalid: !isCoefficientToValid,
         },
       ],
     },
@@ -254,9 +269,10 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
   ];
 
   const isFormValid =
-    isTransportValid &&
-    ((isAmountFromValid && isAmountToValid) ||
-      (isCoefficientFromValid && isCoefficientToValid));
+    isAmountFromValid &&
+    isAmountToValid &&
+    isCoefficientFromValid &&
+    isCoefficientToValid;
 
   const onSubmit = () => {
     const result: TMaterialFilter = {

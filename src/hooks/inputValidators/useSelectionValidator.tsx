@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TSelectionValidatorProps, TSelectionValidatorReturn } from "./types";
 
 export function useSelectionValidator<T>({
@@ -12,29 +12,29 @@ export function useSelectionValidator<T>({
     !initValue?.length && required ? "Заполните данное поле" : ""
   );
 
-  const selectItem = (selectedItem: T) => {
+  const selectItem = useCallback((selectedItem: T) => {
     if (multySelection) {
       setValue((value) => [...value, selectedItem]);
     } else {
       setValue([selectedItem]);
     }
-  };
+  }, []);
 
-  const unselectItem = (unselectedItem: T) => {
+  const unselectItem = useCallback((unselectedItem: T) => {
     if (multySelection) {
       setValue((value) => value.filter((item) => unselectedItem !== item));
     } else {
       setValue([]);
     }
-  };
+  }, []);
 
-  const unselectAll = () => setValue([]);
+  const unselectAll = useCallback(() => setValue([]), []);
 
-  const setInitial = () => {
+  const setInitial = useCallback(() => {
     setValue(initValue || []);
     setIsValid(!(!initValue?.length && required));
     setError(!initValue?.length && required ? "Заполните данное поле" : "");
-  };
+  }, [initValue, required]);
 
   useEffect(() => {
     if (required && value.length === 0) {

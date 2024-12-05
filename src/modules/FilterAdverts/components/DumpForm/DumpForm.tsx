@@ -1,7 +1,6 @@
 import { FC, useMemo, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
-import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import {
   ALL,
@@ -111,7 +110,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     isDangerClassValid,
     dangerClassError,
   ] = useSelectionValidator<(typeof dangerClasses)[0]>({
-    required: false,
     initValue: initDangerClass ? [initDangerClass] : undefined,
   });
   const [
@@ -121,7 +119,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     ____,
     isTransportValid,
     transportError,
-    setTransportInitial,
   ] = useSelectionValidator<IDumpTransportType>({
     multySelection: false,
     initValue: currentFilter.transports || [],
@@ -144,17 +141,19 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
   });
   const [
     coefficientFrom,
-    onCoefficientFromChange,
-    isCoefficientFromValid,
-    coefficientFromError,
-  ] = useInputValidator({ minValue: 1, initValue: initCoefficientFrom });
-  const [
     coefficientTo,
+    onCoefficientFromChange,
     onCoefficientToChange,
+    isCoefficientFromValid,
     isCoefficientToValid,
+    coefficientFromError,
     coefficientToError,
-  ] = useInputValidator({ minValue: 1, initValue: initCoefficientTo });
-
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initCoefficientFrom,
+    secondInitValue: initCoefficientTo,
+    requiredBothOrNone: true,
+  });
   const [shiftTypeI, setShiftTypeI] = useState(initShiftTypeI);
   const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
 
@@ -281,11 +280,21 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
 
   const isFormValid =
     isTypeValid &&
-    ((isAmountFromValid && isAmountToValid) ||
-      (isCoefficientFromValid && isCoefficientToValid) ||
-      isTransportValid ||
-      isWasteTypeValid ||
-      isDangerClassValid);
+    isAmountFromValid &&
+    isAmountToValid &&
+    isCoefficientFromValid &&
+    isCoefficientToValid;
+
+  console.log(
+    'isTypeValid', isTypeValid, '\n',
+    'isAmountFromValid', isAmountFromValid, '\n',
+    'isAmountToValid', isAmountToValid, '\n',
+    'isCoefficientFromValid', isCoefficientFromValid, '\n',
+    'isCoefficientToValid', isCoefficientToValid, '\n',
+    'isTransportValid', isTransportValid, '\n',
+    'isWasteTypeValid', isWasteTypeValid, '\n',
+    'isDangerClassValid', isDangerClassValid, '\n',
+  );
 
   const onSubmit = () => {
     const result: TDumpFilter = {
@@ -313,7 +322,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       dangerClass: dangerClass[0]?.value || null,
     };
     setDumpFilter(result);
-    // navigation.navigate("Main");
+    navigation.navigate("Main");
   };
 
   return (

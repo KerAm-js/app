@@ -93,7 +93,7 @@ const Selection = withLabelAndError<TSelectionProps>(
       } else {
         setFilteredItems(itemsList);
       }
-    }, [search]);
+    }, [search, itemsList]);
 
     useEffect(() => {
       if (isOpened) {
@@ -132,10 +132,10 @@ const Selection = withLabelAndError<TSelectionProps>(
             nestedScrollEnabled
           >
             {filteredItems.length ? (
-              filteredItems.map((item, index) => {
+              filteredItems.map((item) => {
                 return (
                   <SelectionItem
-                    key={index + Date.now()}
+                    key={item.id}
                     item={item}
                     isChecked={selectedItemsObj[item.id]}
                     select={selectItem}

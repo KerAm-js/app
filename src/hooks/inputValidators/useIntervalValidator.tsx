@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TIntervalValidator } from "./types";
 import { validateValue } from "../lib/validateValue";
 
@@ -10,9 +10,9 @@ export const useIntervalValidator: TIntervalValidator = (props) => {
     ...validationParams
   } = props || {};
 
-  const [firstValue, setFirstValue] = useState("");
+  const [firstValue, setFirstValue] = useState(firstInitValue || "");
   const [isFirstValueValid, setIsFirstValueValid] = useState(true);
-  const [secondValue, setSecondValue] = useState("");
+  const [secondValue, setSecondValue] = useState(secondInitValue || "");
   const [isSecondValueValid, setIsSecondValueValid] = useState(true);
   const [firstError, setFirstError] = useState("");
   const [secondError, setSecondError] = useState("");
@@ -59,11 +59,6 @@ export const useIntervalValidator: TIntervalValidator = (props) => {
       validateRequiredBothOrNone(firstValue, text);
     }
   };
-
-  useEffect(() => {
-    if (firstInitValue) onChangeFirstValue(firstInitValue);
-    if (secondInitValue) onChangeSecondValue(secondInitValue);
-  }, []);
 
   return [
     firstValue,

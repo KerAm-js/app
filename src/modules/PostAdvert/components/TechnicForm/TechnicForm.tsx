@@ -561,6 +561,8 @@ const TechnicForm = () => {
           secondValue: secondDate,
           onFirstValueChange: onFirstDateChange,
           onSecondValueChange: onSecondDateChange,
+          isFirstFieldInvalid: isFirstDateValid,
+          isSecondFieldInvalid: isSecondDateValid,
           error: firstDateError || secondDateError,
           label: "Период аренды",
         },

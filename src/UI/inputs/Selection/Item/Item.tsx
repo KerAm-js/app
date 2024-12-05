@@ -12,7 +12,7 @@ import React, { FC } from "react";
 
 const SelectionItem: FC<TSelectionItemProps> = React.memo(
   ({ item, isChecked, select, unselect }: TSelectionItemProps) => {
-
+    if (item.id === 1) console.log(item.name)
     const onPress = () => {
       if (isChecked) {
         unselect(item);
@@ -41,9 +41,6 @@ const SelectionItem: FC<TSelectionItemProps> = React.memo(
         <Text style={selectionItemStyles.title}>{item.name}</Text>
       </Pressable>
     );
-  },
-  (prev, curr) => {
-    return prev.isChecked === curr.isChecked;
   }
 );
 

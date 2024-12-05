@@ -1,7 +1,6 @@
 import { FC, useMemo, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
-import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
 import { View } from "react-native";
@@ -31,6 +30,7 @@ import {
 import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { RootStackParamList } from "../../../../navigation/types";
+import { useIntervalValidator } from "../../../../hooks/inputValidators/useIntervalValidator";
 
 const trailerTypes = TRAILER_TYPES.map((item, index) => ({
   id: index,
@@ -158,177 +158,167 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     multySelection: true,
     initValue: currentFilter.equipment || undefined,
   });
+
   const [
     weightFrom,
+    weightTo,
     onWeightFromChange,
-    ______________________,
+    onWeightToChange,
+    isWeightFromValid,
+    isWeightToValid,
     weightFromError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initWeightFrom,
+    weightToError,
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initWeightFrom,
+    secondInitValue: initWeightTo,
+    requiredBothOrNone: true,
   });
-  const [weightTo, onWeightToChange, _______________________, weightToError] =
-    useInputValidator({
-      minValue: 0,
-      initValue: initWeightTo,
-    });
   const [
     heightFrom,
+    heightTo,
     onHeightFromChange,
-    ________________________,
+    onHeightToChange,
+    isHeightFromValid,
+    isHeightToValid,
     heightFromError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initHeightFrom,
+    heightToError,
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initHeightFrom,
+    secondInitValue: initHeightTo,
+    requiredBothOrNone: true,
   });
-  const [heightTo, onHeightToChange, _________________________, heightToError] =
-    useInputValidator({
-      minValue: 0,
-      initValue: initHeightTo,
-    });
+
   const [
     volumeFrom,
-    onVolumeFromChange,
-    __________________________,
-    volumeFromError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initVolumeFrom,
-  });
-  const [
     volumeTo,
+    onVolumeFromChange,
     onVolumeToChange,
-    ___________________________,
+    isVolumeFromValid,
+    isVolumeToValid,
+    volumeFromError,
     volumeToError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initVolumeTo,
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initVolumeFrom,
+    secondInitValue: initVolumeTo,
+    requiredBothOrNone: true,
   });
+
   const [
     passengersCountFrom,
-    onPassengersCountFromChange,
-    _________,
-    passengersCountFromError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initPassengersCountFrom,
-  });
-  const [
     passengersCountTo,
+    onPassengersCountFromChange,
     onPassengersCountToChange,
-    _______,
+    isPassengersCountFromValid,
+    isPassengersCountToValid,
+    passengersCountFromError,
     passengersCountToError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initPassengersCountTo,
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initPassengersCountFrom,
+    secondInitValue: initPassengersCountTo,
+    requiredBothOrNone: true,
   });
+
   const [
     pipeLengthFrom,
-    onPipeLengthFromChange,
-    ________,
-    pipeLengthFromError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initPipeLengthFrom,
-  });
-  const [
     pipeLengthTo,
+    onPipeLengthFromChange,
     onPipeLengthToChange,
-    ________________,
+    isPipeLengthFromValid,
+    isPipeLengthToValid,
+    pipeLengthFromError,
     pipeLengthToError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initPipeLengthTo,
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initPipeLengthFrom,
+    secondInitValue: initPipeLengthTo,
+    requiredBothOrNone: true,
   });
+
   const [
     boomLengthFrom,
+    boomLengthTo,
     onBoomLengthFromChange,
-    ______________,
+    onBoomLengthToChange,
+    isBoomLengthFromValid,
+    isBoomLengthToValid,
     boomLengthFromError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initBoomLengthFrom,
+    boomLengthToError,
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initBoomLengthFrom,
+    secondInitValue: initBoomLengthTo,
+    requiredBothOrNone: true,
   });
-  const [boomLengthTo, onBoomLengthToChange, ___________, boomLengthToError] =
-    useInputValidator({
-      minValue: 0,
-      initValue: initBoomLengthTo,
-    });
+
   const [
     liftingCapacityFrom,
-    onLiftingCapacityFromChange,
-    __________,
-    liftingCapacityFromError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initLiftingCapacityFrom,
-  });
-  const [
     liftingCapacityTo,
+    onLiftingCapacityFromChange,
     onLiftingCapacityToChange,
-    ____________,
+    isLiftingCapacityFromValid,
+    isLiftingCapacityToValid,
+    liftingCapacityFromError,
     liftingCapacityToError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initLiftingCapacityTo,
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initLiftingCapacityFrom,
+    secondInitValue: initLiftingCapacityTo,
+    requiredBothOrNone: true,
   });
+
   const [
     performanceFrom,
-    onPerformanceFromChange,
-    _____________,
-    performanceFromError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initPerformanceFrom,
-  });
-  const [
     performanceTo,
+    onPerformanceFromChange,
     onPerformanceToChange,
-    ___________________,
+    isPerformanceFromValid,
+    isPerformanceToValid,
+    performanceFromError,
     performanceToError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initPerformanceTo,
+  ] = useIntervalValidator({
+    minValue: 1,
+    firstInitValue: initPerformanceFrom,
+    secondInitValue: initPerformanceTo,
+    requiredBothOrNone: true,
   });
-  const [rollersTypeI, setRollersTypeI] = useState(initRollersTypeI);
+
   const [
     rollersCountFrom,
-    onRollersCountFromChange,
-    _________________,
-    rollersCountFromError,
-  ] = useInputValidator({
-    minValue: 1,
-    initValue: initRollersCountFrom,
-  });
-  const [
     rollersCountTo,
+    onRollersCountFromChange,
     onRollersCountToChange,
-    _______________,
+    isRollersCountFromValid,
+    isRollersCountToValid,
+    rollersCountFromError,
     rollersCountToError,
-  ] = useInputValidator({
+  ] = useIntervalValidator({
     minValue: 1,
-    initValue: initRollersCountTo,
+    firstInitValue: initRollersCountFrom,
+    secondInitValue: initRollersCountTo,
+    requiredBothOrNone: true,
   });
+  const [rollersTypeI, setRollersTypeI] = useState(initRollersTypeI);
   const [sizeTypeI, setSizeTypeI] = useState(initSizeTypeI);
   const [ossigI, setOssigI] = useState(initOssigI);
   const [axesCountI, setAxesCountI] = useState(initAxesCountI);
   const [
     bodyLengthFrom,
-    onBodyLengthFromChange,
-    __________________,
-    bodyLengthFromError,
-  ] = useInputValidator({
-    minValue: 0,
-    initValue: initBodyLengthFrom,
-  });
-  const [
     bodyLengthTo,
+    onBodyLengthFromChange,
     onBodyLengthToChange,
-    ____________________,
+    isBodyLengthFromValid,
+    isBodyLengthToValid,
+    bodyLengthFromError,
     bodyLengthToError,
-  ] = useInputValidator({
+  ] = useIntervalValidator({
     minValue: 0,
-    initValue: initBodyLengthTo,
+    firstInitValue: initBodyLengthFrom,
+    secondInitValue: initBodyLengthTo,
+    requiredBothOrNone: true,
   });
   const [
     trailerType,
@@ -341,42 +331,36 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     initValue: initTrailerType ? [initTrailerType] : undefined,
   });
   const [loadingTypeI, setLoadingTypeI] = useState(initLoadingTypeI);
-  const [
-    unitAmountFrom,
-    onUnitAmountFromChange,
-    isUnitAmountFromValid,
-    unitAmountFromError,
-  ] = useInputValidator({
-    minValue: 1,
-    initValue: initUnitAmountFrom,
-  });
-  const [
-    unitAmountTo,
-    onUnitAmountToChange,
-    isUnitAmountToValid,
-    unitAmountToError,
-  ] = useInputValidator({
-    minValue: 1,
-    initValue: initUnitAmountTo,
-  });
   const [shiftTypeI, setShiftTypeI] = useState(initShiftTypeI);
   const [
-    rentalDaysCountFrom,
-    onRentalDaysCountFromChange,
-    isRentalDaysCountFromValid,
-    rentalDaysCountFromError,
-  ] = useInputValidator({
+    unitAmountFrom,
+    unitAmountTo,
+    onUnitAmountFromChange,
+    onUnitAmountToChange,
+    isUnitAmountFromValid,
+    isUnitAmountToValid,
+    unitAmountFromError,
+    unitAmountToError,
+  ] = useIntervalValidator({
     minValue: 1,
-    initValue: initRentalDaysCountFrom,
+    firstInitValue: initUnitAmountFrom,
+    secondInitValue: initUnitAmountTo,
+    requiredBothOrNone: true,
   });
   const [
+    rentalDaysCountFrom,
     rentalDaysCountTo,
+    onRentalDaysCountFromChange,
     onRentalDaysCountToChange,
+    isRentalDaysCountFromValid,
     isRentalDaysCountToValid,
+    rentalDaysCountFromError,
     rentalDaysCountToError,
-  ] = useInputValidator({
+  ] = useIntervalValidator({
     minValue: 1,
-    initValue: initRentalDaysCountTo,
+    firstInitValue: initRentalDaysCountFrom,
+    secondInitValue: initRentalDaysCountTo,
+    requiredBothOrNone: true,
   });
   const [paymentUnitI, setPaymentUnitI] = useState(initPaymentUnitI);
   const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
@@ -478,6 +462,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           onSecondValueChange: onWeightToChange,
           hidden: !technicType[0] || !hasWeight,
           error: weightFromError || weightToError,
+          isFirstFieldInvalid: !isWeightFromValid,
+          isSecondFieldInvalid: !isWeightToValid,
           label: getLabelForTechnicParam("weight"),
           keyboardType: "decimal-pad",
         },
@@ -488,6 +474,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: heightTo,
           onFirstValueChange: onHeightFromChange,
           onSecondValueChange: onHeightToChange,
+          isFirstFieldInvalid: !isHeightFromValid,
+          isSecondFieldInvalid: !isHeightToValid,
           hidden: !technicType[0] || !hasHeight,
           error: heightFromError || heightToError,
           label: getLabelForTechnicParam("height"),
@@ -500,6 +488,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: volumeTo,
           onFirstValueChange: onVolumeFromChange,
           onSecondValueChange: onVolumeToChange,
+          isFirstFieldInvalid: !isVolumeFromValid,
+          isSecondFieldInvalid: !isVolumeToValid,
           hidden: !technicType[0] || !hasVolume,
           error: volumeFromError || volumeToError,
           label: getLabelForTechnicParam("volume"),
@@ -512,6 +502,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: passengersCountTo,
           onFirstValueChange: onPassengersCountFromChange,
           onSecondValueChange: onPassengersCountToChange,
+          isFirstFieldInvalid: !isPassengersCountFromValid,
+          isSecondFieldInvalid: !isPassengersCountToValid,
           hidden: !technicType[0] || !hasPassengersCount,
           error: passengersCountFromError || passengersCountToError,
           label: getLabelForTechnicParam("passengersCount"),
@@ -524,6 +516,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: pipeLengthTo,
           onFirstValueChange: onPipeLengthFromChange,
           onSecondValueChange: onPipeLengthToChange,
+          isFirstFieldInvalid: !isPipeLengthFromValid,
+          isSecondFieldInvalid: !isPipeLengthToValid,
           hidden: !technicType[0] || !hasPipeLength,
           error: pipeLengthFromError || pipeLengthToError,
           label: getLabelForTechnicParam("pipeLength"),
@@ -536,6 +530,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: boomLengthTo,
           onFirstValueChange: onBoomLengthFromChange,
           onSecondValueChange: onBoomLengthToChange,
+          isFirstFieldInvalid: !isBodyLengthFromValid,
+          isSecondFieldInvalid: !isBodyLengthToValid,
           hidden: !technicType[0] || !hasBoomLength,
           error: boomLengthFromError || boomLengthToError,
           label: getLabelForTechnicParam("boomLength"),
@@ -548,6 +544,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: liftingCapacityTo,
           onFirstValueChange: onLiftingCapacityFromChange,
           onSecondValueChange: onLiftingCapacityToChange,
+          isFirstFieldInvalid: !isLiftingCapacityFromValid,
+          isSecondFieldInvalid: !isLiftingCapacityToValid,
           hidden: !technicType[0] || !hasLiftingCapacity,
           error: liftingCapacityFromError || liftingCapacityToError,
           label: getLabelForTechnicParam("liftingCapacity"),
@@ -560,6 +558,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: performanceTo,
           onFirstValueChange: onPerformanceFromChange,
           onSecondValueChange: onPerformanceToChange,
+          isFirstFieldInvalid: !isPerformanceFromValid,
+          isSecondFieldInvalid: !isPerformanceToValid,
           hidden: !technicType[0] || !hasPerformance,
           error: performanceFromError || performanceToError,
           label: getLabelForTechnicParam("performance"),
@@ -572,6 +572,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: rollersCountTo,
           onFirstValueChange: onRollersCountFromChange,
           onSecondValueChange: onRollersCountToChange,
+          isFirstFieldInvalid: !isRollersCountFromValid,
+          isSecondFieldInvalid: !isRollersCountToValid,
           hidden: !technicType[0] || !hasRollerType,
           error: rollersCountFromError || rollersCountToError,
           label: getLabelForTechnicParam("rollersCount"),
@@ -584,6 +586,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: bodyLengthTo,
           onFirstValueChange: onBodyLengthFromChange,
           onSecondValueChange: onBodyLengthToChange,
+          isFirstFieldInvalid: !isBodyLengthFromValid,
+          isSecondFieldInvalid: !isBodyLengthToValid,
           hidden: !technicType[0] || !hasBodyLength,
           error: bodyLengthFromError || bodyLengthToError,
           label: getLabelForTechnicParam("bodyLength"),
@@ -661,6 +665,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: unitAmountTo,
           onFirstValueChange: onUnitAmountFromChange,
           onSecondValueChange: onUnitAmountToChange,
+          isFirstFieldInvalid: !isUnitAmountFromValid,
+          isSecondFieldInvalid: !isUnitAmountToValid,
           error: unitAmountFromError || unitAmountToError,
           label: "Количество единиц техники",
         },
@@ -680,6 +686,8 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           secondValue: rentalDaysCountTo,
           onFirstValueChange: onRentalDaysCountFromChange,
           onSecondValueChange: onRentalDaysCountToChange,
+          isFirstFieldInvalid: !isRentalDaysCountFromValid,
+          isSecondFieldInvalid: !isRentalDaysCountToValid,
           error: rentalDaysCountFromError || rentalDaysCountToError,
           label: "Срок аренды (в днях)",
         },
