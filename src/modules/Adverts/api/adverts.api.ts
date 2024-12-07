@@ -35,6 +35,7 @@ export const postAdvertApi = api.injectEndpoints({
           advertId: id,
         },
       }),
+      providesTags: ['Likes']
     }),
     getTechnicAdvertById: builder.query<IAdvert, IAdvert["id"]>({
       query: (id) => ({

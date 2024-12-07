@@ -10,9 +10,13 @@ import { TRANSACTION_TYPE_TITLE } from "../../../../consts/data";
 import { getPriceString } from "../../../../modules/Adverts/helpers/getPaymentFor";
 import { IAdvert } from "../../../../types/Advert";
 import { ENUM_TITLES } from "../../../../consts/enums";
+import { useGetLikesByAdvertIdQuery } from "../../../../modules/Adverts/api/adverts.api";
 
 const MainInfo: FC<IAdvert> = (props) => {
-  const { title, paymentType, likes = [], views, updatedAt, transactionType } = props;
+  const { title, paymentType, views, updatedAt, transactionType, id, advertType } = props;
+  const { data: likes, isLoading: isLikesLoading } = useGetLikesByAdvertIdQuery(
+    { advertType, id }
+  );
   const payment =
     paymentType === "ANY" ? "нал/безнал" : ENUM_TITLES[paymentType];
 
@@ -50,9 +54,9 @@ const MainInfo: FC<IAdvert> = (props) => {
           </Text>
           <View style={mainInfoStyles.advertInfoContainer}>
             <SvgXml xml={eyeSvg(GREY_DARK)} width={12} height={12} />
-            <Text style={mainInfoStyles.advertInfo}>{views.length}</Text>
+            <Text style={mainInfoStyles.advertInfo}>{views}</Text>
             <SvgXml xml={likeFillSvg(GREY_DARK)} width={12} height={12} />
-            <Text style={mainInfoStyles.advertInfo}>{likes.length}</Text>
+            <Text style={mainInfoStyles.advertInfo}>{likes?.length}</Text>
           </View>
         </View>
       </View>

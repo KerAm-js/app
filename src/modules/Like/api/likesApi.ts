@@ -1,25 +1,44 @@
-import axios from "axios";
-import { API_URL } from "../../../api/api";
+import { api } from "../../../api/api";
+import { IAdvert } from "../../../types/Advert";
+import { IUser } from "../../../types/User";
 
 
-const addLike = async (credentials: any, token: string) => {
-  return axios.post(`${API_URL}/secured/likes/post`, credentials, { headers: { Authorization: `Bearer ${token}` } });
-};
-const deleteLike = async (id: any, token: string) => {
-    return axios.post(`${API_URL}/secured/likes/delete/${id}`, '2', { headers: { Authorization: `Bearer ${token}` }});
-  };
-  
-
-const currentUserLikes = async (token: string) => {
-  return axios.get(
-    `${API_URL}/secured/current-user/likes`,
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-};
 
 
-export const likesApi = {
-    addLike,
-    deleteLike,
-    currentUserLikes
-};
+export const likesApi = api.injectEndpoints({
+  endpoints: (builder) => ({
+    addLike: builder.mutation({
+      query: ({ credentials, token }) => {
+        return ({
+        url: `/secured/likes/post`,
+        method: 'POST',
+        body: credentials,
+        headers: { Authorization: `Bearer ${token}` }
+      })},
+      invalidatesTags: ["Likes"]
+    }),
+    deleteLike: builder.mutation({
+      query: ({ id, token }) => {
+        return ({
+        method: 'POST',
+        url: `/secured/likes/delete/${id}`,
+        headers: { Authorization: `Bearer ${token}` }
+      })},
+      invalidatesTags: ["Likes"]
+    }),
+    getCurrentUserLikes: builder.query({
+      query: ({ token }) => ({
+        url: `/secured/current-user/likes`,
+        headers: { Authorization: `Bearer ${token}` } 
+      }),
+      providesTags: ['Likes']
+    }),
+  }),
+});
+
+export const {
+  useAddLikeMutation,
+  useDeleteLikeMutation,
+  useGetCurrentUserLikesQuery
+} = likesApi;
+

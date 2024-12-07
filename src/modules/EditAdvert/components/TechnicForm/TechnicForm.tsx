@@ -110,7 +110,7 @@ const TechnicForm = ({props}) => {
       minValue: 0,
       initValue: String(props.pipeLength)
     });
-  console.log(props.boomLength)
+
   const [boomLength, onBoomLengthChange, isBoomLengthValid, boomLengthError] =
     useInputValidator({
       required: true,
