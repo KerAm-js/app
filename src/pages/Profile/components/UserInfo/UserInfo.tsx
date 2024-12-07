@@ -55,7 +55,7 @@ const UserInfo: FC<
             />
 
             <Text style={userInfoStyles.ratingText}>
-              Рейтинг {rating} (количество оценок {ratesCount})
+              Рейтинг {Math.round(rating * 100) / 100} (количество оценок {ratesCount})
             </Text>
           </>
         ) : (

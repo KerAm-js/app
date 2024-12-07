@@ -110,14 +110,6 @@ const MaterialForm = ({props}) => {
       title: "Объявление",
       inputs: [
         {
-          id: "type",
-          type: "segment",
-          values: ENUMS.materialTransactionTypes,
-          selectedIndex: typeI,
-          onChange: (evt) => setTypeI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Тип объявления",
-        },
-        {
           id: "title",
           type: "input",
           onChangeText: onTitleChange,

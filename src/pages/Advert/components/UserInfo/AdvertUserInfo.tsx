@@ -52,7 +52,7 @@ const AdvertUserInfo: FC<
             backgroundColor={GREY_LIGHT}
           />
           <Text style={advertUserInfoStyles.ratingText}>
-            Рейтинг {rating} (количество оценок {ratesCount})
+            Рейтинг {Math.round(rating * 100) / 100} (количество оценок {ratesCount})
           </Text>
         </View>
         <Text style={advertUserInfoStyles.phone}>{toPhoneFormat(phone)}</Text>

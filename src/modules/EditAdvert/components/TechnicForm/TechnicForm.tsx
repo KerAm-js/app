@@ -110,6 +110,7 @@ const TechnicForm = ({props}) => {
       minValue: 0,
       initValue: String(props.pipeLength)
     });
+  console.log(props.boomLength)
   const [boomLength, onBoomLengthChange, isBoomLengthValid, boomLengthError] =
     useInputValidator({
       required: true,
@@ -298,15 +299,6 @@ const TechnicForm = ({props}) => {
     {
       title: "Объявление",
       inputs: [
-        {
-          id: "type",
-          type: "segment",
-          values: ENUMS.technincTransactionTypes,
-          selectedIndex: transactionTypeI,
-          onChange: (evt) =>
-            setTransactionTypeI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Тип объявления",
-        },
         {
           id: "title",
           type: "input",
@@ -722,7 +714,7 @@ const TechnicForm = ({props}) => {
         volume: hasVolume ? Number(volume) : 0,
         passengersCount: hasPassengersCount ? Number(passengersCount) : 0,
         pipeLength: hasPipeLength ? Number(pipeLength) : 0,
-        boomLength: hasBodyLength ? Number(boomLength) : 0,
+        boomLength: hasBoomLength ? Number(boomLength) : 0,
         liftingCapacity: hasLiftingCapacity ? Number(liftingCapacity) : 0,
         performance: hasPerformance ? Number(performance) : 0,
         cargoType: hasCargoType ? cargoType : "",

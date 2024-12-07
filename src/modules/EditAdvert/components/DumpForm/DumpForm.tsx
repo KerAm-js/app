@@ -130,16 +130,6 @@ const DumpForm = ({props}) => {
       title: "Объявление",
       inputs: [
         {
-          id: "type",
-          type: "selection",
-          value: type,
-          selectItem: selectType,
-          unselectItem: unselectType,
-          itemsList: dumpTransactionTypes,
-          error: typeError,
-          label: "Тип объявления",
-        },
-        {
           id: "title",
           type: "input",
           onChangeText: onTitleChange,

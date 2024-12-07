@@ -683,7 +683,7 @@ const TechnicForm = () => {
         volume: hasVolume ? Number(volume) : 0,
         passengersCount: hasPassengersCount ? Number(passengersCount) : 0,
         pipeLength: hasPipeLength ? Number(pipeLength) : 0,
-        boomLength: hasBodyLength ? Number(boomLength) : 0,
+        boomLength: hasBoomLength ? Number(boomLength) : 0,
         liftingCapacity: hasLiftingCapacity ? Number(liftingCapacity) : 0,
         performance: hasPerformance ? Number(performance) : 0,
         cargoType: hasCargoType ? cargoType : "",
