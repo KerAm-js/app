@@ -2,8 +2,7 @@ import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Avatar from "../../../../UI/Avatar/Avatar";
 import Rating from "../../../../UI/Rating/Rating";
-import { FC, memo, useMemo } from "react";
-import LikeButton from "../../../../UI/buttons/Like/LikeButton";
+import { FC, memo } from "react";
 import { advertStyles } from "./styles";
 import { BLACK_DARK, GREY_DARK, RED, WHITE } from "../../../../consts/colors";
 import { pointSvg } from "../../../../assets/svg/point";
@@ -38,14 +37,10 @@ const Advert: FC<IAdvert> = memo((props) => {
     updatedAt,
     views,
     title,
-    price,
     transactionType,
-    addressLat,
-    addressLon,
   } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
 
   const { user, token } = useAuth();
   const { data: likes, isLoading: isLikesLoading } = useGetLikesByAdvertIdQuery(
@@ -57,15 +52,8 @@ const Advert: FC<IAdvert> = memo((props) => {
     advert_type: advertType,
   });
   const openModal = () => {
-    const props1 = props
-
     navigation.navigate("Modal", props);
   };
-  const isLiked = useMemo(
-    () => (likes ? !!likes.find((item) => item.id === user?.id) : false),
-    [likes]
-  );
-
 
   const relevance = getRelevanceObj(updatedAt);
 
@@ -76,6 +64,8 @@ const Advert: FC<IAdvert> = memo((props) => {
     });
 
   const priceString = getPriceString(props);
+
+  console.log(props.updatedAt)
 
   return (
     <Pressable style={advertStyles.container} onPress={goToAdvertPage}>
@@ -98,7 +88,7 @@ const Advert: FC<IAdvert> = memo((props) => {
               <SvgXml xml={circlesSvg()} />
             </Pressable>
           ) : (
-            <SetLike advertId={id} advertType={advertType}/>
+            <SetLike advertId={id} advertType={advertType} />
           )}
         </View>
       )}

@@ -4,8 +4,6 @@ import { SvgXml } from "react-native-svg";
 import Avatar from "../../../../UI/Avatar/Avatar";
 import { FC, useRef, useState } from "react";
 import { ICommentProps } from "./types";
-import { boxOutSvg } from "../../../../assets/svg/boxOut";
-import { boxInSvg } from "../../../../assets/svg/boxIn";
 import Rating from "../../../../UI/Rating/Rating";
 import { WHITE } from "../../../../consts/colors";
 import { arrowRightSvg } from "../../../../assets/svg/arrowRight";

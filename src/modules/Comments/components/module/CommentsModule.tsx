@@ -10,13 +10,11 @@ import { ICommentsModuleProps } from "./types";
 import { useAuth } from "../../../../hooks/store/useAuth";
 
 const CommentsModuleComponent: FC<ICommentsModuleProps> = ({ id, isMyComments }) => {
-  const { token, user } = useAuth();
-  const isCurrentUser = user?.id === id;
-
-  const comments = useAllCommentsByAddresseIdQuery(id, { skip: isCurrentUser });
+  const { token } = useAuth();
+  const comments = useAllCommentsByAddresseIdQuery(id, { skip: isMyComments });
 
   const currUserComments = useCurrentUserCommentsQuery(token || "", {
-    skip: !token || !isCurrentUser,
+    skip: !token || !isMyComments,
   });
 
   useEffect(() => {
@@ -28,7 +26,7 @@ const CommentsModuleComponent: FC<ICommentsModuleProps> = ({ id, isMyComments })
   return (
     <FlatList
       style={commentsModuleStyles.container}
-      data={isCurrentUser ? currUserComments.data : comments.data}
+      data={isMyComments ? currUserComments.data : comments.data}
       contentContainerStyle={commentsModuleStyles.contentContainer}
       renderItem={({ item }) => <Comment isMyComments={isMyComments} key={item.id} {...item} />}
     />

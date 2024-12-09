@@ -22,15 +22,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { API_URL } from "../../../../api/api";
 import { useAuth } from "../../../../hooks/store/useAuth";
-// import { USER } from "../../../../consts/devData";
-// import LikeButton from "../../../../UI/buttons/Like/LikeButton";
 
 const keyExtractor = (item: string) => item;
 
 
 const Slider: FC<ISliderProps> = ({
-  // id,
-  // userId,
   likes,
   photos,
   advertType,
@@ -40,7 +36,6 @@ const Slider: FC<ISliderProps> = ({
   const [currentSlide, setCurrentSlider] = useState(1);
   const { token } = useAuth();
   const insets = useSafeAreaInsets();
-  // const isLiked = useMemo(() => !!likes.find((item) => item === USER.id), []);
 
   const { width: windowWidth } = Dimensions.get("window");
 

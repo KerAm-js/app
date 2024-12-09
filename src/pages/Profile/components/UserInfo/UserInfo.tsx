@@ -1,8 +1,8 @@
-import { Alert, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { userInfoStyles } from "./styles";
 import Rating from "../../../../UI/Rating/Rating";
 import { GREY_LIGHT } from "../../../../consts/colors";
-import { FC, useEffect, useLayoutEffect } from "react";
+import { FC } from "react";
 import { IUser } from "../../../../types/User";
 import InfoCard from "../../../../UI/InfoCard/InfoCard";
 import { RU_LANG } from "../../../../consts/rulang";
@@ -10,9 +10,9 @@ import Link from "../../../../UI/buttons/Link/Link";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { USER } from "../../../../consts/devData";
 import { toPhoneFormat } from "../../../../helpers/toPhoneFormat";
 import React from "react";
+import { useAuth } from "../../../../hooks/store/useAuth";
 
 const UserInfo: FC<
   Pick<
@@ -35,6 +35,7 @@ const UserInfo: FC<
     description,
     ratesCount,
   } = props;
+  const { user } = useAuth();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -61,7 +62,7 @@ const UserInfo: FC<
         ) : (
           <Text style={userInfoStyles.ratingText}>Нет оценок</Text>
         )}
-        {!!ratesCount && id !== USER.id && (
+        {!!ratesCount && (
           <Link
             title={ratesCount + " " + RU_LANG.comments[ratesCount]}
             onPress={goToComments}
