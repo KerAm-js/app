@@ -285,17 +285,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     isCoefficientFromValid &&
     isCoefficientToValid;
 
-  console.log(
-    'isTypeValid', isTypeValid, '\n',
-    'isAmountFromValid', isAmountFromValid, '\n',
-    'isAmountToValid', isAmountToValid, '\n',
-    'isCoefficientFromValid', isCoefficientFromValid, '\n',
-    'isCoefficientToValid', isCoefficientToValid, '\n',
-    'isTransportValid', isTransportValid, '\n',
-    'isWasteTypeValid', isWasteTypeValid, '\n',
-    'isDangerClassValid', isDangerClassValid, '\n',
-  );
-
   const onSubmit = () => {
     const result: TDumpFilter = {
       title: null,

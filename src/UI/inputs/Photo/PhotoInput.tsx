@@ -9,7 +9,6 @@ import { FC, useEffect } from "react";
 import { IImage, IPhotoInputProps } from "./types";
 import { cancelSvg } from "../../../assets/svg/cancel";
 import { useDeleteAdvertImageMutation } from "../../../modules/EditAdvert/api/editAdvert.api";
-import { useAuth } from "../../../hooks/store/useAuth";
 
 function roundBottom(num: number, precision: number) {
   precision = Math.pow(10, precision);
@@ -24,8 +23,8 @@ const PhotoInput: FC<IPhotoInputProps> = ({
   token,
   setImages,
 }) => {
-
-  const [deleteAdvertImage, deleteAdvertImageResults] = useDeleteAdvertImageMutation()
+  const [deleteAdvertImage, deleteAdvertImageResults] =
+    useDeleteAdvertImageMutation();
   const compressImage = async (uri: string) => {
     const fileSize = await getSize(uri);
     const megaBytes = fileSize ? fileSize / 1048576 : null;
@@ -39,7 +38,6 @@ const PhotoInput: FC<IPhotoInputProps> = ({
     });
     return manipResult.uri;
   };
-
 
   const getSize = async (uri: string) => {
     const response = await fetch(uri);
@@ -73,26 +71,29 @@ const PhotoInput: FC<IPhotoInputProps> = ({
   const deleteImage = (index: number) => {
     Alert.alert("Удаление", "Удалить фотографию объявления?", [
       {
-        text: 'Отмена'
+        text: "Отмена",
       },
       {
-        text: "Продолжить",
+        text: "Удалить",
+        style: 'destructive',
         onPress: () => {
-          deleteAdvertImage({fileName: images[index].name, advertId, advertType, token})
-    setImages(images.filter((_, i) => i !== index));
+          deleteAdvertImage({
+            fileName: images[index].name,
+            advertId,
+            advertType,
+            token,
+          });
+          setImages(images.filter((_, i) => i !== index));
         },
-
       },
     ]);
-    
   };
-  console.log(deleteAdvertImageResults.error)
-  useEffect(() => {
-    if(deleteAdvertImageResults.isSuccess){
-      Alert.alert("Успешно", "Изображение удалено");
 
+  useEffect(() => {
+    if (deleteAdvertImageResults.isSuccess) {
+      Alert.alert("Успешно", "Изображение удалено");
     }
-  }, [deleteAdvertImageResults])
+  }, [deleteAdvertImageResults]);
 
   return (
     <ScrollView

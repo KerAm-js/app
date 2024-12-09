@@ -110,7 +110,6 @@ export const postAdvertApi = api.injectEndpoints({
     }),
     getDumpAdvertsByUser: builder.query({
       query: ({token, status}) => {
-        console.log(token)
         return ({
         url: `/secured/current-user/advert-dump/${status}`,
         method: 'GET',

@@ -12,7 +12,6 @@ import React, { FC } from "react";
 
 const SelectionItem: FC<TSelectionItemProps> = React.memo(
   ({ item, isChecked, select, unselect }: TSelectionItemProps) => {
-    if (item.id === 1) console.log(item.name)
     const onPress = () => {
       if (isChecked) {
         unselect(item);

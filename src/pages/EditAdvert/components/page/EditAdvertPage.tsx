@@ -5,7 +5,6 @@ import EditAdvertModule from "../../../../modules/EditAdvert";
 
 const EditAdvertPageComponent = (props) => {
   const headerHeight = useHeaderHeight();
-  console.log(props.route.params.advertType)
   return (
     <KeyboardAvoidingView
       style={editAdvertPageStyles.container}

@@ -15,7 +15,6 @@ import { RootState } from "../../../../store/store";
 
 export const ChooseAddressPage = () => {
   const {point: point1, secondPoint: secondPoint1, distance: distance1} = useSelector((state: RootState) => state.addressByMap)
-  console.log(point1, 'dlm')
   const navigation = useNavigation();
   const isSecondPointRequired = useAddressByMapIsSecondPointRequired();
 

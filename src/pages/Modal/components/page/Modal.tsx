@@ -23,15 +23,11 @@ const MyModal: FC<IAdvert> = (props) => {
     if(props.advertType === 'TECHNIC'){
       changeTechnicAdvertStatus({advertStatus: status, advertId: props.id, token})
     }else if( props.advertType === 'DUMP'){
-      console.log("DUMP")
       changeDumpAdvertStatus({advertStatus: status, advertId: props.id, token})
     }else{
-      console.log('MATERIAL')
       changeMaterialAdvertStatus({advertStatus: status, advertId: props.id, token})
     }
   }
-
-  console.log(changeMaterialAdvertStatusResult.data)
 
 
   const actions: Array<TSheetButtonProps> = [

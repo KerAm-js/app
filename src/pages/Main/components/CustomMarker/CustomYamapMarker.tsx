@@ -53,10 +53,6 @@ export const CustomYamapMarker: FC<ICustomYamapMarkerProps> = ({
       color = GREEN;
   }
 
-  if (advertType === "NON_MATERIAL") {
-    console.log(addressLat, addressLon, transactionType);
-  }
-
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 

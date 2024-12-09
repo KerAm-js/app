@@ -95,7 +95,6 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
         setIsVisible(true);
       }, 10);
     }, []);
-console.log(point)
     return (
       <View style={{flex: 1}}>
         {!isMapLoaded && <MapLoader />}

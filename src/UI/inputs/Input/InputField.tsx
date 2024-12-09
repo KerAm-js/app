@@ -23,12 +23,10 @@ const InputField: FC<IInputProps & TWithLabelAndErrorChildrenProps> = ({
   const [isTextSecure, setIsTextSecure] = useState(secureTextEntry);
 
   const onFocus = () => {
-    console.log('focus')
     setIsFocused && setIsFocused(true);
   };
 
   const onBlur = () => {
-    console.log('blur')
     setIsFocused && setIsFocused(false);
     setErrorShown && setErrorShown(true);
   };

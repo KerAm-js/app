@@ -47,7 +47,6 @@ const usersApi = api.injectEndpoints({
       },
     
       forceRefetch(params) {
-        console.log(params.currentArg.from)
         return (
           params.currentArg.username !== params.previousArg?.username ||
           (params.currentArg.from === 0 || params.currentArg.from !== params.previousArg.from)
