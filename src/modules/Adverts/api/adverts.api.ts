@@ -42,9 +42,12 @@ export const postAdvertApi = api.injectEndpoints({
         url: `/advert-technic/${id}`,
       }),
     }),
-    getTechnicAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
-      query: (userId) => ({
-        url: `/advert-technic/all/${userId}`,
+    getTechnicAdvertsByUser: builder.query({
+      query: ({token, status}) => ({
+        url: `/secured/current-user/advert-technic/${status}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }),
     }),
     getTechnicAdvertsPageable: builder.query<Array<IAdvert>, number>({
@@ -71,9 +74,12 @@ export const postAdvertApi = api.injectEndpoints({
         url: `/advert-material/${id}`,
       }),
     }),
-    getMaterialAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
-      query: (userId) => ({
-        url: `/advert-material/all/${userId}`,
+    getMaterialAdvertsByUser: builder.query({
+      query: ({token, status}) => ({
+        url: `/secured/current-user/advert-material/${status}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }),
     }),
     getMaterialAdvertsPageable: builder.query<Array<IAdvert>, number>({
@@ -102,10 +108,16 @@ export const postAdvertApi = api.injectEndpoints({
         url: `/advert-dump/${id}`,
       }),
     }),
-    getDumpAdvertsByUser: builder.query<Array<IAdvert>, IUser["id"]>({
-      query: (userId) => ({
-        url: `/advert-dump/all/${userId}`,
-      }),
+    getDumpAdvertsByUser: builder.query({
+      query: ({token, status}) => {
+        console.log(token)
+        return ({
+        url: `/secured/current-user/advert-dump/${status}`,
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })},
     }),
     getDumpAdvertsPageable: builder.query<Array<IAdvert>, number>({
       query: (from) => ({

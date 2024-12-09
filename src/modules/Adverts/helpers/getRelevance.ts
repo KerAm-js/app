@@ -10,8 +10,6 @@ const getRelevance = (updatedAt: number) => {
 
 export const getRelevanceObj = (updatedAt: string) => {
   const date = new Date(updatedAt);
-
-
  
 
   const relevance = getRelevance(date.getTime());

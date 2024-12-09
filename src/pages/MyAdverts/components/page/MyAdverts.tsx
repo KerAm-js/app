@@ -12,13 +12,15 @@ import { useNavigation } from "@react-navigation/native";
 
 const MyAdvertsPageComponent = () => {
   const navigation = useNavigation();
-  const { user } = useAuth();
+  const { token } = useAuth();
+
     const { data: technicAdverts, isLoading: isTechnicAdvertsLoading, refetch: refetchTechnicAdverts } =
-    useGetTechnicAdvertsByUserQuery(user?.id || 0);
+    useGetTechnicAdvertsByUserQuery({token: token || 0, status: 'active'});
   const { data: materialAdverts, isLoading: isMaterialAdvertsLoading, refetch: refetchMaterialAdverts } =
-    useGetMaterialAdvertsByUserQuery(user?.id || 0);
+    useGetMaterialAdvertsByUserQuery({token: token || 0, status: 'active'});
   const { data: dumpAdverts, isLoading: isDumpAdvertsLoading, refetch: refetchDumpAdverts } =
-    useGetDumpAdvertsByUserQuery(user?.id || 0);
+    useGetDumpAdvertsByUserQuery({token: token || 0, status: 'active'});
+
 
     useEffect(() => {
       const unsubscribe = navigation.addListener("focus", () => {
