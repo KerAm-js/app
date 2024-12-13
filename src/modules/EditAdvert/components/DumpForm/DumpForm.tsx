@@ -88,7 +88,7 @@ const DumpForm = ({props}) => {
     isTransportValid,
     transportError,
     setTransportInitial,
-  ] = useSelectionValidator<ITransportType>({ required: true, initValue: props.dumpTransport });
+  ] = useSelectionValidator<ITransportType>({ required: true, initValue: props.dumpTransport, multySelection: true });
   
   const [measureI, setMeasureI] = useState(props.measureIn === 'WEIGHT' ? 0 : 1);
   const [
@@ -283,7 +283,7 @@ const DumpForm = ({props}) => {
       token: token || "",
       advert: {
         ...props,
-        advertStatus: "STOPPER",
+        advertStatus: "STOPPED",
         transactionType: transactionType.value,
         advertType: "DUMP",
         addressLat: 45,

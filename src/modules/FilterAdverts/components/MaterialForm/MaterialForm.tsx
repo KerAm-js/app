@@ -94,8 +94,8 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     isTransportValid,
     transportError,
   ] = useSelectionValidator<IDumpTransportType>({
-    multySelection: false,
-    initValue: currentFilter.transports || undefined,
+    multySelection: true,
+    initValue: dumpTransports.filter(item => currentFilter.transports?.indexOf(item.id) > -1 ? item : null) || undefined,
   });
   const [
     fractions,
@@ -290,7 +290,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
       materialType:
         materialType.length > 0 ? materialType[0].name.toLowerCase() : null,
       fractions: fractions.length > 0 ? fractions : null,
-      transports: transport.length > 0 ? transport : null,
+      transports: transport.length > 0 ? transport.map(item => item.id) : null,
       deliveryType:
         FILTER_ENUMS_WITH_ALL.delivery[deliveryI] !== ALL
           ? DELIVERY[deliveryI]

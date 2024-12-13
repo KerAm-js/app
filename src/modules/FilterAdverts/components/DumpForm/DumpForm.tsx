@@ -120,8 +120,8 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     isTransportValid,
     transportError,
   ] = useSelectionValidator<IDumpTransportType>({
-    multySelection: false,
-    initValue: currentFilter.transports || [],
+    multySelection: true,
+    initValue: dumpTransports.filter(item => currentFilter.transports?.indexOf(item.id) > -1 ? item : null) || [],
   });
   const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
   const [
@@ -306,7 +306,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
         PAYMENT_TYPES[paymentTypeI] !== "ANY"
           ? PAYMENT_TYPES[paymentTypeI]
           : null,
-      transports: transport.length > 0 ? transport : null,
+      transports: transport.length > 0 ? transport.map(item => item.id) : null,
       wasteType: wasteType[0]?.name || null,
       dangerClass: dangerClass[0]?.value || null,
     };

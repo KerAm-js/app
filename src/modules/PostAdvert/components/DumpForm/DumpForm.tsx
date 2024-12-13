@@ -78,7 +78,7 @@ const DumpForm = () => {
     isTransportValid,
     transportError,
     setTransportInitial,
-  ] = useSelectionValidator<IDumpTransportType>({ required: true });
+  ] = useSelectionValidator<IDumpTransportType>({ required: true, multySelection: true });
   const [measureI, setMeasureI] = useState(0);
   const [
     coefficient,
@@ -291,7 +291,7 @@ const DumpForm = () => {
     addAdvert({
       token: token || "",
       advert: {
-        advertStatus: "STOPPER",
+        advertStatus: "PUBLISHED",
         transactionType: transactionType.value,
         advertType: "DUMP",
         addressLat: point?.lat || 57,
@@ -345,6 +345,7 @@ const DumpForm = () => {
         navigation.navigate("Profile");
       }
     } else if (addAdvertResult.error) {
+      console.log(addAdvertResult.error)
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
   }, [addAdvertResult]);

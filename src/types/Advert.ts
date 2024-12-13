@@ -16,7 +16,7 @@ type AdvertDto = {
 
 interface BaseAdvert {
   id: number;
-  advertStatus: "DELETED" | "STOPPER" | "PUBLISHED";
+  advertStatus: "DELETED" | "STOPPED" | "PUBLISHED";
   ownerId: number;
   updatedAt: string;
   views: Array<number>;

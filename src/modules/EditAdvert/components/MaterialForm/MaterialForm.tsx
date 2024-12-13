@@ -59,7 +59,7 @@ const MaterialForm = ({props}) => {
     isTransportValid,
     transportError,
     setTransportInitial,
-  ] = useSelectionValidator<ITransportType>({ required: true, initValue: props.dumpTransport });
+  ] = useSelectionValidator<ITransportType>({ required: true, initValue: props.dumpTransport, multySelection: true });
   const [measureI, setMeasureI] = useState(props.measureIn === 'WEIGHT' ? 0 : 1);
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
     { required: true, minValue: 1, initValue: String(props.amount)}
@@ -287,7 +287,7 @@ const MaterialForm = ({props}) => {
         price: Number(priceForWeight),
         paymentType: PAYMENT_TYPES[paymentTypeI],
         description: comment,
-        advertStatus: "STOPPER",
+        advertStatus: "STOPPED",
       },
       token: token || "",
     });

@@ -54,7 +54,7 @@ const MaterialForm = () => {
     isTransportValid,
     transportError,
     setTransportInitial,
-  ] = useSelectionValidator<IDumpTransportType>({ required: true });
+  ] = useSelectionValidator<IDumpTransportType>({ required: true, multySelection: true });
   const [measureI, setMeasureI] = useState(0);
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
     { required: true, minValue: 1 }
@@ -297,7 +297,7 @@ const MaterialForm = () => {
         price: Number(priceForWeight),
         paymentType: PAYMENT_TYPES[paymentTypeI],
         description: comment,
-        advertStatus: "STOPPER",
+        advertStatus: "STOPPED",
       },
       token: token || "",
     });

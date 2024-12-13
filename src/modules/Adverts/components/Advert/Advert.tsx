@@ -161,7 +161,7 @@ const Advert: FC<IAdvert> = memo((props) => {
       </View>
       {advertStatus !== "DELETED" && (
         <View style={advertStyles.bottomContainer}>
-          {advertStatus === "STOPPER" ? (
+          {advertStatus === "STOPPED" ? (
             <Text style={[advertStyles.paymentFor, { color: RED }]}>
               Снято с публикации
             </Text>

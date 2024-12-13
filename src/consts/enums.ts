@@ -44,7 +44,7 @@ export const ENUM_TITLES: { [key in TEnum]: string } = {
   SEMI_TRAILER: "Полуприцеп",
   SHIFT: "Смена",
   SMOOTH: "Гладкие",
-  STOPPER: "Скрыто",
+  STOPPED: "Скрыто",
   TRAILER: "Прицеп",
   VOLUME: "Объём",
   WEIGHT: "Вес",
@@ -70,7 +70,7 @@ export const MATERIAL_TRANSACTION_TYPES: IMaterialAdvert["transactionType"][] =
 export const ADVERT_STATUSES: IAdvert["advertStatus"][] = [
   "DELETED",
   "PUBLISHED",
-  "STOPPER",
+  "STOPPED",
 ];
 export const PAYMENT_TYPES: IAdvert["paymentType"][] = [
   "CASH",

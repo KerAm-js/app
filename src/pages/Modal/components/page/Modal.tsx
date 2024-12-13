@@ -50,7 +50,7 @@ const MyModal: FC<IAdvert> = (props) => {
       id: "3",
       title:
         props.advertStatus === "PUBLISHED" ? "Снять с публикации" : "Опубликовать",
-      onPress: () => {updateRelevance(props.advertStatus === "PUBLISHED" ? 'STOPPER' : 'PUBLISHED')},
+      onPress: () => {updateRelevance(props.advertStatus === "PUBLISHED" ? 'STOPPED' : 'PUBLISHED')},
       type: "default",
     },
     {
