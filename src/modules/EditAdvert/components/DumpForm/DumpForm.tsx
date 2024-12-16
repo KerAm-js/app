@@ -27,6 +27,7 @@ import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
 
 import { useDumpTransports } from "../../../MiniEntities";
+import { useWasteTypes } from "../../../MiniEntities/store/hooks";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -34,10 +35,7 @@ const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   name: ENUM_TITLES[type],
 }));
 
-const wasteTypes = WASTE_TYPES.map((type, index) => ({
-  id: index,
-  name: type,
-}));
+
 
 const dangerClasses = DANGER_CLASSES.map((item, index) => ({
   id: index,
@@ -47,6 +45,9 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
 const DumpForm = ({props}) => {
   const { token } = useAuth();
   const dumpTransports = useDumpTransports();
+  const wasteTypes = useWasteTypes()
+
+
 
 
 
@@ -63,6 +64,7 @@ const DumpForm = ({props}) => {
     minLength: 10,
     initValue: String(props.title)
   });
+
   const [
     wasteType,
     selectWasteType,
@@ -70,7 +72,7 @@ const DumpForm = ({props}) => {
     clearWasteType,
     isWasteTypeValid,
     wasteTypeError,
-  ] = useSelectionValidator<typeof wasteTypes[0]>({ required: true, initValue: wasteTypes.filter(item => item.name === props.wasteType) });
+  ] = useSelectionValidator({ required: true, initValue: props.wasteTypes, multySelection: true});
  
   const [
     dangerClass,
@@ -283,7 +285,7 @@ const DumpForm = ({props}) => {
       token: token || "",
       advert: {
         ...props,
-        advertStatus: "STOPPED",
+        advertStatus: props.advertStatus,
         transactionType: transactionType.value,
         advertType: "DUMP",
         addressLat: 45,
@@ -296,7 +298,7 @@ const DumpForm = ({props}) => {
         coefficient: Number(coefficient),
         price: Number(priceForWeight),
         paymentType: PAYMENT_TYPES[paymentTypeI],
-        wasteType: wasteType[0].name,
+        wasteTypes: wasteType,
         dangerClass: dangerClass[0].name,
         description: comment,
       },

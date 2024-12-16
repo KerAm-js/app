@@ -42,6 +42,7 @@ const RootNavigator: FC = () => {
     getMaterialTypesThunk,
     getTechnicTypesThunk,
     getDumpTransportsThunk,
+    getWasteTypesThunk
   } = useActions();
 
   useLayoutEffect(() => {
@@ -51,6 +52,7 @@ const RootNavigator: FC = () => {
     getMaterialTypesThunk();
     getTechnicTypesThunk();
     getDumpTransportsThunk();
+    getWasteTypesThunk()
   }, []);
 
   if (autoAuthPending) {

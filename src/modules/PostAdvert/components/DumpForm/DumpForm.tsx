@@ -22,6 +22,7 @@ import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
 import { IDumpTransportType, useDumpTransports } from "../../../MiniEntities";
+import { useWasteTypes } from "../../../MiniEntities/store/hooks";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -29,10 +30,6 @@ const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   name: ENUM_TITLES[type],
 }));
 
-const wasteTypes = WASTE_TYPES.map((type, index) => ({
-  id: index,
-  name: type,
-}));
 
 const dangerClasses = DANGER_CLASSES.map((item, index) => ({
   id: index,
@@ -42,6 +39,7 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
 
 const DumpForm = () => {
   const { token } = useAuth();
+  const wasteTypes = useWasteTypes()
   const [addAdvert, addAdvertResult] = useAddDumpAdvertMutation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -61,7 +59,7 @@ const DumpForm = () => {
     clearWasteType,
     isWasteTypeValid,
     wasteTypeError,
-  ] = useSelectionValidator<(typeof wasteTypes)[0]>({ required: true });
+  ] = useSelectionValidator({ required: true, multySelection: true });
   const [
     dangerClass,
     selectDangerClass,
@@ -304,7 +302,7 @@ const DumpForm = () => {
         coefficient: Number(coefficient),
         price: Number(priceForWeight),
         paymentType: PAYMENT_TYPES[paymentTypeI],
-        wasteType: wasteType[0].name,
+        wasteTypes: wasteType,
         dangerClass: dangerClass[0].value,
         description: comment,
       },

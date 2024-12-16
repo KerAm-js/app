@@ -21,3 +21,10 @@ export const useDumpTransports = () => {
   );
   return result;
 };
+
+export const useWasteTypes = () => {
+  const result = useSelector(
+    (state: RootState) => state.miniEntities.wasteTypes
+  );
+  return result;
+};

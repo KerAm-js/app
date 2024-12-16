@@ -3,6 +3,7 @@ import {
   getDumpTransportsThunk,
   getMaterialTypesThunk,
   getTechnicTypesThunk,
+  getWasteTypesThunk,
 } from "./miniEntitiesActions";
 import { IMiniEntitesSlice } from "./types";
 
@@ -10,6 +11,7 @@ const initialState: IMiniEntitesSlice = {
   technicTypes: [],
   materialTypes: [],
   dumpTransports: [],
+  wasteTypes: []
 };
 
 export const miniEntitesSlice = createSlice({
@@ -26,5 +28,8 @@ export const miniEntitesSlice = createSlice({
     builder.addCase(getDumpTransportsThunk.fulfilled, (state, action) => {
       state.dumpTransports = action.payload;
     });
+    builder.addCase(getWasteTypesThunk.fulfilled, (state, action) => {
+      state.wasteTypes = action.payload
+    })
   },
 });

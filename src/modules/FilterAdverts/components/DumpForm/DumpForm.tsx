@@ -23,16 +23,12 @@ import { IDumpTransportType, useDumpTransports } from "../../../MiniEntities";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { useIntervalValidator } from "../../../../hooks/inputValidators/useIntervalValidator";
+import { useWasteTypes } from "../../../MiniEntities/store/hooks";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
   value: type,
   name: ENUM_TITLES[type],
-}));
-
-const wasteTypes = WASTE_TYPES.map((type, index) => ({
-  id: index,
-  name: type,
 }));
 
 const dangerClasses = DANGER_CLASSES.map((item, index) => ({
@@ -42,6 +38,7 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
 }));
 
 const DumpForm: FC<TDumpFilter> = (currentFilter) => {
+  const wasteTypes = useWasteTypes()
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const dumpTransports = useDumpTransports();
@@ -100,7 +97,8 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     wasteTypeError,
   ] = useSelectionValidator<(typeof wasteTypes)[0]>({
     required: false,
-    initValue: initWasteType ? [initWasteType] : undefined,
+    multySelection: true, 
+    initValue: wasteTypes.filter(item => currentFilter.wasteTypes?.indexOf(item.id) > -1 ? item : null) || [],
   });
   const [
     dangerClass,
@@ -307,9 +305,10 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
           ? PAYMENT_TYPES[paymentTypeI]
           : null,
       transports: transport.length > 0 ? transport.map(item => item.id) : null,
-      wasteType: wasteType[0]?.name || null,
+      wasteTypes: wasteType.length > 0 ? wasteType.map(item => item.id) : null,
       dangerClass: dangerClass[0]?.value || null,
     };
+    console.log(result)
     setDumpFilter(result);
     navigation.navigate("Main");
   };

@@ -3,6 +3,7 @@ import {
   getDumpTransports,
   getMaterialTypes,
   getTechnicTypes,
+  getWasteTypes,
 } from "../api/miniEntities.api";
 import {
   IDumpTransportType,
@@ -50,6 +51,18 @@ export const getDumpTransportsThunk = createAsyncThunk<
 >("miniEntities/dumpTransports", async (_, thunkApi) => {
   try {
     const response = await getDumpTransports();
+    if (response.status === 200) {
+      return response.data;
+    }
+    return thunkApi.rejectWithValue(handleError(""));
+  } catch (error) {
+    return thunkApi.rejectWithValue(handleError(error));
+  }
+});
+
+export const getWasteTypesThunk = createAsyncThunk("miniEntities/wasteTypes", async (_, thunkApi) => {
+  try {
+    const response = await getWasteTypes();
     if (response.status === 200) {
       return response.data;
     }

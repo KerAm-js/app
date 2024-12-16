@@ -13,3 +13,7 @@ export const getMaterialTypes = () => {
 export const getDumpTransports = () => {
   return axios.get<IDumpTransportType[]>(`${API_URL}/transport-lib/all`);
 };
+
+export const getWasteTypes = () => {
+  return axios.get(`${API_URL}/waste-type-lib/all`)
+}

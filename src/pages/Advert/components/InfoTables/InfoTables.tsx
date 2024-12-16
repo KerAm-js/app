@@ -81,7 +81,7 @@ const InfoTables: FC<IAdvert> = (advert) => {
   if (advert.advertType === "DUMP") {
     chars.data.push({
       title: propTitles.wasteType,
-      value: advert.wasteType,
+      value: advert.wasteTypes.reduce((value, item, index) => value + (index === 0 ? "": ", ") + item.name, ''),
     });
     chars.data.push({
       title: propTitles.dangerClass,
