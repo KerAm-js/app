@@ -73,12 +73,6 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
     },
   }, []);
 
-  const onLike = (value: boolean) => {
-    console.log(
-      `Post ${id} is ${value ? "liked by" : "disliked by"} user ${ownerId}`
-    );
-  };
-
   const openModal = () => {
     const{children, ...args} = props
     navigation.navigate('Modal', args)
@@ -119,7 +113,6 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
         scrollY={scrollY}
         photos={photos}
         advertType={advertType}
-        onLike={onLike}
       />
       <Animated.ScrollView
         showsVerticalScrollIndicator={false}

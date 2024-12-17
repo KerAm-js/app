@@ -65,8 +65,6 @@ const Advert: FC<IAdvert> = memo((props) => {
 
   const priceString = getPriceString(props);
 
-  console.log(props.updatedAt)
-
   return (
     <Pressable style={advertStyles.container} onPress={goToAdvertPage}>
       {isFetching || !owner ? (
@@ -177,7 +175,7 @@ const Advert: FC<IAdvert> = memo((props) => {
                 {relevance.string}
               </Text>
               <SvgXml xml={eyeSvg(GREY_DARK)} width={12} height={12} />
-              <Text style={advertStyles.advertInfoText}>{views}</Text>
+              <Text style={advertStyles.advertInfoText}>{views?.length}</Text>
               <SvgXml xml={likeFillSvg(GREY_DARK)} width={12} height={12} />
               {!!likes && (
                 <Text style={advertStyles.advertInfoText}>{likes.length}</Text>
