@@ -1,16 +1,10 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import { INPUT_VALUES } from "../../../../consts/inputValues";
-import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import {
-  ITransportType,
-  useEditDumpAdvertMutation,
-
-} from "../../api/editAdvert.api";
+import { useEditDumpAdvertMutation } from "../../api/editAdvert.api";
 import {
   DANGER_CLASSES,
   DUMP_TRANSACTION_TYPES,
@@ -20,7 +14,6 @@ import {
   PAYMENT_TYPES,
   SHIFT_TYPES,
 } from "../../../../consts/enums";
-import { WASTE_TYPES } from "../../../../consts/data";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
@@ -28,6 +21,7 @@ import { Alert } from "react-native";
 
 import { useDumpTransports } from "../../../MiniEntities";
 import { useWasteTypes } from "../../../MiniEntities/store/hooks";
+import { IDumpTransportType } from "../../../../types/MiniEntities";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -35,34 +29,32 @@ const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   name: ENUM_TITLES[type],
 }));
 
-
-
 const dangerClasses = DANGER_CLASSES.map((item, index) => ({
   id: index,
   name: item,
 }));
 
-const DumpForm = ({props}) => {
+const DumpForm = ({ props }) => {
   const { token } = useAuth();
   const dumpTransports = useDumpTransports();
-  const wasteTypes = useWasteTypes()
+  const wasteTypes = useWasteTypes();
 
-
-
-
-
-  const [editAdvert, editAdvertResult] = useEditDumpAdvertMutation()
+  const [editAdvert, editAdvertResult] = useEditDumpAdvertMutation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [type, selectType, unselectType, clearType, isTypeValid, typeError] =
     useSelectionValidator({
       required: true,
-      initValue: [dumpTransactionTypes[DUMP_TRANSACTION_TYPES.indexOf(props.transactionType)]],
+      initValue: [
+        dumpTransactionTypes[
+          DUMP_TRANSACTION_TYPES.indexOf(props.transactionType)
+        ],
+      ],
     });
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
     minLength: 10,
-    initValue: String(props.title)
+    initValue: String(props.title),
   });
 
   const [
@@ -72,8 +64,12 @@ const DumpForm = ({props}) => {
     clearWasteType,
     isWasteTypeValid,
     wasteTypeError,
-  ] = useSelectionValidator({ required: true, initValue: props.wasteTypes, multySelection: true});
- 
+  ] = useSelectionValidator({
+    required: true,
+    initValue: props.wasteTypes,
+    multySelection: true,
+  });
+
   const [
     dangerClass,
     selectDangerClass,
@@ -81,7 +77,10 @@ const DumpForm = ({props}) => {
     clearDangerClass,
     isDangerClassValid,
     dangerClassError,
-  ] = useSelectionValidator<typeof dangerClasses[0]>({ required: true, initValue: dangerClasses.filter(item => item.name === props.dangerClass)});
+  ] = useSelectionValidator<(typeof dangerClasses)[0]>({
+    required: true,
+    initValue: dangerClasses.filter((item) => item.name === props.dangerClass),
+  });
   const [
     transport,
     selectTransport,
@@ -90,19 +89,31 @@ const DumpForm = ({props}) => {
     isTransportValid,
     transportError,
     setTransportInitial,
-  ] = useSelectionValidator<ITransportType>({ required: true, initValue: props.dumpTransport, multySelection: true });
-  
-  const [measureI, setMeasureI] = useState(props.measureIn === 'WEIGHT' ? 0 : 1);
+  ] = useSelectionValidator<IDumpTransportType>({
+    required: true,
+    initValue: props.dumpTransport,
+    multySelection: true,
+  });
+
+  const [measureI, setMeasureI] = useState(
+    props.measureIn === "WEIGHT" ? 0 : 1
+  );
   const [
     coefficient,
     onCoefficientChange,
     isCoefficientValid,
     coefficientError,
-  ] = useInputValidator({ required: true, minValue: 1, initValue: String(props.coefficient) });
+  ] = useInputValidator({
+    required: true,
+    minValue: 1,
+    initValue: String(props.coefficient),
+  });
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
     { required: true, minValue: 1, initValue: String(props.amount) }
   );
-  const [workModeIndex, setWorkModeIndex] = useState(SHIFT_TYPES.indexOf(props.shiftType));
+  const [workModeIndex, setWorkModeIndex] = useState(
+    SHIFT_TYPES.indexOf(props.shiftType)
+  );
   const [comment, setComment] = useState(props.description || "");
   const [
     priceForWeight,
@@ -112,7 +123,7 @@ const DumpForm = ({props}) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.price)
+    initValue: String(props.price),
   });
   const [
     priceForVolume,
@@ -122,10 +133,11 @@ const DumpForm = ({props}) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.price * Number(props.coefficient))
+    initValue: String(props.price * Number(props.coefficient)),
   });
-  const [paymentTypeI, setPaymentTypeI] = useState(PAYMENT_TYPES.indexOf(props.paymentType));
-
+  const [paymentTypeI, setPaymentTypeI] = useState(
+    PAYMENT_TYPES.indexOf(props.paymentType)
+  );
 
   const inputs: TFormInputsArray = [
     {
@@ -149,7 +161,7 @@ const DumpForm = ({props}) => {
         {
           id: "wasteType",
           type: "selection",
-          value: wasteType,
+          value: wasteTypes,
           selectItem: selectWasteType,
           unselectItem: unselectWasteType,
           itemsList: wasteTypes,
@@ -182,7 +194,7 @@ const DumpForm = ({props}) => {
           values: ENUMS.measureIn,
           selectedIndex: measureI,
           onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Измерять",
+          label: "Способ измерения",
         },
         {
           id: "amount",
@@ -192,8 +204,9 @@ const DumpForm = ({props}) => {
           value: amount,
           label:
             ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
-              ? "Объём (м3)"
-              : "Вес (т)",
+              ? "Количество (м3)"
+              : "Количество (т)",
+
           keyboardType: "decimal-pad",
         },
         {
@@ -239,7 +252,7 @@ const DumpForm = ({props}) => {
           error: priceForWeightError,
           label: "Цена (руб/т)",
           keyboardType: "decimal-pad",
-          editable: INPUT_VALUES.measure[measureI] === "Вес",
+          editable: MEASURE_IN[measureI] === "WEIGHT",
         },
         {
           id: "priceForVolume",
@@ -249,12 +262,12 @@ const DumpForm = ({props}) => {
           error: priceForVolumeError,
           label: "Цена (руб/м3)",
           keyboardType: "decimal-pad",
-          editable: INPUT_VALUES.measure[measureI] === "Объём",
+          editable: MEASURE_IN[measureI] === "VOLUME",
         },
         {
           id: "paymentType",
           type: "segment",
-          values: INPUT_VALUES.paymentType,
+          values: PAYMENT_TYPES,
           selectedIndex: paymentTypeI,
           onChange: (evt) =>
             setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -306,22 +319,14 @@ const DumpForm = ({props}) => {
   };
 
   useEffect(() => {
-    if (
-      priceForWeight &&
-      coefficient &&
-      INPUT_VALUES.measure[measureI] === "Вес"
-    ) {
+    if (priceForWeight && coefficient && MEASURE_IN[measureI] === "WEIGHT") {
       const priceVolume = Number(priceForWeight) * Number(coefficient);
       onPriceForVolumeChange(Math.floor(priceVolume).toString());
     }
   }, [coefficient, priceForWeight]);
 
   useEffect(() => {
-    if (
-      priceForVolume &&
-      coefficient &&
-      INPUT_VALUES.measure[measureI] === "Объём"
-    ) {
+    if (priceForVolume && coefficient && MEASURE_IN[measureI] === "VOLUME") {
       const priceWeight = Number(priceForVolume) / Number(coefficient);
       onPriceForWeightChange(Math.floor(priceWeight).toString());
     }
@@ -336,7 +341,7 @@ const DumpForm = ({props}) => {
           advertType: "DUMP",
         });
       } else {
-        Alert.alert("Успешно", "Публикаия обновлена");
+        Alert.alert("Успешно", "Публикация обновлена");
         navigation.navigate("Profile");
       }
     } else if (editAdvertResult.error) {

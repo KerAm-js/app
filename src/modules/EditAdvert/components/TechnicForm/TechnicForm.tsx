@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
@@ -6,14 +6,7 @@ import { useSelectionValidator } from "../../../../hooks/inputValidators/useSele
 import { DATE_REGEX } from "../../../../consts/regex";
 import { getLabelForTechnicParam } from "../../../../helpers/advertParams";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import {
-  ITechnicType,
-  TEquipment,
-
-  useEditTechnicAdvertMutation,
-
-} from "../../api/editAdvert.api";
-import { handleError } from "../../../Auth/helpers/getErrorMessage";
+import { useEditTechnicAdvertMutation } from "../../api/editAdvert.api";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
@@ -29,15 +22,14 @@ import {
   TECHNIC_TRANSACTION_TYPES,
   TRAILER_TYPES,
 } from "../../../../consts/enums";
-import { ITechnicAdvert, TechnicAdvertDto } from "../../../../types/Advert";
+import { ITechnicAdvert } from "../../../../types/Advert";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
 import { useActions } from "../../../../hooks/store/useActions";
-
 import { useTechnicTypes } from "../../../MiniEntities";
+import { ITechnicType, TEquipment } from "../../../../types/MiniEntities";
 
-const TechnicForm = ({props}) => {
-
+const TechnicForm = ({ props }) => {
   const techTypes = useTechnicTypes();
   const { user, token } = useAuth();
   const { setAddressByMapDefaults, setPoint, setSecondPoint } = useActions();
@@ -46,30 +38,44 @@ const TechnicForm = ({props}) => {
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [transactionTypeI, setTransactionTypeI] = useState(props.transactionType === 'GIVE_A_RENT' ? 0 : 1);
+  const [transactionTypeI, setTransactionTypeI] = useState(
+    props.transactionType === "GIVE_A_RENT" ? 0 : 1
+  );
+  const transactionType = TECHNIC_TRANSACTION_TYPES[transactionTypeI];
+  const isPhotosAllowed = transactionType === "GIVE_A_RENT";
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
     minLength: 10,
-    initValue: String(props.title)
+    initValue: String(props.title),
   });
   const [
     technicType,
     selectTechnicType,
     unselectTechnicType,
-    clearTechnicType,
+    _,
     isTechnicTypeValid,
     technicTypeError,
-    setTechnicTypeInitial,
-  ] = useSelectionValidator<ITechnicType>({ required: true, initValue: techTypes.filter(item => item.name === props.technicType)});
-
-  const [mark, onChangeMark] = useInputValidator({initValue: String(props.technicMark)});
-  const [model, onModelChange] = useInputValidator({initValue: String(props.technicModel)});
+  ] = useSelectionValidator<ITechnicType>({
+    required: true,
+    initValue: techTypes.filter((item) => item.name === props.technicType),
+  });
+  const isTransport = !!technicType[0]?.parameters.find(
+    (p) => p.name === "transport"
+  );
+  const isSecondAddressRequired =
+    isTransport && transactionType === "TAKE_A_RENT";
+  const [mark, onChangeMark] = useInputValidator({
+    initValue: String(props.technicMark),
+  });
+  const [model, onModelChange] = useInputValidator({
+    initValue: String(props.technicModel),
+  });
   const [prodYear, onProdYearChange, isProdYearValid, prodYearError] =
     useInputValidator({
       minLength: 4,
       minValue: 1800,
       maxValue: new Date().getFullYear(),
-      initValue: String(props.productionYear)
+      initValue: String(props.productionYear),
     });
 
   const [weight, onWeightChange, isWeightValid, weightError] =
@@ -77,21 +83,18 @@ const TechnicForm = ({props}) => {
       required: true,
       minValue: 0,
       initValue: String(props.weight),
-      
-
     });
   const [height, onHeightChange, isHeightValid, heightError] =
     useInputValidator({
       required: true,
       minValue: 0,
-      initValue: String(props.height)
-
+      initValue: String(props.height),
     });
   const [volume, onVolumeChange, isVolumeValid, volumeError] =
     useInputValidator({
       required: true,
       minValue: 0,
-      initValue: String(props.volume)
+      initValue: String(props.volume),
     });
   const [
     passengersCount,
@@ -101,21 +104,20 @@ const TechnicForm = ({props}) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.passengersCount)
-
+    initValue: String(props.passengersCount),
   });
   const [pipeLength, onPipeLengthChange, isPipeLengthValid, pipeLengthError] =
     useInputValidator({
       required: true,
       minValue: 0,
-      initValue: String(props.pipeLength)
+      initValue: String(props.pipeLength),
     });
 
   const [boomLength, onBoomLengthChange, isBoomLengthValid, boomLengthError] =
     useInputValidator({
       required: true,
       minValue: 0,
-      initValue: String(props.boomLength)
+      initValue: String(props.boomLength),
     });
   const [
     liftingCapacity,
@@ -125,7 +127,7 @@ const TechnicForm = ({props}) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.liftingCapacity)
+    initValue: String(props.liftingCapacity),
   });
   const [
     performance,
@@ -135,15 +137,15 @@ const TechnicForm = ({props}) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.perfomance)
+    initValue: String(props.perfomance),
   });
   const [cargoType, onCargoTypeChange, isCargoTypeValid, cargoTypeError] =
     useInputValidator({
       required: true,
       minLength: 2,
-      initValue: String(props.cargoType)
+      initValue: String(props.cargoType),
     });
-  const [rollersTypeI, setRollersTypeI] = useState(0); // 
+  const [rollersTypeI, setRollersTypeI] = useState(0); //
   const [
     rollersCount,
     onRollersCountChange,
@@ -152,17 +154,18 @@ const TechnicForm = ({props}) => {
   ] = useInputValidator({
     required: true,
     minValue: 1,
-    initValue: String(props.rollersCount)
+    initValue: String(props.rollersCount),
   });
   const [sizeTypeI, setSizeTypeI] = useState(0);
   const [ossigI, setOssigI] = useState(props.ossig ? 1 : 0);
-  const [axesCountI, setAxesCountI] = useState(AXES_COUNTS.indexOf(String(props.axesCount)));
+  const [axesCountI, setAxesCountI] = useState(
+    AXES_COUNTS.indexOf(String(props.axesCount))
+  );
   const [bodyLength, onBodyLengthChange, isBodyLengthValid, bodyLengthError] =
     useInputValidator({
       required: true,
       minValue: 0,
-      initValue: String(props.bodyLength)
-    
+      initValue: String(props.bodyLength),
     });
   const [
     trailerType,
@@ -180,56 +183,61 @@ const TechnicForm = ({props}) => {
     equipment,
     selectEquipment,
     unselectEquipment,
-    unselectAllEquipments,
     __,
+    isEquipmentValid,
     equipmentError,
   ] = useSelectionValidator<TEquipment>({
     multySelection: true,
-
   });
 
   const [count, onCountChange, isCountValid, countError] = useInputValidator({
     required: true,
     minValue: 1,
-    initValue: String(props.unitAmount)
+    initValue: String(props.unitAmount),
   });
-  const [workModeIndex, setWorkModeIndex] = useState(SHIFT_TYPES.indexOf(props.shiftType));
+  const [workModeIndex, setWorkModeIndex] = useState(
+    SHIFT_TYPES.indexOf(props.shiftType)
+  );
   const [firstDate, onFirstDateChange, isFirstDateValid, firstDateError] =
     useInputValidator({
       required: true,
       pattern: DATE_REGEX,
       patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
-      initValue: props.rentalFrom.slice(0, 10).split('-').reverse().join('.')
-
+      initValue: props.rentalFrom.slice(0, 10).split("-").reverse().join("."),
     });
 
-    const [secondDate, onSecondDateChange, isSecondDateValid, secondDateError] =
+  const [secondDate, onSecondDateChange, isSecondDateValid, secondDateError] =
     useInputValidator({
       required: true,
       pattern: DATE_REGEX,
       patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
-      initValue: props.rentalTo.slice(0, 10).split('-').reverse().join('.')
+      initValue: props.rentalTo.slice(0, 10).split("-").reverse().join("."),
     });
   const [
     rentalDaysCount,
     onRentalDaysCountChange,
     isRentalDaysCountValid,
     rentalDaysCountError,
-  ] = useInputValidator({ required: true, minValue: 1, initValue: String(props.rentalDaysCount) });
-  const [comment, setComment] = useState(!!props.description ? props.description : "");
+  ] = useInputValidator({
+    required: true,
+    minValue: 1,
+    initValue: String(props.rentalDaysCount),
+  });
+  const [comment, setComment] = useState(
+    !!props.description ? props.description : ""
+  );
   const [price, onPriceChange, isPriceValid, priceError] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.price)
+    initValue: String(props.price),
   });
 
-  const [paymentForI, setPaymentForI] = useState(PAYMENT_TYPES.indexOf(props.paymentType));
-  const [paymentTypeI, setPaymentTypeI] = useState(PAYMENT_UNITS.indexOf(props.paymentUnit));
-
-
-
-  
- 
+  const [paymentForI, setPaymentForI] = useState(
+    PAYMENT_TYPES.indexOf(props.paymentType)
+  );
+  const [paymentTypeI, setPaymentTypeI] = useState(
+    PAYMENT_UNITS.indexOf(props.paymentUnit)
+  );
 
   const {
     point,
@@ -290,9 +298,6 @@ const TechnicForm = ({props}) => {
   );
   const hasLoadingType = !!technicType[0]?.parameters.find(
     (param) => param.name === "loading_type"
-  );
-  const isTransport = !!technicType[0]?.parameters.find(
-    (p) => p.name === "transport"
   );
 
   const inputs: TFormInputsArray = [
@@ -357,7 +362,6 @@ const TechnicForm = ({props}) => {
           unselectItem: unselectEquipment,
           label: "Дополнительное оборудование",
           error: equipmentError,
-          usesDataFromApi: false,
         },
         {
           id: "weight",
@@ -484,7 +488,7 @@ const TechnicForm = ({props}) => {
           values: ["Не подключён", "Подключён"],
           selectedIndex: ossigI,
           onChange: (evt) => setOssigI(evt.nativeEvent.selectedSegmentIndex),
-          label: getLabelForTechnicParam("OSSIG"),
+          label: getLabelForTechnicParam("ossig"),
           hidden: !technicType[0] || !hasOSSIG,
         },
         {
@@ -551,14 +555,13 @@ const TechnicForm = ({props}) => {
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
           label: "Режим работы",
-
         },
         {
           id: "address",
           type: "address",
-          label: isTransport ? "Плечо (точка А)" : "Адрес",
+          label: isSecondAddressRequired ? "Плечо (точка А)" : "Адрес",
           address: pointAddress,
-          isSecondPointRequired: isTransport,
+          isSecondPointRequired,
           error: point ? undefined : "Заполните данное поле",
         },
         {
@@ -569,7 +572,7 @@ const TechnicForm = ({props}) => {
           isSecondPointRequired: true,
           isSecondInput: true,
           error: secondPoint ? undefined : "Заполните данное поле",
-          hidden: !isTransport,
+          hidden: !isSecondAddressRequired,
         },
         {
           id: "distance",
@@ -579,7 +582,7 @@ const TechnicForm = ({props}) => {
           value: distance ? distance + " км" : "",
           label: "Плечо (км)",
           editable: false,
-          hidden: !isTransport,
+          hidden: !isSecondAddressRequired,
         },
         {
           id: "rentalPeriod",
@@ -592,6 +595,8 @@ const TechnicForm = ({props}) => {
           onSecondValueChange: onSecondDateChange,
           error: firstDateError || secondDateError,
           label: "Период аренды",
+          isFirstFieldInvalid: !isFirstDateValid,
+          isSecondFieldInvalid: !isSecondDateValid,
         },
         {
           id: "rentalDaysCount",
@@ -675,9 +680,6 @@ const TechnicForm = ({props}) => {
     (isBodyLengthValid || !hasBodyLength) &&
     (isTrailerTypeValid || !hasTrailerType);
 
-  const transactionType = TECHNIC_TRANSACTION_TYPES[transactionTypeI];
-  const isPhotosAllowed = transactionType === "GIVE_A_RENT";
-
   const onSubmit = () => {
     if (user) {
       const trailerTypeI = ENUMS.trailerTypes.findIndex(
@@ -737,10 +739,8 @@ const TechnicForm = ({props}) => {
         paymentUnit: PAYMENT_UNITS[paymentTypeI],
         paymentType: PAYMENT_TYPES[paymentForI],
       };
-      delete advert.children
-      delete advert.photos
-
-
+      delete advert.children;
+      delete advert.photos;
 
       editAdvert({
         advert,
@@ -749,21 +749,18 @@ const TechnicForm = ({props}) => {
     }
   };
 
-
-
   useEffect(() => {
     if (editAdvertResult.isSuccess) {
-
       if (isPhotosAllowed) {
         navigation.navigate("EditImages", {
           id: editAdvertResult.originalArgs?.advert.id,
           isPhotosRequired:
-          editAdvertResult.originalArgs?.advert.transactionType === "GIVE_A_RENT",
+            editAdvertResult.originalArgs?.advert.transactionType ===
+            "GIVE_A_RENT",
           advertType: "TECHNIC",
         });
       } else {
-      Alert.alert("Успешно", "Публикаия обновлена");
-
+        Alert.alert("Успешно", "Публикаия обновлена");
         navigation.navigate("Profile");
       }
     } else if (editAdvertResult.error) {
@@ -771,13 +768,8 @@ const TechnicForm = ({props}) => {
     }
   }, [editAdvertResult]);
 
-
-
-
   useEffect(() => {
-
     if (firstDate && isFirstDateValid && secondDate && isSecondDateValid) {
-
       const first = new Date(firstDate.split(".").reverse().join("-"));
       const second = new Date(secondDate.split(".").reverse().join("-"));
       const daysCount =
@@ -789,18 +781,21 @@ const TechnicForm = ({props}) => {
     }
   }, [firstDate, secondDate]);
 
-
-
   useEffect(() => {
-    setAddressByMapDefaults({secondPoint: {lat: props.secondAddressLat, lon: props.secondAddressLon}});
-    setPoint(!!props.addressLon && !!props.addressLat ? {lat: props.addressLat, lon: props.addressLon} : undefined)
+    setAddressByMapDefaults({
+      secondPoint: { lat: props.secondAddressLat, lon: props.secondAddressLon },
+    });
+    setPoint(
+      !!props.addressLon && !!props.addressLat
+        ? { lat: props.addressLat, lon: props.addressLon }
+        : undefined
+    );
 
-    setSecondPoint({secondPoint: {lat: props.secondAddressLat, lon: props.secondAddressLon}, distance: props.distance})
-
-
-    
+    setSecondPoint({
+      secondPoint: { lat: props.secondAddressLat, lon: props.secondAddressLon },
+      distance: props.distance,
+    });
   }, []);
-
 
   return (
     <Form

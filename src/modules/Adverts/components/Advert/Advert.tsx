@@ -16,7 +16,6 @@ import { IAdvert } from "../../../../types/Advert";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { TRANSACTION_TYPE_TITLE } from "../../../../consts/data";
 import { getPriceString } from "../../helpers/getPaymentFor";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useGetUserByIdQuery } from "../../../SearchUsers/api/users.api";
@@ -27,6 +26,7 @@ import {
 import { API_URL } from "../../../../api/api";
 import { getAdvertTypeIconFunc } from "../../../../helpers/advertTypeGetters";
 import { SetLike } from "../../../Like/components/SetLike";
+import { ENUM_TITLES } from "../../../../consts/enums";
 
 const Advert: FC<IAdvert> = memo((props) => {
   const {
@@ -156,7 +156,7 @@ const Advert: FC<IAdvert> = memo((props) => {
           )}
         </View>
         <Text style={advertStyles.paymentFor}>
-          {TRANSACTION_TYPE_TITLE[transactionType]}
+          {ENUM_TITLES[transactionType]}
         </Text>
       </View>
       {advertStatus !== "DELETED" && (

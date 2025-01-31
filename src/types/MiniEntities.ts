@@ -19,3 +19,8 @@ export interface IMaterialType {
   name: string;
   fractions: Array<TFraction>;
 }
+
+export interface IWasteType {
+  id: number;
+  name: string;
+}

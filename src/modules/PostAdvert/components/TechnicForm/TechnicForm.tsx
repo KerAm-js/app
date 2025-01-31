@@ -28,10 +28,9 @@ import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
 import { useActions } from "../../../../hooks/store/useActions";
 import {
-  ITechnicType,
-  TEquipment,
   useTechnicTypes,
 } from "../../../MiniEntities";
+import { ITechnicType, TEquipment } from "../../../../types/MiniEntities";
 
 const trailerTypes = TRAILER_TYPES.map((item, index) => ({
   id: index,
@@ -46,6 +45,8 @@ const TechnicForm = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [transactionTypeI, setTransactionTypeI] = useState(0);
+  const transactionType = TECHNIC_TRANSACTION_TYPES[transactionTypeI];
+  const isPhotosAllowed = transactionType === "GIVE_A_RENT";
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
     minLength: 10,
@@ -59,6 +60,10 @@ const TechnicForm = () => {
     technicTypeError,
     setTechnicTypeInitial,
   ] = useSelectionValidator<ITechnicType>({ required: true });
+  const isTransport = !!technicType[0]?.parameters.find(
+    (p) => p.name === "transport"
+  );
+  const isSecondAddressRequired = isTransport && transactionType === 'TAKE_A_RENT'
   const [mark, onChangeMark] = useInputValidator();
   const [model, onModelChange] = useInputValidator();
   const [prodYear, onProdYearChange, isProdYearValid, prodYearError] =
@@ -255,9 +260,6 @@ const TechnicForm = () => {
   );
   const hasLoadingType = !!technicType[0]?.parameters.find(
     (param) => param.name === "loading_type"
-  );
-  const isTransport = !!technicType[0]?.parameters.find(
-    (p) => p.name === "transport"
   );
 
   const inputs: TFormInputsArray = [
@@ -527,9 +529,9 @@ const TechnicForm = () => {
         {
           id: "address",
           type: "address",
-          label: isTransport ? "Плечо (точка А)" : "Адрес",
+          label: isSecondAddressRequired ? "Плечо (точка А)" : "Адрес",
           address: pointAddress,
-          isSecondPointRequired: isTransport,
+          isSecondPointRequired,
           error: point ? undefined : "Заполните данное поле",
         },
         {
@@ -540,7 +542,7 @@ const TechnicForm = () => {
           isSecondPointRequired: true,
           isSecondInput: true,
           error: secondPoint ? undefined : "Заполните данное поле",
-          hidden: !isTransport,
+          hidden: !isSecondAddressRequired,
         },
         {
           id: "distance",
@@ -550,7 +552,7 @@ const TechnicForm = () => {
           value: distance ? distance + " км" : "",
           label: "Плечо (км)",
           editable: false,
-          hidden: !isTransport,
+          hidden: !isSecondAddressRequired,
         },
         {
           id: "rentalPeriod",
@@ -561,8 +563,8 @@ const TechnicForm = () => {
           secondValue: secondDate,
           onFirstValueChange: onFirstDateChange,
           onSecondValueChange: onSecondDateChange,
-          isFirstFieldInvalid: isFirstDateValid,
-          isSecondFieldInvalid: isSecondDateValid,
+          isFirstFieldInvalid: !isFirstDateValid,
+          isSecondFieldInvalid: !isSecondDateValid,
           error: firstDateError || secondDateError,
           label: "Период аренды",
         },
@@ -648,11 +650,8 @@ const TechnicForm = () => {
     (isBodyLengthValid || !hasBodyLength) &&
     (isTrailerTypeValid || !hasTrailerType);
 
-  const transactionType = TECHNIC_TRANSACTION_TYPES[transactionTypeI];
-  const isPhotosAllowed = transactionType === "GIVE_A_RENT";
-
   const onSubmit = () => {
-    if (user) {
+    if (user && point) {
       const advert: TechnicAdvertDto = {
         advertType: "TECHNIC",
         transactionType,
@@ -668,8 +667,8 @@ const TechnicForm = () => {
         ).toISOString(),
         rentalDaysCount: Number(rentalDaysCount),
         isTransport,
-        addressLat: point?.lat || 57,
-        addressLon: point?.lon || 36,
+        addressLat: point?.lat,
+        addressLon: point?.lon,
         secondAddressLat: secondPoint?.lat,
         secondAddressLon: secondPoint?.lon,
         distance: secondPoint ? distance : undefined,

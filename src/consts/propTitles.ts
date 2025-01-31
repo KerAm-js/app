@@ -3,13 +3,13 @@ export const propTitles = {
   shiftType: "Режим работы",
   rentalPeriod: "Период аренды",
   rentalDaysCount: "Срок аренды (в днях)",
-  delivery: "Доставка",
+  delivery: "Способ отгрузки",
   dangerClass: "Класс опасности",
-  wasteType: "Вид отходов",
+  wasteTypes: "Виды отходов",
   dumpTransport: "Вид транспорта",
   amount: "Количество",
   fractions: "Фракции",
   coefficient: "Коэффициент",
-  materialType: "Виж материала",
+  materialType: "Вид материала",
   distance: 'Плечо'
 };

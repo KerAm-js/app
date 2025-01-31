@@ -1,3 +1,9 @@
+import {
+  IDumpTransportType,
+  IMaterialType,
+  ITechnicType,
+  IWasteType,
+} from "../../../types/MiniEntities";
 import { handleError } from "../../Auth/helpers/getErrorMessage";
 import {
   getDumpTransports,
@@ -5,11 +11,6 @@ import {
   getTechnicTypes,
   getWasteTypes,
 } from "../api/miniEntities.api";
-import {
-  IDumpTransportType,
-  IMaterialType,
-  ITechnicType,
-} from "../api/types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getTechnicTypesThunk = createAsyncThunk<
@@ -60,7 +61,11 @@ export const getDumpTransportsThunk = createAsyncThunk<
   }
 });
 
-export const getWasteTypesThunk = createAsyncThunk("miniEntities/wasteTypes", async (_, thunkApi) => {
+export const getWasteTypesThunk = createAsyncThunk<
+  IWasteType[],
+  undefined,
+  { rejectValue: string }
+>("miniEntities/wasteTypes", async (_, thunkApi) => {
   try {
     const response = await getWasteTypes();
     if (response.status === 200) {

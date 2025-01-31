@@ -23,14 +23,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useActions } from "../../../../hooks/store/useActions";
 import {
-  ITechnicType,
-  TEquipment,
   useTechnicTypes,
 } from "../../../MiniEntities";
 import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { RootStackParamList } from "../../../../navigation/types";
 import { useIntervalValidator } from "../../../../hooks/inputValidators/useIntervalValidator";
+import { ITechnicType, TEquipment } from "../../../../types/MiniEntities";
 
 const trailerTypes = TRAILER_TYPES.map((item, index) => ({
   id: index,
@@ -73,16 +72,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
       (item) => item === currentFilter.loadingType
     );
     return i < 0 ? FILTER_ENUMS_WITH_ALL.loadingTypes.length - 1 : i;
-  }, []);
-  const initShiftTypeI = useMemo(() => {
-    const i = SHIFT_TYPES.findIndex((item) => item === currentFilter.shiftType);
-    return i < 0 ? FILTER_ENUMS_WITH_ALL.shiftTypes.length - 1 : i;
-  }, []);
-  const initPaymentUnitI = useMemo(() => {
-    const i = PAYMENT_UNITS.findIndex(
-      (item) => item === currentFilter.paymentUnit
-    );
-    return i < 0 ? FILTER_ENUMS_WITH_ALL.paymentUnits.length - 1 : i;
   }, []);
   const initPaymentTypeI = useMemo(() => {
     const i = PAYMENT_TYPES.findIndex(
@@ -130,10 +119,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
   const initUnitAmountFrom =
     currentFilter?.unitAmountFrom?.toString() || undefined;
   const initUnitAmountTo = currentFilter?.unitAmountTo?.toString() || undefined;
-  const initRentalDaysCountFrom =
-    currentFilter?.rentalDaysCountFrom?.toString() || undefined;
-  const initRentalDaysCountTo =
-    currentFilter?.rentalDaysCountTo?.toString() || undefined;
 
   const [typeI, setTypeI] = useState(initTypeI < 0 ? 0 : initTypeI);
   const [
@@ -331,7 +316,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     initValue: initTrailerType ? [initTrailerType] : undefined,
   });
   const [loadingTypeI, setLoadingTypeI] = useState(initLoadingTypeI);
-  const [shiftTypeI, setShiftTypeI] = useState(initShiftTypeI);
   const [
     unitAmountFrom,
     unitAmountTo,
@@ -347,22 +331,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     secondInitValue: initUnitAmountTo,
     requiredBothOrNone: true,
   });
-  const [
-    rentalDaysCountFrom,
-    rentalDaysCountTo,
-    onRentalDaysCountFromChange,
-    onRentalDaysCountToChange,
-    isRentalDaysCountFromValid,
-    isRentalDaysCountToValid,
-    rentalDaysCountFromError,
-    rentalDaysCountToError,
-  ] = useIntervalValidator({
-    minValue: 1,
-    firstInitValue: initRentalDaysCountFrom,
-    secondInitValue: initRentalDaysCountTo,
-    requiredBothOrNone: true,
-  });
-  const [paymentUnitI, setPaymentUnitI] = useState(initPaymentUnitI);
   const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
 
   const hasWeight = !!technicType[0]?.parameters.find(
@@ -670,41 +638,11 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
           error: unitAmountFromError || unitAmountToError,
           label: "Количество единиц техники",
         },
-        {
-          id: "workMode",
-          type: "segment",
-          values: FILTER_ENUMS_WITH_ALL.shiftTypes,
-          selectedIndex: shiftTypeI,
-          onChange: (evt) =>
-            setShiftTypeI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Режим работы",
-        },
-        {
-          id: "rentalDaysCount",
-          type: "interval",
-          firstValue: rentalDaysCountFrom,
-          secondValue: rentalDaysCountTo,
-          onFirstValueChange: onRentalDaysCountFromChange,
-          onSecondValueChange: onRentalDaysCountToChange,
-          isFirstFieldInvalid: !isRentalDaysCountFromValid,
-          isSecondFieldInvalid: !isRentalDaysCountToValid,
-          error: rentalDaysCountFromError || rentalDaysCountToError,
-          label: "Срок аренды (в днях)",
-        },
       ],
     },
     {
       title: "Информация о цене",
       inputs: [
-        {
-          id: "paymentFor",
-          type: "segment",
-          values: FILTER_ENUMS_WITH_ALL.paymentUnits,
-          selectedIndex: paymentUnitI,
-          onChange: (evt) =>
-            setPaymentUnitI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Оплата за",
-        },
         {
           id: "paymentType",
           type: "segment",
@@ -721,9 +659,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
   const isFormValid =
     isTechnicTypeValid &&
     isUnitAmountFromValid &&
-    isUnitAmountToValid &&
-    isRentalDaysCountFromValid &&
-    isRentalDaysCountToValid;
+    isUnitAmountToValid;
 
   const onSubmit = () => {
     const axesCount =
@@ -744,6 +680,10 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
       distanceFrom: null,
       distanceTo: null,
       cargoType: null,
+      rentalDaysCountFrom: null,
+      rentalDaysCountTo: null,
+      shiftType: null,
+      paymentUnit: null,
       //parameters below aren't using for filtration
       axesCountFrom: axesCount,
       axesCountTo: axesCount,
@@ -768,14 +708,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
         PAYMENT_TYPES[paymentTypeI] !== "ANY"
           ? PAYMENT_TYPES[paymentTypeI]
           : null,
-      paymentUnit:
-        FILTER_ENUMS_WITH_ALL.paymentUnits[paymentUnitI] !== ALL
-          ? PAYMENT_UNITS[paymentUnitI]
-          : null,
-      shiftType:
-        FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL
-          ? SHIFT_TYPES[shiftTypeI]
-          : null,
       sizeType:
         FILTER_ENUMS_WITH_ALL.sizeTypes[sizeTypeI] !== ALL
           ? SIZE_TYPES[sizeTypeI]
@@ -795,8 +727,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     result.performanceTo = Number(performanceTo) || null;
     result.pipeLengthFrom = Number(pipeLengthTo) || null;
     result.pipeLengthTo = Number(pipeLengthTo) || null;
-    result.rentalDaysCountFrom = Number(rentalDaysCountFrom) || null;
-    result.rentalDaysCountTo = Number(rentalDaysCountTo) || null;
     result.rollersCountFrom = Number(rollersCountFrom) || null;
     result.rollersCountTo = Number(rollersCountTo) || null;
     result.unitAmountFrom = Number(unitAmountFrom) || null;

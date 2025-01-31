@@ -1,7 +1,6 @@
 import { Keyboard, Text, TextInput, View } from "react-native";
 import React, {
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,

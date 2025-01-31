@@ -6,7 +6,6 @@ import { SvgXml } from "react-native-svg";
 import { eyeSvg } from "../../../../assets/svg/eye";
 import { likeFillSvg } from "../../../../assets/svg/likeFill";
 import { GREY_DARK } from "../../../../consts/colors";
-import { TRANSACTION_TYPE_TITLE } from "../../../../consts/data";
 import { getPriceString } from "../../../../modules/Adverts/helpers/getPaymentFor";
 import { IAdvert } from "../../../../types/Advert";
 import { ENUM_TITLES } from "../../../../consts/enums";
@@ -14,7 +13,7 @@ import { useGetLikesByAdvertIdQuery } from "../../../../modules/Adverts/api/adve
 
 const MainInfo: FC<IAdvert> = (props) => {
   const { title, paymentType, views, updatedAt, transactionType, id, advertType } = props;
-  const { data: likes, isLoading: isLikesLoading } = useGetLikesByAdvertIdQuery(
+  const { data: likes } = useGetLikesByAdvertIdQuery(
     { advertType, id }
   );
   const payment =
@@ -28,7 +27,7 @@ const MainInfo: FC<IAdvert> = (props) => {
     <View style={mainInfoStyles.container}>
       <Text style={mainInfoStyles.title}>{title}</Text>
       <Text style={mainInfoStyles.subtitle}>
-        {TRANSACTION_TYPE_TITLE[transactionType]}
+        {ENUM_TITLES[transactionType]}
       </Text>
       <View style={mainInfoStyles.rowsContainer}>
         <View style={mainInfoStyles.row}>

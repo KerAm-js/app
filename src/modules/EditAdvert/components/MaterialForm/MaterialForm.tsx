@@ -3,14 +3,8 @@ import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import { usePhoneValidator } from "../../../../hooks/inputValidators/usePhoneValidator";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import {
-  IMaterialType,
-  ITransportType,
-  TFraction,
-  useEditMaterialAdvertMutation
-} from "../../api/editAdvert.api";
+import { useEditMaterialAdvertMutation } from "../../api/editAdvert.api";
 import {
   DELIVERY,
   ENUM_TITLES,
@@ -25,10 +19,15 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
 import { useDumpTransports, useMaterialTypes } from "../../../MiniEntities";
+import {
+  IDumpTransportType,
+  IMaterialType,
+  TFraction,
+} from "../../../../types/MiniEntities";
+import { IMaterialAdvert } from "../../../../types/Advert";
 
-
-const MaterialForm = ({props}) => {
-  const materialTypes = useMaterialTypes()
+const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
+  const materialTypes = useMaterialTypes();
   const dumpTransports = useDumpTransports();
 
   const { token } = useAuth();
@@ -39,7 +38,7 @@ const MaterialForm = ({props}) => {
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
     minLength: 10,
-    initValue: props.title
+    initValue: props.title,
   });
   const [
     materialType,
@@ -49,7 +48,10 @@ const MaterialForm = ({props}) => {
     isMaterialTypeValid,
     materialTypeError,
     setMaterialTypeInitial,
-  ] = useSelectionValidator<IMaterialType>({ required: true, initValue: materialTypes.filter(item => item.name === props.materialType) });
+  ] = useSelectionValidator<IMaterialType>({
+    required: true,
+    initValue: materialTypes.filter((item) => item.name === props.materialType),
+  });
 
   const [
     transport,
@@ -59,17 +61,27 @@ const MaterialForm = ({props}) => {
     isTransportValid,
     transportError,
     setTransportInitial,
-  ] = useSelectionValidator<ITransportType>({ required: true, initValue: props.dumpTransport, multySelection: true });
-  const [measureI, setMeasureI] = useState(props.measureIn === 'WEIGHT' ? 0 : 1);
+  ] = useSelectionValidator<IDumpTransportType>({
+    required: true,
+    initValue: props.dumpTransport,
+    multySelection: true,
+  });
+  const [measureI, setMeasureI] = useState(
+    props.measureIn === "WEIGHT" ? 0 : 1
+  );
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
-    { required: true, minValue: 1, initValue: String(props.amount)}
+    { required: true, minValue: 1, initValue: String(props.amount) }
   );
   const [
     coefficient,
     onCoefficientChange,
     isCoefficientValid,
     coefficientError,
-  ] = useInputValidator({ required: true, minValue: 1, initValue: String(props.coefficient) });
+  ] = useInputValidator({
+    required: true,
+    minValue: 1,
+    initValue: String(props.coefficient),
+  });
   const [
     fractions,
     selectFractions,
@@ -77,10 +89,17 @@ const MaterialForm = ({props}) => {
     clearFractions,
     isFractionsValid,
     fractionsError,
-  ] = useSelectionValidator<TFraction>({ required: true, initValue: props.fractions });
-  const [workModeIndex, setWorkModeIndex] = useState(SHIFT_TYPES.indexOf(props.shiftType));
-  const [deliveryI, setDeliveryI] = useState(props.deliveryType === 'DELIVERY' ? 0 : 1);
-  const [comment, setComment] = useState(props.description || '');
+  ] = useSelectionValidator<TFraction>({
+    required: true,
+    initValue: props.fractions,
+  });
+  const [workModeIndex, setWorkModeIndex] = useState(
+    SHIFT_TYPES.indexOf(props.shiftType)
+  );
+  const [deliveryI, setDeliveryI] = useState(
+    props.deliveryType === "DELIVERY" ? 0 : 1
+  );
+  const [comment, setComment] = useState(props.description || "");
 
   const [
     priceForWeight,
@@ -90,7 +109,7 @@ const MaterialForm = ({props}) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.price)
+    initValue: String(props.price),
   });
   const [
     priceForVolume,
@@ -100,10 +119,11 @@ const MaterialForm = ({props}) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.price * Number(props.coefficient))
-
+    initValue: String(props.price * Number(props.coefficient)),
   });
-  const [paymentTypeI, setPaymentTypeI] = useState(PAYMENT_TYPES.indexOf(props.paymentType));
+  const [paymentTypeI, setPaymentTypeI] = useState(
+    PAYMENT_TYPES.indexOf(props.paymentType)
+  );
 
   const inputs: TFormInputsArray = [
     {
@@ -154,7 +174,6 @@ const MaterialForm = ({props}) => {
           hidden: !materialType[0] || materialType[0].fractions.length === 0,
           error: fractionsError,
           label: "Фракция",
-          usesDataFromApi: false,
         },
         {
           id: "measure",
@@ -162,7 +181,7 @@ const MaterialForm = ({props}) => {
           values: ENUMS.measureIn,
           selectedIndex: measureI,
           onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Измерять",
+          label: "Способ измерения",
         },
         {
           id: "amount",
@@ -172,8 +191,8 @@ const MaterialForm = ({props}) => {
           value: amount,
           label:
             ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
-              ? "Объём (м3)"
-              : "Вес (т)",
+              ? "Количество (м3)"
+              : "Количество (т)",
           keyboardType: "decimal-pad",
         },
         {
@@ -205,7 +224,7 @@ const MaterialForm = ({props}) => {
           values: ENUMS.delivery,
           selectedIndex: deliveryI,
           onChange: (evt) => setDeliveryI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Доставка",
+          label: "Способ отгрузки",
         },
         {
           id: "comment",
@@ -265,8 +284,6 @@ const MaterialForm = ({props}) => {
   const transactionType = MATERIAL_TRANSACTION_TYPES[typeI];
   const isPhotosAllowed = transactionType === "SELL";
 
-
-
   const onSubmit = () => {
     editAdvert({
       advert: {
@@ -317,7 +334,6 @@ const MaterialForm = ({props}) => {
 
   useEffect(() => {
     if (editAdvertResult.isSuccess) {
-
       if (isPhotosAllowed) {
         navigation.navigate("EditImages", {
           id: editAdvertResult.originalArgs?.advert.id,

@@ -16,18 +16,17 @@ import {
   PAYMENT_TYPES,
   SHIFT_TYPES,
 } from "../../../../consts/enums";
-import {
-  IDumpTransportType,
-  IMaterialType,
-  TFraction,
-  useDumpTransports,
-  useMaterialTypes,
-} from "../../../MiniEntities";
+import { useDumpTransports, useMaterialTypes } from "../../../MiniEntities";
 import { View } from "react-native";
 import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { useIntervalValidator } from "../../../../hooks/inputValidators/useIntervalValidator";
+import {
+  IDumpTransportType,
+  IMaterialType,
+  TFraction,
+} from "../../../../types/MiniEntities";
 
 const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
   const { setMaterialFilter } = useActions();
@@ -55,14 +54,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
   );
   const initAmountFrom = currentFilter?.amountFrom?.toString() || undefined;
   const initAmountTo = currentFilter?.amountTo?.toString() || undefined;
-  const initCoefficientFrom =
-    currentFilter?.coefficientFrom?.toString() || undefined;
-  const initCoefficientTo =
-    currentFilter?.coefficientTo?.toString() || undefined;
-  const initShiftTypeI = useMemo(() => {
-    const i = SHIFT_TYPES.findIndex((item) => item === currentFilter.shiftType);
-    return i < 0 ? FILTER_ENUMS_WITH_ALL.shiftTypes.length - 1 : i;
-  }, []);
   const initPaymentTypeI = useMemo(() => {
     const i = PAYMENT_TYPES.findIndex(
       (item) => item === currentFilter.paymentType
@@ -95,7 +86,10 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     transportError,
   ] = useSelectionValidator<IDumpTransportType>({
     multySelection: true,
-    initValue: dumpTransports.filter(item => currentFilter.transports?.indexOf(item.id) > -1 ? item : null) || undefined,
+    initValue:
+      dumpTransports.filter((item) =>
+        currentFilter.transports?.find((currentItem) => currentItem === item.id)
+      ) || undefined,
   });
   const [
     fractions,
@@ -124,22 +118,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     secondInitValue: initAmountTo,
     requiredBothOrNone: true,
   });
-  const [
-    coefficientFrom,
-    coefficientTo,
-    onCoefficientFromChange,
-    onCoefficientToChange,
-    isCoefficientFromValid,
-    isCoefficientToValid,
-    coefficientFromError,
-    coefficientToError,
-  ] = useIntervalValidator({
-    minValue: 1,
-    firstInitValue: initCoefficientFrom,
-    secondInitValue: initCoefficientTo,
-    requiredBothOrNone: true,
-  });
-  const [shiftTypeI, setShiftTypeI] = useState(initShiftTypeI);
   const [deliveryI, setDeliveryI] = useState(initDeliveryI);
   const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
 
@@ -197,7 +175,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
           values: ENUMS.measureIn,
           selectedIndex: measureI,
           onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Измерять",
+          label: "Способ измерения",
         },
         {
           id: "amount",
@@ -211,22 +189,9 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
           isSecondFieldInvalid: !isAmountToValid,
           label:
             ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
-              ? "Объём (м3)"
-              : "Вес (т)",
+              ? "Количество (м3)"
+              : "Количество (т)",
           keyboardType: "decimal-pad",
-        },
-        {
-          id: "coefficient",
-          type: "interval",
-          firstValue: coefficientFrom,
-          secondValue: coefficientTo,
-          onFirstValueChange: onCoefficientFromChange,
-          onSecondValueChange: onCoefficientToChange,
-          error: coefficientFromError || coefficientToError,
-          label: "Коэффициент (вес/объём)",
-          keyboardType: "decimal-pad",
-          isFirstFieldInvalid: !isCoefficientFromValid,
-          isSecondFieldInvalid: !isCoefficientToValid,
         },
       ],
     },
@@ -234,21 +199,12 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
       title: "Общие данные",
       inputs: [
         {
-          id: "workMode",
-          type: "segment",
-          values: FILTER_ENUMS_WITH_ALL.shiftTypes,
-          selectedIndex: shiftTypeI,
-          onChange: (evt) =>
-            setShiftTypeI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Режим работы",
-        },
-        {
           id: "delivery",
           type: "segment",
           values: FILTER_ENUMS_WITH_ALL.delivery,
           selectedIndex: deliveryI,
           onChange: (evt) => setDeliveryI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Доставка",
+          label: "Способ отгрузки",
         },
       ],
     },
@@ -268,11 +224,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     },
   ];
 
-  const isFormValid =
-    isAmountFromValid &&
-    isAmountToValid &&
-    isCoefficientFromValid &&
-    isCoefficientToValid;
+  const isFormValid = isAmountFromValid && isAmountToValid;
 
   const onSubmit = () => {
     const result: TMaterialFilter = {
@@ -280,24 +232,22 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
       priceTo: null,
       title: null,
       description: null,
+      coefficientFrom: null,
+      coefficientTo: null,
+      shiftType: null,
       // parameters below are not using for filtering
       amountFrom: Number(amountFrom) || null,
       amountTo: Number(amountTo) || null,
-      coefficientFrom: Number(coefficientFrom) || null,
-      coefficientTo: Number(coefficientTo) || null,
       transactionType: MATERIAL_TRANSACTION_TYPES[typeI],
       measureIn: MEASURE_IN[measureI],
       materialType:
         materialType.length > 0 ? materialType[0].name.toLowerCase() : null,
       fractions: fractions.length > 0 ? fractions : null,
-      transports: transport.length > 0 ? transport.map(item => item.id) : null,
+      transports:
+        transport.length > 0 ? transport.map((item) => item.id) : null,
       deliveryType:
         FILTER_ENUMS_WITH_ALL.delivery[deliveryI] !== ALL
           ? DELIVERY[deliveryI]
-          : null,
-      shiftType:
-        FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL
-          ? SHIFT_TYPES[shiftTypeI]
           : null,
       paymentType:
         PAYMENT_TYPES[paymentTypeI] !== "ANY"

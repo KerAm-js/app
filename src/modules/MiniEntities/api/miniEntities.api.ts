@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_URL } from "../../../api/api";
-import { IMaterialType, ITechnicType, IDumpTransportType } from "./types";
+import { IDumpTransportType, IMaterialType, ITechnicType } from "../../../types/MiniEntities";
 
 export const getTechnicTypes = () => {
   return axios.get<ITechnicType[]>(`${API_URL}/technic-type-lib/all`);

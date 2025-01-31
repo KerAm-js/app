@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { Point, Marker } from "react-native-yamap";
 import { SvgXml } from "react-native-svg";
 import { RED } from "../../../consts/colors";
@@ -16,8 +16,9 @@ export const RouteEndMarker: FC<{
       scale={1}
       children={
         <View style={styles.endPointMarker}>
-          <SvgXml width={22} height={30} xml={mapMarkSvg(RED)} />
-
+          {Platform.OS !== "android" && (
+            <SvgXml width={22} height={30} xml={mapMarkSvg(RED)} />
+          )}
           <View style={styles.routeDistanceContainer}>
             <Text style={styles.routeDistance}>{distance} км</Text>
           </View>

@@ -3,7 +3,6 @@ import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
 import { useSelectionValidator } from "../../../../hooks/inputValidators/useSelectionValidator";
-import { INPUT_VALUES } from "../../../../consts/inputValues";
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useAddDumpAdvertMutation } from "../../api/postAdvert.api";
 import {
@@ -15,21 +14,20 @@ import {
   PAYMENT_TYPES,
   SHIFT_TYPES,
 } from "../../../../consts/enums";
-import { WASTE_TYPES } from "../../../../consts/data";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
-import { IDumpTransportType, useDumpTransports } from "../../../MiniEntities";
+import { useDumpTransports } from "../../../MiniEntities";
 import { useWasteTypes } from "../../../MiniEntities/store/hooks";
+import { IDumpTransportType, IWasteType } from "../../../../types/MiniEntities";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
   value: type,
   name: ENUM_TITLES[type],
 }));
-
 
 const dangerClasses = DANGER_CLASSES.map((item, index) => ({
   id: index,
@@ -39,7 +37,7 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
 
 const DumpForm = () => {
   const { token } = useAuth();
-  const wasteTypes = useWasteTypes()
+  const wasteTypes = useWasteTypes();
   const [addAdvert, addAdvertResult] = useAddDumpAdvertMutation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -59,7 +57,10 @@ const DumpForm = () => {
     clearWasteType,
     isWasteTypeValid,
     wasteTypeError,
-  ] = useSelectionValidator({ required: true, multySelection: true });
+  ] = useSelectionValidator<IWasteType>({
+    required: true,
+    multySelection: true,
+  });
   const [
     dangerClass,
     selectDangerClass,
@@ -76,7 +77,10 @@ const DumpForm = () => {
     isTransportValid,
     transportError,
     setTransportInitial,
-  ] = useSelectionValidator<IDumpTransportType>({ required: true, multySelection: true });
+  ] = useSelectionValidator<IDumpTransportType>({
+    required: true,
+    multySelection: true,
+  });
   const [measureI, setMeasureI] = useState(0);
   const [
     coefficient,
@@ -178,7 +182,7 @@ const DumpForm = () => {
           values: ENUMS.measureIn,
           selectedIndex: measureI,
           onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Измерять",
+          label: "Способ измерения",
         },
         {
           id: "amount",
@@ -188,8 +192,8 @@ const DumpForm = () => {
           value: amount,
           label:
             ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
-              ? "Объём (м3)"
-              : "Вес (т)",
+              ? "Количество (м3)"
+              : "Количество (т)",
           keyboardType: "decimal-pad",
         },
         {
@@ -243,7 +247,7 @@ const DumpForm = () => {
           error: priceForWeightError,
           label: "Цена (руб/т)",
           keyboardType: "decimal-pad",
-          editable: INPUT_VALUES.measure[measureI] === "Вес",
+          editable: MEASURE_IN[measureI] === "WEIGHT",
         },
         {
           id: "priceForVolume",
@@ -253,12 +257,12 @@ const DumpForm = () => {
           error: priceForVolumeError,
           label: "Цена (руб/м3)",
           keyboardType: "decimal-pad",
-          editable: INPUT_VALUES.measure[measureI] === "Объём",
+          editable: MEASURE_IN[measureI] === "VOLUME",
         },
         {
           id: "paymentType",
           type: "segment",
-          values: INPUT_VALUES.paymentType,
+          values: PAYMENT_TYPES,
           selectedIndex: paymentTypeI,
           onChange: (evt) =>
             setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),
@@ -310,22 +314,14 @@ const DumpForm = () => {
   };
 
   useEffect(() => {
-    if (
-      priceForWeight &&
-      coefficient &&
-      INPUT_VALUES.measure[measureI] === "Вес"
-    ) {
+    if (priceForWeight && coefficient && MEASURE_IN[measureI] === "WEIGHT") {
       const priceVolume = Number(priceForWeight) * Number(coefficient);
       onPriceForVolumeChange(Math.floor(priceVolume).toString());
     }
   }, [coefficient, priceForWeight]);
 
   useEffect(() => {
-    if (
-      priceForVolume &&
-      coefficient &&
-      INPUT_VALUES.measure[measureI] === "Объём"
-    ) {
+    if (priceForVolume && coefficient && MEASURE_IN[measureI] === "VOLUME") {
       const priceWeight = Number(priceForVolume) / Number(coefficient);
       onPriceForWeightChange(Math.floor(priceWeight).toString());
     }
@@ -343,7 +339,7 @@ const DumpForm = () => {
         navigation.navigate("Profile");
       }
     } else if (addAdvertResult.error) {
-      console.log(addAdvertResult.error)
+      console.log(addAdvertResult.error);
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
   }, [addAdvertResult]);

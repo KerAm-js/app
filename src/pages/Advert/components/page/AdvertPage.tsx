@@ -78,7 +78,9 @@ const AdvertPageComponent: FC<TAdvertPagePropTypes> = ({ isMini, advert }) => {
         lon: advert.addressLon,
       },
       secondPoint:
-        data.advertType === "TECHNIC"
+        data.advertType === "TECHNIC" &&
+        data.secondAddressLat &&
+        data.secondAddressLon
           ? {
               lat: data.secondAddressLat,
               lon: data.secondAddressLon,

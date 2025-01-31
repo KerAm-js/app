@@ -1,12 +1,8 @@
 import { api } from "../../../api/api";
 import {
-  DumpAdvertDto,
   IAdvert,
-  MaterialAdvertDto,
   TAdvertType,
-  TechnicAdvertDto,
 } from "../../../types/Advert";
-import { IImage } from "../../../UI/inputs/Photo/types";
 
 interface FormDataValue {
   uri: string;
@@ -44,28 +40,6 @@ interface FormData {
   [Symbol.iterator](): IterableIterator<string | File>;
 }
 
-export type TEquipment = { id: number; name: string };
-export type TParameter = { id: number; name: string };
-export type TFraction = { id: number; name: string };
-
-export interface ITechnicType {
-  id: number;
-  name: string;
-  equipments: Array<TEquipment>;
-  parameters: Array<TParameter>;
-}
-
-export interface ITransportType {
-  id: number;
-  name: string;
-}
-
-export interface IMaterialType {
-  id: number;
-  name: string;
-  fractions: Array<TFraction>;
-}
-
 export interface UploadImageToAdvertPayload {
   image: {
     uri: string;
@@ -74,15 +48,6 @@ export interface UploadImageToAdvertPayload {
   };
   advert_type: string;
   order_id: string;
-}
-
-interface GetImageNamesByOrderIdParams {
-  order_id: string;
-  advert_type: string;
-}
-
-interface GetImageResponse {
-  url: string;
 }
 
 export const postAdvertApi = api.injectEndpoints({

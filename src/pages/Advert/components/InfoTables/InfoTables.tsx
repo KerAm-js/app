@@ -62,9 +62,10 @@ const InfoTables: FC<IAdvert> = (advert) => {
       });
     }
   } else {
+    console.log(advert.id, advert.dumpTransport)
     chars.data.push({
       title: propTitles.dumpTransport,
-      value: advert.dumpTransport[0].name,
+      value: advert.dumpTransport.reduce((value, item, index) => value + (index === 0 ? "": ", ") + item.name, ''),
     });
     chars.data.push({
       title: propTitles.coefficient,
@@ -80,7 +81,7 @@ const InfoTables: FC<IAdvert> = (advert) => {
   }
   if (advert.advertType === "DUMP") {
     chars.data.push({
-      title: propTitles.wasteType,
+      title: propTitles.wasteTypes,
       value: advert.wasteTypes.reduce((value, item, index) => value + (index === 0 ? "": ", ") + item.name, ''),
     });
     chars.data.push({

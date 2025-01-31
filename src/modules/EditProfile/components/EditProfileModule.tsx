@@ -9,7 +9,6 @@ import { useAuth } from "../../../hooks/store/useAuth";
 import { useUpdateProfileMutation } from "../api/profile.api";
 import { useActions } from "../../../hooks/store/useActions";
 import { useIsUsernameAvailableQuery } from "../../../api/api";
-import { USERNAME_REGEX } from "../../../consts/regex";
 
 const EditProfileModuleComponent = () => {
   const { user, token, isLoading } = useAuth();
@@ -20,9 +19,6 @@ const EditProfileModuleComponent = () => {
     useInputValidator({
       initValue: user?.username,
       minLength: 2,
-      pattern: USERNAME_REGEX,
-      patternErrorMessage:
-        "Данное поле может содержать только латинские буквы, цифры и нижние подчёркивания",
     });
   const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] =
     usePhoneValidator({

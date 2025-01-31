@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TPhoneInputValidator } from "./types";
 import { toPhoneFormat } from "../../helpers/toPhoneFormat";
 

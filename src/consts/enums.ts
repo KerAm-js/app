@@ -8,14 +8,14 @@ import {
 export const ALL = "Все";
 
 export const ENUM_TITLES: { [key in TEnum]: string } = {
-  BUY: "Купля",
-  SELL: "Продажа",
-  GIVE_A_RENT: "Аренда",
-  TAKE_A_RENT: "Нужна аренда",
+  BUY: "Куплю",
+  SELL: "Продам",
+  GIVE_A_RENT: "Сдам в аренду",
+  TAKE_A_RENT: "Возьму в аренду",
   NEED_SOIL_DUMP: "Нужен отвал",
   NEED_SOIL_REMOVAL: "Нужен вывоз",
-  SOIL_DUMP: "Отвал",
-  SOIL_REMOVAL: "Вывоз",
+  SOIL_DUMP: "Отвал/Полигон",
+  SOIL_REMOVAL: "Вывезу",
   ANY: "Любой",
   CASH: "Наличные",
   CLASS_1: "1 класс",
@@ -84,7 +84,7 @@ export const PAYMENT_UNITS: ITechnicAdvert["paymentUnit"][] = [
   "M3_KM",
   "T_KM",
 ];
-export const ROLLER_TYPES: ITechnicAdvert["rollerType"][] = ["MIXED", "SMOOTH"];
+export const ROLLER_TYPES: ITechnicAdvert["rollerType"][] = ["SMOOTH", "MIXED"];
 export const SHIFT_TYPES: ITechnicAdvert["shiftType"][] = [
   "DAY",
   "NIGHT",

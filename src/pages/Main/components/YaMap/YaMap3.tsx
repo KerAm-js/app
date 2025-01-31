@@ -63,6 +63,7 @@ const YaMap3 = () => {
       setStartPoint(newPoint);
     } else {
       setEndPoint(newPoint);
+      setDistance(0);
       if (isMapLoaded && mapRef.current) {
         mapRef.current.findDrivingRoutes([startPoint, newPoint], (result) => {
           const points: Point[] = [];
@@ -120,10 +121,7 @@ const YaMap3 = () => {
         {startPoint && (
           <RouteStartMarker point={startPoint} onPress={onStartMarkPress} />
         )}
-        {route && (
-          <Polyline strokeWidth={3} strokeColor={PURPLE} points={route} />
-        )}
-        {endPoint && (
+        {!!endPoint && !!distance && (
           <RouteEndMarker
             point={endPoint}
             distance={distance}
@@ -133,6 +131,9 @@ const YaMap3 = () => {
         {data?.map((advertMini) => {
           return <CustomYamapMarker key={advertMini.id} {...advertMini} />;
         })}
+        {route && (
+          <Polyline strokeWidth={3} strokeColor={PURPLE} points={route} />
+        )}
       </YaMap>
       <MenuBar advertType={advertType} setAdvertType={onChangeAdvertType} />
     </View>

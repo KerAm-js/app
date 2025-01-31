@@ -20,12 +20,10 @@ import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
 import {
-  IDumpTransportType,
-  IMaterialType,
-  TFraction,
   useDumpTransports,
   useMaterialTypes,
 } from "../../../MiniEntities";
+import { IDumpTransportType, IMaterialType, TFraction } from "../../../../types/MiniEntities";
 
 const MaterialForm = () => {
   const { token } = useAuth();
@@ -166,7 +164,7 @@ const MaterialForm = () => {
           values: ENUMS.measureIn,
           selectedIndex: measureI,
           onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Измерять",
+          label: "Способ измерения",
         },
         {
           id: "amount",
@@ -174,10 +172,7 @@ const MaterialForm = () => {
           onChangeText: onAmountCange,
           error: amountError,
           value: amount,
-          label:
-            ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
-              ? "Объём (м3)"
-              : "Вес (т)",
+          label: 'Количество',
           keyboardType: "decimal-pad",
         },
         {
@@ -217,7 +212,7 @@ const MaterialForm = () => {
           values: ENUMS.delivery,
           selectedIndex: deliveryI,
           onChange: (evt) => setDeliveryI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Доставка",
+          label: "Способ отгрузки",
         },
         {
           id: "comment",

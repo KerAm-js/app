@@ -18,9 +18,6 @@ const Register = () => {
     useInputValidator({
       initValue: "",
       minLength: 2,
-      pattern: USERNAME_REGEX,
-      patternErrorMessage:
-        "Данное поле может содержать только латинские буквы, цифры и нижние подчёркивания",
     });
   const [phoneText, onPhoneChange, isPhoneValid, phoneError, _, phone] =
     usePhoneValidator({

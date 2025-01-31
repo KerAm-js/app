@@ -73,7 +73,8 @@ export type TDumpFilter = NullablePartial<
     coefficientTo?: number;
     priceFrom?: number;
     priceTo?: number;
-    transports?: DumpAdvertDto["dumpTransport"];
+    transports?: number[];
+    wasteTypes?: number[];
   } & Partial<
     Pick<
       DumpAdvertDto,
@@ -84,7 +85,6 @@ export type TDumpFilter = NullablePartial<
       | "paymentType"
       | "shiftType"
       | "transactionType"
-      | "wasteType"
     >
   >
 >;
@@ -97,7 +97,7 @@ export type TMaterialFilter = NullablePartial<
     coefficientTo?: number;
     priceFrom?: number;
     priceTo?: number;
-    transports?: MaterialAdvertDto["dumpTransport"];
+    transports?: number[];
   } & Pick<
     MaterialAdvertDto,
     | "materialType"

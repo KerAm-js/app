@@ -13,17 +13,17 @@ import {
   PAYMENT_TYPES,
   SHIFT_TYPES,
 } from "../../../../consts/enums";
-import { WASTE_TYPES } from "../../../../consts/data";
 import { useActions } from "../../../../hooks/store/useActions";
 import { TDumpFilter } from "../../store/types";
 import { View } from "react-native";
 import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
 import { useNavigation } from "@react-navigation/native";
-import { IDumpTransportType, useDumpTransports } from "../../../MiniEntities";
+import { useDumpTransports } from "../../../MiniEntities";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { useIntervalValidator } from "../../../../hooks/inputValidators/useIntervalValidator";
 import { useWasteTypes } from "../../../MiniEntities/store/hooks";
+import { IDumpTransportType } from "../../../../types/MiniEntities";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -38,7 +38,7 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
 }));
 
 const DumpForm: FC<TDumpFilter> = (currentFilter) => {
-  const wasteTypes = useWasteTypes()
+  const wasteTypes = useWasteTypes();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const dumpTransports = useDumpTransports();
@@ -47,12 +47,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       dumpTransactionTypes.find(
         (item) => item.value === currentFilter?.transactionType
       ) || undefined,
-    []
-  );
-  const initWasteType = useMemo(
-    () =>
-      wasteTypes.find((item) => item.name === currentFilter?.wasteType) ||
-      undefined,
     []
   );
   const initDangerClass = useMemo(
@@ -67,14 +61,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
   );
   const initAmountFrom = currentFilter?.amountFrom?.toString() || undefined;
   const initAmountTo = currentFilter?.amountTo?.toString() || undefined;
-  const initCoefficientFrom =
-    currentFilter?.coefficientFrom?.toString() || undefined;
-  const initCoefficientTo =
-    currentFilter?.coefficientTo?.toString() || undefined;
-  const initShiftTypeI = useMemo(() => {
-    const i = SHIFT_TYPES.findIndex((item) => item === currentFilter.shiftType);
-    return i < 0 ? FILTER_ENUMS_WITH_ALL.shiftTypes.length - 1 : i;
-  }, []);
   const initPaymentTypeI = useMemo(() => {
     const i = PAYMENT_TYPES.findIndex(
       (item) => item === currentFilter.paymentType
@@ -97,8 +83,11 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     wasteTypeError,
   ] = useSelectionValidator<(typeof wasteTypes)[0]>({
     required: false,
-    multySelection: true, 
-    initValue: wasteTypes.filter(item => currentFilter.wasteTypes?.indexOf(item.id) > -1 ? item : null) || [],
+    multySelection: true,
+    initValue:
+      wasteTypes.filter((item) =>
+        currentFilter.wasteTypes?.find((currentItem) => currentItem === item.id)
+      ) || undefined,
   });
   const [
     dangerClass,
@@ -119,7 +108,10 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     transportError,
   ] = useSelectionValidator<IDumpTransportType>({
     multySelection: true,
-    initValue: dumpTransports.filter(item => currentFilter.transports?.indexOf(item.id) > -1 ? item : null) || [],
+    initValue:
+      dumpTransports.filter((item) =>
+        currentFilter.transports?.find((currentItem) => currentItem === item.id)
+      ) || undefined,
   });
   const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
   const [
@@ -137,22 +129,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     secondInitValue: initAmountTo,
     requiredBothOrNone: true,
   });
-  const [
-    coefficientFrom,
-    coefficientTo,
-    onCoefficientFromChange,
-    onCoefficientToChange,
-    isCoefficientFromValid,
-    isCoefficientToValid,
-    coefficientFromError,
-    coefficientToError,
-  ] = useIntervalValidator({
-    minValue: 1,
-    firstInitValue: initCoefficientFrom,
-    secondInitValue: initCoefficientTo,
-    requiredBothOrNone: true,
-  });
-  const [shiftTypeI, setShiftTypeI] = useState(initShiftTypeI);
   const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
 
   const inputs: TFormInputsArray = [
@@ -213,7 +189,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
           values: ENUMS.measureIn,
           selectedIndex: measureI,
           onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Измерять",
+          label: "Способ измерения",
         },
         {
           id: "amount",
@@ -227,36 +203,9 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
           isSecondFieldInvalid: !isAmountToValid,
           label:
             ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
-              ? "Объём (м3)"
-              : "Вес (т)",
+              ? "Количество (м3)"
+              : "Количество (т)",
           keyboardType: "decimal-pad",
-        },
-        {
-          id: "coefficient",
-          type: "interval",
-          firstValue: coefficientFrom,
-          secondValue: coefficientTo,
-          onFirstValueChange: onCoefficientFromChange,
-          onSecondValueChange: onCoefficientToChange,
-          error: coefficientFromError || coefficientToError,
-          label: "Коэффициент (вес/объём)",
-          keyboardType: "decimal-pad",
-          isFirstFieldInvalid: !isCoefficientFromValid,
-          isSecondFieldInvalid: !isCoefficientToValid,
-        },
-      ],
-    },
-    {
-      title: "Общие данные",
-      inputs: [
-        {
-          id: "workMode",
-          type: "segment",
-          values: FILTER_ENUMS_WITH_ALL.shiftTypes,
-          selectedIndex: shiftTypeI,
-          onChange: (evt) =>
-            setShiftTypeI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Режим работы",
         },
       ],
     },
@@ -276,12 +225,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     },
   ];
 
-  const isFormValid =
-    isTypeValid &&
-    isAmountFromValid &&
-    isAmountToValid &&
-    isCoefficientFromValid &&
-    isCoefficientToValid;
+  const isFormValid = isTypeValid && isAmountFromValid && isAmountToValid;
 
   const onSubmit = () => {
     const result: TDumpFilter = {
@@ -289,26 +233,24 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       description: null,
       priceFrom: null,
       priceTo: null,
+      shiftType: null,
+      coefficientFrom: null,
+      coefficientTo: null,
       //parameters below are not using for filter
       transactionType: type[0].value,
       measureIn: MEASURE_IN[measureI],
       amountFrom: Number(amountFrom) || null,
       amountTo: Number(amountTo) || null,
-      coefficientFrom: Number(coefficientFrom) || null,
-      coefficientTo: Number(coefficientTo) || null,
-      shiftType:
-        FILTER_ENUMS_WITH_ALL.shiftTypes[shiftTypeI] !== ALL
-          ? SHIFT_TYPES[shiftTypeI]
-          : null,
       paymentType:
         PAYMENT_TYPES[paymentTypeI] !== "ANY"
           ? PAYMENT_TYPES[paymentTypeI]
           : null,
-      transports: transport.length > 0 ? transport.map(item => item.id) : null,
-      wasteTypes: wasteType.length > 0 ? wasteType.map(item => item.id) : null,
+      transports:
+        transport.length > 0 ? transport.map((item) => item.id) : null,
+      wasteTypes:
+        wasteType.length > 0 ? wasteType.map((item) => item.id) : null,
       dangerClass: dangerClass[0]?.value || null,
     };
-    console.log(result)
     setDumpFilter(result);
     navigation.navigate("Main");
   };

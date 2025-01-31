@@ -1,4 +1,3 @@
-import { IAdvert } from "../types/Advert";
 import { TechnicParams } from "../types/Technic";
 
 export const EQUIPMENTS = {
@@ -40,19 +39,6 @@ export const WASTE_TYPES = [
   "Грунт замусоренный",
   "Суглинок"
 ];
-
-export const TRANSACTION_TYPE_TITLE: {
-  [key in IAdvert["transactionType"]]: string;
-} = {
-  BUY: "Купля",
-  SELL: "Продажа",
-  GIVE_A_RENT: "Аренда",
-  TAKE_A_RENT: "Нужна аренда",
-  NEED_SOIL_DUMP: "Нужен отвал",
-  NEED_SOIL_REMOVAL: "Нужен вывоз",
-  SOIL_DUMP: "Отвал",
-  SOIL_REMOVAL: "Вывоз",
-};
 
 export const TECHNIC_PARAMS: {
   [key in keyof TechnicParams]: {

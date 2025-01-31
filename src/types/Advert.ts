@@ -1,3 +1,4 @@
+import { IWasteType } from "./MiniEntities";
 import { TechnicParams, NOT_SPECIFIED } from "./Technic";
 
 export type TAdvertType = "TECHNIC" | "DUMP" | "NON_MATERIAL" | "OTHER";
@@ -47,7 +48,7 @@ export interface DumpAdvertDto extends AdvertDto {
     | "NEED_SOIL_REMOVAL"
     | "SOIL_DUMP"
     | "SOIL_REMOVAL";
-  wasteType: string;
+  wasteTypes: IWasteType[];
   coefficient: number;
   dumpTransport: Array<{ id: number; name: string }>;
   measureIn: "VOLUME" | "WEIGHT";
