@@ -27,11 +27,9 @@ const keyExtractor = (item: string) => item;
 
 
 const Slider: FC<ISliderProps> = ({
-  likes,
   photos,
   advertType,
   scrollY,
-  onLike,
 }) => {
   const [currentSlide, setCurrentSlider] = useState(1);
   const { token } = useAuth();

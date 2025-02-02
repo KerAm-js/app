@@ -12,6 +12,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import {
   AXES_COUNTS,
+  ENUM_TITLES,
   ENUMS,
   LOADING_TYPES,
   PAYMENT_TYPES,
@@ -29,7 +30,16 @@ import { useActions } from "../../../../hooks/store/useActions";
 import { useTechnicTypes } from "../../../MiniEntities";
 import { ITechnicType, TEquipment } from "../../../../types/MiniEntities";
 
-const TechnicForm = ({ props }) => {
+const trailerTypes = TRAILER_TYPES.map((item, index) => ({
+  id: index,
+  name: ENUM_TITLES[item],
+  value: item,
+}));
+
+const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
+  const initTrailerType = trailerTypes.find(
+    (item) => item.value === props.trailerType
+  );
   const techTypes = useTechnicTypes();
   const { user, token } = useAuth();
   const { setAddressByMapDefaults, setPoint, setSecondPoint } = useActions();
@@ -137,7 +147,7 @@ const TechnicForm = ({ props }) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.perfomance),
+    initValue: String(props.performance),
   });
   const [cargoType, onCargoTypeChange, isCargoTypeValid, cargoTypeError] =
     useInputValidator({
@@ -174,8 +184,9 @@ const TechnicForm = ({ props }) => {
     ___,
     isTrailerTypeValid,
     trailerTypeError,
-  ] = useSelectionValidator<ITechnicAdvert["trailerType"]>({
+  ] = useSelectionValidator<(typeof trailerTypes)[0]>({
     required: true,
+    initValue: initTrailerType ? [initTrailerType] : undefined,
   });
 
   const [loadingTypeI, setLoadingTypeI] = useState(0);
@@ -200,7 +211,6 @@ const TechnicForm = ({ props }) => {
   );
   const [firstDate, onFirstDateChange, isFirstDateValid, firstDateError] =
     useInputValidator({
-      required: true,
       pattern: DATE_REGEX,
       patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
       initValue: props.rentalFrom.slice(0, 10).split("-").reverse().join("."),
@@ -208,7 +218,6 @@ const TechnicForm = ({ props }) => {
 
   const [secondDate, onSecondDateChange, isSecondDateValid, secondDateError] =
     useInputValidator({
-      required: true,
       pattern: DATE_REGEX,
       patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
       initValue: props.rentalTo.slice(0, 10).split("-").reverse().join("."),
@@ -514,13 +523,12 @@ const TechnicForm = ({ props }) => {
         {
           id: "trailerType",
           type: "selection",
-          itemsList: ENUMS.trailerTypes,
+          itemsList: trailerTypes,
           value: trailerType,
           selectItem: selectTrailerType,
           unselectItem: unselectTrailerType,
           label: getLabelForTechnicParam("trailerType"),
           error: trailerTypeError,
-          usesDataFromApi: false,
           hidden: !technicType[0] || !hasTrailerType,
         },
         {
@@ -682,9 +690,6 @@ const TechnicForm = ({ props }) => {
 
   const onSubmit = () => {
     if (user) {
-      const trailerTypeI = ENUMS.trailerTypes.findIndex(
-        (item) => item === trailerType[0]
-      );
       const advert = {
         ...props,
         id: props.id,
@@ -728,10 +733,7 @@ const TechnicForm = ({ props }) => {
         ossig: hasOSSIG ? !!ossigI : false,
         axesCount: hasAxesCount ? Number(AXES_COUNTS[axesCountI]) : 0,
         bodyLength: hasBodyLength ? Number(bodyLength) : 0,
-        trailerType:
-          hasTrailerType && trailerTypeI
-            ? TRAILER_TYPES[trailerTypeI]
-            : "NOT_SPECIFIED",
+        trailerType: hasTrailerType ? trailerType[0].value : "NOT_SPECIFIED",
         loadingType: hasLoadingType
           ? LOADING_TYPES[loadingTypeI]
           : "NOT_SPECIFIED",

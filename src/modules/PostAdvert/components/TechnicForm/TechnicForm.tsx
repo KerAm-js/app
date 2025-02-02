@@ -27,9 +27,7 @@ import { TechnicAdvertDto } from "../../../../types/Advert";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
 import { useActions } from "../../../../hooks/store/useActions";
-import {
-  useTechnicTypes,
-} from "../../../MiniEntities";
+import { useTechnicTypes } from "../../../MiniEntities";
 import { ITechnicType, TEquipment } from "../../../../types/MiniEntities";
 
 const trailerTypes = TRAILER_TYPES.map((item, index) => ({
@@ -63,7 +61,8 @@ const TechnicForm = () => {
   const isTransport = !!technicType[0]?.parameters.find(
     (p) => p.name === "transport"
   );
-  const isSecondAddressRequired = isTransport && transactionType === 'TAKE_A_RENT'
+  const isSecondAddressRequired =
+    isTransport && transactionType === "TAKE_A_RENT";
   const [mark, onChangeMark] = useInputValidator();
   const [model, onModelChange] = useInputValidator();
   const [prodYear, onProdYearChange, isProdYearValid, prodYearError] =
@@ -175,13 +174,11 @@ const TechnicForm = () => {
   const [workModeIndex, setWorkModeIndex] = useState(0);
   const [firstDate, onFirstDateChange, isFirstDateValid, firstDateError] =
     useInputValidator({
-      required: true,
       pattern: DATE_REGEX,
       patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
     });
   const [secondDate, onSecondDateChange, isSecondDateValid, secondDateError] =
     useInputValidator({
-      required: true,
       pattern: DATE_REGEX,
       patternErrorMessage: "Введите дату по шаблону ДД.ММ.ГГГГ",
     });
@@ -765,7 +762,7 @@ const TechnicForm = () => {
     setAddressByMapDefaults();
     return () => {
       setAddressByMapDefaults();
-    }
+    };
   }, []);
 
   return (

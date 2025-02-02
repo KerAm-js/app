@@ -18,10 +18,10 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
-
 import { useDumpTransports } from "../../../MiniEntities";
 import { useWasteTypes } from "../../../MiniEntities/store/hooks";
 import { IDumpTransportType } from "../../../../types/MiniEntities";
+import { IDumpAdvert } from "../../../../types/Advert";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -34,7 +34,7 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
   name: item,
 }));
 
-const DumpForm = ({ props }) => {
+const DumpForm = ({ props }: {props: IDumpAdvert}) => {
   const { token } = useAuth();
   const dumpTransports = useDumpTransports();
   const wasteTypes = useWasteTypes();
