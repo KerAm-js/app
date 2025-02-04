@@ -95,7 +95,7 @@ const InfoTables: FC<IAdvert> = (advert) => {
       value: advert.materialType,
     });
     general.data.push({
-      title: propTitles.delivery,
+      title: propTitles.deliveryType,
       value: ENUM_TITLES[advert.deliveryType],
     });
   }

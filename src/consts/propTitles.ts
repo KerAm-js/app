@@ -3,7 +3,7 @@ export const propTitles = {
   shiftType: "Режим работы",
   rentalPeriod: "Период аренды",
   rentalDaysCount: "Срок аренды (в днях)",
-  delivery: "Способ отгрузки",
+  deliveryType: "Способ отгрузки",
   dangerClass: "Класс опасности",
   wasteTypes: "Виды отходов",
   dumpTransport: "Вид транспорта",

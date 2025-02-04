@@ -105,9 +105,10 @@ export const DANGER_CLASSES: IDumpAdvert["dangerClass"][] = [
   "CLASS_5",
 ];
 export const MEASURE_IN: IDumpAdvert["measureIn"][] = ["WEIGHT", "VOLUME"];
-export const DELIVERY: IMaterialAdvert["deliveryType"][] = [
+export const DELIVERY_TYPE: IMaterialAdvert["deliveryType"][] = [
   "DELIVERY",
   "SELF_PICKUP",
+  "ANY"
 ];
 export const AXES_COUNTS = ["3", "4"];
 
@@ -145,7 +146,7 @@ export const ENUMS = {
   trailerTypes: TRAILER_TYPES.map((i) => ENUM_TITLES[i]),
   dangerClasses: DANGER_CLASSES.map((i) => ENUM_TITLES[i]),
   measureIn: MEASURE_IN.map((i) => ENUM_TITLES[i]),
-  delivery: DELIVERY.map((i) => ENUM_TITLES[i]),
+  delivery: DELIVERY_TYPE.map((i) => ENUM_TITLES[i]),
 };
 
 export const OSSIG_TITLES = ["Подключён", "Не подключён"];

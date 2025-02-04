@@ -60,7 +60,7 @@ export interface MaterialAdvertDto extends AdvertDto {
   advertType: "NON_MATERIAL";
   advertStatus: BaseAdvert["advertStatus"];
   transactionType: "BUY" | "SELL";
-  deliveryType: "DELIVERY" | "SELF_PICKUP";
+  deliveryType: "DELIVERY" | "SELF_PICKUP" | "ANY";
   materialType: string;
   coefficient: number;
   dumpTransport: Array<{ id: number; name: string }>;

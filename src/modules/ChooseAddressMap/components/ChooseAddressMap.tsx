@@ -35,15 +35,17 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
     setDistance,
   }) => {
     const mapRef = useRef<YaMap | null>(null);
+    const initialRegionPoint = useRef<Point>({
+      lat: point?.lat || 55.753215,
+      lon: point?.lon || 37.622504,
+    }).current;
     const [isMapLoaded, setIsMapLoaded] = useState(false);
     const [route, setRoute] = useState<Point[] | null>(null);
     const [isVisible, setIsVisible] = useState(false);
 
     const onMapPress = (evt: NativeSyntheticEvent<Point>) => {
       const newPoint = evt.nativeEvent;
-      if (!point || !isSecondPointRequired) {
-        setPoint(newPoint);
-      } else {
+      if (point && isSecondPointRequired) {
         if (isMapLoaded && mapRef.current) {
           mapRef.current.findDrivingRoutes([point, newPoint], (result) => {
             const points: Point[] = [];
@@ -60,7 +62,10 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
               Math.round(result.routes[0].sections[0].routeInfo.distance / 1000)
             );
           });
+          mapRef.current.fitMarkers([point, newPoint]);
         }
+      } else {
+        setPoint(newPoint);
       }
     };
 
@@ -71,8 +76,6 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
 
     const onMapLoaded = () => {
       setIsMapLoaded(true);
-      if (mapRef.current && point)
-        mapRef.current?.setCenter(point, 8, undefined, undefined, 0.5);
     };
 
     const onStartMarkPress = useCallback(() => {
@@ -95,8 +98,9 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
         setIsVisible(true);
       }, 10);
     }, []);
+
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         {!isMapLoaded && <MapLoader />}
         {isVisible && (
           <YaMap
@@ -108,8 +112,8 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
               uri: "https://www.clipartmax.com/png/middle/180-1801760_pin-png.png",
             }}
             initialRegion={{
-              lat: point?.lat || 55.753215,
-              lon: point?.lon || 37.622504,
+              lat: initialRegionPoint.lat,
+              lon: initialRegionPoint.lon,
               zoom: 8,
               azimuth: 80,
               tilt: 100,

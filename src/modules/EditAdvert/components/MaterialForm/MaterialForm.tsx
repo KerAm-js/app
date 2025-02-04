@@ -6,7 +6,7 @@ import { useSelectionValidator } from "../../../../hooks/inputValidators/useSele
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useEditMaterialAdvertMutation } from "../../api/editAdvert.api";
 import {
-  DELIVERY,
+  DELIVERY_TYPE,
   ENUM_TITLES,
   ENUMS,
   MATERIAL_TRANSACTION_TYPES,
@@ -294,7 +294,7 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
         addressLon: 45,
         fractions,
         title,
-        deliveryType: DELIVERY[deliveryI],
+        deliveryType: DELIVERY_TYPE[deliveryI],
         shiftType: SHIFT_TYPES[workModeIndex],
         materialType: materialType[0].name,
         dumpTransport: transport,

@@ -267,7 +267,7 @@ const DumpForm = ({ props }: {props: IDumpAdvert}) => {
         {
           id: "paymentType",
           type: "segment",
-          values: PAYMENT_TYPES,
+          values: ENUMS.paymentTypes,
           selectedIndex: paymentTypeI,
           onChange: (evt) =>
             setPaymentTypeI(evt.nativeEvent.selectedSegmentIndex),

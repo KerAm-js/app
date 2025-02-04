@@ -6,7 +6,7 @@ import { useSelectionValidator } from "../../../../hooks/inputValidators/useSele
 import { useAuth } from "../../../../hooks/store/useAuth";
 import { useAddMaterialAdvertMutation } from "../../api/postAdvert.api";
 import {
-  DELIVERY,
+  DELIVERY_TYPE,
   ENUM_TITLES,
   ENUMS,
   MATERIAL_TRANSACTION_TYPES,
@@ -19,11 +19,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
+import { useDumpTransports, useMaterialTypes } from "../../../MiniEntities";
 import {
-  useDumpTransports,
-  useMaterialTypes,
-} from "../../../MiniEntities";
-import { IDumpTransportType, IMaterialType, TFraction } from "../../../../types/MiniEntities";
+  IDumpTransportType,
+  IMaterialType,
+  TFraction,
+} from "../../../../types/MiniEntities";
 
 const MaterialForm = () => {
   const { token } = useAuth();
@@ -52,7 +53,10 @@ const MaterialForm = () => {
     isTransportValid,
     transportError,
     setTransportInitial,
-  ] = useSelectionValidator<IDumpTransportType>({ required: true, multySelection: true });
+  ] = useSelectionValidator<IDumpTransportType>({
+    required: true,
+    multySelection: true,
+  });
   const [measureI, setMeasureI] = useState(0);
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
     { required: true, minValue: 1 }
@@ -172,7 +176,10 @@ const MaterialForm = () => {
           onChangeText: onAmountCange,
           error: amountError,
           value: amount,
-          label: 'Количество',
+          label:
+            ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
+              ? "Количество (м3)"
+              : "Количество (т)",
           keyboardType: "decimal-pad",
         },
         {
@@ -282,7 +289,7 @@ const MaterialForm = () => {
         addressLon: point?.lon || 36,
         fractions,
         title,
-        deliveryType: DELIVERY[deliveryI],
+        deliveryType: DELIVERY_TYPE[deliveryI],
         shiftType: SHIFT_TYPES[workModeIndex],
         materialType: materialType[0].name,
         dumpTransport: transport,

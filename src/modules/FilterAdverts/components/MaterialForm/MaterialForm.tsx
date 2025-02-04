@@ -7,14 +7,13 @@ import { useActions } from "../../../../hooks/store/useActions";
 import { useNavigation } from "@react-navigation/native";
 import {
   ALL,
-  DELIVERY,
+  DELIVERY_TYPE,
   ENUM_TITLES,
   ENUMS,
   FILTER_ENUMS_WITH_ALL,
   MATERIAL_TRANSACTION_TYPES,
   MEASURE_IN,
   PAYMENT_TYPES,
-  SHIFT_TYPES,
 } from "../../../../consts/enums";
 import { useDumpTransports, useMaterialTypes } from "../../../MiniEntities";
 import { View } from "react-native";
@@ -61,7 +60,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     return i < 0 ? PAYMENT_TYPES.length - 1 : i;
   }, []);
   const initDeliveryI = useMemo(() => {
-    const i = DELIVERY.findIndex((item) => item === currentFilter.deliveryType);
+    const i = DELIVERY_TYPE.findIndex((item) => item === currentFilter.deliveryType);
     return i < 0 ? FILTER_ENUMS_WITH_ALL.delivery.length - 1 : i;
   }, []);
   const [typeI, setTypeI] = useState(
@@ -247,7 +246,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
         transport.length > 0 ? transport.map((item) => item.id) : null,
       deliveryType:
         FILTER_ENUMS_WITH_ALL.delivery[deliveryI] !== ALL
-          ? DELIVERY[deliveryI]
+          ? DELIVERY_TYPE[deliveryI]
           : null,
       paymentType:
         PAYMENT_TYPES[paymentTypeI] !== "ANY"
