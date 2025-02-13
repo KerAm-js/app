@@ -60,8 +60,10 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     return i < 0 ? PAYMENT_TYPES.length - 1 : i;
   }, []);
   const initDeliveryI = useMemo(() => {
-    const i = DELIVERY_TYPE.findIndex((item) => item === currentFilter.deliveryType);
-    return i < 0 ? FILTER_ENUMS_WITH_ALL.delivery.length - 1 : i;
+    const i = DELIVERY_TYPE.findIndex(
+      (item) => item === currentFilter.deliveryType
+    );
+    return i < 0 ? ENUMS.delivery.length - 1 : i;
   }, []);
   const [typeI, setTypeI] = useState(
     initTransactionTypeI < 0 ? 0 : initTransactionTypeI
@@ -200,7 +202,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
         {
           id: "delivery",
           type: "segment",
-          values: FILTER_ENUMS_WITH_ALL.delivery,
+          values: ENUMS.delivery,
           selectedIndex: deliveryI,
           onChange: (evt) => setDeliveryI(evt.nativeEvent.selectedSegmentIndex),
           label: "Способ отгрузки",
@@ -245,9 +247,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
       transports:
         transport.length > 0 ? transport.map((item) => item.id) : null,
       deliveryType:
-        FILTER_ENUMS_WITH_ALL.delivery[deliveryI] !== ALL
-          ? DELIVERY_TYPE[deliveryI]
-          : null,
+        ENUMS.delivery[deliveryI] !== ALL ? DELIVERY_TYPE[deliveryI] : null,
       paymentType:
         PAYMENT_TYPES[paymentTypeI] !== "ANY"
           ? PAYMENT_TYPES[paymentTypeI]

@@ -19,6 +19,13 @@ export const addressByMapSlice = createSlice({
     setPointAddress: (state, action: PayloadAction<string>) => {
       state.pointAddress = action.payload;
     },
+    setSuggestedPoint: (
+      state,
+      action: PayloadAction<TAddressByMapState["suggestedPoint"]>
+    ) => {
+      state.suggestedPoint = action.payload;
+      state.pointAddress = undefined;
+    },
     changePointToSecondPoint: (state) => {
       state.point = state.secondPoint ? { ...state.secondPoint } : undefined;
       state.pointAddress = undefined;
@@ -39,15 +46,19 @@ export const addressByMapSlice = createSlice({
     setSecondPointAddress: (state, action: PayloadAction<string>) => {
       state.secondPointAddress = action.payload;
     },
-    setAddressByMapDefaults: (state, action: PayloadAction<Pick<TAddressByMapState, "distance" | "point" | "secondPoint"> | undefined>) => {
-      if(!action.payload){
+    setAddressByMapDefaults: (
+      state,
+      action: PayloadAction<
+        | Pick<TAddressByMapState, "distance" | "point" | "secondPoint">
+        | undefined
+      >
+    ) => {
+      if (!action.payload) {
         return initialState;
       }
-      state.point = action.payload.point
-      state.distance = action.payload.distance
-      state.secondPoint = action.payload.secondPoint
-      
-
+      state.point = action.payload.point;
+      state.distance = action.payload.distance;
+      state.secondPoint = action.payload.secondPoint;
     },
     submitAddressByMapData: (
       state,

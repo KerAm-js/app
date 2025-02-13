@@ -3,6 +3,7 @@ import { IError } from "../api/types";
 
 export const handleError = (error: unknown | any): string => {
   if (isAxiosError(error)) {
+    console.log('error', error.message, error.code, error.response, error.name, error.status)
     return error.response?.data.message || error.message;
   }
   return 'Неизвестная ошибка';
@@ -21,7 +22,7 @@ export const getErrorMessage = (error: unknown | any): IError => {
         message = "Пожалуйста, проверьте данные и повторите попытку";
       } else if (code >= 400 && code < 500) {
         message =
-          "Возможно, вы ввели данные некорректно. Пожалуйста, проверьте данные и повторите попытку";
+          "Возможно, вы ввели некорретные данные. Пожалуйста, проверьте данные и повторите попытку";
       } else if (code >= 500) {
         message =
           "Возможно, на сервере ведутся технические работы. Пожалуйста, повторите попытку позже";

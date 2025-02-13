@@ -19,8 +19,9 @@ export const searchBarStyles = StyleSheet.create({
   input: {
     fontSize: TEXT_F_SIZE,
     fontFamily: 'Gilroy-Medium',
+    flex: 1,
     paddingLeft: 8,
     paddingTop: 11,
-    paddingBottom: 9
+    paddingBottom: 9,
   },
 });

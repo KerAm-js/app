@@ -1,14 +1,16 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BLACK_DARK, GREY_DARK, WHITE } from "../../../consts/colors";
 import { BORDER_RADIUS_SMALL } from "../../../consts/borders";
 import { LABEL_F_SIZE } from "../../../consts/texts";
 import { Dispatch, FC, SetStateAction, useEffect } from "react";
 import { Geocoder, Point } from "react-native-yamap";
-import { YA_MAP_JS_API_KEY } from "../../../api/yamap";
 import { TAddressByMapState } from "../store/types";
 import { SCREEN_PADDING } from "../../../consts/views";
-
-Geocoder.init(YA_MAP_JS_API_KEY);
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../navigation/types";
+import { searchSvg } from "../../../assets/svg/search";
+import { SvgXml } from "react-native-svg";
 
 type TPropTypes = Pick<
   TAddressByMapState,
@@ -18,6 +20,8 @@ type TPropTypes = Pick<
   | "secondPointAddress"
   | "isSecondPointRequired"
 > & {
+  setPoint: Dispatch<SetStateAction<Point | undefined>>;
+  setSecondPoint: Dispatch<SetStateAction<Point | undefined>>;
   setPointAddress: Dispatch<SetStateAction<string>>;
   setSecondPointAddress: Dispatch<SetStateAction<string>>;
 };
@@ -31,14 +35,20 @@ export const AddressInfo: FC<TPropTypes> = ({
   setPointAddress,
   setSecondPointAddress,
 }) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const goToSearchAddress = (isSecondPoint: boolean) =>
+    navigation.navigate("SearchAddress", { isSecondPoint });
+
   useEffect(() => {
     if (point) {
       Geocoder.geocode(point)
-        .then((res) =>
+        .then((res) => {
           setPointAddress(
             res.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.name
-          )
-        )
+          );
+        })
         .catch((err) => console.log(err));
     }
   }, [point]);
@@ -57,15 +67,23 @@ export const AddressInfo: FC<TPropTypes> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
+      <TouchableOpacity
+        style={styles.row}
+        onPress={() => goToSearchAddress(false)}
+      >
+        <SvgXml xml={searchSvg(GREY_DARK)} width={16} height={16} />
         <Text
           style={[styles.address, !pointAddress && styles.addressPlaceholder]}
         >
           {pointAddress || "Точка А"}
         </Text>
-      </View>
+      </TouchableOpacity>
       {isSecondPointRequired && (
-        <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.row}
+          onPress={() => goToSearchAddress(true)}
+        >
+          <SvgXml xml={searchSvg(GREY_DARK)} width={16} height={16} />
           <Text
             style={[
               styles.address,
@@ -74,7 +92,7 @@ export const AddressInfo: FC<TPropTypes> = ({
           >
             {secondPointAddress || "Точка Б"}
           </Text>
-        </View>
+        </TouchableOpacity>
       )}
     </View>
   );
@@ -101,6 +119,9 @@ const styles = StyleSheet.create({
   row: {
     paddingHorizontal: 15,
     paddingVertical: 7,
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
   },
   addressPlaceholder: {
     color: GREY_DARK,

@@ -7,4 +7,5 @@ export type TAddressByMapState = {
   secondPointAddress?: string;
   isSecondPointRequired?: boolean;
   distance?: number;
+  suggestedPoint?: { point: Point; isSecondPoint: boolean };
 };

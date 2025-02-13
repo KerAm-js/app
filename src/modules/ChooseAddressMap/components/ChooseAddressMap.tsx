@@ -1,5 +1,5 @@
 import { NativeSyntheticEvent, View } from "react-native";
-import YaMap, { Point, Polyline } from "react-native-yamap";
+import YaMap, { Animation, Point, Polyline } from "react-native-yamap";
 import React, {
   Dispatch,
   FC,
@@ -22,11 +22,13 @@ type TPropTypes = Pick<
   setPoint: Dispatch<SetStateAction<Point | undefined>>;
   setSecondPoint: Dispatch<SetStateAction<Point | undefined>>;
   setDistance: Dispatch<SetStateAction<number | undefined>>;
+  initialPoint: Point;
 };
 
 export const ChooseAddressMap: FC<TPropTypes> = React.memo(
   ({
     point,
+    initialPoint,
     secondPoint,
     isSecondPointRequired,
     distance,
@@ -35,10 +37,6 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
     setDistance,
   }) => {
     const mapRef = useRef<YaMap | null>(null);
-    const initialRegionPoint = useRef<Point>({
-      lat: point?.lat || 55.753215,
-      lon: point?.lon || 37.622504,
-    }).current;
     const [isMapLoaded, setIsMapLoaded] = useState(false);
     const [route, setRoute] = useState<Point[] | null>(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -46,26 +44,33 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
     const onMapPress = (evt: NativeSyntheticEvent<Point>) => {
       const newPoint = evt.nativeEvent;
       if (point && isSecondPointRequired) {
-        if (isMapLoaded && mapRef.current) {
-          mapRef.current.findDrivingRoutes([point, newPoint], (result) => {
+        setSecondPoint(newPoint);
+        drawRoute(point, newPoint);
+      } else {
+        setPoint(newPoint);
+      }
+    };
+
+    const drawRoute = (firstPoint: Point, secondPoint: Point) => {
+      if (mapRef.current) {
+        mapRef.current.findDrivingRoutes(
+          [firstPoint, secondPoint],
+          (result) => {
             const points: Point[] = [];
             if (result && result.routes && result.routes.length >= 1) {
               result.routes[0].sections.forEach((section) => {
-                section.points.forEach((point) => {
-                  points.push(point);
+                section.points.forEach((item: Point) => {
+                  points.push(item);
                 });
               });
             }
             setRoute(points);
-            setSecondPoint(newPoint);
             setDistance(
               Math.round(result.routes[0].sections[0].routeInfo.distance / 1000)
             );
-          });
-          mapRef.current.fitMarkers([point, newPoint]);
-        }
-      } else {
-        setPoint(newPoint);
+          }
+        );
+        mapRef.current.fitMarkers([firstPoint, secondPoint]);
       }
     };
 
@@ -94,6 +99,25 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
     }, []);
 
     useEffect(() => {
+      if (initialPoint && isMapLoaded && mapRef.current) {
+        if (
+          point &&
+          point.lat === initialPoint.lat &&
+          point.lon === initialPoint.lon
+        ) {
+          mapRef.current.setCenter(initialPoint, 17);
+        } else if (
+          point &&
+          secondPoint &&
+          secondPoint.lat === initialPoint.lat &&
+          secondPoint.lon === initialPoint.lon
+        ) {
+          drawRoute(point, secondPoint);
+        }
+      }
+    }, [initialPoint]);
+
+    useEffect(() => {
       setTimeout(() => {
         setIsVisible(true);
       }, 10);
@@ -112,8 +136,8 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
               uri: "https://www.clipartmax.com/png/middle/180-1801760_pin-png.png",
             }}
             initialRegion={{
-              lat: initialRegionPoint.lat,
-              lon: initialRegionPoint.lon,
+              lat: initialPoint.lat,
+              lon: initialPoint.lon,
               zoom: 8,
               azimuth: 80,
               tilt: 100,

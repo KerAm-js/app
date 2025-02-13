@@ -32,6 +32,7 @@ import { AdvertLocationMap } from "../pages/AdvertLocationMap";
 import EditAdvertPage from "../pages/EditAdvert";
 import EditImagesPage from "../pages/EditImages";
 import Support from "../pages/Support";
+import { SearchAddressPage } from "../pages/SearchAddress/SearchAddressPage";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -42,7 +43,7 @@ const RootNavigator: FC = () => {
     getMaterialTypesThunk,
     getTechnicTypesThunk,
     getDumpTransportsThunk,
-    getWasteTypesThunk
+    getWasteTypesThunk,
   } = useActions();
 
   useLayoutEffect(() => {
@@ -52,7 +53,7 @@ const RootNavigator: FC = () => {
     getMaterialTypesThunk();
     getTechnicTypesThunk();
     getDumpTransportsThunk();
-    getWasteTypesThunk()
+    getWasteTypesThunk();
   }, []);
 
   if (autoAuthPending) {
@@ -142,6 +143,14 @@ const RootNavigator: FC = () => {
               component={UserSearchPage.Component}
             />
             <Stack.Screen
+              options={{
+                title: "Поиск",
+              }}
+              name="SearchAddress"
+            >
+              {({ route }) => <SearchAddressPage {...route.params} />}
+            </Stack.Screen>
+            <Stack.Screen
               options={({ route }) => ({
                 title: route.params.username,
                 headerRight: () => (
@@ -184,9 +193,7 @@ const RootNavigator: FC = () => {
               }}
               name="Support"
               component={Support.Component}
-            >
-              
-            </Stack.Screen>
+            ></Stack.Screen>
             <Stack.Screen
               options={({
                 route: {

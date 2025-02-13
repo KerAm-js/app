@@ -162,7 +162,6 @@ export const FILTER_ENUMS_WITH_ALL = {
   trailerTypes: [...ENUMS.trailerTypes, ALL],
   dangerClasses: [...ENUMS.dangerClasses, ALL],
   measureIn: [...ENUMS.measureIn, ALL],
-  delivery: [...ENUMS.delivery, ALL],
   axesCount: [...AXES_COUNTS, ALL],
   ossig: [...OSSIG_TITLES, ALL],
 };

@@ -1,5 +1,5 @@
 import { ActivityIndicator, FlatList, View } from "react-native";
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { searchUsersStyles } from "./styles";
 import UserCard from "../../../../components/UserCard/UserCard";
 import SearchBar from "../../../../UI/inputs/SearchBar/SearchBar";
@@ -8,13 +8,9 @@ import { BLACK_DARK } from "../../../../consts/colors";
 import { PAGINATION_SIZE } from "../../api/consts";
 
 const SearchUsersModuleComponent = () => {
-  const [params, setParams] = useState({ from: 0, search: '' });
+  const [params, setParams] = useState({ from: 0, search: "" });
 
-  const {
-    isLoading,
-    isFetching,
-    data,
-  } = useGetUsersQuery(
+  const { isLoading, isFetching, data } = useGetUsersQuery(
     {
       username: params.search,
       from: params.from,
@@ -36,7 +32,10 @@ const SearchUsersModuleComponent = () => {
   };
 
   // Обернем setParams через debounce
-  const debouncedSetParams = useMemo(() => debounce((newParams) => setParams(newParams), 1000), []);
+  const debouncedSetParams = useMemo(
+    () => debounce((newParams) => setParams(newParams), 1000),
+    []
+  );
 
   const handleSearchChange = useCallback(
     (text) => {
@@ -60,23 +59,23 @@ const SearchUsersModuleComponent = () => {
         onChangeText={handleSearchChange}
         placeholder="Имя пользователя"
       />
-
       <FlatList
         onEndReached={incrementPage}
         data={data}
         style={searchUsersStyles.list}
         contentContainerStyle={searchUsersStyles.flatlistContent}
-        ListFooterComponent={(isFetching || isLoading) && (
-          <ActivityIndicator
-            style={searchUsersStyles.loader}
-            size="small"
-            color={BLACK_DARK}
-          />
-        )}
-        ListFooterComponentStyle={{top: -40}}
+        ListFooterComponent={
+          (isFetching || isLoading) && (
+            <ActivityIndicator
+              style={searchUsersStyles.loader}
+              size="small"
+              color={BLACK_DARK}
+            />
+          )
+        }
+        ListFooterComponentStyle={{ top: -40 }}
         renderItem={({ item }) => <UserCard key={item.email} {...item} />}
       />
-      
     </View>
   );
 };

@@ -1,11 +1,11 @@
 import { NativeSyntheticEvent, View } from "react-native";
 import MenuBar from "../MenuBar/MenuBar";
 import NavBar from "../NavBar/NavBar";
-import YaMap, { Point, Polyline } from "react-native-yamap";
+import YaMap, { Geocoder, Point, Polyline } from "react-native-yamap";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { TAdvertType } from "../../../../types/Advert";
 import * as SplashScreen from "expo-splash-screen";
-import { YA_MAP_API_KEY } from "../../../../api/yamap";
+import { YA_MAP_API_KEY, YA_MAP_JS_API_KEY } from "../../../../api/yamap";
 import {
   useGetDumpAdvertsMiniFilteredQuery,
   useGetMaterialAdvertsMiniFilteredQuery,
@@ -18,6 +18,7 @@ import { useAdvertFilters } from "../../../../modules/FilterAdverts/store/hooks"
 import { PURPLE } from "../../../../consts/colors";
 
 YaMap.init(YA_MAP_API_KEY);
+Geocoder.init(YA_MAP_JS_API_KEY);
 
 const YaMap3 = () => {
   const [advertType, setAdvertType] = useState<TAdvertType>("TECHNIC");
@@ -93,7 +94,7 @@ const YaMap3 = () => {
   }, []);
 
   const onEndMarkPress = useCallback(() => {
-    setEndPoint(endPoint || null);
+    setEndPoint(null);
     setRoute(null);
   }, []);
 

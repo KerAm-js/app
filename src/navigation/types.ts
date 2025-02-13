@@ -8,6 +8,7 @@ import { IAdvert } from "../types/Advert";
 import { IComment } from "../types/Comment";
 import { IUser } from "../types/User";
 import { TAdvertLocationMapProps } from "../pages/AdvertLocationMap/components/AdvertLocationMap";
+import { SearchAddressPagePropTypes } from "../pages/SearchAddress/SearchAddressPage";
 
 export interface IAnimatedHeaderComponentProps {
   scrollY?: { value: number };
@@ -32,6 +33,7 @@ export type RootStackParamList = {
     | "ratesCount"
   >;
   UserSearch: undefined;
+  SearchAddress: SearchAddressPagePropTypes;
   MyComments: IMyCommentsPageProps;
   MyAdverts: undefined;
   DeletedAdverts: undefined;
@@ -45,6 +47,8 @@ export type RootStackParamList = {
   ChooseAdvertType: IChooseAdvertTypePageProps;
   AdvertsList: Pick<IAdvert, "advertType">;
   NewAdvert: Pick<IAdvert, "advertType">;
-  AdvertImages: Pick<IAdvert, "id" | "advertType"> & { isPhotosRequired: boolean };
+  AdvertImages: Pick<IAdvert, "id" | "advertType"> & {
+    isPhotosRequired: boolean;
+  };
   Filter: Pick<IAdvert, "advertType">;
 };

@@ -21,7 +21,6 @@ const LogIn = () => {
       minLength: 3,
       required: true,
     });
-
   const { logInThunk, clearError } = useActions();
   const { isLoading, error, autoAuthPending } = useAuth();
 
