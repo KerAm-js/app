@@ -12,6 +12,7 @@ const CardButton: FC<TCardButtonProps> = ({ title, type, onPress }) => {
         xml={getAdvertTypeIconFunc(type)()}
         width={cardButtonWidth / 2.4}
         height={cardButtonWidth / 2.4}
+        style={type === 'DUMP' && {marginLeft: -10}}
       />
       <Text style={cardButtonStyles.title}>{title}</Text>
     </Pressable>

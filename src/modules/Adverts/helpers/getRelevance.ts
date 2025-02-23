@@ -3,14 +3,12 @@ import { GREEN, RED, YELLOW } from "../../../consts/colors";
 const getRelevance = (updatedAt: number) => {
   const date = new Date();
 
-
   const diff = date.getTime() - updatedAt; // Разница в миллисекундах
-  return Math.floor(diff / 1000); // Разница в секундах
+  return Math.ceil(diff / 1000); // Разница в секундах
 };
 
 export const getRelevanceObj = (updatedAt: string) => {
   const date = new Date(updatedAt);
- 
 
   const relevance = getRelevance(date.getTime());
   if (relevance < 60) {

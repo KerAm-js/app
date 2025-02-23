@@ -65,8 +65,6 @@ const Advert: FC<IAdvert> = memo((props) => {
 
   const priceString = getPriceString(props);
 
-  console.log(props.updatedAt)
-
   return (
     <Pressable style={advertStyles.container} onPress={goToAdvertPage}>
       {isFetching || !owner ? (
@@ -143,7 +141,7 @@ const Advert: FC<IAdvert> = memo((props) => {
       <View style={advertStyles.priceContainer}>
         <View>
           <Text style={advertStyles.price}>
-            {priceString.first[0]}
+            {priceString.first}
             <Text style={advertStyles.paymentFor}>{priceString.first[1]}</Text>
           </Text>
           {priceString.second && (

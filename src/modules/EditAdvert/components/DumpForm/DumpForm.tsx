@@ -34,7 +34,7 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
   name: item,
 }));
 
-const DumpForm = ({ props }: {props: IDumpAdvert}) => {
+const DumpForm = ({ props }: { props: IDumpAdvert }) => {
   const { token } = useAuth();
   const dumpTransports = useDumpTransports();
   const wasteTypes = useWasteTypes();
@@ -289,9 +289,6 @@ const DumpForm = ({ props }: {props: IDumpAdvert}) => {
     isCoefficientValid;
 
   const transactionType = type[0];
-  const isPhotosAllowed =
-    transactionType.value === "SOIL_DUMP" ||
-    transactionType.value === "SOIL_REMOVAL";
 
   const onSubmit = () => {
     editAdvert({
@@ -301,15 +298,17 @@ const DumpForm = ({ props }: {props: IDumpAdvert}) => {
         advertStatus: props.advertStatus,
         transactionType: transactionType.value,
         advertType: "DUMP",
-        addressLat: 45,
-        addressLon: 45,
         title,
         shiftType: SHIFT_TYPES[workModeIndex],
         dumpTransport: transport,
         measureIn: MEASURE_IN[measureI],
         amount: Number(amount),
         coefficient: Number(coefficient),
-        price: Number(priceForWeight),
+        price: Number(
+          ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
+            ? priceForVolume
+            : priceForWeight
+        ),
         paymentType: PAYMENT_TYPES[paymentTypeI],
         wasteTypes: wasteType,
         dangerClass: dangerClass[0].name,
@@ -330,20 +329,15 @@ const DumpForm = ({ props }: {props: IDumpAdvert}) => {
       const priceWeight = Number(priceForVolume) / Number(coefficient);
       onPriceForWeightChange(Math.floor(priceWeight).toString());
     }
-  }, [priceForVolume]);
+  }, [coefficient, priceForVolume]);
 
   useEffect(() => {
     if (editAdvertResult.isSuccess) {
-      if (isPhotosAllowed) {
-        navigation.navigate("EditImages", {
-          id: editAdvertResult.originalArgs?.advert.id,
-          isPhotosRequired: false,
-          advertType: "DUMP",
-        });
-      } else {
-        Alert.alert("Успешно", "Публикация обновлена");
-        navigation.navigate("Profile");
-      }
+      navigation.navigate("EditImages", {
+        id: editAdvertResult.originalArgs?.advert.id,
+        isPhotosRequired: false,
+        advertType: "DUMP",
+      });
     } else if (editAdvertResult.error) {
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
@@ -355,7 +349,7 @@ const DumpForm = ({ props }: {props: IDumpAdvert}) => {
       isFormValid={isFormValid}
       isLoading={editAdvertResult.isLoading}
       onSubmit={onSubmit}
-      submitTitle={isPhotosAllowed ? "Далее" : "Опубликовать"}
+      submitTitle={"Далее"}
     />
   );
 };

@@ -285,9 +285,6 @@ const DumpForm = () => {
     isCoefficientValid;
 
   const transactionType = type[0];
-  const isPhotosAllowed =
-    transactionType.value === "SOIL_DUMP" ||
-    transactionType.value === "SOIL_REMOVAL";
 
   const onSubmit = () => {
     addAdvert({
@@ -304,7 +301,11 @@ const DumpForm = () => {
         measureIn: MEASURE_IN[measureI],
         amount: Number(amount),
         coefficient: Number(coefficient),
-        price: Number(priceForWeight),
+        price: Number(
+          ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
+            ? priceForVolume
+            : priceForWeight
+        ),
         paymentType: PAYMENT_TYPES[paymentTypeI],
         wasteTypes: wasteType,
         dangerClass: dangerClass[0].value,
@@ -325,21 +326,16 @@ const DumpForm = () => {
       const priceWeight = Number(priceForVolume) / Number(coefficient);
       onPriceForWeightChange(Math.floor(priceWeight).toString());
     }
-  }, [priceForVolume]);
+  }, [coefficient, priceForVolume]);
 
   useEffect(() => {
     if (addAdvertResult.isSuccess) {
-      if (isPhotosAllowed) {
-        navigation.navigate("AdvertImages", {
-          id: addAdvertResult.data.id,
-          isPhotosRequired: false,
-          advertType: "DUMP",
-        });
-      } else {
-        navigation.navigate("Profile");
-      }
+      navigation.navigate("AdvertImages", {
+        id: addAdvertResult.data.id,
+        isPhotosRequired: false,
+        advertType: "DUMP",
+      });
     } else if (addAdvertResult.error) {
-      console.log(addAdvertResult.error);
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
   }, [addAdvertResult]);
@@ -350,7 +346,7 @@ const DumpForm = () => {
       isFormValid={isFormValid}
       isLoading={addAdvertResult.isLoading}
       onSubmit={onSubmit}
-      submitTitle={isPhotosAllowed ? "Далее" : "Опубликовать"}
+      submitTitle={"Далее"}
     />
   );
 };

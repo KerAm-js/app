@@ -8,9 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import {
   ALL,
   DELIVERY_TYPE,
-  ENUM_TITLES,
   ENUMS,
-  FILTER_ENUMS_WITH_ALL,
   MATERIAL_TRANSACTION_TYPES,
   MEASURE_IN,
   PAYMENT_TYPES,
@@ -20,7 +18,6 @@ import { View } from "react-native";
 import { ResetFilterButton } from "../ResetFilterButton/ResetFilterButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { useIntervalValidator } from "../../../../hooks/inputValidators/useIntervalValidator";
 import {
   IDumpTransportType,
   IMaterialType,
@@ -47,12 +44,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
       ),
     []
   );
-  const initMeasureI = useMemo(
-    () => MEASURE_IN.findIndex((item) => item === currentFilter?.measureIn),
-    []
-  );
-  const initAmountFrom = currentFilter?.amountFrom?.toString() || undefined;
-  const initAmountTo = currentFilter?.amountTo?.toString() || undefined;
   const initPaymentTypeI = useMemo(() => {
     const i = PAYMENT_TYPES.findIndex(
       (item) => item === currentFilter.paymentType
@@ -102,22 +93,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
   ] = useSelectionValidator<TFraction>({
     multySelection: true,
     initValue: currentFilter.fractions || undefined,
-  });
-  const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
-  const [
-    amountFrom,
-    amountTo,
-    onAmountFromChange,
-    onAmountToChange,
-    isAmountFromValid,
-    isAmountToValid,
-    amountFromError,
-    amountToError,
-  ] = useIntervalValidator({
-    minValue: 1,
-    firstInitValue: initAmountFrom,
-    secondInitValue: initAmountTo,
-    requiredBothOrNone: true,
   });
   const [deliveryI, setDeliveryI] = useState(initDeliveryI);
   const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
@@ -170,30 +145,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
           hidden: !materialType[0] || materialType[0]?.fractions.length === 0,
           label: "Фракции",
         },
-        {
-          id: "measure",
-          type: "segment",
-          values: ENUMS.measureIn,
-          selectedIndex: measureI,
-          onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Способ измерения",
-        },
-        {
-          id: "amount",
-          type: "interval",
-          firstValue: amountFrom,
-          secondValue: amountTo,
-          onFirstValueChange: onAmountFromChange,
-          onSecondValueChange: onAmountToChange,
-          error: amountFromError || amountToError,
-          isFirstFieldInvalid: !isAmountFromValid,
-          isSecondFieldInvalid: !isAmountToValid,
-          label:
-            ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
-              ? "Количество (м3)"
-              : "Количество (т)",
-          keyboardType: "decimal-pad",
-        },
       ],
     },
     {
@@ -225,8 +176,6 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     },
   ];
 
-  const isFormValid = isAmountFromValid && isAmountToValid;
-
   const onSubmit = () => {
     const result: TMaterialFilter = {
       priceFrom: null,
@@ -236,23 +185,24 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
       coefficientFrom: null,
       coefficientTo: null,
       shiftType: null,
-      // parameters below are not using for filtering
-      amountFrom: Number(amountFrom) || null,
-      amountTo: Number(amountTo) || null,
+      measureIn: null,
+      amountFrom: null,
+      amountTo: null,
+      // the parameters above are not needed for filtering yet.
       transactionType: MATERIAL_TRANSACTION_TYPES[typeI],
-      measureIn: MEASURE_IN[measureI],
       materialType:
         materialType.length > 0 ? materialType[0].name.toLowerCase() : null,
       fractions: fractions.length > 0 ? fractions : null,
       transports:
         transport.length > 0 ? transport.map((item) => item.id) : null,
       deliveryType:
-        ENUMS.delivery[deliveryI] !== ALL ? DELIVERY_TYPE[deliveryI] : null,
+        DELIVERY_TYPE[deliveryI] !== "ANY" ? DELIVERY_TYPE[deliveryI] : null,
       paymentType:
         PAYMENT_TYPES[paymentTypeI] !== "ANY"
           ? PAYMENT_TYPES[paymentTypeI]
           : null,
     };
+    console.log(result);
     setMaterialFilter(result);
     navigation.navigate("Main");
   };
@@ -261,7 +211,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     <View>
       <Form
         inputs={inputs}
-        isFormValid={isFormValid}
+        isFormValid={true}
         onSubmit={onSubmit}
         submitTitle="Сохранить"
       />

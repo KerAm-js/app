@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { useInputValidator } from "../../../../hooks/inputValidators/useInputValidator";
@@ -25,11 +25,11 @@ import {
   TFraction,
 } from "../../../../types/MiniEntities";
 import { IMaterialAdvert } from "../../../../types/Advert";
+import { getPriceString } from "../../../Adverts/helpers/getPaymentFor";
 
 const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
   const materialTypes = useMaterialTypes();
   const dumpTransports = useDumpTransports();
-
   const { token } = useAuth();
   const [editAdvert, editAdvertResult] = useEditMaterialAdvertMutation();
   const navigation =
@@ -101,6 +101,8 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
   );
   const [comment, setComment] = useState(props.description || "");
 
+  const { first, second } = getPriceString(props);
+
   const [
     priceForWeight,
     onPriceForWeightChange,
@@ -109,7 +111,7 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.price),
+    initValue: String(first[0]),
   });
   const [
     priceForVolume,
@@ -119,7 +121,7 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.price * Number(props.coefficient)),
+    initValue: second ? String(second[0]) : undefined,
   });
   const [paymentTypeI, setPaymentTypeI] = useState(
     PAYMENT_TYPES.indexOf(props.paymentType)
@@ -282,7 +284,6 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
     isPriceForVolumeValid;
 
   const transactionType = MATERIAL_TRANSACTION_TYPES[typeI];
-  const isPhotosAllowed = transactionType === "SELL";
 
   const onSubmit = () => {
     editAdvert({
@@ -290,8 +291,6 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
         ...props,
         transactionType,
         advertType: "NON_MATERIAL",
-        addressLat: 45,
-        addressLon: 45,
         fractions,
         title,
         deliveryType: DELIVERY_TYPE[deliveryI],
@@ -301,10 +300,13 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
         measureIn: MEASURE_IN[measureI],
         amount: Number(amount),
         coefficient: Number(coefficient),
-        price: Number(priceForWeight),
+        price: Number(
+          ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
+            ? priceForVolume
+            : priceForWeight
+        ),
         paymentType: PAYMENT_TYPES[paymentTypeI],
         description: comment,
-        advertStatus: "STOPPED",
       },
       token: token || "",
     });
@@ -330,20 +332,14 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
       const priceWeight = Number(priceForVolume) / Number(coefficient);
       onPriceForWeightChange(Math.floor(priceWeight).toString());
     }
-  }, [priceForVolume]);
+  }, [coefficient, priceForVolume]);
 
   useEffect(() => {
     if (editAdvertResult.isSuccess) {
-      if (isPhotosAllowed) {
-        navigation.navigate("EditImages", {
-          id: editAdvertResult.originalArgs?.advert.id,
-          isPhotosRequired: false,
-          advertType: "NON_MATERIAL",
-        });
-      } else {
-        Alert.alert("Успешно", "Публикаия обновлена");
-        navigation.navigate("Profile");
-      }
+      navigation.navigate("EditImages", {
+        id: editAdvertResult.originalArgs?.advert.id,
+        advertType: "NON_MATERIAL",
+      });
     } else if (editAdvertResult.error) {
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
@@ -354,7 +350,7 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
       inputs={inputs}
       isFormValid={isFormValid}
       onSubmit={onSubmit}
-      submitTitle={isPhotosAllowed ? "Далее" : "Опубликовать"}
+      submitTitle={"Далее"}
       isLoading={editAdvertResult.isLoading}
     />
   );

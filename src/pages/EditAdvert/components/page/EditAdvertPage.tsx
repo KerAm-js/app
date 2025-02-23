@@ -11,7 +11,11 @@ const EditAdvertPageComponent = (props) => {
       keyboardVerticalOffset={headerHeight}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <ScrollView showsVerticalScrollIndicator={false} style={editAdvertPageStyles.scrollView}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={editAdvertPageStyles.scrollView}
+        contentContainerStyle={editAdvertPageStyles.scrollContent}
+      >
         <EditAdvertModule.Component props={props.route.params} />
       </ScrollView>
     </KeyboardAvoidingView>

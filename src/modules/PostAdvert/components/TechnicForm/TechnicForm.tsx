@@ -44,7 +44,6 @@ const TechnicForm = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [transactionTypeI, setTransactionTypeI] = useState(0);
   const transactionType = TECHNIC_TRANSACTION_TYPES[transactionTypeI];
-  const isPhotosAllowed = transactionType === "GIVE_A_RENT";
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
     minLength: 10,
@@ -727,16 +726,12 @@ const TechnicForm = () => {
 
   useEffect(() => {
     if (addAdvertResult.isSuccess) {
-      if (isPhotosAllowed) {
-        navigation.navigate("AdvertImages", {
-          id: addAdvertResult.data.id,
-          isPhotosRequired:
-            addAdvertResult.data.transactionType === "GIVE_A_RENT",
-          advertType: "TECHNIC",
-        });
-      } else {
-        navigation.navigate("Profile");
-      }
+      navigation.navigate("AdvertImages", {
+        id: addAdvertResult.data.id,
+        isPhotosRequired:
+          addAdvertResult.data.transactionType === "GIVE_A_RENT",
+        advertType: "TECHNIC",
+      });
     } else if (addAdvertResult.error) {
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
@@ -770,7 +765,7 @@ const TechnicForm = () => {
       inputs={inputs}
       isFormValid={isFormValid}
       onSubmit={onSubmit}
-      submitTitle={isPhotosAllowed ? "Далее" : "Опубликовать"}
+      submitTitle={"Далее"}
       isLoading={addAdvertResult.isLoading}
     />
   );

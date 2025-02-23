@@ -8,10 +8,7 @@ import {
   DUMP_TRANSACTION_TYPES,
   ENUM_TITLES,
   ENUMS,
-  FILTER_ENUMS_WITH_ALL,
-  MEASURE_IN,
   PAYMENT_TYPES,
-  SHIFT_TYPES,
 } from "../../../../consts/enums";
 import { useActions } from "../../../../hooks/store/useActions";
 import { TDumpFilter } from "../../store/types";
@@ -21,7 +18,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useDumpTransports } from "../../../MiniEntities";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
-import { useIntervalValidator } from "../../../../hooks/inputValidators/useIntervalValidator";
 import { useWasteTypes } from "../../../MiniEntities/store/hooks";
 import { IDumpTransportType } from "../../../../types/MiniEntities";
 
@@ -55,12 +51,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       undefined,
     []
   );
-  const initMeasureI = useMemo(
-    () => MEASURE_IN.findIndex((item) => item === currentFilter?.measureIn),
-    []
-  );
-  const initAmountFrom = currentFilter?.amountFrom?.toString() || undefined;
-  const initAmountTo = currentFilter?.amountTo?.toString() || undefined;
   const initPaymentTypeI = useMemo(() => {
     const i = PAYMENT_TYPES.findIndex(
       (item) => item === currentFilter.paymentType
@@ -112,22 +102,6 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       dumpTransports.filter((item) =>
         currentFilter.transports?.find((currentItem) => currentItem === item.id)
       ) || undefined,
-  });
-  const [measureI, setMeasureI] = useState(initMeasureI < 0 ? 0 : initMeasureI);
-  const [
-    amountFrom,
-    amountTo,
-    onAmountFromChange,
-    onAmountToChange,
-    isAmountFromValid,
-    isAmountToValid,
-    amountFromError,
-    amountToError,
-  ] = useIntervalValidator({
-    minValue: 1,
-    firstInitValue: initAmountFrom,
-    secondInitValue: initAmountTo,
-    requiredBothOrNone: true,
   });
   const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
 
@@ -183,30 +157,30 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
           error: transportError,
           label: "Вид транспорта",
         },
-        {
-          id: "measure",
-          type: "segment",
-          values: ENUMS.measureIn,
-          selectedIndex: measureI,
-          onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
-          label: "Способ измерения",
-        },
-        {
-          id: "amount",
-          type: "interval",
-          firstValue: amountFrom,
-          secondValue: amountTo,
-          onFirstValueChange: onAmountFromChange,
-          onSecondValueChange: onAmountToChange,
-          error: amountFromError || amountToError,
-          isFirstFieldInvalid: !isAmountFromValid,
-          isSecondFieldInvalid: !isAmountToValid,
-          label:
-            ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
-              ? "Количество (м3)"
-              : "Количество (т)",
-          keyboardType: "decimal-pad",
-        },
+        // {
+        //   id: "measure",
+        //   type: "segment",
+        //   values: ENUMS.measureIn,
+        //   selectedIndex: measureI,
+        //   onChange: (evt) => setMeasureI(evt.nativeEvent.selectedSegmentIndex),
+        //   label: "Способ измерения",
+        // },
+        // {
+        //   id: "amount",
+        //   type: "interval",
+        //   firstValue: amountFrom,
+        //   secondValue: amountTo,
+        //   onFirstValueChange: onAmountFromChange,
+        //   onSecondValueChange: onAmountToChange,
+        //   error: amountFromError || amountToError,
+        //   isFirstFieldInvalid: !isAmountFromValid,
+        //   isSecondFieldInvalid: !isAmountToValid,
+        //   label:
+        //     ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
+        //       ? "Количество (м3)"
+        //       : "Количество (т)",
+        //   keyboardType: "decimal-pad",
+        // },
       ],
     },
     {
@@ -225,7 +199,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
     },
   ];
 
-  const isFormValid = isTypeValid && isAmountFromValid && isAmountToValid;
+  const isFormValid = isTypeValid;
 
   const onSubmit = () => {
     const result: TDumpFilter = {
@@ -236,11 +210,11 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       shiftType: null,
       coefficientFrom: null,
       coefficientTo: null,
-      //parameters below are not using for filter
+      measureIn: null,
+      amountFrom: null,
+      amountTo: null,
+      // the parameters above are not needed for filtering yet.
       transactionType: type[0].value,
-      measureIn: MEASURE_IN[measureI],
-      amountFrom: Number(amountFrom) || null,
-      amountTo: Number(amountTo) || null,
       paymentType:
         PAYMENT_TYPES[paymentTypeI] !== "ANY"
           ? PAYMENT_TYPES[paymentTypeI]

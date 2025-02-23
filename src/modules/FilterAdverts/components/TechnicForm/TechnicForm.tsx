@@ -684,7 +684,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
       rentalDaysCountTo: null,
       shiftType: null,
       paymentUnit: null,
-      //parameters below aren't using for filtration
+      // the parameters above are not needed for filtering yet
       axesCountFrom: axesCount,
       axesCountTo: axesCount,
       equipment: hasEquipment && equipment.length > 0 ? equipment : null,

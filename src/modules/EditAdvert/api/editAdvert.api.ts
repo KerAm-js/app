@@ -1,8 +1,5 @@
 import { api } from "../../../api/api";
-import {
-  IAdvert,
-  TAdvertType,
-} from "../../../types/Advert";
+import { IAdvert, TAdvertType } from "../../../types/Advert";
 
 interface FormDataValue {
   uri: string;
@@ -52,112 +49,108 @@ export interface UploadImageToAdvertPayload {
 
 export const postAdvertApi = api.injectEndpoints({
   endpoints: (builder) => ({
-  editTechnicAdvert: builder.mutation<
-  IAdvert,
-  {
-    advert: any;
-    token: string;
-  }
->({
-  query: ({ advert, token }) => {
+    editTechnicAdvert: builder.mutation<
+      IAdvert,
+      {
+        advert: any;
+        token: string;
+      }
+    >({
+      query: ({ advert, token }) => {
+        return {
+          url: "/secured/advert-technic/upd",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: advert,
+        };
+      },
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled; // ожидаем выполнение запроса
+          console.log("Response data:", data); // выводим данные из ответа
+        } catch (error) {
+          console.error("Error occurred:", error);
+        }
+      },
+      transformResponse: (response, meta, arg) => {
+        // Если сервер возвращает строку "Advert Updated", но нам нужно вернуть сам объект advert
+        if (typeof response === "string" && response === "Advert Updated") {
+          return arg.advert; // возвращаем переданный advert
+        }
+        // Если сервер возвращает данные в другом формате, можно адаптировать код.
+        return response;
+      },
+      invalidatesTags: ["User", "TechnicAdverts"],
+    }),
+    editDumpAdvert: builder.mutation<
+      IAdvert,
+      {
+        advert: any;
+        token: string;
+      }
+    >({
+      query: ({ advert, token }) => {
+        return {
+          url: "/secured/advert-dump/upd",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: advert,
+        };
+      },
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled; // ожидаем выполнение запроса
+          console.log("Response data:", data); // выводим данные из ответа
+        } catch (error) {
+          console.error("Error occurred:", error);
+        }
+      },
+      transformResponse: (response, meta, arg) => {
+        // Если сервер возвращает строку "Advert Updated", но нам нужно вернуть сам объект advert
+        if (typeof response === "string" && response === "Advert Updated") {
+          return arg.advert; // возвращаем переданный advert
+        }
+        // Если сервер возвращает данные в другом формате, можно адаптировать код.
+        return response;
+      },
+      invalidatesTags: ["User", "DumpAdverts"],
+    }),
 
-    return ({
-    url: "/secured/advert-technic/upd",
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: advert,
-  })},
-  onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
-    try {
-      const { data } = await queryFulfilled; // ожидаем выполнение запроса
-      console.log('Response data:', data); // выводим данные из ответа
-    } catch (error) {
-      console.error('Error occurred:', error);
-    }
-  },
-  transformResponse: (response, meta, arg) => {
-    // Если сервер возвращает строку "Advert Updated", но нам нужно вернуть сам объект advert
-    if (typeof response === "string" && response === "Advert Updated") {
-      return arg.advert; // возвращаем переданный advert
-    }
-    // Если сервер возвращает данные в другом формате, можно адаптировать код.
-    return response; 
-  },
-  invalidatesTags: ['User', 'TechnicAdverts'],
-}),
-editDumpAdvert: builder.mutation<
-  IAdvert,
-  {
-    advert: any;
-    token: string;
-  }
->({
-  query: ({ advert, token }) => {
-
-    return ({
-    url: "/secured/advert-dump/upd",
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: advert,
-  })},
-  onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
-
-    try {
-      const { data } = await queryFulfilled; // ожидаем выполнение запроса
-      console.log('Response data:', data); // выводим данные из ответа
-    } catch (error) {
-      console.error('Error occurred:', error);
-    }
-  },
-  transformResponse: (response, meta, arg) => {
-    // Если сервер возвращает строку "Advert Updated", но нам нужно вернуть сам объект advert
-    if (typeof response === "string" && response === "Advert Updated") {
-      return arg.advert; // возвращаем переданный advert
-    }
-    // Если сервер возвращает данные в другом формате, можно адаптировать код.
-    return response; 
-  },
-  invalidatesTags: ['User', 'DumpAdverts'],
-}),
-
-editMaterialAdvert: builder.mutation<
-  IAdvert,
-  {
-    advert: any;
-    token: string;
-  }
->({
-  query: ({ advert, token }) => {
-
-    return ({
-    url: "/secured/advert-material/upd",
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: advert,
-  })},
-  onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
-
-    try {
-      const { data } = await queryFulfilled; // ожидаем выполнение запроса
-      console.log('Response data:', data); // выводим данные из ответа
-    } catch (error) {
-      console.error('Error occurred:', error);
-    }
-  },
-  transformResponse: (response, meta, arg) => {
-
-    return arg.advert; // возвращаем переданный advert
-  
-  },
-  invalidatesTags: ['User', 'MaterialAdverts'],
-}),
-getAdvertImages: builder.mutation<
+    editMaterialAdvert: builder.mutation<
+      IAdvert,
+      {
+        advert: any;
+        token: string;
+      }
+    >({
+      query: ({ advert, token }) => {
+        return {
+          url: "/secured/advert-material/upd",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: advert,
+        };
+      },
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled; // ожидаем выполнение запроса
+          console.log("Response data:", data); // выводим данные из ответа
+        } catch (error) {
+          console.error("Error occurred:", error);
+        }
+      },
+      transformResponse: (response, meta, arg) => {
+        return arg.advert; // возвращаем переданный advert
+      },
+      invalidatesTags: ["User", "MaterialAdverts"],
+    }),
+    getAdvertImages: builder.mutation<
       string,
       {
         advertType: TAdvertType;
@@ -174,112 +167,103 @@ getAdvertImages: builder.mutation<
         },
       }),
     }),
-  deleteAdvertImage: builder.mutation<
-  string,
-  {
-    fileName: any;
-    advertType: any;
-    advertId: any;
-    token: string;
-  }
->({
-  query: ({ fileName, advertType, advertId, token }) => {
-    const formData = new FormData();
-    formData.append("file_name", fileName);
-    formData.append("advert_type", advertType);
-    formData.append("advert_id", String(advertId));
+    deleteAdvertImage: builder.mutation<
+      string,
+      {
+        fileName: any;
+        advertType: any;
+        advertId: any;
+        token: string;
+      }
+    >({
+      query: ({ fileName, advertType, advertId, token }) => {
+        const formData = new FormData();
+        formData.append("file_name", fileName);
+        formData.append("advert_type", advertType);
+        formData.append("advert_id", String(advertId));
 
-    return ({
-    url: "/secured/delete-image",
-    method: "DELETE",
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-    formData: true
-  })},
-  invalidatesTags: ['Images']
-
-}),
-changeTechnicAdvertStatus: builder.mutation<
-  string,
-  {
-    advertStatus: string,
-    advertId: any,
-    token?: string | undefined
-  }
->({
-  query: ({ advertStatus, advertId, token }) => {
-   
-
-    return ({
-    url: "/secured/advert-technic/status-update",
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: {
-      advertId,
-      advertStatus
-    },
-
-  })},
-  invalidatesTags: ['User', 'TechnicAdverts']
-
-}),
-changeMaterialAdvertStatus: builder.mutation<
-  string,
-  {
-    advertStatus: string,
-    advertId: any,
-    token?: string | undefined
-  }
->({
-  query: ({ advertStatus, advertId, token }) => {
-   
-
-    return ({
-    url: "/secured/advert-material/status-update",
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: {
-      advertId,
-      advertStatus
-    },
-
-  })},
-  invalidatesTags: ['User', 'MaterialAdverts']
-
-}),
-changeDumpAdvertStatus: builder.mutation<
-  string,
-  {
-    advertStatus: string,
-    advertId: any,
-    token?: string | undefined
-  }
->({
-  query: ({ advertStatus, advertId, token }) => {
-   
-
-    return ({
-    url: "/secured/advert-dump/status-update",
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: {
-      advertId,
-      advertStatus
-    },
-
-  })},
-  invalidatesTags: ['User', 'DumpAdverts']
-
-})
+        return {
+          url: "/secured/delete-image",
+          method: "DELETE",
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+          formData: true,
+        };
+      },
+      invalidatesTags: ["Images"],
+    }),
+    changeTechnicAdvertStatus: builder.mutation<
+      string,
+      {
+        advertStatus: string;
+        advertId: any;
+        token?: string | undefined;
+      }
+    >({
+      query: ({ advertStatus, advertId, token }) => {
+        return {
+          url: "/secured/advert-technic/status-update",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: {
+            advertId,
+            advertStatus,
+          },
+        };
+      },
+      invalidatesTags: ["User", "TechnicAdverts"],
+    }),
+    changeMaterialAdvertStatus: builder.mutation<
+      string,
+      {
+        advertStatus: string;
+        advertId: any;
+        token?: string | undefined;
+      }
+    >({
+      query: ({ advertStatus, advertId, token }) => {
+        return {
+          url: "/secured/advert-material/status-update",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: {
+            advertId,
+            advertStatus,
+          },
+        };
+      },
+      invalidatesTags: ["User", "MaterialAdverts"],
+    }),
+    changeDumpAdvertStatus: builder.mutation<
+      string,
+      {
+        advertStatus: string;
+        advertId: any;
+        token?: string | undefined;
+      }
+    >({
+      query: ({ advertStatus, advertId, token }) => {
+        return {
+          url: "/secured/advert-dump/status-update",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: {
+            advertId,
+            advertStatus,
+          },
+        };
+      },
+      invalidatesTags: ["User", "DumpAdverts"],
+    }),
   }),
 });
 
@@ -292,7 +276,4 @@ export const {
   useChangeTechnicAdvertStatusMutation,
   useChangeMaterialAdvertStatusMutation,
   useChangeDumpAdvertStatusMutation,
-
-  
-
 } = postAdvertApi;

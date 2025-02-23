@@ -27,14 +27,7 @@ import { circlesSvg } from "../../../../assets/svg/circles";
 import { advertStyles } from "../../../../modules/Adverts/components/Advert/styles";
 
 const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
-  const {
-    id,
-    likes,
-    photos,
-    ownerId,
-    advertType,
-    children,
-  } = props
+  const { id, likes, photos, ownerId, advertType, children } = props;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -44,7 +37,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
 
   const scrollY = useSharedValue(0);
   const context = useSharedValue({ y: 0 });
-  const {user} = useAuth()
+  const { user } = useAuth();
   const scrollToTop = () => {
     if (scrollRef?.current)
       scrollRef.current?.scrollTo({ y: 0, animated: true });
@@ -54,28 +47,31 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
       scrollRef.current?.scrollTo({ y: 256, animated: true });
   };
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onBeginDrag: (e) => {
-      context.value.y = e.contentOffset.y;
-    },
-    onScroll: (e) => {
-      scrollY.value = e.contentOffset.y;
-    },
-    onEndDrag: (e) => {
-      const { y } = e.contentOffset;
-      if (y > 0 && y < 256) {
-        if (y < context.value.y) {
-          runOnJS(scrollToTop)();
-        } else if (y > context.value.y) {
-          runOnJS(scrollToMainInfo)();
+  const scrollHandler = useAnimatedScrollHandler(
+    {
+      onBeginDrag: (e) => {
+        context.value.y = e.contentOffset.y;
+      },
+      onScroll: (e) => {
+        scrollY.value = e.contentOffset.y;
+      },
+      onEndDrag: (e) => {
+        const { y } = e.contentOffset;
+        if (y > 0 && y < 256) {
+          if (y < context.value.y) {
+            runOnJS(scrollToTop)();
+          } else if (y > context.value.y) {
+            runOnJS(scrollToMainInfo)();
+          }
         }
-      }
+      },
     },
-  }, []);
+    []
+  );
 
   const openModal = () => {
-    const{children, ...args} = props
-    navigation.navigate('Modal', args)
+    const { children, ...args } = props;
+    navigation.navigate("Modal", args);
   };
 
   useEffect(() => {
@@ -85,17 +81,14 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
       headerTitle: (props) => (
         <AnimatedHeaderTitle scrollY={scrollY} title={props.children} />
       ),
-      headerRight: () => (
-        <AnimatedHeaderRightButton>
-          {String(user?.id) === String(ownerId) ? (
-            <Pressable onPress={openModal} style={advertStyles.editButton}>
-              <SvgXml xml={circlesSvg()} />
-            </Pressable>
-          ) : (
-            <SetLike advertId={id} advertType={advertType} size={31}/>
-          )}
-        </AnimatedHeaderRightButton>
-      ),
+      headerRight:
+        String(user?.id) !== String(ownerId)
+          ? () => (
+              <AnimatedHeaderRightButton>
+                <SetLike advertId={id} advertType={advertType} size={31} />
+              </AnimatedHeaderRightButton>
+            )
+          : undefined,
       headerStyle: {},
       headerBackVisible: false,
     });
@@ -104,7 +97,10 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
   return (
     <View>
       {Platform.OS === "ios" && (
-        <AnimatedStatusBar photosLength={photos?.length || 0} scrollY={scrollY} />
+        <AnimatedStatusBar
+          photosLength={photos?.length || 0}
+          scrollY={scrollY}
+        />
       )}
       <Slider
         ownerId={ownerId}
@@ -120,7 +116,6 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
         style={{ paddingTop: sliderStyles.image.height + insets.top }}
         onScroll={scrollHandler}
         scrollEventThrottle={16}
-        contentContainerStyle={{ paddingBottom: 70 }}
       >
         <View
           style={[

@@ -62,7 +62,6 @@ const InfoTables: FC<IAdvert> = (advert) => {
       });
     }
   } else {
-    console.log(advert.id, advert.dumpTransport)
     chars.data.push({
       title: propTitles.dumpTransport,
       value: advert.dumpTransport.reduce((value, item, index) => value + (index === 0 ? "": ", ") + item.name, ''),

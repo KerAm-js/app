@@ -9,4 +9,7 @@ export const editAdvertPageStyles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
+  scrollContent: {
+    paddingBottom: 150,
+  }
 });

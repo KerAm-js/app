@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 import { SMALL_F_SIZE, TEXT_F_SIZE, ULTRA_SMALL_F_SIZE } from "../../../../consts/texts";
 import { GREY_DARK, GREY_MIDDLE } from "../../../../consts/colors";
-import { SCREEN_PADDING } from "../../../../consts/views";
 
 export const advertUserInfoStyles = StyleSheet.create({
   container: {

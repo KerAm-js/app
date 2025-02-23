@@ -278,7 +278,6 @@ const MaterialForm = () => {
     isPriceForVolumeValid;
 
   const transactionType = MATERIAL_TRANSACTION_TYPES[typeI];
-  const isPhotosAllowed = transactionType === "SELL";
 
   const onSubmit = () => {
     addAdvert({
@@ -296,7 +295,11 @@ const MaterialForm = () => {
         measureIn: MEASURE_IN[measureI],
         amount: Number(amount),
         coefficient: Number(coefficient),
-        price: Number(priceForWeight),
+        price: Number(
+          ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
+            ? priceForVolume
+            : priceForWeight
+        ),
         paymentType: PAYMENT_TYPES[paymentTypeI],
         description: comment,
         advertStatus: "STOPPED",
@@ -325,19 +328,15 @@ const MaterialForm = () => {
       const priceWeight = Number(priceForVolume) / Number(coefficient);
       onPriceForWeightChange(Math.floor(priceWeight).toString());
     }
-  }, [priceForVolume]);
+  }, [coefficient, priceForVolume]);
 
   useEffect(() => {
     if (addAdvertResult.isSuccess) {
-      if (isPhotosAllowed) {
-        navigation.navigate("AdvertImages", {
-          id: addAdvertResult.data.id,
-          isPhotosRequired: false,
-          advertType: "NON_MATERIAL",
-        });
-      } else {
-        navigation.navigate("Profile");
-      }
+      navigation.navigate("AdvertImages", {
+        id: addAdvertResult.data.id,
+        isPhotosRequired: false,
+        advertType: "NON_MATERIAL",
+      });
     } else if (addAdvertResult.error) {
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
@@ -348,7 +347,7 @@ const MaterialForm = () => {
       inputs={inputs}
       isFormValid={isFormValid}
       onSubmit={onSubmit}
-      submitTitle={isPhotosAllowed ? "Далее" : "Опубликовать"}
+      submitTitle={"Далее"}
       isLoading={addAdvertResult.isLoading}
     />
   );

@@ -25,8 +25,6 @@ import {
 } from "../../../../consts/enums";
 import { ITechnicAdvert } from "../../../../types/Advert";
 import { Alert } from "react-native";
-import { useAddressByMap } from "../../../ChooseAddressMap";
-import { useActions } from "../../../../hooks/store/useActions";
 import { useTechnicTypes } from "../../../MiniEntities";
 import { ITechnicType, TEquipment } from "../../../../types/MiniEntities";
 
@@ -42,7 +40,6 @@ const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
   );
   const techTypes = useTechnicTypes();
   const { user, token } = useAuth();
-  const { setAddressByMapDefaults, setPoint, setSecondPoint } = useActions();
 
   const [editAdvert, editAdvertResult] = useEditTechnicAdvertMutation();
 
@@ -52,7 +49,6 @@ const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
     props.transactionType === "GIVE_A_RENT" ? 0 : 1
   );
   const transactionType = TECHNIC_TRANSACTION_TYPES[transactionTypeI];
-  const isPhotosAllowed = transactionType === "GIVE_A_RENT";
   const [title, onTitleChange, isTitleValid, titleError] = useInputValidator({
     required: true,
     minLength: 10,
@@ -72,8 +68,6 @@ const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
   const isTransport = !!technicType[0]?.parameters.find(
     (p) => p.name === "transport"
   );
-  const isSecondAddressRequired =
-    isTransport && transactionType === "TAKE_A_RENT";
   const [mark, onChangeMark] = useInputValidator({
     initValue: String(props.technicMark),
   });
@@ -247,15 +241,6 @@ const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
   const [paymentTypeI, setPaymentTypeI] = useState(
     PAYMENT_UNITS.indexOf(props.paymentUnit)
   );
-
-  const {
-    point,
-    secondPoint,
-    distance,
-    pointAddress,
-    isSecondPointRequired,
-    secondPointAddress,
-  } = useAddressByMap();
 
   const hasWeight = !!technicType[0]?.parameters.find(
     (param) => param.name === "weight"
@@ -565,34 +550,6 @@ const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
           label: "Режим работы",
         },
         {
-          id: "address",
-          type: "address",
-          label: isSecondAddressRequired ? "Плечо (точка А)" : "Адрес",
-          address: pointAddress,
-          isSecondPointRequired,
-          error: point ? undefined : "Заполните данное поле",
-        },
-        {
-          id: "secondAddress",
-          type: "address",
-          label: "Плечо (точка Б)",
-          address: secondPointAddress,
-          isSecondPointRequired: true,
-          isSecondInput: true,
-          error: secondPoint ? undefined : "Заполните данное поле",
-          hidden: !isSecondAddressRequired,
-        },
-        {
-          id: "distance",
-          type: "input",
-          error: countError,
-          onChangeText: () => {},
-          value: distance ? distance + " км" : "",
-          label: "Плечо (км)",
-          editable: false,
-          hidden: !isSecondAddressRequired,
-        },
-        {
           id: "rentalPeriod",
           type: "interval",
           firstPlaceholder: "ДД.ММ.ГГГГ",
@@ -673,8 +630,6 @@ const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
     isSecondDateValid &&
     isRentalDaysCountValid &&
     isPriceValid &&
-    !!point &&
-    (secondPoint || !isSecondPointRequired) &&
     (isWeightValid || !hasWeight) &&
     (isHeightValid || !hasHeight) &&
     (isVolumeValid || !hasVolume) &&
@@ -707,10 +662,6 @@ const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
         ).toISOString(),
         rentalDaysCount: Number(rentalDaysCount),
         isTransport,
-        addressLat: point?.lat || 57,
-        addressLon: point?.lon || 36,
-        secondAddressLat: secondPoint?.lat,
-        secondAddressLon: secondPoint?.lon,
         description: comment,
         technicType: technicType[0].name,
         technicMark: mark,
@@ -739,7 +690,7 @@ const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
           : "NOT_SPECIFIED",
         price: Number(price),
         paymentUnit: PAYMENT_UNITS[paymentTypeI],
-        paymentType: PAYMENT_TYPES[paymentForI],
+        paymentType: PAYMENT_TYPES[paymentForI], 
       };
       delete advert.children;
       delete advert.photos;
@@ -753,18 +704,10 @@ const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
 
   useEffect(() => {
     if (editAdvertResult.isSuccess) {
-      if (isPhotosAllowed) {
-        navigation.navigate("EditImages", {
-          id: editAdvertResult.originalArgs?.advert.id,
-          isPhotosRequired:
-            editAdvertResult.originalArgs?.advert.transactionType ===
-            "GIVE_A_RENT",
-          advertType: "TECHNIC",
-        });
-      } else {
-        Alert.alert("Успешно", "Публикаия обновлена");
-        navigation.navigate("Profile");
-      }
+      navigation.navigate("EditImages", {
+        id: editAdvertResult.originalArgs?.advert.id,
+        advertType: "TECHNIC",
+      });
     } else if (editAdvertResult.error) {
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
@@ -783,28 +726,12 @@ const TechnicForm = ({ props }: { props: ITechnicAdvert }) => {
     }
   }, [firstDate, secondDate]);
 
-  useEffect(() => {
-    setAddressByMapDefaults({
-      secondPoint: { lat: props.secondAddressLat, lon: props.secondAddressLon },
-    });
-    setPoint(
-      !!props.addressLon && !!props.addressLat
-        ? { lat: props.addressLat, lon: props.addressLon }
-        : undefined
-    );
-
-    setSecondPoint({
-      secondPoint: { lat: props.secondAddressLat, lon: props.secondAddressLon },
-      distance: props.distance,
-    });
-  }, []);
-
   return (
     <Form
       inputs={inputs}
       isFormValid={isFormValid}
       onSubmit={onSubmit}
-      submitTitle={isPhotosAllowed ? "Далее" : "Опубликовать"}
+      submitTitle={"Далее"}
       isLoading={editAdvertResult.isLoading}
     />
   );
