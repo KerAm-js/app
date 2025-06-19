@@ -9,7 +9,7 @@ import { animatedHeaderTitleStyles } from "./styles";
 const AnimatedHeaderTitle: FC<IAnimatedHeaderTitle> = ({ scrollY, title }) => {
   const rStyle = useAnimatedStyle(() => {
     return {
-      opacity: scrollY ? withTiming(scrollY.value > 250 ? 1 : 0) : 1,
+      opacity: scrollY ? withTiming(scrollY.value >= 262 ? 1 : 0) : 1,
     };
   }, [scrollY?.value]);
 

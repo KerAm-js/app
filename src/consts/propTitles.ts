@@ -2,7 +2,7 @@ export const propTitles = {
   unitAmount: "Количество единиц техники",
   shiftType: "Режим работы",
   rentalPeriod: "Период аренды",
-  rentalDaysCount: "Срок аренды (в днях)",
+  rentalDaysCount: "Срок аренды",
   deliveryType: "Способ отгрузки",
   dangerClass: "Класс опасности",
   wasteTypes: "Виды отходов",
@@ -11,5 +11,7 @@ export const propTitles = {
   fractions: "Фракции",
   coefficient: "Коэффициент",
   materialType: "Вид материала",
-  distance: 'Плечо'
+  distance: 'Плечо',
+  cargoType: 'Вид перевозимого груза',
+  cargoVolume: 'Объём перевозимого груза',
 };

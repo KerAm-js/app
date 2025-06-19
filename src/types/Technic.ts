@@ -18,7 +18,7 @@ export type TechnicParams = {
   rollersCount?: number;
   sizeType?: "OVERSIZE" | "OVERALL" | NOT_SPECIFIED;
   ossig?: boolean;
-  axesCount?: number;
+  axesCount?: number[];
   bodyLength?: number;
   trailerType?:
     | "FLAT_TRAILER"

@@ -119,7 +119,6 @@ export const postAdvertApi = api.injectEndpoints({
       },
       invalidatesTags: ["User", "DumpAdverts"],
     }),
-
     editMaterialAdvert: builder.mutation<
       IAdvert,
       {
@@ -146,7 +145,12 @@ export const postAdvertApi = api.injectEndpoints({
         }
       },
       transformResponse: (response, meta, arg) => {
-        return arg.advert; // возвращаем переданный advert
+        // Если сервер возвращает строку "Advert Updated", но нам нужно вернуть сам объект advert
+        if (typeof response === "string" && response === "Advert Updated") {
+          return arg.advert; // возвращаем переданный advert
+        }
+        // Если сервер возвращает данные в другом формате, можно адаптировать код.
+        return response;
       },
       invalidatesTags: ["User", "MaterialAdverts"],
     }),

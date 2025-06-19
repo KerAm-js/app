@@ -9,8 +9,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { FC, useEffect, useRef } from "react";
-import { Dimensions, Platform, Pressable, View } from "react-native";
-import LikeButton from "../../../../UI/buttons/Like/LikeButton";
+import { Dimensions, Platform, View } from "react-native";
 import AnimatedHeaderBackButton from "../HeaderBack/HeaderBack";
 import AnimatedHeaderBackground from "../HeaderBackground/HeaderBackground";
 import AnimatedHeaderRightButton from "../HeaderRight/HeaderRight";
@@ -22,9 +21,6 @@ import { scrollWithSliderStyles } from "./styles";
 import React from "react";
 import { SetLike } from "../../../../modules/Like/components/SetLike";
 import { useAuth } from "../../../../hooks/store/useAuth";
-import { SvgXml } from "react-native-svg";
-import { circlesSvg } from "../../../../assets/svg/circles";
-import { advertStyles } from "../../../../modules/Adverts/components/Advert/styles";
 
 const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
   const { id, likes, photos, ownerId, advertType, children } = props;
@@ -44,7 +40,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
   };
   const scrollToMainInfo = () => {
     if (scrollRef?.current)
-      scrollRef.current?.scrollTo({ y: 256, animated: true });
+      scrollRef.current?.scrollTo({ y: 262, animated: true });
   };
 
   const scrollHandler = useAnimatedScrollHandler(
@@ -57,7 +53,7 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
       },
       onEndDrag: (e) => {
         const { y } = e.contentOffset;
-        if (y > 0 && y < 256) {
+        if (y > 0 && y < 262) {
           if (y < context.value.y) {
             runOnJS(scrollToTop)();
           } else if (y > context.value.y) {
@@ -68,11 +64,6 @@ const ScrollWithSlider: FC<IScrollWithSliderProps> = (props) => {
     },
     []
   );
-
-  const openModal = () => {
-    const { children, ...args } = props;
-    navigation.navigate("Modal", args);
-  };
 
   useEffect(() => {
     navigation.setOptions({

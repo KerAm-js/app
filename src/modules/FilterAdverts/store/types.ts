@@ -7,8 +7,7 @@ import { NullablePartial } from "../../../types/others";
 
 export type TTechnicFilter = NullablePartial<
   {
-    axesCountFrom?: number;
-    axesCountTo?: number;
+    axesCount: number[];
     bodyLengthFrom?: number;
     bodyLengthTo?: number;
     boomLengthFrom?: number;

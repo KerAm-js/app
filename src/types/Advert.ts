@@ -2,13 +2,14 @@ import { IWasteType } from "./MiniEntities";
 import { TechnicParams, NOT_SPECIFIED } from "./Technic";
 
 export type TAdvertType = "TECHNIC" | "DUMP" | "NON_MATERIAL" | "OTHER";
+export type ShifType = "DAY" | "FULL" | "NIGHT"
 
 type AdvertDto = {
   advertType: TAdvertType;
   addressLat: number;
   addressLon: number;
   transactionType: string;
-  shiftType: "DAY" | "FULL" | "NIGHT";
+  shiftType: ShifType | NOT_SPECIFIED;
   title: string;
   price: number;
   paymentType: "ANY" | "CASH" | "NON_CASH";
@@ -30,18 +31,21 @@ export interface TechnicAdvertDto extends AdvertDto, TechnicParams {
   transactionType: "GIVE_A_RENT" | "TAKE_A_RENT";
   unitAmount: number;
   isTransport: boolean;
-  rentalFrom: string;
-  rentalTo: string;
+  rentalFrom?: string;
+  rentalTo?: string;
   rentalDaysCount: number;
   equipment: Array<{ id: number; name: string }>;
   secondAddressLat?: number;
   secondAddressLon?: number;
   distance?: number;
   paymentUnit: "HOUR" | "SHIFT" | "M3_KM" | "T_KM";
+  cargoVolume: number;
+  materialType: string | NOT_SPECIFIED;
 }
 
 export interface DumpAdvertDto extends AdvertDto {
   advertType: "DUMP";
+  shiftType: ShifType;
   advertStatus: BaseAdvert["advertStatus"];
   transactionType:
     | "NEED_SOIL_DUMP"
@@ -58,6 +62,7 @@ export interface DumpAdvertDto extends AdvertDto {
 
 export interface MaterialAdvertDto extends AdvertDto {
   advertType: "NON_MATERIAL";
+  shiftType: ShifType;
   advertStatus: BaseAdvert["advertStatus"];
   transactionType: "BUY" | "SELL";
   deliveryType: "DELIVERY" | "SELF_PICKUP" | "ANY";
@@ -86,7 +91,7 @@ export interface ITechnicAdvert extends BaseAdvert, TechnicAdvertDto {
   rollersCount: number;
   sizeType: "OVERSIZE" | "OVERALL" | NOT_SPECIFIED;
   ossig: boolean;
-  axesCount: number;
+  axesCount: number[];
   bodyLength: number;
   trailerType:
     | "FLAT_TRAILER"

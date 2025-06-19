@@ -25,12 +25,7 @@ import { useAuth } from "../../../../hooks/store/useAuth";
 
 const keyExtractor = (item: string) => item;
 
-
-const Slider: FC<ISliderProps> = ({
-  photos,
-  advertType,
-  scrollY,
-}) => {
+const Slider: FC<ISliderProps> = ({ photos, advertType, scrollY }) => {
   const [currentSlide, setCurrentSlider] = useState(1);
   const { token } = useAuth();
   const insets = useSafeAreaInsets();
@@ -149,7 +144,7 @@ const Slider: FC<ISliderProps> = ({
           onPress={onLike}
         />
       </View> */}
-      {!!photos?.length && Platform.OS === 'ios' && (
+      {!!photos?.length && Platform.OS === "ios" && (
         <LinearGradient
           colors={["rgba(0, 0, 0, 0.65)", "rgba(0, 0, 0, 0)"]}
           style={[sliderStyles.shadow, { height: insets.top + 20 }]}

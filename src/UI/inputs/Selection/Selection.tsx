@@ -1,10 +1,5 @@
 import { Keyboard, Text, TextInput, View } from "react-native";
-import React, {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { TSelectionProps } from "./types";
 import { selectionStyles } from "./styles";
 import SelectionItem from "./Item/Item";
@@ -39,7 +34,9 @@ const Selection = withLabelAndError<TSelectionProps>(
     const inputRef = useRef<TextInput | null>(null);
     const menuAnimatedHeight = useSharedValue(value.length ? 44 : 0);
     const baseHeight =
-      itemsList.length > 7 ? 326 : INPUT_HEIGHT + 46 * itemsList.length;
+      filteredItems.length > 7
+        ? 326
+        : INPUT_HEIGHT + 46 * (filteredItems.length || 1);
 
     const selectedItemsObj = useMemo(() => {
       const result: { [key: string]: boolean } = {};
@@ -101,6 +98,14 @@ const Selection = withLabelAndError<TSelectionProps>(
         containerHeight.value = withTiming(baseHeight + newMenuAnimatedHeight);
       }
     }, [value]);
+
+    useEffect(() => {
+      if (isOpened) {
+        containerHeight.value = withTiming(
+          baseHeight + menuAnimatedHeight.value
+        );
+      }
+    }, [filteredItems.length]);
 
     return (
       <View style={selectionStyles.container}>

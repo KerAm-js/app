@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import Form from "../../../../components/Form/Form";
 import { TFormInputsArray } from "../../../../components/Form/types";
 import { IImageFormProps } from "./types";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../../navigation/types";
 import { useUploadImageToAdvertMutation } from "../../api/postAdvert.api";
@@ -44,7 +44,7 @@ const ImageForm: FC<IImageFormProps> = ({
       {
         text: "Продолжить",
         onPress: () => {
-          navigation.navigate("Profile");
+          navigation.pop(2);
         },
       },
     ]);

@@ -10,6 +10,7 @@ import {
 } from "react-native-safe-area-context";
 import { animatedHeaderBackgroundStyles } from "./styles";
 import { IAnimatedHeaderComponentProps } from "../../../../navigation/types";
+import { sliderStyles } from "../Slider/styles";
 
 const AnimatedHeaderBackground: FC<IAnimatedHeaderComponentProps> = ({
   scrollY,
@@ -20,7 +21,7 @@ const AnimatedHeaderBackground: FC<IAnimatedHeaderComponentProps> = ({
 
   const rStyle = useAnimatedStyle(() => {
     return {
-      opacity: scrollY ? withTiming(scrollY.value > 250 ? 1 : 0) : 1,
+      opacity: scrollY ? withTiming(scrollY.value >= 262 ? 1 : 0) : 1,
       height,
     };
   }, [scrollY?.value]);

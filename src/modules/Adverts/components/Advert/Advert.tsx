@@ -5,7 +5,6 @@ import Rating from "../../../../UI/Rating/Rating";
 import { FC, memo } from "react";
 import { advertStyles } from "./styles";
 import { BLACK_DARK, GREY_DARK, RED, WHITE } from "../../../../consts/colors";
-import { pointSvg } from "../../../../assets/svg/point";
 import { SvgXml } from "react-native-svg";
 import { watchSvg } from "../../../../assets/svg/watch";
 import { eyeSvg } from "../../../../assets/svg/eye";
@@ -91,10 +90,6 @@ const Advert: FC<IAdvert> = memo((props) => {
         </View>
       )}
       <View style={advertStyles.sliderContainer}>
-        <View style={advertStyles.addressContainer}>
-          <SvgXml xml={pointSvg(WHITE)} width={10} height={14} />
-          {/* <Text style={advertStyles.address}>{address}</Text> */}
-        </View>
         {!!photos && !!photos.length ? (
           <Image
             style={advertStyles.image}
@@ -141,7 +136,7 @@ const Advert: FC<IAdvert> = memo((props) => {
       <View style={advertStyles.priceContainer}>
         <View>
           <Text style={advertStyles.price}>
-            {priceString.first}
+            {priceString.first[0]}
             <Text style={advertStyles.paymentFor}>{priceString.first[1]}</Text>
           </Text>
           {priceString.second && (
@@ -175,7 +170,7 @@ const Advert: FC<IAdvert> = memo((props) => {
                 {relevance.string}
               </Text>
               <SvgXml xml={eyeSvg(GREY_DARK)} width={12} height={12} />
-              <Text style={advertStyles.advertInfoText}>{views?.length}</Text>
+              <Text style={advertStyles.advertInfoText}>{views}</Text>
               <SvgXml xml={likeFillSvg(GREY_DARK)} width={12} height={12} />
               {!!likes && (
                 <Text style={advertStyles.advertInfoText}>{likes?.length}</Text>

@@ -12,13 +12,8 @@ type TParams = {
   skip: boolean;
 };
 
-export const usePageableAdverts = ({
-  advertType,
-  skip,
-}: TParams) => {
+export const usePageableAdverts = ({ advertType, skip }: TParams) => {
   const [from, setFrom] = useState(0);
-
-
 
   const {
     data: technicAdverts,

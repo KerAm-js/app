@@ -27,8 +27,12 @@ import { TechnicAdvertDto } from "../../../../types/Advert";
 import { Alert } from "react-native";
 import { useAddressByMap } from "../../../ChooseAddressMap";
 import { useActions } from "../../../../hooks/store/useActions";
-import { useTechnicTypes } from "../../../MiniEntities";
-import { ITechnicType, TEquipment } from "../../../../types/MiniEntities";
+import { useMaterialTypes, useTechnicTypes } from "../../../MiniEntities";
+import {
+  IMaterialType,
+  ITechnicType,
+  TEquipment,
+} from "../../../../types/MiniEntities";
 
 const trailerTypes = TRAILER_TYPES.map((item, index) => ({
   id: index,
@@ -36,10 +40,17 @@ const trailerTypes = TRAILER_TYPES.map((item, index) => ({
   value: item,
 }));
 
+const axesCounts = AXES_COUNTS.map((item, index) => ({
+  id: index,
+  name: item.toString(),
+  value: item,
+}));
+
 const TechnicForm = () => {
   const { user, token } = useAuth();
   const { setAddressByMapDefaults } = useActions();
   const [addAdvert, addAdvertResult] = useAddTechnicAdvertMutation();
+  const materialTypes = useMaterialTypes();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [transactionTypeI, setTransactionTypeI] = useState(0);
@@ -122,11 +133,6 @@ const TechnicForm = () => {
     required: true,
     minValue: 0,
   });
-  const [cargoType, onCargoTypeChange, isCargoTypeValid, cargoTypeError] =
-    useInputValidator({
-      required: true,
-      minLength: 2,
-    });
   const [rollersTypeI, setRollersTypeI] = useState(0);
   const [
     rollersCount,
@@ -139,7 +145,17 @@ const TechnicForm = () => {
   });
   const [sizeTypeI, setSizeTypeI] = useState(0);
   const [ossigI, setOssigI] = useState(0);
-  const [axesCountI, setAxesCountI] = useState(0);
+  const [
+    axesCount,
+    selectAxesCount,
+    unselectAxesCount,
+    unselectAllAxesCounts,
+    isAxesCountValid,
+    axesCountError,
+  ] = useSelectionValidator<(typeof axesCounts)[0]>({
+    required: true,
+    multySelection: true,
+  });
   const [bodyLength, onBodyLengthChange, isBodyLengthValid, bodyLengthError] =
     useInputValidator({
       required: true,
@@ -149,7 +165,7 @@ const TechnicForm = () => {
     trailerType,
     selectTrailerType,
     unselectTrailerType,
-    ___,
+    unselectAllTrailerTypes,
     isTrailerTypeValid,
     trailerTypeError,
   ] = useSelectionValidator<(typeof trailerTypes)[0]>({
@@ -161,10 +177,28 @@ const TechnicForm = () => {
     selectEquipment,
     unselectEquipment,
     unselectAllEquipments,
-    __,
+    isEquipmentsValid,
     equipmentError,
   ] = useSelectionValidator<TEquipment>({
     multySelection: true,
+  });
+  const [
+    materialType,
+    selectMaterialType,
+    unselectMaterialType,
+    clearMaterialType,
+    isMaterialTypeValid,
+    materialTypeError,
+    setMaterialTypeInitial,
+  ] = useSelectionValidator<IMaterialType>({ required: true });
+  const [
+    cargoVolume,
+    onCargoVolumeChange,
+    isCargoVolumeValid,
+    cargoVolumeError,
+  ] = useInputValidator({
+    required: true,
+    minValue: 0,
   });
   const [count, onCountChange, isCountValid, countError] = useInputValidator({
     required: true,
@@ -205,6 +239,10 @@ const TechnicForm = () => {
     isSecondPointRequired,
     secondPointAddress,
   } = useAddressByMap();
+
+  const isTakeARent = transactionType === "TAKE_A_RENT";
+  const isGiveARent = transactionType === "GIVE_A_RENT";
+  const isDumpTrack = technicType[0]?.technicClass === "DUMP_TRUCK";
 
   const hasWeight = !!technicType[0]?.parameters.find(
     (param) => param.name === "weight"
@@ -302,6 +340,7 @@ const TechnicForm = () => {
           onChangeText: onChangeMark,
           value: mark,
           label: "Марка",
+          hidden: isTakeARent,
         },
         {
           id: "model",
@@ -309,6 +348,7 @@ const TechnicForm = () => {
           onChangeText: onModelChange,
           value: model,
           label: "Модель",
+          hidden: isTakeARent,
         },
         {
           id: "prodYear",
@@ -318,6 +358,7 @@ const TechnicForm = () => {
           value: prodYear,
           label: "Год выпуска",
           keyboardType: "decimal-pad",
+          hidden: isTakeARent,
         },
         {
           id: "equipment",
@@ -411,16 +452,6 @@ const TechnicForm = () => {
           keyboardType: "decimal-pad",
         },
         {
-          id: "cargoType",
-          type: "input",
-          value: cargoType,
-          onChangeText: onCargoTypeChange,
-          error: cargoTypeError,
-          hidden: !technicType[0] || !hasCargoType,
-          label: getLabelForTechnicParam("cargoType"),
-          maxLength: 30,
-        },
-        {
           id: "rollersType",
           type: "segment",
           values: ENUMS.rollerTypes,
@@ -460,12 +491,13 @@ const TechnicForm = () => {
         },
         {
           id: "axesCount",
-          type: "segment",
-          values: AXES_COUNTS,
-          selectedIndex: axesCountI,
-          onChange: (evt) =>
-            setAxesCountI(evt.nativeEvent.selectedSegmentIndex),
+          type: "selection",
+          itemsList: axesCounts,
+          value: axesCount,
+          selectItem: selectAxesCount,
+          unselectItem: unselectAxesCount,
           label: getLabelForTechnicParam("axesCount"),
+          error: axesCountError,
           hidden: !technicType[0] || !hasAxesCount,
         },
         {
@@ -505,6 +537,27 @@ const TechnicForm = () => {
       title: "Общие данные",
       inputs: [
         {
+          id: "materialType",
+          type: "selection",
+          value: materialType,
+          selectItem: selectMaterialType,
+          unselectItem: unselectMaterialType,
+          itemsList: materialTypes,
+          error: materialTypeError,
+          label: "Вид перевозимого груза",
+          hidden: !technicType[0] || !isDumpTrack || isGiveARent,
+        },
+        {
+          id: "cargoVolume",
+          type: "input",
+          value: cargoVolume,
+          onChangeText: onCargoVolumeChange,
+          error: cargoVolumeError,
+          hidden: !technicType[0] || !isDumpTrack || isGiveARent,
+          label: "Объём перевозимого груза (м3)",
+          keyboardType: "decimal-pad",
+        },
+        {
           id: "count",
           type: "input",
           onChangeText: onCountChange,
@@ -514,13 +567,14 @@ const TechnicForm = () => {
           keyboardType: "decimal-pad",
         },
         {
-          id: "workMode",
+          id: "shiftType",
           type: "segment",
           values: ENUMS.shiftTypes,
           selectedIndex: workModeIndex,
           onChange: (evt) =>
             setWorkModeIndex(evt.nativeEvent.selectedSegmentIndex),
           label: "Режим работы",
+          hidden: isGiveARent,
         },
         {
           id: "address",
@@ -563,6 +617,7 @@ const TechnicForm = () => {
           isSecondFieldInvalid: !isSecondDateValid,
           error: firstDateError || secondDateError,
           label: "Период аренды",
+          hidden: isGiveARent,
         },
         {
           id: "rentalDaysCount",
@@ -578,6 +633,7 @@ const TechnicForm = () => {
             secondDate &&
             isSecondDateValid
           ),
+          hidden: isGiveARent,
         },
         {
           id: "comment",
@@ -627,9 +683,9 @@ const TechnicForm = () => {
     isTechnicTypeValid &&
     isProdYearValid &&
     isCountValid &&
-    isFirstDateValid &&
-    isSecondDateValid &&
-    isRentalDaysCountValid &&
+    (isFirstDateValid || isGiveARent) &&
+    (isSecondDateValid || isGiveARent) &&
+    (isRentalDaysCountValid || isGiveARent) &&
     isPriceValid &&
     !!point &&
     (secondPoint || !isSecondPointRequired) &&
@@ -641,7 +697,6 @@ const TechnicForm = () => {
     (isBoomLengthValid || !hasBodyLength) &&
     (isLiftingCapacityValid || !hasLiftingCapacity) &&
     (isPerformanceValid || !hasPerformance) &&
-    (isCargoTypeValid || !hasCargoType) &&
     (isRollersCountValid || !hasRollersCount) &&
     (isBodyLengthValid || !hasBodyLength) &&
     (isTrailerTypeValid || !hasTrailerType);
@@ -654,14 +709,23 @@ const TechnicForm = () => {
         title,
         equipment: equipment || [],
         unitAmount: Number(count),
-        shiftType: SHIFT_TYPES[workModeIndex],
-        rentalFrom: new Date(
-          firstDate.split(".").reverse().join("-")
-        ).toISOString(),
-        rentalTo: new Date(
-          secondDate.split(".").reverse().join("-")
-        ).toISOString(),
-        rentalDaysCount: Number(rentalDaysCount),
+        materialType:
+          isDumpTrack && isTakeARent && materialType[0]
+            ? materialType[0].name
+            : "NOT_SPECIFIED",
+        cargoVolume: isDumpTrack && isTakeARent ? Number(cargoVolume) : 0.0,
+        shiftType: isGiveARent ? "NOT_SPECIFIED" : SHIFT_TYPES[workModeIndex],
+        rentalFrom: isGiveARent
+          ? "1960-01-01T00:01:00.000Z"
+          : firstDate
+          ? new Date(firstDate.split(".").reverse().join("-")).toISOString()
+          : undefined,
+        rentalTo: isGiveARent
+          ? "1960-01-01T00:01:00.000Z"
+          : secondDate
+          ? new Date(secondDate.split(".").reverse().join("-")).toISOString()
+          : undefined,
+        rentalDaysCount: isGiveARent ? 0 : Number(rentalDaysCount),
         isTransport,
         addressLat: point?.lat,
         addressLon: point?.lon,
@@ -670,9 +734,9 @@ const TechnicForm = () => {
         distance: secondPoint ? distance : undefined,
         description: comment,
         technicType: technicType[0].name,
-        technicMark: mark,
-        technicModel: model,
-        productionYear: Number(prodYear),
+        technicMark: isTakeARent ? "NOT_SPECIFIED" : mark,
+        technicModel: isTakeARent ? "NOT_SPECIFIED" : model,
+        productionYear: isTakeARent ? 1960 : Number(prodYear),
         weight: hasWeight ? Number(weight) : 0,
         height: hasHeight ? Number(height) : 0,
         volume: hasVolume ? Number(volume) : 0,
@@ -681,14 +745,14 @@ const TechnicForm = () => {
         boomLength: hasBoomLength ? Number(boomLength) : 0,
         liftingCapacity: hasLiftingCapacity ? Number(liftingCapacity) : 0,
         performance: hasPerformance ? Number(performance) : 0,
-        cargoType: hasCargoType ? cargoType : "",
+        cargoType: "",
         rollerType: hasRollerType
           ? ROLLER_TYPES[rollersTypeI]
           : "NOT_SPECIFIED",
         rollersCount: hasRollersCount ? Number(rollersCount) : 0,
         sizeType: hasSizeType ? SIZE_TYPES[sizeTypeI] : "NOT_SPECIFIED",
         ossig: hasOssig ? !!ossigI : false,
-        axesCount: hasAxesCount ? Number(AXES_COUNTS[axesCountI]) : 0,
+        axesCount: hasAxesCount ? axesCount.map((item) => item.value) : [],
         bodyLength: hasBodyLength ? Number(bodyLength) : 0,
         trailerType: hasTrailerType ? trailerType[0].value : "NOT_SPECIFIED",
         loadingType: hasLoadingType
@@ -713,15 +777,18 @@ const TechnicForm = () => {
     onPipeLengthChange("");
     onBodyLengthChange("");
     onBoomLengthChange("");
-    onCargoTypeChange("");
     onLiftingCapacityChange("");
     onPerformanceChange("");
     onRollersCountChange("");
-    setAxesCountI(0);
+    onCargoVolumeChange("");
+    unselectAllAxesCounts();
+    unselectAllEquipments();
+    unselectAllTrailerTypes();
     setLoadingTypeI(0);
     setOssigI(0);
     setSizeTypeI(0);
     setRollersTypeI(0);
+    clearMaterialType();
   };
 
   useEffect(() => {
@@ -733,6 +800,8 @@ const TechnicForm = () => {
         advertType: "TECHNIC",
       });
     } else if (addAdvertResult.error) {
+      console.log(addAdvertResult.data);
+      console.log(addAdvertResult.error);
       Alert.alert("Ошибка", "Что-то пошло не так");
     }
   }, [addAdvertResult]);

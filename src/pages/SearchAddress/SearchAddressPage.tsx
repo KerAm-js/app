@@ -10,8 +10,6 @@ import {
 import SearchBar from "../../UI/inputs/SearchBar/SearchBar";
 import {
   Geocoder,
-  Point,
-  Search,
   Suggest,
   YamapSuggestWithCoords,
 } from "react-native-yamap";

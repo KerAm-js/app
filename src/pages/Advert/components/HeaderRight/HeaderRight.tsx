@@ -19,7 +19,7 @@ const AnimatedHeaderRightButton: FC<IAnimatedHeaderRightProps> = ({
 }) => {
   const rStyle = useAnimatedStyle(() => {
     return {
-      opacity: scrollY ? withTiming(scrollY.value > 250 ? 1 : 0) : 1,
+      opacity: scrollY ? withTiming(scrollY.value >= 262 ? 1 : 0) : 1,
       display: scrollY ? (scrollY.value > 200 ? "flex" : "none") : "flex",
     };
   }, [scrollY?.value]);

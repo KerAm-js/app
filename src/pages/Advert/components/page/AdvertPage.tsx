@@ -13,7 +13,7 @@ import {
   useGetTechnicAdvertByIdQuery,
 } from "../../../../modules/Adverts/api/adverts.api";
 import { TAdvertPagePropTypes } from "./types";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import Link from "../../../../UI/buttons/Link/Link";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -67,8 +67,14 @@ const AdvertPageComponent: FC<TAdvertPagePropTypes> = ({ isMini, advert }) => {
 
   const info = user || currentUser;
 
+  console.log(technicAdvert, isMini && isFetching);
+
   if ((isMini && isFetching) || !data) {
-    return <ActivityIndicator />;
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator color={"#000"} />
+      </View>
+    );
   }
 
   const showLocationOnMap = () =>

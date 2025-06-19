@@ -93,7 +93,7 @@ const ImageForm: FC<IImageFormProps> = ({
         {
           text: "Продолжить",
           onPress: () => {
-            navigation.navigate("Profile");
+            navigation.pop(2);;
           },
         },
       ]);

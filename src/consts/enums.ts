@@ -3,6 +3,7 @@ import {
   IAdvert,
   IDumpAdvert,
   IMaterialAdvert,
+  ShifType,
 } from "../types/Advert";
 
 export const ALL = "Все";
@@ -85,7 +86,7 @@ export const PAYMENT_UNITS: ITechnicAdvert["paymentUnit"][] = [
   "T_KM",
 ];
 export const ROLLER_TYPES: ITechnicAdvert["rollerType"][] = ["SMOOTH", "MIXED"];
-export const SHIFT_TYPES: ITechnicAdvert["shiftType"][] = [
+export const SHIFT_TYPES: ShifType[] = [
   "DAY",
   "NIGHT",
   "FULL",
@@ -110,7 +111,7 @@ export const DELIVERY_TYPE: IMaterialAdvert["deliveryType"][] = [
   "SELF_PICKUP",
   "ANY"
 ];
-export const AXES_COUNTS = ["3", "4"];
+export const AXES_COUNTS = [3, 4];
 
 type TEnum =
   | IAdvert["transactionType"]
@@ -149,7 +150,7 @@ export const ENUMS = {
   delivery: DELIVERY_TYPE.map((i) => ENUM_TITLES[i]),
 };
 
-export const OSSIG_TITLES = ["Подключён", "Не подключён"];
+export const OSSIG_TITLES = ["Не подключён", "Подключён"];
 
 export const FILTER_ENUMS_WITH_ALL = {
   advertStatuses: [...ENUMS.advertStatuses, ALL],

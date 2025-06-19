@@ -45,6 +45,8 @@ const YaMap3 = () => {
     (advertType === "NON_MATERIAL" && materialAdverts) ||
     (advertType === "DUMP" && dumpAdverts) ||
     [];
+  
+  console.log(data.length);
 
   const onChangeAdvertType = (type: TAdvertType) => {
     setAdvertType(type);

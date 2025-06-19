@@ -19,15 +19,20 @@ const InfoTables: FC<IAdvert> = (advert) => {
       const param = key as keyof typeof TECHNIC_PARAMS;
       const title = TECHNIC_PARAMS[param]?.title;
       const value = advert[param];
-      if (title && value !== "NOT_SPECIFIED" && value !== 0 && !!value) {
+      if (
+        title &&
+        value !== "NOT_SPECIFIED" &&
+        value !== 0 &&
+        !!value &&
+        !(param === "productionYear" && value === 1960)
+      ) {
         let data: TableRowData;
         if (param === "ossig") {
-          //ossig
           data = {
             title,
             value: advert[param] ? "Подключён" : "Не подключён",
           };
-        } else if (typeof value !== "boolean" && value in ENUM_TITLES) {
+        } else if (typeof value === "string" && value in ENUM_TITLES) {
           data = {
             title,
             value: ENUM_TITLES[value as keyof typeof ENUM_TITLES],
@@ -36,35 +41,56 @@ const InfoTables: FC<IAdvert> = (advert) => {
           const measurement = TECHNIC_PARAMS[param]?.measurement;
           data = {
             title,
-            value: value + (measurement ? " " + measurement : ""),
+            value: value + (measurement ? " (" + measurement + ")" : ""),
           };
         }
         chars.data.push(data);
       }
     }
-    const rentalPeriod =
-      new Date(advert.rentalFrom).toLocaleDateString().replaceAll("/", ".") +
-      " - " +
-      new Date(advert.rentalTo).toLocaleDateString().replaceAll("/", ".");
+    if (advert.rentalFrom && advert.rentalTo) {
+      const rentalPeriod =
+        new Date(advert?.rentalFrom || "")
+          .toLocaleDateString()
+          .replaceAll("/", ".") +
+        " - " +
+        new Date(advert?.rentalTo || "")
+          .toLocaleDateString()
+          .replaceAll("/", ".");
+
+      general.data.push({
+        title: propTitles.rentalPeriod,
+        value: rentalPeriod,
+      });
+    }
 
     general.data.push({
-      title: propTitles.rentalPeriod,
-      value: rentalPeriod,
-    });
-    general.data.push({
       title: propTitles.rentalDaysCount,
-      value: advert.rentalDaysCount,
+      value: advert.rentalDaysCount + ' (дн)',
     });
+    console.log(advert.id)
     if (advert.isTransport) {
       general.data.push({
         title: propTitles.distance,
-        value: advert.distance,
+        value: advert.distance + ' (км)',
       });
+      if (advert.transactionType === 'TAKE_A_RENT') {
+        general.data.push({
+          title: propTitles.cargoVolume,
+          value: advert.cargoVolume + ' (м3)',
+        });
+        general.data.push({
+          title: propTitles.cargoType,
+          value: advert.materialType,
+        });
+      }
     }
   } else {
     chars.data.push({
       title: propTitles.dumpTransport,
-      value: advert.dumpTransport.reduce((value, item, index) => value + (index === 0 ? "": ", ") + item.name, ''),
+      value: advert.dumpTransport.reduce(
+        (value, item, index) => value + (index === 0 ? "" : ", ") + item.name,
+        ""
+      ),
     });
     chars.data.push({
       title: propTitles.coefficient,
@@ -81,7 +107,10 @@ const InfoTables: FC<IAdvert> = (advert) => {
   if (advert.advertType === "DUMP") {
     chars.data.push({
       title: propTitles.wasteTypes,
-      value: advert.wasteTypes.reduce((value, item, index) => value + (index === 0 ? "": ", ") + item.name, ''),
+      value: advert.wasteTypes.reduce(
+        (value, item, index) => value + (index === 0 ? "" : ", ") + item.name,
+        ""
+      ),
     });
     chars.data.push({
       title: propTitles.dangerClass,

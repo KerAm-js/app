@@ -37,7 +37,7 @@ export const WASTE_TYPES = [
   "Грунт",
   "Грунт жидкий",
   "Грунт замусоренный",
-  "Суглинок"
+  "Суглинок",
 ];
 
 export const TECHNIC_PARAMS: {
@@ -52,7 +52,7 @@ export const TECHNIC_PARAMS: {
   productionYear: { title: "Год производства" },
   weight: { title: "Вес", measurement: "т" },
   height: { title: "Высота", measurement: "м" },
-  volume: { title: "Объём", measurement: "м3" },
+  volume: { title: "Объём кузова", measurement: "м3" },
   passengersCount: { title: "Количество пассажиров" },
   pipeLength: { title: "Длина труб", measurement: "м" },
   boomLength: { title: "Длина стрелы", measurement: "м" },

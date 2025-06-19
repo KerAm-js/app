@@ -1,3 +1,5 @@
+import { NOT_SPECIFIED } from "./Technic";
+
 export type TEquipment = { id: number; name: string };
 export type TParameter = { id: number; name: string };
 export type TFraction = { id: number; name: string };
@@ -7,6 +9,7 @@ export interface ITechnicType {
   name: string;
   equipments: Array<TEquipment>;
   parameters: Array<TParameter>;
+  technicClass: 'DUMP_TRUCK' | NOT_SPECIFIED
 }
 
 export interface IDumpTransportType {
