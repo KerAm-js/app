@@ -33,6 +33,7 @@ import EditAdvertPage from "../pages/EditAdvert";
 import EditImagesPage from "../pages/EditImages";
 import Support from "../pages/Support";
 import { SearchAddressPage } from "../pages/SearchAddress/SearchAddressPage";
+import FilteredAdvertsMapPage from "../pages/FilteredAdvertsMap";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -80,6 +81,16 @@ const RootNavigator: FC = () => {
               name="Main"
               component={MainPage.Component}
             />
+            <Stack.Screen
+              options={{
+                headerShown: false,
+              }}
+              name="FilteredAdvertsMap"
+            >
+              {({ route }) => (
+                <FilteredAdvertsMapPage.Component {...route.params} />
+              )}
+            </Stack.Screen>
             <Stack.Screen
               options={{
                 headerShown: false,

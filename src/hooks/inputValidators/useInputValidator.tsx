@@ -23,7 +23,7 @@ export const useInputValidator: TInputValidator = (props) => {
 
   const onChangeValue = (text: string) => {
     setValue(text);
-    const number = Number(text);
+    const number = !!text.length ? Number(text) : NaN;
     if (text.length < minLength) {
       setError(
         `Введите минимум ${minLength} ${

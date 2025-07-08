@@ -51,4 +51,12 @@ export type RootStackParamList = {
     isPhotosRequired: boolean;
   };
   Filter: Pick<IAdvert, "advertType">;
+  Support: undefined;
+  EditAdvert: IAdvert;
+  EditImages: {
+    id: number;
+    advertType: IAdvert["advertType"];
+    isPhotosRequired: boolean;
+  };
+  FilteredAdvertsMap: Pick<IAdvert, "advertType">;
 };

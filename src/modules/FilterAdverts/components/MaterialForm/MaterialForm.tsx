@@ -204,7 +204,7 @@ const MaterialForm: FC<TMaterialFilter> = (currentFilter) => {
     };
     console.log(result);
     setMaterialFilter(result);
-    navigation.navigate("Main");
+    navigation.navigate("FilteredAdvertsMap", {advertType: 'NON_MATERIAL'});
   };
 
   return (

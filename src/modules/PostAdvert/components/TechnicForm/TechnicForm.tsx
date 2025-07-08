@@ -231,14 +231,8 @@ const TechnicForm = () => {
 
   const techTypes = useTechnicTypes();
 
-  const {
-    point,
-    secondPoint,
-    distance,
-    pointAddress,
-    isSecondPointRequired,
-    secondPointAddress,
-  } = useAddressByMap();
+  const { point, secondPoint, distance, pointAddress, secondPointAddress } =
+    useAddressByMap();
 
   const isTakeARent = transactionType === "TAKE_A_RENT";
   const isGiveARent = transactionType === "GIVE_A_RENT";
@@ -581,7 +575,7 @@ const TechnicForm = () => {
           type: "address",
           label: isSecondAddressRequired ? "Плечо (точка А)" : "Адрес",
           address: pointAddress,
-          isSecondPointRequired,
+          isSecondPointRequired: isSecondAddressRequired,
           error: point ? undefined : "Заполните данное поле",
         },
         {
@@ -590,7 +584,6 @@ const TechnicForm = () => {
           label: "Плечо (точка Б)",
           address: secondPointAddress,
           isSecondPointRequired: true,
-          isSecondInput: true,
           error: secondPoint ? undefined : "Заполните данное поле",
           hidden: !isSecondAddressRequired,
         },
@@ -688,7 +681,7 @@ const TechnicForm = () => {
     (isRentalDaysCountValid || isGiveARent) &&
     isPriceValid &&
     !!point &&
-    (secondPoint || !isSecondPointRequired) &&
+    (secondPoint || !isSecondAddressRequired) &&
     (isWeightValid || !hasWeight) &&
     (isHeightValid || !hasHeight) &&
     (isVolumeValid || !hasVolume) &&

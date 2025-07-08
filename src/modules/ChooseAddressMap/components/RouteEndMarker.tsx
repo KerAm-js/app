@@ -3,7 +3,7 @@ import { Platform, StyleSheet, Text, View } from "react-native";
 import { Point, Marker } from "react-native-yamap";
 import { SvgXml } from "react-native-svg";
 import { RED } from "../../../consts/colors";
-import { mapMarkSvg } from "../../../assets/svg/mapMark";
+import { mapMarkerBSvg } from "../../../assets/svg/mapMarkerB";
 
 export const RouteEndMarker: FC<{
   point: Point;
@@ -17,7 +17,7 @@ export const RouteEndMarker: FC<{
       children={
         <View style={styles.endPointMarker}>
           {Platform.OS !== "android" && (
-            <SvgXml width={22} height={30} xml={mapMarkSvg(RED)} />
+            <SvgXml width={22} height={30} xml={mapMarkerBSvg(RED)} />
           )}
           <View style={styles.routeDistanceContainer}>
             <Text style={styles.routeDistance}>{distance} км</Text>
@@ -36,16 +36,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   routeDistanceContainer: {
-    borderColor: "red",
+    borderColor: RED,
     borderWidth: 2,
-    backgroundColor: "#fff",
+    backgroundColor: RED,
     marginTop: 10,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 3,
+    paddingHorizontal: 5,
     borderRadius: 7,
     borderCurve: "continuous",
   },
   routeDistance: {
     fontSize: 15,
+    color: '#fff',
+    fontWeight: '600'
   },
 });

@@ -13,7 +13,6 @@ export const AddressInput = WithLabelAndError<TAddressInputProps>(
     errorShown,
     setErrorShown,
     isSecondPointRequired,
-    isSecondInput,
     address,
   }) => {
     const navigation =

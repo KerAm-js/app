@@ -1,11 +1,11 @@
 import { FC } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Point, Marker } from "react-native-yamap";
 import { SvgXml } from "react-native-svg";
-import { BLACK_LIGHT, RED } from "../../../consts/colors";
-import { mapMarkerASvg } from "../../../assets/svg/mapMarkerA";
+import { RED } from "../../../consts/colors";
+import { mapMarkerSvg } from "../../../assets/svg/mapMarker";
 
-export const RouteStartMarker: FC<{
+export const MapMarker: FC<{
   point: Point;
   onPress: () => void;
 }> = ({ point, onPress }) => {
@@ -16,11 +16,7 @@ export const RouteStartMarker: FC<{
       anchor={{ y: 1, x: 0.5 }}
       children={
         <View style={styles.startPointMarker}>
-          <SvgXml
-            width={22}
-            height={30}
-            xml={mapMarkerASvg(Platform.OS === "android" ? RED : BLACK_LIGHT)}
-          />
+          <SvgXml width={22} height={30} xml={mapMarkerSvg(RED)} />
         </View>
       }
       onPress={onPress}

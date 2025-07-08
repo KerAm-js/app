@@ -11,7 +11,16 @@ export const getPriceString = (advert: IAdvert) => {
     };
   }
 
-  const isMeasuredInWeight = advert.measureIn === ENUM_TITLES.WEIGHT;
+  if (advert.coefficient === -1) {
+    return {
+      first: [
+        advert.price,
+        advert.measureIn === "WEIGHT" ? " руб/т" : "руб/м3",
+      ],
+    };
+  }
+
+  const isMeasuredInWeight = advert.measureIn === "WEIGHT";
   const firstPrice = isMeasuredInWeight
     ? advert.price
     : Math.floor(advert.price / advert.coefficient);

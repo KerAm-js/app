@@ -22,6 +22,7 @@ import { useDumpTransports } from "../../../MiniEntities";
 import { useWasteTypes } from "../../../MiniEntities/store/hooks";
 import { IDumpTransportType } from "../../../../types/MiniEntities";
 import { IDumpAdvert } from "../../../../types/Advert";
+import { getPriceString } from "../../../Adverts/helpers/getPaymentFor";
 
 const dumpTransactionTypes = DUMP_TRANSACTION_TYPES.map((type, index) => ({
   id: index,
@@ -35,6 +36,7 @@ const dangerClasses = DANGER_CLASSES.map((item, index) => ({
 }));
 
 const DumpForm = ({ props }: { props: IDumpAdvert }) => {
+  const initCoefficient = props.coefficient === -1 ? "" : props.coefficient;
   const { token } = useAuth();
   const dumpTransports = useDumpTransports();
   const wasteTypes = useWasteTypes();
@@ -104,9 +106,8 @@ const DumpForm = ({ props }: { props: IDumpAdvert }) => {
     isCoefficientValid,
     coefficientError,
   ] = useInputValidator({
-    required: true,
-    minValue: 1,
-    initValue: String(props.coefficient),
+    minValue: 0.01,
+    initValue: String(initCoefficient),
   });
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
     { required: true, minValue: 1, initValue: String(props.amount) }
@@ -115,6 +116,7 @@ const DumpForm = ({ props }: { props: IDumpAdvert }) => {
     SHIFT_TYPES.indexOf(props.shiftType)
   );
   const [comment, setComment] = useState(props.description || "");
+  const { first, second } = getPriceString(props);
   const [
     priceForWeight,
     onPriceForWeightChange,
@@ -123,7 +125,7 @@ const DumpForm = ({ props }: { props: IDumpAdvert }) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.price),
+    initValue: String(first[0]),
   });
   const [
     priceForVolume,
@@ -133,11 +135,16 @@ const DumpForm = ({ props }: { props: IDumpAdvert }) => {
   ] = useInputValidator({
     required: true,
     minValue: 0,
-    initValue: String(props.price * Number(props.coefficient)),
+    initValue: second ? String(second[0]) : undefined,
   });
   const [paymentTypeI, setPaymentTypeI] = useState(
     PAYMENT_TYPES.indexOf(props.paymentType)
   );
+
+  const isPriceForWeightHidden =
+    MEASURE_IN[measureI] !== "WEIGHT" && !coefficient;
+  const isPriceForVolumeHidden =
+    MEASURE_IN[measureI] !== "VOLUME" && !coefficient;
 
   const inputs: TFormInputsArray = [
     {
@@ -253,6 +260,7 @@ const DumpForm = ({ props }: { props: IDumpAdvert }) => {
           label: "Цена (руб/т)",
           keyboardType: "decimal-pad",
           editable: MEASURE_IN[measureI] === "WEIGHT",
+          hidden: isPriceForWeightHidden,
         },
         {
           id: "priceForVolume",
@@ -263,6 +271,7 @@ const DumpForm = ({ props }: { props: IDumpAdvert }) => {
           label: "Цена (руб/м3)",
           keyboardType: "decimal-pad",
           editable: MEASURE_IN[measureI] === "VOLUME",
+          hidden: isPriceForVolumeHidden,
         },
         {
           id: "paymentType",
@@ -285,8 +294,9 @@ const DumpForm = ({ props }: { props: IDumpAdvert }) => {
     isTransportValid &&
     isAmountValid &&
     isPriceForWeightValid &&
-    isPriceForVolumeValid &&
-    isCoefficientValid;
+    isCoefficientValid &&
+    (isPriceForWeightValid || isPriceForWeightHidden) &&
+    (isPriceForVolumeValid || isPriceForVolumeHidden);
 
   const transactionType = type[0];
 
@@ -303,7 +313,7 @@ const DumpForm = ({ props }: { props: IDumpAdvert }) => {
         dumpTransport: transport,
         measureIn: MEASURE_IN[measureI],
         amount: Number(amount),
-        coefficient: Number(coefficient),
+        coefficient: coefficient ? Number(coefficient) : -1,
         price: Number(
           ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
             ? priceForVolume

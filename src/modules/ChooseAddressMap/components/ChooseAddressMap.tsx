@@ -1,4 +1,4 @@
-import { NativeSyntheticEvent, View } from "react-native";
+import { NativeSyntheticEvent, Platform, View } from "react-native";
 import YaMap, { Animation, Point, Polyline } from "react-native-yamap";
 import React, {
   Dispatch,
@@ -13,7 +13,8 @@ import { RouteEndMarker } from "./RouteEndMarker";
 import { RouteStartMarker } from "./RouteStartMarker";
 import { TAddressByMapState } from "../store/types";
 import { MapLoader } from "./MapLoader";
-import { PURPLE } from "../../../consts/colors";
+import { BLACK_LIGHT, RED } from "../../../consts/colors";
+import { MapMarker } from "./MapMarker";
 
 type TPropTypes = Pick<
   TAddressByMapState,
@@ -144,11 +145,18 @@ export const ChooseAddressMap: FC<TPropTypes> = React.memo(
             }}
             style={{ flex: 1, zIndex: -1 }}
           >
-            {point && (
-              <RouteStartMarker point={point} onPress={onStartMarkPress} />
-            )}
+            {point &&
+              (isSecondPointRequired ? (
+                <RouteStartMarker point={point} onPress={onStartMarkPress} />
+              ) : (
+                <MapMarker point={point} onPress={onStartMarkPress} />
+              ))}
             {route && (
-              <Polyline strokeWidth={3} strokeColor={PURPLE} points={route} />
+              <Polyline
+                strokeWidth={3}
+                strokeColor={Platform.OS === "android" ? RED : BLACK_LIGHT}
+                points={route}
+              />
             )}
             {secondPoint && (
               <RouteEndMarker

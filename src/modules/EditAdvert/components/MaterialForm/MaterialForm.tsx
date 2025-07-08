@@ -78,8 +78,7 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
     isCoefficientValid,
     coefficientError,
   ] = useInputValidator({
-    required: true,
-    minValue: 1,
+    minValue: 0.01,
     initValue: String(props.coefficient),
   });
   const [
@@ -126,6 +125,11 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
   const [paymentTypeI, setPaymentTypeI] = useState(
     PAYMENT_TYPES.indexOf(props.paymentType)
   );
+
+  const isPriceForWeightHidden =
+    MEASURE_IN[measureI] !== "WEIGHT" && !coefficient;
+  const isPriceForVolumeHidden =
+    MEASURE_IN[measureI] !== "VOLUME" && !coefficient;
 
   const inputs: TFormInputsArray = [
     {
@@ -249,6 +253,7 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
           label: "Цена (руб/т)",
           keyboardType: "decimal-pad",
           editable: ENUMS.measureIn[measureI] === ENUM_TITLES.WEIGHT,
+          hidden: isPriceForWeightHidden,
         },
         {
           id: "priceVolume",
@@ -259,6 +264,7 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
           label: "Цена (руб/м3)",
           keyboardType: "decimal-pad",
           editable: ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME,
+          hidden: isPriceForVolumeHidden,
         },
         {
           id: "paymentType",
@@ -280,8 +286,8 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
     isAmountValid &&
     isCoefficientValid &&
     (isFractionsValid || materialType[0]?.fractions.length === 0) &&
-    isPriceForWeightValid &&
-    isPriceForVolumeValid;
+    (isPriceForWeightValid || isPriceForWeightHidden) &&
+    (isPriceForVolumeValid || isPriceForVolumeHidden);
 
   const transactionType = MATERIAL_TRANSACTION_TYPES[typeI];
 
@@ -299,7 +305,7 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
         dumpTransport: transport,
         measureIn: MEASURE_IN[measureI],
         amount: Number(amount),
-        coefficient: Number(coefficient),
+        coefficient: coefficient ? Number(coefficient) : -1,
         price: Number(
           ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
             ? priceForVolume
@@ -319,7 +325,7 @@ const MaterialForm = ({ props }: { props: IMaterialAdvert }) => {
       ENUMS.measureIn[measureI] === ENUM_TITLES.WEIGHT
     ) {
       const priceVolume = Number(priceForWeight) * Number(coefficient);
-      onPriceForVolumeChange(Math.floor(priceVolume).toString());
+      onPriceForVolumeChange(priceVolume.toString());
     }
   }, [coefficient, priceForWeight]);
 

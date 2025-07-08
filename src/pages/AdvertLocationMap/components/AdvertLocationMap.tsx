@@ -1,11 +1,11 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import YaMap, { Point, Polyline } from "react-native-yamap";
 import { RouteStartMarker } from "../../../modules/ChooseAddressMap/components/RouteStartMarker";
 import { CloseMapButton } from "../../../UI/buttons/CloseMapButton/CloseMapButton";
 import { RouteEndMarker } from "../../../modules/ChooseAddressMap/components/RouteEndMarker";
 import { MapLoader } from "../../../modules/ChooseAddressMap";
-import { PURPLE } from "../../../consts/colors";
+import { BLACK_LIGHT, PURPLE, RED } from "../../../consts/colors";
 
 export type TAdvertLocationMapProps = {
   point: Point;
@@ -68,7 +68,7 @@ export const AdvertLocationMap: FC<TAdvertLocationMapProps> = ({
         >
           <RouteStartMarker point={point} onPress={() => null} />
           {route && (
-            <Polyline strokeWidth={3} strokeColor={PURPLE} points={route} />
+            <Polyline strokeWidth={3} strokeColor={Platform.OS === 'android' ? RED : BLACK_LIGHT} points={route} />
           )}
           {secondPoint && (
             <RouteEndMarker

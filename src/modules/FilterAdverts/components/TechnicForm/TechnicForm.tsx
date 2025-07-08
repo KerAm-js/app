@@ -52,17 +52,22 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
       ),
     []
   );
+
   const initRollersTypeI = useMemo(() => {
     const i = ROLLER_TYPES.findIndex(
       (item) => item === currentFilter.rollerType
     );
     return i < 0 ? FILTER_ENUMS_WITH_ALL.rollerTypes.length - 1 : i;
   }, []);
+
   const initSizeTypeI = useMemo(() => {
     const i = SIZE_TYPES.findIndex((item) => item === currentFilter.sizeType);
     return i < 0 ? FILTER_ENUMS_WITH_ALL.sizeTypes.length - 1 : i;
   }, []);
-  const initOssigI = currentFilter.ossig ? 1 : currentFilter.ossig === null ? 2 : 0
+
+  const initOssigI =
+    typeof currentFilter.ossig !== "boolean" ? 2 : currentFilter.ossig ? 1 : 0;
+
   const initAxesCount = useMemo(
     () =>
       currentFilter.axesCount?.map((item) => ({
@@ -96,8 +101,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
   const initWeightTo = currentFilter?.weightTo?.toString() || undefined;
   const initHeightFrom = currentFilter?.heightFrom?.toString() || undefined;
   const initHeightTo = currentFilter?.heightTo?.toString() || undefined;
-  const initVolumeFrom = currentFilter?.volumeFrom?.toString() || undefined;
-  const initVolumeTo = currentFilter?.volumeTo?.toString() || undefined;
   const initPassengersCountFrom =
     currentFilter?.passengersCountFrom?.toString() || undefined;
   const initPassengersCountTo =
@@ -123,9 +126,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
   const initBodyLengthFrom =
     currentFilter?.bodyLengthFrom?.toString() || undefined;
   const initBodyLengthTo = currentFilter?.bodyLengthTo?.toString() || undefined;
-  const initUnitAmountFrom =
-    currentFilter?.unitAmountFrom?.toString() || undefined;
-  const initUnitAmountTo = currentFilter?.unitAmountTo?.toString() || undefined;
 
   const [typeI, setTypeI] = useState(initTypeI < 0 ? 0 : initTypeI);
   const [
@@ -318,21 +318,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     initValue: initTrailerType ? [initTrailerType] : undefined,
   });
   const [loadingTypeI, setLoadingTypeI] = useState(initLoadingTypeI);
-  const [
-    unitAmountFrom,
-    unitAmountTo,
-    onUnitAmountFromChange,
-    onUnitAmountToChange,
-    isUnitAmountFromValid,
-    isUnitAmountToValid,
-    unitAmountFromError,
-    unitAmountToError,
-  ] = useIntervalValidator({
-    minValue: 1,
-    firstInitValue: initUnitAmountFrom,
-    secondInitValue: initUnitAmountTo,
-    requiredBothOrNone: true,
-  });
   const [paymentTypeI, setPaymentTypeI] = useState(initPaymentTypeI);
 
   const hasWeight = !!technicType[0]?.parameters.find(
@@ -613,23 +598,6 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
       ],
     },
     {
-      title: "Общие данные",
-      inputs: [
-        {
-          id: "count",
-          type: "interval",
-          firstValue: unitAmountFrom,
-          secondValue: unitAmountTo,
-          onFirstValueChange: onUnitAmountFromChange,
-          onSecondValueChange: onUnitAmountToChange,
-          isFirstFieldInvalid: !isUnitAmountFromValid,
-          isSecondFieldInvalid: !isUnitAmountToValid,
-          error: unitAmountFromError || unitAmountToError,
-          label: "Количество единиц техники",
-        },
-      ],
-    },
-    {
       title: "Информация о цене",
       inputs: [
         {
@@ -645,8 +613,7 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     },
   ];
 
-  const isFormValid =
-    isTechnicTypeValid && isUnitAmountFromValid && isUnitAmountToValid;
+  const isFormValid = isTechnicTypeValid;
 
   const onSubmit = () => {
     const result: TTechnicFilter = {
@@ -670,7 +637,10 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
       volumeFrom: null,
       volumeTo: null,
       // the parameters above are not needed for filtering yet
-      axesCount: hasAxesCount ? axesCount?.map((item) => item.value) : null,
+      axesCount:
+        hasAxesCount && axesCount.length > 0
+          ? axesCount?.map((item) => item.value)
+          : null,
       equipment: hasEquipment && equipment.length > 0 ? equipment : null,
       loadingType:
         hasLoadingType &&
@@ -713,13 +683,13 @@ const TechnicForm: FC<TTechnicFilter> = (currentFilter) => {
     result.pipeLengthTo = Number(pipeLengthTo) || null;
     result.rollersCountFrom = Number(rollersCountFrom) || null;
     result.rollersCountTo = Number(rollersCountTo) || null;
-    result.unitAmountFrom = Number(unitAmountFrom) || null;
-    result.unitAmountTo = Number(unitAmountTo) || null;
+    result.unitAmountFrom = null;
+    result.unitAmountTo = null;
     result.weightFrom = Number(weightFrom) || null;
     result.weightTo = Number(weightTo) || null;
     result.transactionType = TECHNIC_TRANSACTION_TYPES[typeI];
     setTechnicFilter(result);
-    navigation.navigate("Main");
+    navigation.navigate("FilteredAdvertsMap", { advertType: "TECHNIC" });
   };
 
   return (

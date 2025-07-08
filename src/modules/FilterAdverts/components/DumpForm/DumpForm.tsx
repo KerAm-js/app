@@ -226,7 +226,7 @@ const DumpForm: FC<TDumpFilter> = (currentFilter) => {
       dangerClass: dangerClass[0]?.value || null,
     };
     setDumpFilter(result);
-    navigation.navigate("Main");
+    navigation.navigate("FilteredAdvertsMap", { advertType: "DUMP" });
   };
 
   return (

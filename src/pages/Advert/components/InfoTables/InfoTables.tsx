@@ -65,18 +65,18 @@ const InfoTables: FC<IAdvert> = (advert) => {
 
     general.data.push({
       title: propTitles.rentalDaysCount,
-      value: advert.rentalDaysCount + ' (дн)',
+      value: advert.rentalDaysCount + " (дн)",
     });
-    console.log(advert.id)
+
     if (advert.isTransport) {
       general.data.push({
         title: propTitles.distance,
-        value: advert.distance + ' (км)',
+        value: advert.distance + " (км)",
       });
-      if (advert.transactionType === 'TAKE_A_RENT') {
+      if (advert.transactionType === "TAKE_A_RENT") {
         general.data.push({
           title: propTitles.cargoVolume,
-          value: advert.cargoVolume + ' (м3)',
+          value: advert.cargoVolume + " (м3)",
         });
         general.data.push({
           title: propTitles.cargoType,
@@ -94,7 +94,7 @@ const InfoTables: FC<IAdvert> = (advert) => {
     });
     chars.data.push({
       title: propTitles.coefficient,
-      value: advert.coefficient,
+      value: advert.coefficient === -1 ? "-" : advert.coefficient,
     });
     const measurement =
       TECHNIC_PARAMS[advert.measureIn === "WEIGHT" ? "weight" : "volume"]

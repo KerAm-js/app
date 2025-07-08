@@ -87,7 +87,7 @@ const DumpForm = () => {
     onCoefficientChange,
     isCoefficientValid,
     coefficientError,
-  ] = useInputValidator({ required: true, minValue: 1, initValue: "1.5" });
+  ] = useInputValidator({ minValue: 0.01 });
   const [amount, onAmountCange, isAmountValid, amountError] = useInputValidator(
     { required: true, minValue: 1 }
   );
@@ -112,10 +112,13 @@ const DumpForm = () => {
     minValue: 0,
   });
   const [paymentTypeI, setPaymentTypeI] = useState(0);
-
   const dumpTransports = useDumpTransports();
-
   const { point, pointAddress } = useAddressByMap();
+
+  const isPriceForWeightHidden =
+    MEASURE_IN[measureI] !== "WEIGHT" && !coefficient;
+  const isPriceForVolumeHidden =
+    MEASURE_IN[measureI] !== "VOLUME" && !coefficient;
 
   const inputs: TFormInputsArray = [
     {
@@ -248,6 +251,7 @@ const DumpForm = () => {
           label: "Цена (руб/т)",
           keyboardType: "decimal-pad",
           editable: MEASURE_IN[measureI] === "WEIGHT",
+          hidden: isPriceForWeightHidden,
         },
         {
           id: "priceForVolume",
@@ -258,6 +262,7 @@ const DumpForm = () => {
           label: "Цена (руб/м3)",
           keyboardType: "decimal-pad",
           editable: MEASURE_IN[measureI] === "VOLUME",
+          hidden: isPriceForVolumeHidden,
         },
         {
           id: "paymentType",
@@ -280,9 +285,9 @@ const DumpForm = () => {
     isDangerClassValid &&
     isTransportValid &&
     isAmountValid &&
-    isPriceForWeightValid &&
-    isPriceForVolumeValid &&
-    isCoefficientValid;
+    (isPriceForWeightValid || isPriceForWeightHidden) &&
+    (isPriceForVolumeValid || isPriceForVolumeHidden);
+  isCoefficientValid || coefficient === undefined;
 
   const transactionType = type[0];
 
@@ -300,7 +305,7 @@ const DumpForm = () => {
         dumpTransport: transport,
         measureIn: MEASURE_IN[measureI],
         amount: Number(amount),
-        coefficient: Number(coefficient),
+        coefficient: coefficient ? Number(coefficient) : -1,
         price: Number(
           ENUMS.measureIn[measureI] === ENUM_TITLES.VOLUME
             ? priceForVolume
