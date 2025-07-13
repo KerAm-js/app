@@ -99,8 +99,8 @@ const AdvertPageComponent: FC<TAdvertPagePropTypes> = ({ isMini, advert }) => {
     <ScrollWithSlider {...data} photos={isMini ? photos : data.photos}>
       <MainInfo {...data} />
       <InfoTables {...data} />
-      <Link title="Посмотреть на карте" onPress={showLocationOnMap} />
       <AdvertComment userId={data.ownerId} comment={data.description} />
+      <Link title="Посмотреть на карте" onPress={showLocationOnMap} />
       {info && <AdvertUserInfo {...info} />}
     </ScrollWithSlider>
   );

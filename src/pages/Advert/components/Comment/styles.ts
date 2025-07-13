@@ -1,32 +1,29 @@
 import { StyleSheet } from "react-native";
 import { BORDER_RADIUS_SMALL } from "../../../../consts/borders";
 import { WHITE } from "../../../../consts/colors";
-import { SMALL_F_SIZE } from "../../../../consts/texts";
 import { SCREEN_PADDING } from "../../../../consts/views";
+import { SMALL_F_SIZE, TEXT_F_SIZE } from "../../../../consts/texts";
 
 export const advertCommentStyles = StyleSheet.create({
   container: {
-    flexDirection: "row",
     paddingHorizontal: SCREEN_PADDING,
-    paddingBottom: 15,
-    marginTop: 15,
-  },
-  commentCorner: {
-    marginTop: 13,
-    marginLeft: 5,
   },
   commentContainer: {
-    marginTop: 13,
-    padding: 10,
     borderRadius: BORDER_RADIUS_SMALL,
+    padding: 12,
+    paddingTop: 15,
+    paddingBottom: 15,
     backgroundColor: WHITE,
-    borderTopLeftRadius: 0,
-    flex: 1,
-
+    marginBottom: 15,
   },
   text: {
     fontSize: SMALL_F_SIZE,
     fontFamily: "Gilroy-Medium",
-    lineHeight: SMALL_F_SIZE + 4
+    lineHeight: SMALL_F_SIZE + 4,
+  },
+  title: {
+    fontSize: TEXT_F_SIZE,
+    fontFamily: "Gilroy-Bold",
+    marginBottom: 8,
   },
 });
